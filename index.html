@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="is-loading">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,10 +8,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Sidya Global" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <title>Sidya Global | Ürün Tanıtım ve İhracat</title>
+    <title>Sidya Global | Product Showcase and Export</title>
     <meta
       name="description"
-      content="Sidya Global, ürünlerinizi uluslararası alıcılara profesyonel şekilde tanıtan modern ihracat vitrin sitesidir."
+      content="Sidya Global is a modern export showcase for presenting products professionally to international buyers."
     />
     <meta name="google-site-verification" content="" data-tracking-placeholder="google-search-console" />
     <meta name="yandex-verification" content="" data-tracking-placeholder="yandex-webmaster" />
@@ -19,32 +19,54 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon.svg" />
     <link rel="preload" href="assets/export-warehouse-hero.png" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260601-1" />
+    <link rel="stylesheet" href="styles.css?v=20260601-2" />
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="#about" aria-label="Sidya Global biz kimiz bölümü">
+      <a class="brand" href="#about" aria-label="Sidya Global about section">
         <span class="brand-mark">SG</span>
         <span class="brand-name">Sidya Global</span>
       </a>
 
-      <nav class="nav-links" aria-label="Ana menü">
-        <a href="#products" data-i18n="navProducts">Ürünler</a>
-        <a class="category-shortcut" href="#home-products" data-i18n="navHome">Ev ve Yaşam</a>
-        <a class="category-shortcut" href="#cleaning-products" data-i18n="navCleaning">Temizlik</a>
-        <a class="category-shortcut" href="#industrial-products" data-i18n="navIndustrial">Endüstriyel</a>
-        <a href="#partners" data-i18n="navPartners">Ortaklar</a>
-        <a href="#process" data-i18n="navProcess">Süreç</a>
-        <a href="#markets" data-i18n="navMarkets">Pazarlar</a>
-        <a href="#contact" data-i18n="navContact">Teklif Al</a>
+      <nav class="nav-links" aria-label="Main menu">
+        <div class="nav-item has-dropdown">
+          <a href="#products" data-i18n="navProducts">Products</a>
+          <div class="products-menu" aria-label="Product categories">
+            <div class="products-menu-column">
+              <a class="category-shortcut" href="#home-products" data-i18n="navHome">Home</a>
+              <a class="firm-link" href="https://www.garipleryapimarket.com/">Garipler Yapı Market</a>
+            </div>
+            <div class="products-menu-column">
+              <a class="category-shortcut" href="#cleaning-products" data-i18n="navCleaning">Cleaning</a>
+              <a class="firm-link" href="https://www.abcdeterjan.com.tr/">ABC Deterjan</a>
+              <a class="firm-link" href="https://www.unilever.com.tr/">Unilever</a>
+              <a class="firm-link" href="https://www.pg.com.tr/">P&amp;G</a>
+              <a class="firm-link" href="https://www.henkel.com.tr/">Henkel</a>
+              <a class="firm-link" href="https://www.evyap.com.tr/">Evyap</a>
+            </div>
+            <div class="products-menu-column">
+              <a class="category-shortcut" href="#industrial-products" data-i18n="navIndustrial">Industrial</a>
+              <a class="firm-link" href="https://demettemizlik.com/">Demet Temizlik</a>
+            </div>
+          </div>
+        </div>
+        <a href="#partners" data-i18n="navPartners">Partners</a>
+        <a href="#process" data-i18n="navProcess">Process</a>
+        <a href="#markets" data-i18n="navMarkets">Markets</a>
+        <a href="#contact" data-i18n="navContact">Request Quote</a>
       </nav>
 
       <div class="header-actions">
+        <div class="top-contact-links" aria-label="Direct contact">
+          <a href="mailto:info@sidyaglobal.com">Mail</a>
+          <a href="https://wa.me/905534546118" target="_blank" rel="noopener">WhatsApp</a>
+          <a href="https://t.me/sidyaglobal" target="_blank" rel="noopener">Telegram</a>
+        </div>
         <div class="lang-switch" aria-label="Dil seçimi">
-          <button class="lang-option is-active" type="button" data-lang="tr" aria-label="Türkçe">
+          <button class="lang-option" type="button" data-lang="tr" aria-label="Türkçe">
             <img src="assets/flag-tr.svg" alt="" aria-hidden="true" /> TR
           </button>
-          <button class="lang-option" type="button" data-lang="en" aria-label="English">
+          <button class="lang-option is-active" type="button" data-lang="en" aria-label="English">
             <img src="assets/flag-gb.svg" alt="" aria-hidden="true" /> EN
           </button>
           <button class="lang-option" type="button" data-lang="az" aria-label="Azərbaycanca">
@@ -57,8 +79,8 @@
             <img src="assets/flag-ru.svg" alt="" aria-hidden="true" /> RU
           </button>
         </div>
-        <a class="quote-link" href="https://wa.me/905534546118?text=Hello%20Sidya%20Global%2C%20I%20would%20like%20to%20request%20a%20quote." target="_blank" rel="noopener" data-i18n="headerCta">Teklif İste</a>
-        <button class="install-app-link" type="button" data-i18n="installAppCta">Uygulama</button>
+        <a class="quote-link" href="https://wa.me/905534546118?text=Hello%20Sidya%20Global%2C%20I%20would%20like%20to%20request%20a%20quote." target="_blank" rel="noopener" data-i18n="headerCta">Get Quote</a>
+        <button class="install-app-link" type="button" data-i18n="installAppCta">App</button>
       </div>
     </header>
 
@@ -360,6 +382,8 @@
       </section>
     </main>
 
+    <button class="scroll-top-button" type="button" aria-label="Back to top">↑</button>
+
     <footer class="site-footer">
       <span>© 2026 Sidya Global</span>
       <a href="mailto:info@sidyaglobal.com">info@sidyaglobal.com</a>
@@ -382,6 +406,6 @@
         yandexWebmasterToken: "",
       };
     </script>
-    <script src="script.js?v=20260601-1"></script>
+    <script src="script.js?v=20260601-2"></script>
   </body>
 </html>

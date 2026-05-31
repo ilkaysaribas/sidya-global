@@ -640,6 +640,7 @@ const translatePage = () => {
   });
 
   renderProducts();
+  document.documentElement.classList.remove("is-loading");
 };
 
 const renderProducts = () => {
@@ -712,6 +713,7 @@ const installButton = document.querySelector(".install-app-link");
 const installPanel = document.querySelector("#installPanel");
 const installPanelCopy = document.querySelector("#installPanelCopy");
 const installPanelClose = document.querySelector(".install-panel-close");
+const scrollTopButton = document.querySelector(".scroll-top-button");
 
 const isIosDevice = () => /iphone|ipad|ipod/i.test(window.navigator.userAgent);
 
@@ -738,7 +740,7 @@ window.addEventListener("beforeinstallprompt", (event) => {
 
 installButton?.addEventListener("click", async () => {
   if (isStandaloneApp()) {
-    showInstallPanel("Sidya Global zaten uygulama olarak açılmış görünüyor.");
+    showInstallPanel("Sidya Global zaten telefonunuzda uygulama gibi ayrı pencerede açılıyor. PWA uygulamalar APK/IPA dosyası indirmez; ana ekrana eklenerek çalışır.");
     return;
   }
 
@@ -765,7 +767,7 @@ installButton?.addEventListener("click", async () => {
 
   if (isIosDevice()) {
     showInstallPanel(
-      "Apple, web uygulamalarında otomatik indirmeye izin vermez. iPhone’da Safari paylaş menüsünden Ana Ekrana Ekle seçeneğiyle Sidya Global uygulamasını ekleyebilirsiniz.",
+      "Apple, web uygulamalarında otomatik dosya indirmeye izin vermez. iPhone’da Safari paylaş menüsünden Ana Ekrana Ekle seçeneğiyle Sidya Global uygulamasını ekleyebilirsiniz.",
     );
     return;
   }
@@ -787,6 +789,14 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     hideInstallPanel();
   }
+});
+
+window.addEventListener("scroll", () => {
+  scrollTopButton?.classList.toggle("is-visible", window.scrollY > 520);
+});
+
+scrollTopButton?.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
 if ("serviceWorker" in navigator && /^https?:$/.test(window.location.protocol)) {
