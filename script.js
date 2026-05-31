@@ -795,8 +795,70 @@ if ("serviceWorker" in navigator && /^https?:$/.test(window.location.protocol)) 
   });
 }
 
+const getTrackingConfig = () => window.SIDYA_TRACKING || {};
+
+const updateVerificationMeta = (selector, token) => {
+  const normalizedToken = String(token || "").trim();
+  const meta = document.querySelector(selector);
+  if (meta && normalizedToken) {
+    meta.setAttribute("content", normalizedToken);
+  }
+};
+
+const loadTrackingScript = (src, datasetName) => {
+  if (document.querySelector(`[data-tracking-script="${datasetName}"]`)) {
+    return;
+  }
+
+  const script = document.createElement("script");
+  script.async = true;
+  script.src = src;
+  script.dataset.trackingScript = datasetName;
+  document.head.appendChild(script);
+};
+
+const setupGoogleAnalytics = () => {
+  const measurementId = String(getTrackingConfig().googleAnalyticsId || "").trim();
+  if (!measurementId) {
+    return;
+  }
+
+  window.dataLayer = window.dataLayer || [];
+  window.gtag =
+    window.gtag ||
+    function () {
+      window.dataLayer.push(arguments);
+    };
+  window.gtag("js", new Date());
+  window.gtag("config", measurementId);
+  loadTrackingScript(`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`, "google-analytics");
+};
+
+const setupMetaPixel = () => {
+  const pixelId = String(getTrackingConfig().metaPixelId || "").trim();
+  if (!pixelId || document.querySelector("[data-tracking-script='meta-pixel']")) {
+    return;
+  }
+
+  window.fbq =
+    window.fbq ||
+    function () {
+      window.fbq.callMethod ? window.fbq.callMethod.apply(window.fbq, arguments) : window.fbq.queue.push(arguments);
+    };
+  if (!window._fbq) {
+    window._fbq = window.fbq;
+  }
+  window.fbq.push = window.fbq;
+  window.fbq.loaded = true;
+  window.fbq.version = "2.0";
+  window.fbq.queue = [];
+  window.fbq("init", pixelId);
+  window.fbq("track", "PageView");
+  loadTrackingScript("https://connect.facebook.net/en_US/fbevents.js", "meta-pixel");
+};
+
 const setupYandexMetrica = () => {
-  const counterId = String(window.SIDYA_YANDEX_METRICA_ID || "").trim();
+  const counterId = String(getTrackingConfig().yandexMetricaId || "").trim();
   if (!counterId || document.querySelector("[data-yandex-metrica]")) {
     return;
   }
@@ -819,6 +881,15 @@ const setupYandexMetrica = () => {
   script.src = "https://mc.yandex.ru/metrika/tag.js";
   script.dataset.yandexMetrica = "true";
   document.head.appendChild(script);
+};
+
+const setupTracking = () => {
+  const config = getTrackingConfig();
+  updateVerificationMeta("meta[name='google-site-verification']", config.googleSearchConsoleToken);
+  updateVerificationMeta("meta[name='yandex-verification']", config.yandexWebmasterToken);
+  setupGoogleAnalytics();
+  setupMetaPixel();
+  setupYandexMetrica();
 };
 
 const openMailDraft = (form) => {
@@ -867,4 +938,4 @@ document.querySelector("#quoteForm").addEventListener("submit", async (event) =>
 });
 
 translatePage();
-setupYandexMetrica();
+setupTracking();

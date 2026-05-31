@@ -13,6 +13,8 @@
       name="description"
       content="Sidya Global, ürünlerinizi uluslararası alıcılara profesyonel şekilde tanıtan modern ihracat vitrin sitesidir."
     />
+    <meta name="google-site-verification" content="" data-tracking-placeholder="google-search-console" />
+    <meta name="yandex-verification" content="" data-tracking-placeholder="yandex-webmaster" />
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon.svg" />
@@ -372,7 +374,13 @@
     </footer>
 
     <script>
-      window.SIDYA_YANDEX_METRICA_ID = "";
+      window.SIDYA_TRACKING = {
+        googleAnalyticsId: "",
+        googleSearchConsoleToken: "",
+        metaPixelId: "",
+        yandexMetricaId: "",
+        yandexWebmasterToken: "",
+      };
     </script>
     <script src="script.js"></script>
   </body>
