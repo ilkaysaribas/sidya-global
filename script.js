@@ -699,6 +699,26 @@ document.addEventListener("click", (event) => {
 });
 
 const installButton = document.querySelector(".install-app-link");
+const installPanel = document.querySelector("#installPanel");
+const installPanelCopy = document.querySelector("#installPanelCopy");
+const installPanelClose = document.querySelector(".install-panel-close");
+
+const isIosDevice = () => /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+
+const isStandaloneApp = () =>
+  window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+
+const showInstallPanel = (message) => {
+  if (installPanelCopy) {
+    installPanelCopy.textContent = message;
+  }
+
+  installPanel?.removeAttribute("hidden");
+};
+
+const hideInstallPanel = () => {
+  installPanel?.setAttribute("hidden", "");
+};
 
 window.addEventListener("beforeinstallprompt", (event) => {
   event.preventDefault();
@@ -707,27 +727,55 @@ window.addEventListener("beforeinstallprompt", (event) => {
 });
 
 installButton?.addEventListener("click", async () => {
-  const status = document.querySelector("#formStatus");
-
-  if (!deferredInstallPrompt) {
-    if (status) {
-      status.textContent =
-        "Telefon uygulaması için site HTTPS olarak yayında olmalı. Android Chrome veya iPhone Safari üzerinden ana ekrana ekleyebilirsiniz.";
-    }
-    window.location.hash = "contact";
+  if (isStandaloneApp()) {
+    showInstallPanel("Sidya Global zaten uygulama olarak açılmış görünüyor.");
     return;
   }
 
-  deferredInstallPrompt.prompt();
-  const choice = await deferredInstallPrompt.userChoice;
-  deferredInstallPrompt = null;
-  installButton.classList.remove("is-ready");
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    const choice = await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    installButton.classList.remove("is-ready");
 
-  if (status) {
-    status.textContent =
+    showInstallPanel(
       choice.outcome === "accepted"
-        ? "Uygulama kurulumu başlatıldı."
-        : "Uygulama kurulumu iptal edildi.";
+        ? "Uygulama kurulumu başlatıldı. Telefonunuzdaki onay adımlarını tamamlayın."
+        : "Uygulama kurulumu iptal edildi. Tekrar denemek için Uygulama butonuna basabilirsiniz.",
+    );
+    return;
+  }
+
+  if (window.location.protocol === "file:") {
+    showInstallPanel(
+      "Bu dosya bilgisayardan açıldığı için otomatik uygulama kurulumu başlatılamaz. Site sidyaglobal.com üzerinde HTTPS olarak yayına alındığında Android Chrome kurulum penceresini gösterebilir; iPhone’da Safari üzerinden Ana Ekrana Ekle kullanılmalıdır.",
+    );
+    return;
+  }
+
+  if (isIosDevice()) {
+    showInstallPanel(
+      "Apple, web uygulamalarında otomatik indirmeye izin vermez. iPhone’da Safari paylaş menüsünden Ana Ekrana Ekle seçeneğiyle Sidya Global uygulamasını ekleyebilirsiniz.",
+    );
+    return;
+  }
+
+  showInstallPanel(
+    "Tarayıcı şu anda otomatik kurulum penceresini göndermedi. Android Chrome ile HTTPS adresinden açıldığında Uygulama butonu kurulum penceresini otomatik açar.",
+  );
+});
+
+installPanelClose?.addEventListener("click", hideInstallPanel);
+
+installPanel?.addEventListener("click", (event) => {
+  if (event.target === installPanel) {
+    hideInstallPanel();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    hideInstallPanel();
   }
 });
 

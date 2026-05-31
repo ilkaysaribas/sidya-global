@@ -189,6 +189,81 @@ textarea {
   background: #fff;
 }
 
+.install-panel[hidden] {
+  display: none;
+}
+
+.install-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(10, 18, 28, 0.5);
+  backdrop-filter: blur(8px);
+}
+
+.install-panel-card {
+  position: relative;
+  width: min(100%, 520px);
+  padding: 28px;
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.install-panel-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--ink);
+  background: #eef5f4;
+  cursor: pointer;
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.install-panel h2 {
+  margin: 0 42px 10px 0;
+  font-size: clamp(1.35rem, 5vw, 2rem);
+}
+
+.install-panel p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.install-steps {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.install-steps div {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #eef5f4;
+}
+
+.install-steps strong {
+  color: var(--navy);
+}
+
+.install-steps span {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
 .hero {
   position: relative;
   min-height: calc(100vh - 74px);
