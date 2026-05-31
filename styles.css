@@ -374,12 +374,13 @@ textarea {
 
 .hero-image {
   object-fit: cover;
+  object-position: center;
   filter: grayscale(0.48) contrast(0.96) brightness(0.82);
 }
 
 .hero-overlay {
   background:
-    linear-gradient(90deg, rgba(18, 18, 18, 0.9), rgba(42, 42, 42, 0.56) 48%, rgba(20, 20, 20, 0.12)),
+    linear-gradient(90deg, rgba(18, 18, 18, 0.94), rgba(42, 42, 42, 0.7) 42%, rgba(20, 20, 20, 0.18)),
     linear-gradient(0deg, rgba(17, 17, 17, 0.68), rgba(34, 34, 34, 0.08) 50%);
 }
 
@@ -950,7 +951,7 @@ h2 {
   z-index: 70;
   display: grid;
   place-items: center;
-  width: 42px;
+  width: 48px;
   height: 42px;
   border: 0;
   border-radius: 999px;
@@ -958,9 +959,9 @@ h2 {
   background: #2f3437;
   box-shadow: var(--shadow);
   cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(8px);
+  opacity: 0.94;
+  pointer-events: auto;
+  transform: translateY(0);
   transition: opacity 160ms ease, transform 160ms ease;
   font-size: 1.2rem;
   font-weight: 900;
@@ -968,8 +969,6 @@ h2 {
 
 .scroll-top-button.is-visible {
   opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
 }
 
 .social-links {
@@ -1069,6 +1068,10 @@ h2 {
   .hero {
     min-height: 560px;
     padding: 34px 16px 210px;
+  }
+
+  .hero-image {
+    object-position: 58% center;
   }
 
   .hero-overlay {
