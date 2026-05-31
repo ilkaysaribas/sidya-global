@@ -1,0 +1,43 @@
+{
+  "name": "Sidya Global",
+  "short_name": "Sidya Global",
+  "description": "Turkiye merkezli ihracat, urun tanitim ve B2B teklif platformu.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5ef",
+  "theme_color": "#2f3131",
+  "orientation": "portrait-primary",
+  "lang": "tr",
+  "icons": [
+    {
+      "src": "assets/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/maskable-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Teklif Al",
+      "short_name": "Teklif",
+      "url": "./index.html#contact"
+    },
+    {
+      "name": "Kataloglar",
+      "short_name": "Katalog",
+      "url": "./index.html#products"
+    },
+    {
+      "name": "Stratejik Ortaklar",
+      "short_name": "Ortaklar",
+      "url": "./index.html#partners"
+    }
+  ]
+}

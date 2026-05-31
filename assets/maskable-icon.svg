@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Sidya Global">
+  <rect width="512" height="512" fill="#2f3131"/>
+  <circle cx="256" cy="256" r="188" fill="#ff9800"/>
+  <circle cx="256" cy="256" r="146" fill="#102a43"/>
+  <text x="256" y="316" text-anchor="middle" fill="#fff" font-family="Arial, sans-serif" font-size="142" font-weight="900">SG</text>
+</svg>

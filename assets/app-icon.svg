@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Sidya Global">
+  <rect width="512" height="512" rx="112" fill="#2f3131"/>
+  <circle cx="148" cy="142" r="74" fill="#ff9800"/>
+  <text x="256" y="320" text-anchor="middle" fill="#fff" font-family="Arial, sans-serif" font-size="162" font-weight="900">SG</text>
+  <path d="M128 395h256" fill="none" stroke="#ff9800" stroke-width="30" stroke-linecap="round"/>
+</svg>

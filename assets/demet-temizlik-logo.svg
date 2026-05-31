@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 180" role="img" aria-labelledby="title">
+  <title id="title">Demet Temizlik</title>
+  <rect width="520" height="180" rx="34" fill="#f5fbf7"/>
+  <circle cx="92" cy="88" r="48" fill="#1f9d55"/>
+  <path d="M68 91c18-28 45-33 66-21-8 3-15 9-21 18-10 15-26 24-45 25 0-8 0-15 0-22z" fill="#fff"/>
+  <path d="M88 114c21-1 39-12 51-32 4 30-16 56-47 56-20 0-37-11-45-27 12 3 25 4 41 3z" fill="#dff5e6"/>
+  <text x="168" y="78" fill="#123a2c" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="800">Demet</text>
+  <text x="168" y="122" fill="#1f9d55" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">Temizlik</text>
+</svg>

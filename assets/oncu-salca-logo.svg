@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 180" role="img" aria-labelledby="title">
+  <title id="title">Öncü Salça</title>
+  <rect width="520" height="180" rx="34" fill="#fff7f2"/>
+  <circle cx="90" cy="90" r="48" fill="#d71920"/>
+  <path d="M72 91c0-21 17-38 38-38 9 0 17 3 24 9-5-1-12 2-20 9-12 10-21 14-42 20z" fill="#fff"/>
+  <path d="M103 47c9-18 25-24 45-20-7 16-22 26-45 20z" fill="#4d9f38"/>
+  <text x="162" y="80" fill="#d71920" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="900">Öncü</text>
+  <text x="164" y="124" fill="#50312a" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="800">Salça</text>
+</svg>
