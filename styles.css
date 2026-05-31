@@ -120,9 +120,9 @@ textarea {
   left: 0;
   z-index: 40;
   display: grid;
-  grid-template-columns: repeat(3, minmax(145px, 1fr));
+  grid-template-columns: repeat(5, minmax(128px, 1fr));
   gap: 10px;
-  min-width: 540px;
+  min-width: min(820px, calc(100vw - 32px));
   padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 8px;
