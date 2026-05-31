@@ -61,6 +61,8 @@ const content = {
     contactPointTwo: "Hedef ülkeye göre belge kontrolü",
     contactPointThree: "Konteyner veya palet bazlı fiyatlama",
     whatsappCta: "WhatsApp ile iletişim ve sorular",
+    mailCta: "Mail ile teklif iste",
+    telegramCta: "Telegram ile yazın",
     formName: "Ad Soyad",
     formCompany: "Şirket",
     formEmail: "E-posta",
@@ -141,6 +143,8 @@ const content = {
     contactPointTwo: "Market-specific certificate checks",
     contactPointThree: "Container or pallet based pricing",
     whatsappCta: "Contact and questions via WhatsApp",
+    mailCta: "Request quote by email",
+    telegramCta: "Message on Telegram",
     formName: "Full Name",
     formCompany: "Company",
     formEmail: "Email",
@@ -221,6 +225,8 @@ const content = {
     contactPointTwo: "Hədəf ölkəyə görə sənəd yoxlaması",
     contactPointThree: "Konteyner və ya palet əsasında qiymətləndirmə",
     whatsappCta: "WhatsApp ilə əlaqə və suallar",
+    mailCta: "E-poçtla təklif istəyin",
+    telegramCta: "Telegram ilə yazın",
     formName: "Ad Soyad",
     formCompany: "Şirkət",
     formEmail: "E-poçt",
@@ -301,6 +307,8 @@ const content = {
     contactPointTwo: "სამიზნე ქვეყნის მიხედვით დოკუმენტების შემოწმება",
     contactPointThree: "კონტეინერის ან პალეტის მიხედვით ფასწარმოქმნა",
     whatsappCta: "კონტაქტი და კითხვები WhatsApp-ით",
+    mailCta: "შეთავაზების მოთხოვნა ელფოსტით",
+    telegramCta: "მოგვწერეთ Telegram-ზე",
     formName: "სახელი და გვარი",
     formCompany: "კომპანია",
     formEmail: "ელფოსტა",
@@ -381,6 +389,8 @@ const content = {
     contactPointTwo: "Проверка документов по целевой стране",
     contactPointThree: "Расчет по контейнеру или палете",
     whatsappCta: "Связь и вопросы через WhatsApp",
+    mailCta: "Запросить предложение по email",
+    telegramCta: "Написать в Telegram",
     formName: "Имя и фамилия",
     formCompany: "Компания",
     formEmail: "Эл. почта",
@@ -613,7 +623,7 @@ const productPartners = {
 
 const businessEmail = "info@sidyaglobal.com";
 
-let currentLang = "tr";
+let currentLang = "en";
 let deferredInstallPrompt = null;
 
 const translatePage = () => {
@@ -785,6 +795,32 @@ if ("serviceWorker" in navigator && /^https?:$/.test(window.location.protocol)) 
   });
 }
 
+const setupYandexMetrica = () => {
+  const counterId = String(window.SIDYA_YANDEX_METRICA_ID || "").trim();
+  if (!counterId || document.querySelector("[data-yandex-metrica]")) {
+    return;
+  }
+
+  window.ym =
+    window.ym ||
+    function () {
+      (window.ym.a = window.ym.a || []).push(arguments);
+    };
+  window.ym.l = Date.now();
+  window.ym(counterId, "init", {
+    clickmap: true,
+    trackLinks: true,
+    accurateTrackBounce: true,
+    webvisor: true,
+  });
+
+  const script = document.createElement("script");
+  script.async = true;
+  script.src = "https://mc.yandex.ru/metrika/tag.js";
+  script.dataset.yandexMetrica = "true";
+  document.head.appendChild(script);
+};
+
 const openMailDraft = (form) => {
   const subject = encodeURIComponent(`Export inquiry - ${form.get("product")}`);
   const body = encodeURIComponent(
@@ -831,3 +867,4 @@ document.querySelector("#quoteForm").addEventListener("submit", async (event) =>
 });
 
 translatePage();
+setupYandexMetrica();
