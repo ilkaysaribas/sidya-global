@@ -79,7 +79,7 @@ const content = {
     formReady: "E-posta taslaÄŸÄ± hazÄ±rlandÄ±. Mail uygulamanÄ±z aÃ§Ä±lÄ±yor.",
     formSent: "Talebiniz alÄ±ndÄ±. En kÄ±sa sÃ¼rede dÃ¶nÃ¼ÅŸ yapÄ±lacaktÄ±r.",
     formError: "Form gÃ¶nderilemedi. Mail uygulamanÄ±z aÃ§Ä±lÄ±yor.",
-    footerText: "Ä°stanbul merkezli ihracat tanÄ±tÄ±m sitesi",
+    footerText: "Trabzon merkezli ihracat tanitim sitesi",
   },
   en: {
     navProducts: "Products",
@@ -109,7 +109,7 @@ const content = {
     introKicker: "Who we are",
     introTitle: "Sidya Global connects reliable supply with the right markets.",
     introCopy:
-      "Sidya Global is an export-focused trading platform connecting manufacturers and brand partners in FMCG, cleaning, food and industrial products with international buyers.",
+      "Sidya Global is a Trabzon, Turkiye based export-focused trading platform connecting manufacturers and brand partners in FMCG, cleaning, food and industrial products with international buyers.",
     missionTitle: "Our mission",
     missionCopy: "To help buyers reach the right products, reliable suppliers and transparent export processes quickly.",
     visionTitle: "Our vision",
@@ -161,7 +161,7 @@ const content = {
     formReady: "Email draft is ready. Opening your mail app.",
     formSent: "Your inquiry has been received. We will respond shortly.",
     formError: "The form could not be sent. Opening your mail app.",
-    footerText: "Istanbul-based export showcase website",
+    footerText: "Trabzon-based export showcase website",
   },
   az: {
     navProducts: "MÉ™hsullar",
@@ -243,7 +243,7 @@ const content = {
     formReady: "E-poÃ§t mÉ™tni hazÄ±rlandÄ±. PoÃ§t tÉ™tbiqiniz aÃ§Ä±lÄ±r.",
     formSent: "TÉ™lÉ™biniz qÉ™bul edildi. Æn qÄ±sa zamanda geri dÃ¶nÃ¼ÅŸ edilÉ™cÉ™k.",
     formError: "Forma gÃ¶ndÉ™rilÉ™ bilmÉ™di. PoÃ§t tÉ™tbiqiniz aÃ§Ä±lÄ±r.",
-    footerText: "Ä°stanbul mÉ™rkÉ™zli ixrac tanÄ±tÄ±m saytÄ±",
+    footerText: "Trabzon merkezli ixrac tanitim sayti",
   },
   ka: {
     navProducts: "áƒáƒ áƒáƒ“áƒ£áƒ¥áƒ¢áƒ”áƒ‘áƒ˜",
@@ -325,7 +325,7 @@ const content = {
     formReady: "áƒ”áƒšáƒ¤áƒáƒ¡áƒ¢áƒ˜áƒ¡ áƒ¢áƒ”áƒ¥áƒ¡áƒ¢áƒ˜ áƒ›áƒ–áƒáƒ“áƒáƒ. áƒ˜áƒ®áƒ¡áƒœáƒ”áƒ‘áƒ áƒ—áƒ¥áƒ•áƒ”áƒœáƒ˜ áƒ¤áƒáƒ¡áƒ¢áƒ˜áƒ¡ áƒáƒáƒ˜.",
     formSent: "áƒ—áƒ¥áƒ•áƒ”áƒœáƒ˜ áƒ›áƒáƒ—áƒ®áƒáƒ•áƒœáƒ áƒ›áƒ˜áƒ¦áƒ”áƒ‘áƒ£áƒšáƒ˜áƒ. áƒ›áƒáƒšáƒ” áƒ“áƒáƒ’áƒ˜áƒ™áƒáƒ•áƒ¨áƒ˜áƒ áƒ“áƒ”áƒ‘áƒ˜áƒ—.",
     formError: "áƒ¤áƒáƒ áƒ›áƒ áƒ•áƒ”áƒ  áƒ’áƒáƒ˜áƒ’áƒ–áƒáƒ•áƒœáƒ. áƒ˜áƒ®áƒ¡áƒœáƒ”áƒ‘áƒ áƒ—áƒ¥áƒ•áƒ”áƒœáƒ˜ áƒ¤áƒáƒ¡áƒ¢áƒ˜áƒ¡ áƒáƒáƒ˜.",
-    footerText: "áƒ¡áƒ¢áƒáƒ›áƒ‘áƒáƒšáƒ¨áƒ˜ áƒ“áƒáƒ¤áƒ£áƒ«áƒœáƒ”áƒ‘áƒ£áƒšáƒ˜ áƒ¡áƒáƒ”áƒ¥áƒ¡áƒáƒáƒ áƒ¢áƒ áƒ¡áƒáƒ˜áƒ¢áƒ˜",
+    footerText: "Trabzon-based export showcase website",
   },
   ru: {
     navProducts: "ĞŸÑ€Ğ¾Ğ´ÑƒĞºÑ‚Ñ‹",
@@ -407,7 +407,7 @@ const content = {
     formReady: "Ğ§ĞµÑ€Ğ½Ğ¾Ğ²Ğ¸Ğº Ğ¿Ğ¸ÑÑŒĞ¼Ğ° Ğ³Ğ¾Ñ‚Ğ¾Ğ². ĞÑ‚ĞºÑ€Ñ‹Ğ²Ğ°ĞµÑ‚ÑÑ Ğ¿Ğ¾Ñ‡Ñ‚Ğ¾Ğ²Ğ¾Ğµ Ğ¿Ñ€Ğ¸Ğ»Ğ¾Ğ¶ĞµĞ½Ğ¸Ğµ.",
     formSent: "Ğ’Ğ°Ñˆ Ğ·Ğ°Ğ¿Ñ€Ğ¾Ñ Ğ¿Ğ¾Ğ»ÑƒÑ‡ĞµĞ½. ĞœÑ‹ ÑĞ²ÑĞ¶ĞµĞ¼ÑÑ Ñ Ğ²Ğ°Ğ¼Ğ¸ Ğ² Ğ±Ğ»Ğ¸Ğ¶Ğ°Ğ¹ÑˆĞµĞµ Ğ²Ñ€ĞµĞ¼Ñ.",
     formError: "Ğ¤Ğ¾Ñ€Ğ¼Ñƒ Ğ½Ğµ ÑƒĞ´Ğ°Ğ»Ğ¾ÑÑŒ Ğ¾Ñ‚Ğ¿Ñ€Ğ°Ğ²Ğ¸Ñ‚ÑŒ. ĞÑ‚ĞºÑ€Ñ‹Ğ²Ğ°ĞµÑ‚ÑÑ Ğ¿Ğ¾Ñ‡Ñ‚Ğ¾Ğ²Ğ¾Ğµ Ğ¿Ñ€Ğ¸Ğ»Ğ¾Ğ¶ĞµĞ½Ğ¸Ğµ.",
-    footerText: "Ğ­ĞºÑĞ¿Ğ¾Ñ€Ñ‚Ğ½Ñ‹Ğ¹ Ğ¿Ñ€ĞµĞ·ĞµĞ½Ñ‚Ğ°Ñ†Ğ¸Ğ¾Ğ½Ğ½Ñ‹Ğ¹ ÑĞ°Ğ¹Ñ‚ Ğ¸Ğ· Ğ¡Ñ‚Ğ°Ğ¼Ğ±ÑƒĞ»Ğ°",
+    footerText: "Trabzon-based export showcase website",
   },
 };
 

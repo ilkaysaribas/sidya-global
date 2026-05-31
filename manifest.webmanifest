@@ -1,7 +1,7 @@
 {
   "name": "Sidya Global",
   "short_name": "Sidya Global",
-  "description": "Turkiye merkezli ihracat, urun tanitim ve B2B teklif platformu.",
+  "description": "Trabzon, Turkiye merkezli ihracat, urun tanitim ve B2B teklif platformu.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
