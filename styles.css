@@ -435,11 +435,11 @@ textarea {
 
 .hero {
   position: relative;
-  min-height: min(560px, calc(100vh - 54px));
+  min-height: min(480px, calc(100vh - 54px));
   display: grid;
   align-items: center;
   overflow: hidden;
-  padding: clamp(34px, 6vw, 62px) clamp(16px, 5vw, 56px) clamp(76px, 11vw, 128px);
+  padding: clamp(26px, 4.8vw, 48px) clamp(16px, 4vw, 46px) clamp(62px, 8vw, 96px);
 }
 
 .hero-image,
@@ -481,9 +481,9 @@ textarea {
 
 .hero h1 {
   margin: 0;
-  max-width: 15ch;
-  font-size: clamp(2rem, 4.7vw, 3.75rem);
-  line-height: 1.01;
+  max-width: 18ch;
+  font-size: clamp(1.85rem, 3.65vw, 3.05rem);
+  line-height: 1.04;
   letter-spacing: 0;
 }
 
@@ -537,7 +537,7 @@ textarea {
 }
 
 .hero-metrics div {
-  padding: 14px;
+  padding: 11px 12px;
   color: #fff;
   background: rgba(40, 40, 40, 0.8);
 }
@@ -548,7 +548,7 @@ textarea {
 }
 
 .hero-metrics strong {
-  font-size: 1.32rem;
+  font-size: 1.12rem;
 }
 
 .hero-metrics span {
@@ -565,11 +565,11 @@ textarea {
 }
 
 .trust-band span {
-  min-height: 62px;
+  min-height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14px;
+  padding: 11px;
   text-align: center;
   color: var(--navy);
   background: #fff;
@@ -578,7 +578,7 @@ textarea {
 
 .section,
 .markets-section {
-  padding: clamp(34px, 6vw, 62px) clamp(16px, 5vw, 56px);
+  padding: clamp(28px, 4.8vw, 50px) clamp(16px, 4vw, 46px);
 }
 
 .intro-section {
@@ -640,7 +640,7 @@ h2 {
   align-items: end;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 30px;
+  margin-bottom: 22px;
 }
 
 .product-grid {
@@ -650,11 +650,11 @@ h2 {
 }
 
 .product-card {
-  min-height: 245px;
+  min-height: 210px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 16px;
+  padding: 14px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface);
@@ -664,12 +664,12 @@ h2 {
 .product-icon {
   display: grid;
   place-items: center;
-  width: 54px;
-  height: 54px;
+  width: 46px;
+  height: 46px;
   border-radius: 8px;
   color: #fff;
   background: var(--teal);
-  font-size: 1.55rem;
+  font-size: 1.32rem;
   font-weight: 900;
 }
 
@@ -683,21 +683,21 @@ h2 {
 }
 
 .product-card h3 {
-  margin: 22px 0 10px;
-  font-size: 1.25rem;
+  margin: 16px 0 8px;
+  font-size: 1.1rem;
 }
 
 .product-card p {
   margin: 0;
   color: var(--muted);
-  line-height: 1.7;
+  line-height: 1.55;
 }
 
 .product-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 20px;
+  margin-top: 14px;
 }
 
 .product-meta span {
@@ -712,8 +712,8 @@ h2 {
 .related-companies {
   display: grid;
   gap: 10px;
-  margin-top: 18px;
-  padding-top: 16px;
+  margin-top: 14px;
+  padding-top: 12px;
   border-top: 1px solid var(--line);
 }
 
@@ -759,13 +759,13 @@ h2 {
 
 .store-product-card {
   min-height: 0;
-  padding: 18px;
-  gap: 16px;
+  padding: 14px;
+  gap: 12px;
   background: #fff;
 }
 
 .product-visual {
-  min-height: 150px;
+  min-height: 122px;
   display: grid;
   place-items: center;
   border-radius: 8px;
@@ -775,8 +775,8 @@ h2 {
 }
 
 .product-visual img {
-  width: min(112px, 62%);
-  max-height: 112px;
+  width: min(92px, 58%);
+  max-height: 92px;
   object-fit: contain;
   filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.16));
 }
@@ -797,10 +797,10 @@ h2 {
 }
 
 .store-product-card h3 {
-  min-height: 54px;
+  min-height: 46px;
   margin: 0;
   color: #001b61;
-  font-size: 1.02rem;
+  font-size: 0.92rem;
   line-height: 1.25;
   text-align: center;
 }
@@ -813,7 +813,7 @@ h2 {
 
 .store-badges span {
   min-width: 48px;
-  padding: 7px 10px;
+  padding: 6px 9px;
   border: 1px solid #dceef4;
   border-radius: 999px;
   color: #001b80;
@@ -831,7 +831,7 @@ h2 {
 }
 
 .tonnage-list div {
-  padding: 9px;
+  padding: 7px;
   border-radius: 8px;
   background: #f4f4f4;
   text-align: center;
@@ -900,9 +900,9 @@ h2 {
   display: grid;
   align-content: center;
   justify-items: center;
-  gap: 18px;
-  min-height: 190px;
-  padding: 24px;
+  gap: 13px;
+  min-height: 150px;
+  padding: 18px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fbfbf8;
@@ -918,8 +918,8 @@ h2 {
 }
 
 .partner-card img {
-  width: min(150px, 82%);
-  height: 82px;
+  width: min(118px, 78%);
+  height: 58px;
   object-fit: contain;
 }
 
@@ -939,8 +939,8 @@ h2 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 38px;
-  padding: 0 12px;
+  min-height: 34px;
+  padding: 0 10px;
   border-radius: 8px;
   color: #fff;
   background: var(--teal);
@@ -966,8 +966,8 @@ h2 {
 }
 
 .process-list article {
-  min-height: 250px;
-  padding: 24px;
+  min-height: 205px;
+  padding: 18px;
   background: #fff;
 }
 
@@ -977,8 +977,8 @@ h2 {
 }
 
 .process-list h3 {
-  margin: 42px 0 12px;
-  font-size: 1.3rem;
+  margin: 30px 0 10px;
+  font-size: 1.12rem;
 }
 
 .process-list p {
@@ -1013,10 +1013,10 @@ h2 {
 }
 
 .market-map span {
-  min-height: 82px;
+  min-height: 64px;
   display: flex;
   align-items: center;
-  padding: 18px;
+  padding: 14px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.08);
@@ -1034,7 +1034,7 @@ h2 {
 .cart-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
-  gap: 18px;
+  gap: 14px;
   align-items: start;
 }
 
@@ -1047,8 +1047,8 @@ h2 {
 }
 
 .cart-panel {
-  min-height: 220px;
-  padding: 12px;
+  min-height: 180px;
+  padding: 10px;
 }
 
 .cart-items {
@@ -1058,7 +1058,7 @@ h2 {
 
 .cart-empty {
   margin: 0;
-  padding: 34px 18px;
+  padding: 24px 14px;
   color: var(--muted);
   text-align: center;
   font-weight: 800;
@@ -1066,18 +1066,18 @@ h2 {
 
 .cart-item {
   display: grid;
-  grid-template-columns: 58px minmax(0, 1fr) auto auto;
-  gap: 12px;
+  grid-template-columns: 50px minmax(0, 1fr) auto auto;
+  gap: 10px;
   align-items: center;
-  padding: 12px;
+  padding: 10px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fafafa;
 }
 
 .cart-item img {
-  width: 58px;
-  height: 58px;
+  width: 50px;
+  height: 50px;
   object-fit: contain;
   border-radius: 8px;
   background: #fff;
@@ -1138,8 +1138,8 @@ h2 {
   position: sticky;
   top: 92px;
   display: grid;
-  gap: 14px;
-  padding: 18px;
+  gap: 10px;
+  padding: 14px;
 }
 
 .cart-summary h3 {
@@ -1151,7 +1151,7 @@ h2 {
   display: flex;
   justify-content: space-between;
   gap: 14px;
-  padding: 12px 0;
+  padding: 9px 0;
   border-bottom: 1px solid var(--line);
 }
 
@@ -1182,7 +1182,7 @@ h2 {
 .proforma-order-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(290px, 0.8fr);
-  gap: 18px;
+  gap: 14px;
   align-items: start;
 }
 
@@ -1195,7 +1195,7 @@ h2 {
 }
 
 .proforma-picker {
-  padding: 18px;
+  padding: 14px;
 }
 
 .proforma-open-button {
@@ -1212,8 +1212,8 @@ h2 {
 
 .proforma-product-panel {
   display: grid;
-  gap: 14px;
-  margin-top: 18px;
+  gap: 11px;
+  margin-top: 14px;
 }
 
 .proforma-search-label {
@@ -1249,25 +1249,25 @@ h2 {
 .proforma-product-list {
   display: grid;
   gap: 10px;
-  max-height: 520px;
+  max-height: 420px;
   overflow: auto;
   padding-right: 4px;
 }
 
 .proforma-product-row {
   display: grid;
-  grid-template-columns: 64px minmax(220px, 1.2fr) minmax(320px, 1.5fr) 110px 86px;
-  gap: 12px;
+  grid-template-columns: 54px minmax(190px, 1.2fr) minmax(280px, 1.5fr) 96px 78px;
+  gap: 10px;
   align-items: center;
-  padding: 12px;
+  padding: 10px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fafafa;
 }
 
 .proforma-product-image {
-  width: 64px;
-  height: 64px;
+  width: 54px;
+  height: 54px;
   justify-self: center;
   object-fit: contain;
   border-radius: 8px;
@@ -1297,7 +1297,7 @@ h2 {
 }
 
 .proforma-product-row dl div {
-  padding: 8px;
+  padding: 6px;
   border-radius: 8px;
   background: #fff;
   text-align: center;
@@ -1354,8 +1354,8 @@ h2 {
   position: sticky;
   top: 92px;
   display: grid;
-  gap: 12px;
-  padding: 18px;
+  gap: 10px;
+  padding: 14px;
 }
 
 .proforma-order-summary h3,
@@ -1373,7 +1373,7 @@ h2 {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px;
+  padding: 9px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fafafa;
@@ -1411,7 +1411,7 @@ h2 {
   display: flex;
   justify-content: space-between;
   gap: 14px;
-  padding: 11px 0;
+  padding: 9px 0;
   border-bottom: 1px solid var(--line);
 }
 
@@ -1447,7 +1447,7 @@ h2 {
 .proforma-layout {
   display: grid;
   grid-template-columns: minmax(260px, 0.9fr) minmax(300px, 1.1fr);
-  gap: 18px;
+  gap: 14px;
   align-items: stretch;
 }
 
@@ -1463,8 +1463,8 @@ h2 {
 
 .proforma-form {
   display: grid;
-  gap: 12px;
-  padding: 18px;
+  gap: 10px;
+  padding: 14px;
 }
 
 .proforma-form label,
@@ -1497,7 +1497,7 @@ h2 {
 .proforma-summary div {
   display: grid;
   gap: 7px;
-  padding: 18px 14px;
+  padding: 14px 12px;
   border-right: 1px solid var(--line);
 }
 
@@ -1517,7 +1517,7 @@ h2 {
 }
 
 .proforma-table-wrap {
-  margin-top: 18px;
+  margin-top: 14px;
   overflow-x: auto;
 }
 
@@ -1529,7 +1529,7 @@ h2 {
 
 .proforma-table th,
 .proforma-table td {
-  padding: 14px 16px;
+  padding: 11px 13px;
   border-bottom: 1px solid var(--line);
   text-align: left;
 }
@@ -1543,12 +1543,16 @@ h2 {
 .transport-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-  margin-top: 18px;
+  gap: 14px;
+  margin-top: 14px;
 }
 
 .transport-card {
-  padding: 16px;
+  padding: 14px;
+}
+
+.transport-visual {
+  max-height: 136px;
 }
 
 .transport-visual {
@@ -1641,18 +1645,18 @@ h2 {
 .contact-section {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(340px, 1.1fr);
-  gap: clamp(28px, 7vw, 88px);
+  gap: clamp(22px, 5vw, 64px);
   align-items: start;
 }
 
 .contact-points {
   display: grid;
   gap: 10px;
-  margin-top: 28px;
+  margin-top: 20px;
 }
 
 .contact-points span {
-  padding: 12px 14px;
+  padding: 10px 12px;
   border-left: 4px solid #3d3d3d;
   background: #fff;
   font-weight: 780;
@@ -1662,8 +1666,8 @@ h2 {
   display: inline-flex;
   flex-direction: column;
   gap: 4px;
-  margin-top: 18px;
-  padding: 16px 18px;
+  margin-top: 14px;
+  padding: 13px 15px;
   border-radius: 8px;
   color: #fff;
   background: #2f3437;
