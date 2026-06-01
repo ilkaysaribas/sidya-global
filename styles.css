@@ -1012,7 +1012,8 @@ h2 {
   gap: 12px;
 }
 
-.market-map span {
+.market-map span,
+.market-map a {
   min-height: 64px;
   display: flex;
   align-items: center;
@@ -1020,7 +1021,15 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.08);
+  color: #fff;
   font-weight: 850;
+  text-decoration: none;
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.market-map a:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
 }
 
 .proforma-section {
@@ -1381,6 +1390,20 @@ h2 {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fafafa;
+}
+
+.proforma-line-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  color: #fff;
+  background: #151515;
+  font-size: 0.78rem;
+  font-weight: 900;
 }
 
 .proforma-line-actions {

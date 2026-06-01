@@ -33,6 +33,7 @@ const content = {
     heroSecondary: "View Products",
     metricCountries: "Target markets",
     metricCategories: "Product groups",
+    metricQuoteValue: "1 day",
     metricQuote: "Quote turnaround",
     trustOne: "Trusted Turkish supplier network",
     trustTwo: "FOB, CIF and EXW delivery options",
@@ -181,6 +182,7 @@ const content = {
     metricCountries: "Hedef pazar",
     metricCategories: "Ürün grubu",
     metricQuote: "Teklif dönüşü",
+    metricQuoteValue: "1 gün",
     trustOne: "Güvenilir Türk tedarik ağı",
     trustTwo: "FOB, CIF ve EXW teslim opsiyonları",
     trustThree: "Şeffaf proforma hazırlığı",
@@ -316,6 +318,7 @@ const content = {
     marketsTitle: "Türkiyənin yaxın, şimal və şərq bazarları üçün hazır təqdimat.",
     marketsCopy: "Sidya Global Avropa, Qafqaz, Qara dəniz regionu, Mərkəzi Asiya və Yaxın Şərq alıcıları üçün təkliflər hazırlayır.",
     footerText: "Trabzon mərkəzli ixrac tanıtım saytı",
+    metricQuoteValue: "1 gün",
   },
   ka: {
     navProducts: "პროდუქტები",
@@ -340,6 +343,7 @@ const content = {
     marketsTitle: "მზად არის თურქეთის ახლო, ჩრდილოეთ და აღმოსავლეთ ბაზრებისთვის.",
     marketsCopy: "Sidya Global ამზადებს შეთავაზებებს ევროპის, კავკასიის, შავი ზღვის რეგიონის, ცენტრალური აზიისა და ახლო აღმოსავლეთის მყიდველებისთვის.",
     footerText: "ტრაბზონზე დაფუძნებული საექსპორტო ვებგვერდი",
+    metricQuoteValue: "1 დღე",
   },
   ru: {
     navProducts: "Продукты",
@@ -364,6 +368,7 @@ const content = {
     marketsTitle: "Готово для близких, северных и восточных рынков Турции.",
     marketsCopy: "Sidya Global готовит предложения для покупателей из Европы, Кавказа, Черноморского региона, Центральной Азии и Ближнего Востока.",
     footerText: "Экспортный сайт из Трабзона",
+    metricQuoteValue: "1 день",
   },
 };
 
@@ -670,7 +675,7 @@ const proformaItems = [
 
 const productCatalog = [];
 
-productCatalog.push(...(window.SIDYA_CATALOG_PRODUCTS || []));
+productCatalog.push(...(window.SIDYA_CATALOG_PRODUCTS || []).filter((product) => product.brand !== "PM Catalog"));
 
 const proformaOrder = new Map();
 const brandLogoMap = {
@@ -689,6 +694,59 @@ const marketNames = {
   az: ["Gürcüstan", "Azərbaycan", "Ermənistan", "İran", "İraq", "Rusiya", "Ukrayna", "Qazaxıstan"],
   ka: ["საქართველო", "აზერბაიჯანი", "სომხეთი", "ირანი", "ერაყი", "რუსეთი", "უკრაინა", "ყაზახეთი"],
   ru: ["Грузия", "Азербайджан", "Армения", "Иран", "Ирак", "Россия", "Украина", "Казахстан"],
+};
+
+const marketLinks = {
+  en: [
+    "https://en.wikipedia.org/wiki/Georgia_(country)",
+    "https://en.wikipedia.org/wiki/Azerbaijan",
+    "https://en.wikipedia.org/wiki/Armenia",
+    "https://en.wikipedia.org/wiki/Iran",
+    "https://en.wikipedia.org/wiki/Iraq",
+    "https://en.wikipedia.org/wiki/Russia",
+    "https://en.wikipedia.org/wiki/Ukraine",
+    "https://en.wikipedia.org/wiki/Kazakhstan",
+  ],
+  tr: [
+    "https://tr.wikipedia.org/wiki/G%C3%BCrcistan",
+    "https://tr.wikipedia.org/wiki/Azerbaycan",
+    "https://tr.wikipedia.org/wiki/Ermenistan",
+    "https://tr.wikipedia.org/wiki/%C4%B0ran",
+    "https://tr.wikipedia.org/wiki/Irak",
+    "https://tr.wikipedia.org/wiki/Rusya",
+    "https://tr.wikipedia.org/wiki/Ukrayna",
+    "https://tr.wikipedia.org/wiki/Kazakistan",
+  ],
+  az: [
+    "https://az.wikipedia.org/wiki/G%C3%BCrc%C3%BCstan",
+    "https://az.wikipedia.org/wiki/Az%C9%99rbaycan",
+    "https://az.wikipedia.org/wiki/Erm%C9%99nistan",
+    "https://az.wikipedia.org/wiki/%C4%B0ran",
+    "https://az.wikipedia.org/wiki/%C4%B0raq",
+    "https://az.wikipedia.org/wiki/Rusiya",
+    "https://az.wikipedia.org/wiki/Ukrayna",
+    "https://az.wikipedia.org/wiki/Qazax%C4%B1stan",
+  ],
+  ka: [
+    "https://ka.wikipedia.org/wiki/%E1%83%A1%E1%83%90%E1%83%A5%E1%83%90%E1%83%A0%E1%83%97%E1%83%95%E1%83%94%E1%83%9A%E1%83%9D",
+    "https://ka.wikipedia.org/wiki/%E1%83%90%E1%83%96%E1%83%94%E1%83%A0%E1%83%91%E1%83%90%E1%83%98%E1%83%AF%E1%83%90%E1%83%9C%E1%83%98",
+    "https://ka.wikipedia.org/wiki/%E1%83%A1%E1%83%9D%E1%83%9B%E1%83%AE%E1%83%94%E1%83%97%E1%83%98",
+    "https://ka.wikipedia.org/wiki/%E1%83%98%E1%83%A0%E1%83%90%E1%83%9C%E1%83%98",
+    "https://ka.wikipedia.org/wiki/%E1%83%94%E1%83%A0%E1%83%90%E1%83%A7%E1%83%98",
+    "https://ka.wikipedia.org/wiki/%E1%83%A0%E1%83%A3%E1%83%A1%E1%83%94%E1%83%97%E1%83%98",
+    "https://ka.wikipedia.org/wiki/%E1%83%A3%E1%83%99%E1%83%A0%E1%83%90%E1%83%98%E1%83%9C%E1%83%90",
+    "https://ka.wikipedia.org/wiki/%E1%83%A7%E1%83%90%E1%83%96%E1%83%90%E1%83%AE%E1%83%94%E1%83%97%E1%83%98",
+  ],
+  ru: [
+    "https://ru.wikipedia.org/wiki/%D0%93%D1%80%D1%83%D0%B7%D0%B8%D1%8F",
+    "https://ru.wikipedia.org/wiki/%D0%90%D0%B7%D0%B5%D1%80%D0%B1%D0%B0%D0%B9%D0%B4%D0%B6%D0%B0%D0%BD",
+    "https://ru.wikipedia.org/wiki/%D0%90%D1%80%D0%BC%D0%B5%D0%BD%D0%B8%D1%8F",
+    "https://ru.wikipedia.org/wiki/%D0%98%D1%80%D0%B0%D0%BD",
+    "https://ru.wikipedia.org/wiki/%D0%98%D1%80%D0%B0%D0%BA",
+    "https://ru.wikipedia.org/wiki/%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D1%8F",
+    "https://ru.wikipedia.org/wiki/%D0%A3%D0%BA%D1%80%D0%B0%D0%B8%D0%BD%D0%B0",
+    "https://ru.wikipedia.org/wiki/%D0%9A%D0%B0%D0%B7%D0%B0%D1%85%D1%81%D1%82%D0%B0%D0%BD",
+  ],
 };
 
 const businessEmail = "info@sidyaglobal.com";
@@ -757,7 +815,10 @@ const renderMarkets = () => {
   const marketList = document.querySelector("#marketList");
   if (!marketList) return;
   const names = marketNames[currentLang] || marketNames.en;
-  marketList.innerHTML = names.map((name) => `<span>${name}</span>`).join("");
+  const links = marketLinks[currentLang] || marketLinks.en;
+  marketList.innerHTML = names
+    .map((name, index) => `<a href="${links[index] || links[0]}" target="_blank" rel="noopener">${name}</a>`)
+    .join("");
 };
 
 let exchangeRatesData = null;
@@ -912,11 +973,12 @@ const renderProformaOrder = () => {
 
   empty.hidden = entries.length > 0;
   lines.innerHTML = entries
-    .map(({ product, cartons }) => {
+    .map(({ product, cartons }, index) => {
       const pallets = cartons / getCartonsPerPallet(product);
       const weight = cartons * getKgPerCarton(product);
       const volume = cartons * getM3PerCarton(product);
       return `<article class="proforma-line">
+        <span class="proforma-line-index">${index + 1}</span>
         <div>
           <strong>${getProductName(product)}</strong>
           <span>${cartons.toLocaleString("en-US")} ${t("proformaCartonQty")} · ${pallets.toFixed(2)} PLT · ${formatWeight(weight)} · ${formatVolume(volume)}</span>
@@ -943,12 +1005,13 @@ const renderProformaOrder = () => {
 };
 
 const buildProformaRows = () =>
-  getProformaEntries().map(({ product, cartons }) => {
+  getProformaEntries().map(({ product, cartons }, index) => {
     const cartonsPerPallet = getCartonsPerPallet(product);
     const unitsPerCarton = getUnitsPerCarton(product);
     const kgPerCarton = getKgPerCarton(product);
     const m3PerCarton = getM3PerCarton(product);
     return {
+      no: index + 1,
       brand: product.brand,
       product: getProductName(product),
       volume: product.liter,
@@ -970,9 +1033,9 @@ const downloadProformaCsv = () => {
     alert(t("proformaQuoteEmpty"));
     return false;
   }
-  const headers = ["Brand", "Product", "Volume", "Cartons", "Units/Carton", "Cartons/Pallet", "Pallets", "Kg/Carton", "Total Kg", "m3/Carton", "Total m3"];
+  const headers = ["No", "Brand", "Product", "Volume", "Cartons", "Units/Carton", "Cartons/Pallet", "Pallets", "Kg/Carton", "Total Kg", "m3/Carton", "Total m3"];
   const csvRows = rows.map((row) =>
-    [row.brand, row.product, row.volume, row.cartons, row.unitsPerCarton, row.cartonsPerPallet, row.pallets.toFixed(2), row.kgPerCarton.toFixed(2), row.totalWeight.toFixed(2), row.m3PerCarton.toFixed(3), row.totalVolume.toFixed(3)]
+    [row.no, row.brand, row.product, row.volume, row.cartons, row.unitsPerCarton, row.cartonsPerPallet, row.pallets.toFixed(2), row.kgPerCarton.toFixed(2), row.totalWeight.toFixed(2), row.m3PerCarton.toFixed(3), row.totalVolume.toFixed(3)]
       .map(toCsvCell)
       .join(";"),
   );
@@ -990,7 +1053,7 @@ const buildProformaMessage = () => {
   const totalCartons = rows.reduce((sum, row) => sum + row.cartons, 0);
   const totalWeight = rows.reduce((sum, row) => sum + row.totalWeight, 0);
   const totalVolume = rows.reduce((sum, row) => sum + row.totalVolume, 0);
-  const lines = rows.map((row) => `- ${row.brand} / ${row.product}: ${row.cartons} koli, ${row.pallets.toFixed(2)} PLT, ${formatWeight(row.totalWeight)}, ${formatVolume(row.totalVolume)}`);
+  const lines = rows.map((row) => `${row.no}. ${row.brand} / ${row.product}: ${row.cartons} koli, ${row.pallets.toFixed(2)} PLT, ${formatWeight(row.totalWeight)}, ${formatVolume(row.totalVolume)}`);
   return [`Sidya Global proforma request`, "", ...lines, "", `Total cartons: ${totalCartons}`, `Total weight: ${formatWeight(totalWeight)}`, `Total volume: ${formatVolume(totalVolume)}`].join("\n");
 };
 
