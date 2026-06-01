@@ -2,7 +2,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-001",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-001.webp",
+    "logo": "assets/catalog-products/abc-007.webp",
     "category": "cleaning-products",
     "liter": "600 gr x 20",
     "cartonsPerPallet": 60,
@@ -22,7 +22,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-002",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-002.webp",
+    "logo": "assets/catalog-products/abc-006.webp",
     "category": "cleaning-products",
     "liter": "600 gr x 20",
     "cartonsPerPallet": 60,
@@ -42,7 +42,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-003",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-003.webp",
+    "logo": "assets/catalog-products/abc-005.webp",
     "category": "cleaning-products",
     "liter": "600 gr x 20",
     "cartonsPerPallet": 60,
@@ -62,7 +62,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-004",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-004.webp",
+    "logo": "assets/catalog-products/abc-008.webp",
     "category": "cleaning-products",
     "liter": "1.8 kg x 8",
     "cartonsPerPallet": 60,
@@ -82,7 +82,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-005",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-005.webp",
+    "logo": "assets/catalog-products/abc-009.webp",
     "category": "cleaning-products",
     "liter": "1.8 kg x 8",
     "cartonsPerPallet": 60,
@@ -102,7 +102,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-006",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-006.webp",
+    "logo": "assets/catalog-products/abc-010.webp",
     "category": "cleaning-products",
     "liter": "500 gr x 28",
     "cartonsPerPallet": 60,
@@ -122,7 +122,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-007",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-007.webp",
+    "logo": "assets/catalog-products/abc-011.webp",
     "category": "cleaning-products",
     "liter": "1.5 kg x 12",
     "cartonsPerPallet": 60,
@@ -142,7 +142,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-008",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-008.webp",
+    "logo": "assets/catalog-products/abc-012.webp",
     "category": "cleaning-products",
     "liter": "1.5 kg x 12",
     "cartonsPerPallet": 60,
@@ -162,7 +162,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-009",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-009.webp",
+    "logo": "assets/catalog-products/abc-013.webp",
     "category": "cleaning-products",
     "liter": "1.5 kg x 12",
     "cartonsPerPallet": 60,
@@ -182,7 +182,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-010",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-010.webp",
+    "logo": "assets/catalog-products/abc-014.webp",
     "category": "cleaning-products",
     "liter": "1.5 kg x 12",
     "cartonsPerPallet": 60,
@@ -202,7 +202,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-011",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-011.webp",
+    "logo": "assets/catalog-products/abc-015.webp",
     "category": "cleaning-products",
     "liter": "4 kg",
     "cartonsPerPallet": 60,
@@ -222,7 +222,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-012",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-012.webp",
+    "logo": "assets/catalog-products/abc-016.webp",
     "category": "cleaning-products",
     "liter": "4 kg",
     "cartonsPerPallet": 60,
@@ -242,7 +242,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-013",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-013.webp",
+    "logo": "assets/catalog-products/abc-017.webp",
     "category": "cleaning-products",
     "liter": "5,5 kg",
     "cartonsPerPallet": 60,
@@ -262,7 +262,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-014",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-014.webp",
+    "logo": "assets/catalog-products/abc-018.webp",
     "category": "cleaning-products",
     "liter": "6 kg",
     "cartonsPerPallet": 60,
@@ -282,7 +282,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-015",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-015.webp",
+    "logo": "assets/catalog-products/abc-019.webp",
     "category": "cleaning-products",
     "liter": "6 kg",
     "cartonsPerPallet": 60,
@@ -302,7 +302,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-016",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-016.webp",
+    "logo": "assets/catalog-products/abc-020.webp",
     "category": "cleaning-products",
     "liter": "6 kg",
     "cartonsPerPallet": 60,
@@ -322,7 +322,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-017",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-017.webp",
+    "logo": "assets/catalog-products/abc-021.webp",
     "category": "cleaning-products",
     "liter": "8 kg",
     "cartonsPerPallet": 60,
@@ -342,7 +342,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-018",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-018.webp",
+    "logo": "assets/catalog-products/abc-022.webp",
     "category": "cleaning-products",
     "liter": "8 kg",
     "cartonsPerPallet": 60,
@@ -362,7 +362,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-019",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-019.webp",
+    "logo": "assets/catalog-products/abc-023.webp",
     "category": "cleaning-products",
     "liter": "8 kg",
     "cartonsPerPallet": 60,
@@ -382,7 +382,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-020",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-020.webp",
+    "logo": "assets/catalog-products/abc-024.webp",
     "category": "cleaning-products",
     "liter": "10 kg",
     "cartonsPerPallet": 60,
@@ -402,7 +402,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-021",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-021.webp",
+    "logo": "assets/catalog-products/abc-025.webp",
     "category": "cleaning-products",
     "liter": "10 kg",
     "cartonsPerPallet": 60,
@@ -422,7 +422,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-022",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-022.webp",
+    "logo": "assets/catalog-products/abc-026.webp",
     "category": "cleaning-products",
     "liter": "10 kg",
     "cartonsPerPallet": 60,
@@ -442,7 +442,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-023",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-023.webp",
+    "logo": "assets/catalog-products/abc-027.webp",
     "category": "cleaning-products",
     "liter": "2145 ml x 6",
     "cartonsPerPallet": 60,
@@ -462,7 +462,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-024",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-024.webp",
+    "logo": "assets/catalog-products/abc-028.webp",
     "category": "cleaning-products",
     "liter": "3 L x 6",
     "cartonsPerPallet": 60,
@@ -482,7 +482,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-025",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-025.webp",
+    "logo": "assets/catalog-products/abc-029.webp",
     "category": "cleaning-products",
     "liter": "3 L x 6",
     "cartonsPerPallet": 60,
@@ -502,7 +502,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-026",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-026.webp",
+    "logo": "assets/catalog-products/abc-030.webp",
     "category": "cleaning-products",
     "liter": "3 L x 6",
     "cartonsPerPallet": 60,
@@ -522,7 +522,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-027",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-027.webp",
+    "logo": "assets/catalog-products/abc-031.webp",
     "category": "cleaning-products",
     "liter": "3 L x 6",
     "cartonsPerPallet": 60,
@@ -542,7 +542,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-028",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-028.webp",
+    "logo": "assets/catalog-products/abc-032.webp",
     "category": "cleaning-products",
     "liter": "3 L x 6",
     "cartonsPerPallet": 60,
@@ -562,7 +562,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-029",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-029.webp",
+    "logo": "assets/catalog-products/abc-033.webp",
     "category": "cleaning-products",
     "liter": "3 L x 6",
     "cartonsPerPallet": 60,
@@ -582,7 +582,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-030",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-030.webp",
+    "logo": "assets/catalog-products/abc-034.webp",
     "category": "cleaning-products",
     "liter": "3 L x 6",
     "cartonsPerPallet": 60,
@@ -602,7 +602,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-031",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-031.webp",
+    "logo": "assets/catalog-products/abc-035.webp",
     "category": "cleaning-products",
     "liter": "3 L x 6",
     "cartonsPerPallet": 60,
@@ -622,7 +622,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-032",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-032.webp",
+    "logo": "assets/catalog-products/abc-036.webp",
     "category": "cleaning-products",
     "liter": "3 L x 6",
     "cartonsPerPallet": 60,
@@ -642,7 +642,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-033",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-033.webp",
+    "logo": "assets/catalog-products/abc-037.webp",
     "category": "cleaning-products",
     "liter": "5 L x 4",
     "cartonsPerPallet": 60,
@@ -662,7 +662,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-034",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-034.webp",
+    "logo": "assets/catalog-products/abc-038.webp",
     "category": "cleaning-products",
     "liter": "5 L x 4",
     "cartonsPerPallet": 60,
@@ -682,7 +682,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-035",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-035.webp",
+    "logo": "assets/catalog-products/abc-039.webp",
     "category": "cleaning-products",
     "liter": "5 L x 4",
     "cartonsPerPallet": 60,
@@ -702,7 +702,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-036",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-036.webp",
+    "logo": "assets/catalog-products/abc-040.webp",
     "category": "cleaning-products",
     "liter": "5 L x 4",
     "cartonsPerPallet": 60,
@@ -722,7 +722,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-037",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-037.webp",
+    "logo": "assets/catalog-products/abc-041.webp",
     "category": "cleaning-products",
     "liter": "5 L x 4",
     "cartonsPerPallet": 60,
@@ -742,7 +742,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-038",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-038.webp",
+    "logo": "assets/catalog-products/abc-042.webp",
     "category": "cleaning-products",
     "liter": "5 L x 4",
     "cartonsPerPallet": 60,
@@ -762,7 +762,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-039",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-039.webp",
+    "logo": "assets/catalog-products/abc-043.webp",
     "category": "cleaning-products",
     "liter": "1440 ml x 9",
     "cartonsPerPallet": 60,
@@ -782,7 +782,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-040",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-040.webp",
+    "logo": "assets/catalog-products/abc-044.webp",
     "category": "cleaning-products",
     "liter": "1440 ml x 9",
     "cartonsPerPallet": 60,
@@ -802,7 +802,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-041",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-041.webp",
+    "logo": "assets/catalog-products/abc-045.webp",
     "category": "cleaning-products",
     "liter": "1440 ml x 9",
     "cartonsPerPallet": 60,
@@ -822,7 +822,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-042",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-042.webp",
+    "logo": "assets/catalog-products/abc-046.webp",
     "category": "cleaning-products",
     "liter": "1440 ml x 9",
     "cartonsPerPallet": 60,
@@ -842,7 +842,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-043",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-043.webp",
+    "logo": "assets/catalog-products/abc-047.webp",
     "category": "cleaning-products",
     "liter": "1440 ml x 9",
     "cartonsPerPallet": 60,
@@ -862,7 +862,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-044",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-044.webp",
+    "logo": "assets/catalog-products/abc-048.webp",
     "category": "cleaning-products",
     "liter": "1440 ml x 9",
     "cartonsPerPallet": 60,
@@ -882,7 +882,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-045",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-045.webp",
+    "logo": "assets/catalog-products/abc-049.webp",
     "category": "cleaning-products",
     "liter": "1440 ml x 9",
     "cartonsPerPallet": 60,
@@ -902,7 +902,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-046",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-046.webp",
+    "logo": "assets/catalog-products/abc-050.webp",
     "category": "cleaning-products",
     "liter": "1440 ml x 9",
     "cartonsPerPallet": 60,
@@ -922,7 +922,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-047",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-047.webp",
+    "logo": "assets/catalog-products/abc-051.webp",
     "category": "cleaning-products",
     "liter": "500 gr x 24",
     "cartonsPerPallet": 60,
@@ -942,7 +942,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-048",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-048.webp",
+    "logo": "assets/catalog-products/abc-052.webp",
     "category": "cleaning-products",
     "liter": "1 kg x 18",
     "cartonsPerPallet": 60,
@@ -962,7 +962,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-049",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-049.webp",
+    "logo": "assets/catalog-products/abc-053.webp",
     "category": "cleaning-products",
     "liter": "4 kg x 6",
     "cartonsPerPallet": 60,
@@ -982,7 +982,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-050",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-050.webp",
+    "logo": "assets/catalog-products/abc-054.webp",
     "category": "cleaning-products",
     "liter": "685 gr x 20",
     "cartonsPerPallet": 60,
@@ -1002,7 +1002,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-051",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-051.webp",
+    "logo": "assets/catalog-products/abc-055.webp",
     "category": "cleaning-products",
     "liter": "4 kg x 4",
     "cartonsPerPallet": 60,
@@ -1022,7 +1022,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-052",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-052.webp",
+    "logo": "assets/catalog-products/abc-056.webp",
     "category": "cleaning-products",
     "liter": "1370 gr x 14",
     "cartonsPerPallet": 60,
@@ -1042,7 +1042,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-053",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-053.webp",
+    "logo": "assets/catalog-products/abc-057.webp",
     "category": "cleaning-products",
     "liter": "750 ml x 18",
     "cartonsPerPallet": 60,
@@ -1062,7 +1062,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-054",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-054.webp",
+    "logo": "assets/catalog-products/abc-058.webp",
     "category": "cleaning-products",
     "liter": "1850 ml x 9",
     "cartonsPerPallet": 60,
@@ -1082,7 +1082,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-055",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-055.webp",
+    "logo": "assets/catalog-products/abc-059.webp",
     "category": "cleaning-products",
     "liter": "3250 ml x 4",
     "cartonsPerPallet": 60,
@@ -1102,7 +1102,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-056",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-056.webp",
+    "logo": "assets/catalog-products/abc-060.webp",
     "category": "cleaning-products",
     "liter": "500 ml x 24",
     "cartonsPerPallet": 60,
@@ -1122,7 +1122,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-057",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-057.webp",
+    "logo": "assets/catalog-products/abc-061.webp",
     "category": "cleaning-products",
     "liter": "900 ml x 14",
     "cartonsPerPallet": 60,
@@ -1142,7 +1142,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-058",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-058.webp",
+    "logo": "assets/catalog-products/abc-062.webp",
     "category": "cleaning-products",
     "liter": "750 ml x 20",
     "cartonsPerPallet": 60,
@@ -1162,7 +1162,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-059",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-059.webp",
+    "logo": "assets/catalog-products/abc-063.webp",
     "category": "cleaning-products",
     "liter": "750+750 ml x 10",
     "cartonsPerPallet": 60,
@@ -1182,7 +1182,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-060",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-060.webp",
+    "logo": "assets/catalog-products/abc-064.webp",
     "category": "cleaning-products",
     "liter": "750 ml x 20",
     "cartonsPerPallet": 60,
@@ -1202,7 +1202,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-061",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-061.webp",
+    "logo": "assets/catalog-products/abc-065.webp",
     "category": "cleaning-products",
     "liter": "900 ml x 14",
     "cartonsPerPallet": 60,
@@ -1222,7 +1222,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-062",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-062.webp",
+    "logo": "assets/catalog-products/abc-066.webp",
     "category": "cleaning-products",
     "liter": "2500 ml x 8",
     "cartonsPerPallet": 60,
@@ -1242,7 +1242,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-063",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-063.webp",
+    "logo": "assets/catalog-products/abc-067.webp",
     "category": "cleaning-products",
     "liter": "400 ml x 12",
     "cartonsPerPallet": 60,
@@ -1262,7 +1262,7 @@ window.SIDYA_CATALOG_PRODUCTS = [
   {
     "id": "abc-catalog-064",
     "brand": "ABC",
-    "logo": "assets/catalog-products/abc-064.webp",
+    "logo": "assets/catalog-products/abc-068.webp",
     "category": "cleaning-products",
     "liter": "3 L x 8",
     "cartonsPerPallet": 60,
