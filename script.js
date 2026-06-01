@@ -554,6 +554,14 @@ const proformaItems = [
   { id: "medical", name: "Medical products", palletFactor: 1, kgPerPallet: 360, m3PerPallet: 1.7 },
 ];
 
+const marketNames = {
+  en: ["Georgia", "Azerbaijan", "Armenia", "Iran", "Iraq", "Russia", "Ukraine", "Romania", "Kazakhstan"],
+  tr: ["Gürcistan", "Azerbaycan", "Ermenistan", "İran", "Irak", "Rusya", "Ukrayna", "Romanya", "Kazakistan"],
+  az: ["Gürcüstan", "Azərbaycan", "Ermənistan", "İran", "İraq", "Rusiya", "Ukrayna", "Rumıniya", "Qazaxıstan"],
+  ka: ["საქართველო", "აზერბაიჯანი", "სომხეთი", "ირანი", "ერაყი", "რუსეთი", "უკრაინა", "რუმინეთი", "ყაზახეთი"],
+  ru: ["Грузия", "Азербайджан", "Армения", "Иран", "Ирак", "Россия", "Украина", "Румыния", "Казахстан"],
+};
+
 const businessEmail = "info@sidyaglobal.com";
 let currentLang = "en";
 let deferredInstallPrompt = null;
@@ -581,6 +589,13 @@ const renderProducts = () => {
         .join("")}</div>${relatedMarkup}</article>`;
     })
     .join("");
+};
+
+const renderMarkets = () => {
+  const marketList = document.querySelector("#marketList");
+  if (!marketList) return;
+  const names = marketNames[currentLang] || marketNames.en;
+  marketList.innerHTML = names.map((name) => `<span>${name}</span>`).join("");
 };
 
 const renderProformaOptions = () => {
@@ -620,6 +635,7 @@ const translatePage = () => {
     if (t(key)) node.textContent = t(key);
   });
   renderProducts();
+  renderMarkets();
   updateProforma();
   document.documentElement.classList.remove("is-loading");
 };
