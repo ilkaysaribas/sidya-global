@@ -14,6 +14,10 @@ const content = {
     installPanelCopy: "Open sidyaglobal.com on Android Chrome or iPhone Safari to add the site to your home screen.",
     installAndroid: "Open in Chrome, tap App, and confirm the install prompt.",
     installIos: "Open in Safari, tap Share, then choose Add to Home Screen.",
+    exchangeTitle: "Current TCMB rates",
+    exchangeLoading: "Loading...",
+    exchangeUpdated: "Updated",
+    exchangeUnavailable: "Rates could not be loaded",
     heroEyebrow: "Cleaning • Industrial • Home & Living",
     heroTitle: "Your Trusted Gateway to Reliable Products from Türkiye",
     heroCopy:
@@ -150,6 +154,10 @@ const content = {
     installPanelCopy: "Siteyi Android Chrome veya iPhone Safari ile açarak ana ekrana ekleyebilirsiniz.",
     installAndroid: "Chrome ile açın, Uygulama butonuna basın ve kurulum penceresini onaylayın.",
     installIos: "Safari ile açın, Paylaş düğmesine basın ve Ana Ekrana Ekle seçeneğini kullanın.",
+    exchangeTitle: "Güncel TCMB kurları",
+    exchangeLoading: "Yükleniyor...",
+    exchangeUpdated: "Güncellendi",
+    exchangeUnavailable: "Kur bilgileri alınamadı",
     heroEyebrow: "Temizlik • Endüstriyel • Ev ve Yaşam",
     heroTitle: "Türkiye'den Güvenilir Ürünlere Açılan Kapınız",
     heroCopy:
@@ -671,6 +679,11 @@ const t = (key) => content[currentLang][key] || content.en[key] || key;
 const getProductName = (product) => product.names[currentLang] || product.names.en;
 const formatWeight = (value) => `${value.toLocaleString("en-US")} kg`;
 const formatVolume = (value) => `${value.toFixed(2)} m3`;
+const formatTryRate = (value) =>
+  new Intl.NumberFormat("tr-TR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 4,
+  }).format(value);
 const getCartonsPerPallet = (product) => product.cartonsPerPallet || 60;
 const getUnitsPerCarton = (product) => product.unitsPerCarton || 12;
 const getKgPerCarton = (product) => product.kgPerCarton || product.kgPerPallet / getCartonsPerPallet(product);
@@ -709,6 +722,39 @@ const renderMarkets = () => {
   if (!marketList) return;
   const names = marketNames[currentLang] || marketNames.en;
   marketList.innerHTML = names.map((name) => `<span>${name}</span>`).join("");
+};
+
+let exchangeRatesData = null;
+
+const renderExchangeRates = () => {
+  const list = document.querySelector("#exchangeRateList");
+  const updated = document.querySelector("#exchangeUpdated");
+  if (!list || !updated) return;
+
+  if (!exchangeRatesData?.rates?.length) {
+    updated.textContent = t("exchangeLoading");
+    return;
+  }
+
+  list.innerHTML = exchangeRatesData.rates
+    .map((rate) => `<span>${rate.label} <strong>${formatTryRate(rate.value)} TL</strong></span>`)
+    .join("");
+
+  const stamp = exchangeRatesData.date || new Date(exchangeRatesData.updatedAt).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
+  updated.textContent = `${t("exchangeUpdated")}: ${stamp} · TCMB`;
+};
+
+const loadExchangeRates = async () => {
+  const updated = document.querySelector("#exchangeUpdated");
+  if (!updated || window.location.protocol === "file:") return;
+  try {
+    const response = await fetch("/api/exchange-rates", { cache: "no-store" });
+    if (!response.ok) throw new Error("Exchange API failed");
+    exchangeRatesData = await response.json();
+    renderExchangeRates();
+  } catch (error) {
+    updated.textContent = `${t("exchangeUnavailable")} · TCMB`;
+  }
 };
 
 const renderProformaProducts = () => {
@@ -913,6 +959,7 @@ const translatePage = () => {
   });
   renderProducts();
   renderMarkets();
+  renderExchangeRates();
   renderProformaProducts();
   renderProformaOrder();
   document.documentElement.classList.remove("is-loading");
@@ -1099,3 +1146,4 @@ document.querySelector("#mailProforma")?.addEventListener("click", sendProformaM
 document.querySelector("#whatsappProforma")?.addEventListener("click", sendProformaWhatsApp);
 translatePage();
 setupTracking();
+loadExchangeRates();

@@ -30,7 +30,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260601-11" />
+    <link rel="stylesheet" href="styles.css?v=20260601-12" />
   </head>
   <body>
     <header class="site-header">
@@ -111,6 +111,20 @@
         <button class="install-app-link" type="button" data-i18n="installAppCta">App</button>
       </div>
     </header>
+
+    <section class="exchange-rate-bar" aria-label="Current exchange rates">
+      <div class="exchange-rate-heading">
+        <strong data-i18n="exchangeTitle">Current TCMB rates</strong>
+        <span id="exchangeUpdated" data-i18n="exchangeLoading">Loading...</span>
+      </div>
+      <div class="exchange-rate-list" id="exchangeRateList">
+        <span>Dolar <strong>...</strong></span>
+        <span>Euro <strong>...</strong></span>
+        <span>Dolar/TL <strong>...</strong></span>
+        <span>Manat <strong>...</strong></span>
+        <span>Lari <strong>...</strong></span>
+      </div>
+    </section>
 
     <div class="install-panel" id="installPanel" hidden>
       <div class="install-panel-card" role="dialog" aria-modal="true" aria-labelledby="installPanelTitle">
@@ -581,6 +595,6 @@
       }
     </script>
     <script src="catalog-products.generated.js?v=20260601-4"></script>
-    <script src="script.js?v=20260601-13"></script>
+    <script src="script.js?v=20260601-14"></script>
   </body>
 </html>

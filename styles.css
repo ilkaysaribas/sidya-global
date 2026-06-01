@@ -59,6 +59,60 @@ textarea {
   backdrop-filter: blur(14px);
 }
 
+.exchange-rate-bar {
+  position: sticky;
+  top: 54px;
+  z-index: 19;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 8px clamp(16px, 4vw, 48px);
+  color: #f4f4f4;
+  background: #3c3f41;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.24);
+  font-size: 0.78rem;
+}
+
+.exchange-rate-heading {
+  display: grid;
+  gap: 2px;
+  min-width: 150px;
+}
+
+.exchange-rate-heading strong {
+  color: #fff;
+  font-size: 0.82rem;
+}
+
+.exchange-rate-heading span {
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.exchange-rate-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.exchange-rate-list span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.08);
+  font-weight: 800;
+}
+
+.exchange-rate-list strong {
+  color: #fff;
+}
+
 .brand,
 .header-actions,
 .nav-links {
@@ -1778,6 +1832,10 @@ h2 {
     padding-top: 2px;
   }
 
+  .exchange-rate-bar {
+    position: static;
+  }
+
   .hero h1 {
     max-width: 12ch;
   }
@@ -1845,6 +1903,23 @@ h2 {
     min-height: 36px;
     padding: 0 12px;
     font-size: 0.86rem;
+  }
+
+  .exchange-rate-bar {
+    display: grid;
+    gap: 8px;
+    padding: 10px 16px;
+  }
+
+  .exchange-rate-list {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .exchange-rate-list span {
+    flex: 0 0 auto;
   }
 
   .hero {
