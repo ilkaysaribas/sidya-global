@@ -5,6 +5,7 @@ const wantedCurrencies = {
   USD: "Dolar",
   EUR: "Euro",
   AZN: "Manat",
+  RUB: "Ruble",
   GEL: "Lari",
 };
 
