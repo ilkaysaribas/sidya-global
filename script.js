@@ -14,6 +14,13 @@ const content = {
     installPanelCopy: "Open sidyaglobal.com on Android Chrome or iPhone Safari to add the site to your home screen.",
     installAndroid: "Open in Chrome, tap App, and confirm the install prompt.",
     installIos: "Open in Safari, tap Share, then choose Add to Home Screen.",
+    installOpenSite: "Open sidyaglobal.com",
+    installAppleNote: "iPhone does not allow automatic app downloads from a website; use Safari's Add to Home Screen option.",
+    installAlreadyInstalled: "Sidya Global is already opening as an app window on this device.",
+    installStarted: "App installation has started.",
+    installCancelled: "App installation was cancelled.",
+    installIosFallback: "On iPhone, open this site in Safari, tap Share, then choose Add to Home Screen.",
+    installAndroidFallback: "If Android Chrome does not show the install prompt, open the browser menu and choose Install app or Add to Home screen.",
     exchangeTitle: "Current TCMB rates",
     exchangeLoading: "Loading...",
     exchangeUpdated: "Updated",
@@ -154,6 +161,13 @@ const content = {
     installPanelCopy: "Siteyi Android Chrome veya iPhone Safari ile açarak ana ekrana ekleyebilirsiniz.",
     installAndroid: "Chrome ile açın, Uygulama butonuna basın ve kurulum penceresini onaylayın.",
     installIos: "Safari ile açın, Paylaş düğmesine basın ve Ana Ekrana Ekle seçeneğini kullanın.",
+    installOpenSite: "sidyaglobal.com'u aç",
+    installAppleNote: "iPhone, web sitesinden otomatik uygulama indirmeye izin vermez; Safari'deki Ana Ekrana Ekle seçeneğini kullanın.",
+    installAlreadyInstalled: "Sidya Global bu cihazda zaten uygulama penceresi gibi açılıyor.",
+    installStarted: "Uygulama kurulumu başladı.",
+    installCancelled: "Uygulama kurulumu iptal edildi.",
+    installIosFallback: "iPhone'da siteyi Safari ile açın, Paylaş düğmesine basın ve Ana Ekrana Ekle seçeneğini seçin.",
+    installAndroidFallback: "Android Chrome kurulum penceresi göstermiyorsa tarayıcı menüsünden Uygulamayı yükle veya Ana ekrana ekle seçeneğini kullanın.",
     exchangeTitle: "Güncel TCMB kurları",
     exchangeLoading: "Yükleniyor...",
     exchangeUpdated: "Güncellendi",
@@ -1001,7 +1015,11 @@ window.addEventListener("beforeinstallprompt", (event) => {
 
 installButton?.addEventListener("click", async () => {
   if (isStandaloneApp()) {
-    showInstallPanel("Sidya Global is already opening as an app window on this device.");
+    showInstallPanel(t("installAlreadyInstalled"));
+    return;
+  }
+  if (isIosDevice()) {
+    showInstallPanel(t("installIosFallback"));
     return;
   }
   if (deferredInstallPrompt) {
@@ -1009,14 +1027,10 @@ installButton?.addEventListener("click", async () => {
     const choice = await deferredInstallPrompt.userChoice;
     deferredInstallPrompt = null;
     installButton.classList.remove("is-ready");
-    showInstallPanel(choice.outcome === "accepted" ? "App installation has started." : "App installation was cancelled.");
+    showInstallPanel(choice.outcome === "accepted" ? t("installStarted") : t("installCancelled"));
     return;
   }
-  showInstallPanel(
-    isIosDevice()
-      ? "On iPhone, open this site in Safari, tap Share, then choose Add to Home Screen."
-      : "If Android Chrome does not show the install prompt, open the browser menu and choose Install app or Add to Home screen.",
-  );
+  showInstallPanel(t("installAndroidFallback"));
 });
 
 installPanelClose?.addEventListener("click", hideInstallPanel);

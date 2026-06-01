@@ -30,6 +30,7 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--paper);
+  overflow-x: hidden;
 }
 
 a {
@@ -407,6 +408,29 @@ textarea {
 .install-steps span {
   color: var(--muted);
   line-height: 1.55;
+}
+
+.install-panel-actions {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.install-open-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  border-radius: 999px;
+  color: #fff;
+  background: #151515;
+  font-weight: 900;
+}
+
+.install-panel-actions span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
 }
 
 .hero {
@@ -1806,12 +1830,29 @@ h2 {
 }
 
 @media (max-width: 1060px) {
+  .site-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .header-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
   .nav-links {
     order: 3;
     width: 100%;
     overflow-x: auto;
     padding-top: 6px;
     gap: 18px;
+    scrollbar-width: none;
+  }
+
+  .nav-links::-webkit-scrollbar,
+  .top-contact-links::-webkit-scrollbar,
+  .exchange-rate-list::-webkit-scrollbar {
+    display: none;
   }
 
   .products-menu {
@@ -1876,13 +1917,14 @@ h2 {
 
 @media (max-width: 760px) {
   .site-header {
-    min-height: 68px;
+    min-height: 58px;
     flex-wrap: wrap;
-    padding: 12px 16px;
+    gap: 8px;
+    padding: 9px 12px;
   }
 
   .brand {
-    max-width: 185px;
+    max-width: calc(100vw - 170px);
     gap: 8px;
   }
 
@@ -1894,21 +1936,86 @@ h2 {
 
   .brand-name {
     white-space: normal;
-    font-size: 0.94rem;
+    font-size: 0.88rem;
     line-height: 1.06;
+  }
+
+  .header-actions {
+    flex: 1 1 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-items: stretch;
+    gap: 7px;
+  }
+
+  .top-contact-links,
+  .lang-switch,
+  .nav-links {
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
+  }
+
+  .top-contact-links {
+    order: 1;
+    grid-column: 1 / -1;
+  }
+
+  .lang-switch {
+    order: 2;
+    grid-column: 1 / -1;
+  }
+
+  .quote-link,
+  .install-app-link {
+    justify-self: stretch;
+  }
+
+  .nav-links {
+    order: 5;
+    gap: 8px;
+    padding-top: 2px;
+  }
+
+  .nav-links a,
+  .has-dropdown > a {
+    min-height: 32px;
+    flex: 0 0 auto;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    font-size: 0.76rem;
+  }
+
+  .products-menu {
+    top: 182px;
+    left: 10px;
+    right: 10px;
+    max-height: min(58vh, 390px);
+    padding: 9px;
+  }
+
+  .products-menu-column > .category-shortcut,
+  .firm-link {
+    min-height: 34px;
+    display: flex;
+    align-items: center;
   }
 
   .quote-link,
   .install-app-link {
     min-height: 36px;
     padding: 0 12px;
-    font-size: 0.86rem;
+    font-size: 0.8rem;
   }
 
   .exchange-rate-bar {
     display: grid;
-    gap: 8px;
-    padding: 10px 16px;
+    gap: 7px;
+    padding: 8px 12px;
+    font-size: 0.72rem;
   }
 
   .exchange-rate-list {
@@ -1920,15 +2027,18 @@ h2 {
 
   .exchange-rate-list span {
     flex: 0 0 auto;
+    min-height: 26px;
+    padding: 0 8px;
   }
 
   .hero {
-    min-height: 560px;
-    padding: 34px 16px 210px;
+    min-height: 430px;
+    align-items: start;
+    padding: 28px 14px 122px;
   }
 
   .hero-image {
-    object-position: 62% center;
+    object-position: 68% center;
   }
 
   .hero-overlay {
@@ -1938,14 +2048,46 @@ h2 {
   }
 
   .hero h1 {
-    max-width: 13ch;
-    font-size: clamp(1.9rem, 9vw, 2.9rem);
+    max-width: 18ch;
+    font-size: clamp(1.55rem, 7.6vw, 2.15rem);
+    line-height: 1.05;
+  }
+
+  .hero-copy {
+    max-width: 25ch;
+    font-size: 0.88rem;
+    line-height: 1.42;
+  }
+
+  .hero-actions {
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .primary-action,
+  .secondary-action {
+    min-height: 36px;
+    padding: 0 12px;
+    font-size: 0.82rem;
   }
 
   .hero-metrics {
     left: 16px;
     right: 16px;
-    grid-template-columns: 1fr;
+    bottom: 14px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .hero-metrics div {
+    padding: 9px 7px;
+  }
+
+  .hero-metrics strong {
+    font-size: 1rem;
+  }
+
+  .hero-metrics span {
+    font-size: 0.64rem;
   }
 
   .trust-band,
@@ -1963,7 +2105,7 @@ h2 {
 
   .section,
   .markets-section {
-    padding: 52px 16px;
+    padding: 38px 14px;
   }
 
   .section-heading {
@@ -1995,6 +2137,79 @@ h2 {
     grid-column: 2;
     justify-self: start;
     text-align: left;
+  }
+
+  .install-panel {
+    padding: 12px;
+  }
+
+  .install-panel-card {
+    width: min(100%, 360px);
+    padding: 18px;
+  }
+
+  .install-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .proforma-picker,
+  .proforma-order-summary {
+    padding: 12px;
+  }
+
+  .proforma-product-row {
+    gap: 9px;
+    padding: 10px;
+  }
+
+  .proforma-product-row dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .proforma-line {
+    display: grid;
+  }
+
+  .proforma-line-actions {
+    justify-content: start;
+  }
+
+  .scroll-top-button {
+    right: 12px;
+    bottom: 12px;
+    width: 44px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 430px) {
+  .top-contact-links a,
+  .lang-option {
+    min-height: 30px;
+    font-size: 0.7rem;
+    padding: 0 8px;
+  }
+
+  .hero {
+    min-height: 405px;
+  }
+
+  .hero h1 {
+    max-width: 17ch;
+    font-size: 1.62rem;
+  }
+
+  .hero-copy {
+    max-width: 23ch;
+  }
+
+  .hero-metrics {
+    left: 10px;
+    right: 10px;
+  }
+
+  .hero-metrics span {
+    font-size: 0.58rem;
   }
 }
 

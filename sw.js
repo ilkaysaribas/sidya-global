@@ -1,12 +1,12 @@
-const CACHE_NAME = "sidya-global-v20";
+const CACHE_NAME = "sidya-global-v21";
 
 const SHELL_ASSETS = [
   "./",
   "./index.html",
   "./offline.html",
-  "./styles.css?v=20260601-12",
+  "./styles.css?v=20260601-13",
   "./catalog-products.generated.js?v=20260601-4",
-  "./script.js?v=20260601-14",
+  "./script.js?v=20260601-15",
   "./manifest.webmanifest",
   "./assets/app-icon.svg",
   "./assets/app-icon-192.png",
