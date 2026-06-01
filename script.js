@@ -616,7 +616,9 @@ const productPartners = {
     { name: "Nivea", site: "https://www.nivea.com.tr/", catalog: "assets/nivea-katalog.pdf", logo: "assets/nivea-logo.svg" },
     { name: "Sebamed", site: "https://www.sebamed.com.tr/", logo: "assets/sebamed-logo.svg" },
     { name: "Vileda", site: "https://www.vileda.com.tr/", logo: "assets/vileda-logo.svg" },
-    { name: "Reckitt Benckiser Home Group", site: "https://www.reckitt.com/offices/turkey/", catalog: "assets/reckitt-katalog.pdf", logo: "assets/reckitt-logo.svg" },
+    { name: "Reckitt Benckiser Home Group", site: "https://www.reckitt.com/offices/turkey/", catalog: "assets/reckitt-katalog.pdf", logo: "assets/reckitt-logo.svg", catalogs: [
+      { label: "Core 2024 Catalog", href: "assets/reckitt-core-2024-katalog.pdf" },
+    ] },
   ],
   "food-products": [
     { name: "Öncü Salça", site: "https://www.oncusalca.com.tr/", logo: "assets/oncu-salca-logo.svg" },
