@@ -627,12 +627,12 @@ const productPartners = {
   "cleaning-products": [
     { name: "ABC Deterjan", site: "https://www.abcdeterjan.com.tr/", catalog: "assets/abc-deterjan-urunleri-katalog-2025.pdf", logo: "assets/abc-logo.jpg" },
     { name: "Unilever", site: "https://www.unilever.com.tr/", logo: "assets/unilever-logo.svg" },
-    { name: "P&G", site: "https://www.pg.com.tr/", logo: "assets/pg-logo.svg", catalogs: [
+    { name: "P&G", site: "https://www.pg.com.tr/", logo: "assets/pg-logo.svg" },
+    { name: "Henkel", site: "https://www.henkel.com.tr/", logo: "assets/henkel-logo.svg" },
+    { name: "Evyap", site: "https://www.evyap.com.tr/", catalog: "assets/evyap-katalog.pdf", logo: "assets/evyap-logo.svg", catalogs: [
       { label: "AZ Catalog", href: "assets/pm-catalog-azerbaijani.pdf" },
       { label: "KA Catalog", href: "assets/pm-catalog-georgian.pdf" },
     ] },
-    { name: "Henkel", site: "https://www.henkel.com.tr/", logo: "assets/henkel-logo.svg" },
-    { name: "Evyap", site: "https://www.evyap.com.tr/", catalog: "assets/evyap-katalog.pdf", logo: "assets/evyap-logo.svg" },
     { name: "Eczacıbaşı / Selpak", site: "https://www.eczacibasi.com.tr/", logo: "assets/selpak-logo.svg" },
     { name: "SC Johnson", site: "https://scjohnson.com/en", catalog: "assets/sc-johnson-katalog.pdf", logo: "assets/scjohnson-logo.svg" },
     { name: "Nivea", site: "https://www.nivea.com.tr/", catalog: "assets/nivea-katalog.pdf", logo: "assets/nivea-logo.svg" },
@@ -673,6 +673,15 @@ const productCatalog = [];
 productCatalog.push(...(window.SIDYA_CATALOG_PRODUCTS || []));
 
 const proformaOrder = new Map();
+const brandLogoMap = {
+  ABC: "assets/abc-logo.jpg",
+  Evyap: "assets/evyap-logo.svg",
+  "Johnson & Johnson": "assets/johnson-logo.svg",
+  Nivea: "assets/nivea-logo.svg",
+  "PM Catalog": "assets/evyap-logo.svg",
+  Reckitt: "assets/reckitt-logo.svg",
+  "SC Johnson": "assets/scjohnson-logo.svg",
+};
 
 const marketNames = {
   en: ["Georgia", "Azerbaijan", "Armenia", "Iran", "Iraq", "Russia", "Ukraine", "Kazakhstan"],
@@ -714,6 +723,7 @@ const getCartonsPerPallet = (product) => product.cartonsPerPallet || 60;
 const getUnitsPerCarton = (product) => product.unitsPerCarton || 12;
 const getKgPerCarton = (product) => product.kgPerCarton || product.kgPerPallet / getCartonsPerPallet(product);
 const getM3PerCarton = (product) => product.m3PerCarton || product.m3PerPallet / getCartonsPerPallet(product);
+const getBrandLogo = (product) => brandLogoMap[product.brand] || product.logo || "assets/app-icon.svg";
 const getProformaEntries = () =>
   [...proformaOrder.entries()]
     .map(([productId, cartons]) => ({ product: productCatalog.find((item) => item.id === productId), cartons }))
@@ -820,7 +830,7 @@ const renderProformaProducts = () => {
       const unitsPerCarton = getUnitsPerCarton(product);
       const kgPerCarton = getKgPerCarton(product);
       return `<article class="proforma-product-row">
-        <img class="proforma-product-image" src="${product.logo}" alt="" loading="lazy" />
+        <img class="proforma-product-image proforma-brand-logo" src="${getBrandLogo(product)}" alt="${product.brand} logo" loading="lazy" />
         <div>
           <strong>${getProductName(product)}</strong>
           <span>${product.brand} · ${product.liter}</span>

@@ -1275,6 +1275,10 @@ h2 {
   box-shadow: 0 0 0 1px rgba(16, 42, 67, 0.08);
 }
 
+.proforma-brand-logo {
+  padding: 8px;
+}
+
 .proforma-product-row strong,
 .proforma-line strong {
   display: block;
