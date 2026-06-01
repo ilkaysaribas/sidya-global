@@ -83,7 +83,7 @@ const content = {
     proformaM3PerCarton: "m3 / carton",
     proformaExcelCta: "Download Excel",
     proformaMailCta: "Send by Mail",
-    proformaWhatsappCta: "Send by WhatsApp",
+    proformaWhatsappCta: "Send by message",
     proformaQuoteEmpty: "Please add at least one product to the proforma list.",
     truckFillLabel: "TIR load",
     containerFillLabel: "Container load",
@@ -117,8 +117,8 @@ const content = {
     containerCapacity: "Approx. 76 m3 and 26,500 kg payload capacity.",
     contactKicker: "Quote and meeting",
     contactTitle: "Send your buying request quickly.",
-    contactCopy: "The form prepares an email draft for your request. You can also reach us directly through WhatsApp, Telegram or email.",
-    whatsappCta: "Contact and questions via WhatsApp",
+    contactCopy: "The form prepares an email draft for your request. You can also reach us directly through Telegram or email.",
+    whatsappCta: "Contact and questions",
     mailCta: "Request quote by email",
     telegramCta: "Message on Telegram",
     formName: "Full Name",
@@ -230,7 +230,7 @@ const content = {
     proformaM3PerCarton: "Koli m3",
     proformaExcelCta: "Excel indir",
     proformaMailCta: "Mail ile gönder",
-    proformaWhatsappCta: "WhatsApp ile gönder",
+    proformaWhatsappCta: "Mesaj ile gönder",
     proformaQuoteEmpty: "Lütfen proforma listesine en az bir ürün ekleyin.",
     truckFillLabel: "TIR dolumu",
     containerFillLabel: "Konteyner dolumu",
@@ -264,8 +264,8 @@ const content = {
     containerCapacity: "Yaklaşık 76 m3 ve 26.500 kg taşıma kapasitesi.",
     contactKicker: "Teklif ve görüşme",
     contactTitle: "Satın alma talebinizi hızlıca gönderin.",
-    contactCopy: "Form talebiniz için e-posta taslağı hazırlar. WhatsApp, Telegram veya e-posta ile de doğrudan ulaşabilirsiniz.",
-    whatsappCta: "WhatsApp ile iletişim ve sorular",
+    contactCopy: "Form talebiniz için e-posta taslağı hazırlar. Telegram veya e-posta ile de doğrudan ulaşabilirsiniz.",
+    whatsappCta: "İletişim ve sorular",
     mailCta: "Mail ile teklif iste",
     telegramCta: "Telegram ile yazın",
     formName: "Ad Soyad",
@@ -416,8 +416,8 @@ Object.assign(content.az, {
   containerCapacity: "Təxminən 76 m3 və 26.500 kg yük tutumu.",
   contactKicker: "Təklif və görüş",
   contactTitle: "Satınalma sorğunuzu tez göndərin.",
-  contactCopy: "Forma sorğunuz üçün e-poçt layihəsi hazırlayır. WhatsApp, Telegram və ya e-poçtla da əlaqə saxlaya bilərsiniz.",
-  whatsappCta: "WhatsApp ilə əlaqə və suallar",
+  contactCopy: "Forma sorğunuz üçün e-poçt layihəsi hazırlayır. Telegram və ya e-poçtla da əlaqə saxlaya bilərsiniz.",
+  whatsappCta: "Əlaqə və suallar",
   mailCta: "E-poçtla təklif istəyin",
   telegramCta: "Telegram ilə yazın",
   formName: "Ad Soyad",
@@ -488,8 +488,8 @@ Object.assign(content.ka, {
   containerCapacity: "დაახლოებით 76 მ3 და 26,500 კგ ტვირთამწეობა.",
   contactKicker: "შეთავაზება და შეხვედრა",
   contactTitle: "გაგზავნეთ შესყიდვის მოთხოვნა სწრაფად.",
-  contactCopy: "ფორმა ამზადებს ელფოსტის პროექტს. დაგვიკავშირდით WhatsApp, Telegram ან ელფოსტითაც.",
-  whatsappCta: "კონტაქტი WhatsApp-ით",
+  contactCopy: "ფორმა ამზადებს ელფოსტის პროექტს. დაგვიკავშირდით Telegram-ით ან ელფოსტით.",
+  whatsappCta: "კონტაქტი და კითხვები",
   mailCta: "შეთავაზება ელფოსტით",
   telegramCta: "Telegram-ით მიწერა",
   formName: "სახელი და გვარი",
@@ -557,8 +557,8 @@ Object.assign(content.ru, {
   containerCapacity: "Около 76 м3 и 26 500 кг грузоподъемности.",
   contactKicker: "Предложение и встреча",
   contactTitle: "Быстро отправьте запрос на закупку.",
-  contactCopy: "Форма подготовит черновик письма. Также можно связаться через WhatsApp, Telegram или email.",
-  whatsappCta: "Связь и вопросы через WhatsApp",
+  contactCopy: "Форма подготовит черновик письма. Также можно связаться через Telegram или email.",
+  whatsappCta: "Связь и вопросы",
   mailCta: "Запросить предложение по email",
   telegramCta: "Написать в Telegram",
   formName: "Имя и фамилия",
@@ -991,11 +991,6 @@ const sendProformaMail = () => {
   window.location.href = `mailto:${businessEmail}?subject=${subject}&body=${body}`;
 };
 
-const sendProformaWhatsApp = () => {
-  if (!downloadProformaCsv()) return;
-  window.open(`https://wa.me/905534546118?text=${encodeURIComponent(buildProformaMessage())}`, "_blank", "noopener");
-};
-
 const translatePage = () => {
   document.documentElement.lang = currentLang;
   document.querySelectorAll(".lang-option").forEach((button) => {
@@ -1191,7 +1186,6 @@ document.querySelector("#proformaOrderLines")?.addEventListener("click", (event)
 });
 document.querySelector("#downloadProformaExcel")?.addEventListener("click", downloadProformaCsv);
 document.querySelector("#mailProforma")?.addEventListener("click", sendProformaMail);
-document.querySelector("#whatsappProforma")?.addEventListener("click", sendProformaWhatsApp);
 translatePage();
 setupTracking();
 loadExchangeRates();

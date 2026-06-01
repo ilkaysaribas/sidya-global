@@ -1556,17 +1556,24 @@ h2 {
   overflow: hidden;
   display: grid;
   place-items: center;
-  height: 132px;
+  height: 144px;
   border-radius: 8px;
   background: #f7f7f7;
 }
 
-.transport-card img {
+.transport-frame {
   position: relative;
+  width: min(100%, 315px);
+  aspect-ratio: 420 / 180;
+}
+
+.transport-card img {
+  position: absolute;
+  inset: 0;
   z-index: 1;
   display: block;
-  width: min(100%, 315px);
-  height: 112px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
@@ -1596,17 +1603,17 @@ h2 {
 }
 
 .transport-visual-truck .load-zone {
-  left: max(8%, calc(50% - 150px));
-  right: max(35%, calc(50% - 12px));
-  top: 31%;
-  bottom: 33%;
+  left: 6.7%;
+  right: 33.8%;
+  top: 30%;
+  bottom: 32%;
 }
 
 .transport-visual-container .load-zone {
-  left: max(10%, calc(50% - 138px));
-  right: max(10%, calc(50% - 138px));
-  top: 29%;
-  bottom: 28%;
+  left: 9%;
+  right: 9%;
+  top: 28%;
+  bottom: 27%;
 }
 
 .load-fill {
