@@ -7678,5 +7678,1905 @@ window.SIDYA_CATALOG_PRODUCTS = [
       "ka": "Neutrogena Norveç Formülü",
       "ru": "Neutrogena Norveç Formülü"
     }
+  },
+  {
+    "id": "nivea-catalog-001",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "40 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Luminous630 Günlük UV Yüz Bakım Kremi SPF50",
+      "tr": "NIVEA Luminous630 Günlük UV Yüz Bakım Kremi SPF50",
+      "az": "NIVEA Luminous630 Günlük UV Yüz Bakım Kremi SPF50",
+      "ka": "NIVEA Luminous630 Günlük UV Yüz Bakım Kremi SPF50",
+      "ru": "NIVEA Luminous630 Günlük UV Yüz Bakım Kremi SPF50"
+    }
+  },
+  {
+    "id": "nivea-catalog-002",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "50 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Luminous630 Leke Karşıtı Gece Bakım Kremi",
+      "tr": "NIVEA Luminous630 Leke Karşıtı Gece Bakım Kremi",
+      "az": "NIVEA Luminous630 Leke Karşıtı Gece Bakım Kremi",
+      "ka": "NIVEA Luminous630 Leke Karşıtı Gece Bakım Kremi",
+      "ru": "NIVEA Luminous630 Leke Karşıtı Gece Bakım Kremi"
+    }
+  },
+  {
+    "id": "nivea-catalog-003",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "30 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Luminous630 Leke ve Yaşlanma Karşıtı Serum",
+      "tr": "NIVEA Luminous630 Leke ve Yaşlanma Karşıtı Serum",
+      "az": "NIVEA Luminous630 Leke ve Yaşlanma Karşıtı Serum",
+      "ka": "NIVEA Luminous630 Leke ve Yaşlanma Karşıtı Serum",
+      "ru": "NIVEA Luminous630 Leke ve Yaşlanma Karşıtı Serum"
+    }
+  },
+  {
+    "id": "nivea-catalog-004",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "30 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Luminous630 Sivilce Lekesi Karşıtı Serum",
+      "tr": "NIVEA Luminous630 Sivilce Lekesi Karşıtı Serum",
+      "az": "NIVEA Luminous630 Sivilce Lekesi Karşıtı Serum",
+      "ka": "NIVEA Luminous630 Sivilce Lekesi Karşıtı Serum",
+      "ru": "NIVEA Luminous630 Sivilce Lekesi Karşıtı Serum"
+    }
+  },
+  {
+    "id": "nivea-catalog-005",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "30 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Luminous630 Skin Glow Anında Aydınlatıcı Serum",
+      "tr": "NIVEA Luminous630 Skin Glow Anında Aydınlatıcı Serum",
+      "az": "NIVEA Luminous630 Skin Glow Anında Aydınlatıcı Serum",
+      "ka": "NIVEA Luminous630 Skin Glow Anında Aydınlatıcı Serum",
+      "ru": "NIVEA Luminous630 Skin Glow Anında Aydınlatıcı Serum"
+    }
+  },
+  {
+    "id": "nivea-catalog-006",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "100 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Luminous630 Skin Glow Peeling Etkili Tonik",
+      "tr": "NIVEA Luminous630 Skin Glow Peeling Etkili Tonik",
+      "az": "NIVEA Luminous630 Skin Glow Peeling Etkili Tonik",
+      "ka": "NIVEA Luminous630 Skin Glow Peeling Etkili Tonik",
+      "ru": "NIVEA Luminous630 Skin Glow Peeling Etkili Tonik"
+    }
+  },
+  {
+    "id": "nivea-catalog-007",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "30 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Cellular Epigenetics Rejuvenating Serum",
+      "tr": "NIVEA Cellular Epigenetics Rejuvenating Serum",
+      "az": "NIVEA Cellular Epigenetics Rejuvenating Serum",
+      "ka": "NIVEA Cellular Epigenetics Rejuvenating Serum",
+      "ru": "NIVEA Cellular Epigenetics Rejuvenating Serum"
+    }
+  },
+  {
+    "id": "nivea-catalog-008",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "30 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Cellular Expert Filler Hyaluronik Asit Dolgunlaştırıcı Serum",
+      "tr": "NIVEA Cellular Expert Filler Hyaluronik Asit Dolgunlaştırıcı Serum",
+      "az": "NIVEA Cellular Expert Filler Hyaluronik Asit Dolgunlaştırıcı Serum",
+      "ka": "NIVEA Cellular Expert Filler Hyaluronik Asit Dolgunlaştırıcı Serum",
+      "ru": "NIVEA Cellular Expert Filler Hyaluronik Asit Dolgunlaştırıcı Serum"
+    }
+  },
+  {
+    "id": "nivea-catalog-009",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "50 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Cellular Expert Filler Yoğun Yaşlanma Karşıtı Gündüz Kremi SPF15",
+      "tr": "NIVEA Cellular Expert Filler Yoğun Yaşlanma Karşıtı Gündüz Kremi SPF15",
+      "az": "NIVEA Cellular Expert Filler Yoğun Yaşlanma Karşıtı Gündüz Kremi SPF15",
+      "ka": "NIVEA Cellular Expert Filler Yoğun Yaşlanma Karşıtı Gündüz Kremi SPF15",
+      "ru": "NIVEA Cellular Expert Filler Yoğun Yaşlanma Karşıtı Gündüz Kremi SPF15"
+    }
+  },
+  {
+    "id": "nivea-catalog-010",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "30 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Cellular Expert Lift Şekillendirici Serum",
+      "tr": "NIVEA Cellular Expert Lift Şekillendirici Serum",
+      "az": "NIVEA Cellular Expert Lift Şekillendirici Serum",
+      "ka": "NIVEA Cellular Expert Lift Şekillendirici Serum",
+      "ru": "NIVEA Cellular Expert Lift Şekillendirici Serum"
+    }
+  },
+  {
+    "id": "nivea-catalog-011",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "30 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Q10 Kırışıklık Karşıtı Çift Etkili Serum",
+      "tr": "NIVEA Q10 Kırışıklık Karşıtı Çift Etkili Serum",
+      "az": "NIVEA Q10 Kırışıklık Karşıtı Çift Etkili Serum",
+      "ka": "NIVEA Q10 Kırışıklık Karşıtı Çift Etkili Serum",
+      "ru": "NIVEA Q10 Kırışıklık Karşıtı Çift Etkili Serum"
+    }
+  },
+  {
+    "id": "nivea-catalog-012",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "40 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Q10 Günlük UV Fluid Krem SPF50",
+      "tr": "NIVEA Q10 Günlük UV Fluid Krem SPF50",
+      "az": "NIVEA Q10 Günlük UV Fluid Krem SPF50",
+      "ka": "NIVEA Q10 Günlük UV Fluid Krem SPF50",
+      "ru": "NIVEA Q10 Günlük UV Fluid Krem SPF50"
+    }
+  },
+  {
+    "id": "nivea-catalog-013",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "50 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Q10 Power Kırışıklık Karşıtı Gündüz Kremi SPF30",
+      "tr": "NIVEA Q10 Power Kırışıklık Karşıtı Gündüz Kremi SPF30",
+      "az": "NIVEA Q10 Power Kırışıklık Karşıtı Gündüz Kremi SPF30",
+      "ka": "NIVEA Q10 Power Kırışıklık Karşıtı Gündüz Kremi SPF30",
+      "ru": "NIVEA Q10 Power Kırışıklık Karşıtı Gündüz Kremi SPF30"
+    }
+  },
+  {
+    "id": "nivea-catalog-014",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "15 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Q10 Power Kırışıklık Karşıtı Göz Kremi",
+      "tr": "NIVEA Q10 Power Kırışıklık Karşıtı Göz Kremi",
+      "az": "NIVEA Q10 Power Kırışıklık Karşıtı Göz Kremi",
+      "ka": "NIVEA Q10 Power Kırışıklık Karşıtı Göz Kremi",
+      "ru": "NIVEA Q10 Power Kırışıklık Karşıtı Göz Kremi"
+    }
+  },
+  {
+    "id": "nivea-catalog-015",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "50 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Q10 Power Kırışıklık Karşıtı Gece Kremi",
+      "tr": "NIVEA Q10 Power Kırışıklık Karşıtı Gece Kremi",
+      "az": "NIVEA Q10 Power Kırışıklık Karşıtı Gece Kremi",
+      "ka": "NIVEA Q10 Power Kırışıklık Karşıtı Gece Kremi",
+      "ru": "NIVEA Q10 Power Kırışıklık Karşıtı Gece Kremi"
+    }
+  },
+  {
+    "id": "nivea-catalog-016",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "50 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Essentials BB Krem SPF15",
+      "tr": "NIVEA Essentials BB Krem SPF15",
+      "az": "NIVEA Essentials BB Krem SPF15",
+      "ka": "NIVEA Essentials BB Krem SPF15",
+      "ru": "NIVEA Essentials BB Krem SPF15"
+    }
+  },
+  {
+    "id": "nivea-catalog-017",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "200 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Derma Skin Clear Sivilce Karşıtı Tonik",
+      "tr": "NIVEA Derma Skin Clear Sivilce Karşıtı Tonik",
+      "az": "NIVEA Derma Skin Clear Sivilce Karşıtı Tonik",
+      "ka": "NIVEA Derma Skin Clear Sivilce Karşıtı Tonik",
+      "ru": "NIVEA Derma Skin Clear Sivilce Karşıtı Tonik"
+    }
+  },
+  {
+    "id": "nivea-catalog-018",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "30 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Derma Skin Clear Dengeleyici Serum",
+      "tr": "NIVEA Derma Skin Clear Dengeleyici Serum",
+      "az": "NIVEA Derma Skin Clear Dengeleyici Serum",
+      "ka": "NIVEA Derma Skin Clear Dengeleyici Serum",
+      "ru": "NIVEA Derma Skin Clear Dengeleyici Serum"
+    }
+  },
+  {
+    "id": "nivea-catalog-019",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "40 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Derma Skin Clear UV Fluid",
+      "tr": "NIVEA Derma Skin Clear UV Fluid",
+      "az": "NIVEA Derma Skin Clear UV Fluid",
+      "ka": "NIVEA Derma Skin Clear UV Fluid",
+      "ru": "NIVEA Derma Skin Clear UV Fluid"
+    }
+  },
+  {
+    "id": "nivea-catalog-020",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "150 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Derma Skin Clear Yüz Temizleme Jeli",
+      "tr": "NIVEA Derma Skin Clear Yüz Temizleme Jeli",
+      "az": "NIVEA Derma Skin Clear Yüz Temizleme Jeli",
+      "ka": "NIVEA Derma Skin Clear Yüz Temizleme Jeli",
+      "ru": "NIVEA Derma Skin Clear Yüz Temizleme Jeli"
+    }
+  },
+  {
+    "id": "nivea-catalog-021",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "400 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Micellar Makyaj Temizleme Suyu",
+      "tr": "NIVEA Micellar Makyaj Temizleme Suyu",
+      "az": "NIVEA Micellar Makyaj Temizleme Suyu",
+      "ka": "NIVEA Micellar Makyaj Temizleme Suyu",
+      "ru": "NIVEA Micellar Makyaj Temizleme Suyu"
+    }
+  },
+  {
+    "id": "nivea-catalog-022",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "25 Adet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Makyaj Temizleme Mendilleri",
+      "tr": "NIVEA Makyaj Temizleme Mendilleri",
+      "az": "NIVEA Makyaj Temizleme Mendilleri",
+      "ka": "NIVEA Makyaj Temizleme Mendilleri",
+      "ru": "NIVEA Makyaj Temizleme Mendilleri"
+    }
+  },
+  {
+    "id": "nivea-catalog-023",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "200 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Aqua Rose Organik Gül Suyu İçeren Tonik",
+      "tr": "NIVEA Aqua Rose Organik Gül Suyu İçeren Tonik",
+      "az": "NIVEA Aqua Rose Organik Gül Suyu İçeren Tonik",
+      "ka": "NIVEA Aqua Rose Organik Gül Suyu İçeren Tonik",
+      "ru": "NIVEA Aqua Rose Organik Gül Suyu İçeren Tonik"
+    }
+  },
+  {
+    "id": "nivea-catalog-024",
+    "brand": "Nivea",
+    "logo": "assets/nivea-logo.svg",
+    "category": "cleaning-products",
+    "liter": "150 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 360,
+    "m3PerPallet": 1.5,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "NIVEA Aqua Rose Yüz Yıkama Köpüğü",
+      "tr": "NIVEA Aqua Rose Yüz Yıkama Köpüğü",
+      "az": "NIVEA Aqua Rose Yüz Yıkama Köpüğü",
+      "ka": "NIVEA Aqua Rose Yüz Yıkama Köpüğü",
+      "ru": "NIVEA Aqua Rose Yüz Yıkama Köpüğü"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-001",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x150 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Duş Sabunu Natural Olive Zeytinyağı Özlü",
+      "tr": "Duru Duş Sabunu Natural Olive Zeytinyağı Özlü",
+      "az": "Duru Duş Sabunu Natural Olive Zeytinyağı Özlü",
+      "ka": "Duru Duş Sabunu Natural Olive Zeytinyağı Özlü",
+      "ru": "Duru Duş Sabunu Natural Olive Zeytinyağı Özlü"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-002",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x150 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Duş Sabunu Fresh Sensations Okyanus Tazeliği",
+      "tr": "Duru Duş Sabunu Fresh Sensations Okyanus Tazeliği",
+      "az": "Duru Duş Sabunu Fresh Sensations Okyanus Tazeliği",
+      "ka": "Duru Duş Sabunu Fresh Sensations Okyanus Tazeliği",
+      "ru": "Duru Duş Sabunu Fresh Sensations Okyanus Tazeliği"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-003",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x150 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Duş Sabunu Fresh Sensations Çiçek Tazeliği",
+      "tr": "Duru Duş Sabunu Fresh Sensations Çiçek Tazeliği",
+      "az": "Duru Duş Sabunu Fresh Sensations Çiçek Tazeliği",
+      "ka": "Duru Duş Sabunu Fresh Sensations Çiçek Tazeliği",
+      "ru": "Duru Duş Sabunu Fresh Sensations Çiçek Tazeliği"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-004",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x150 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Duş Sabunu Fresh Sensations Yağmur Tazeliği",
+      "tr": "Duru Duş Sabunu Fresh Sensations Yağmur Tazeliği",
+      "az": "Duru Duş Sabunu Fresh Sensations Yağmur Tazeliği",
+      "ka": "Duru Duş Sabunu Fresh Sensations Yağmur Tazeliği",
+      "ru": "Duru Duş Sabunu Fresh Sensations Yağmur Tazeliği"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-005",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "2x135 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Hydro Pure Sakura Kalıp Sabun",
+      "tr": "Duru Hydro Pure Sakura Kalıp Sabun",
+      "az": "Duru Hydro Pure Sakura Kalıp Sabun",
+      "ka": "Duru Hydro Pure Sakura Kalıp Sabun",
+      "ru": "Duru Hydro Pure Sakura Kalıp Sabun"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-006",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "2x135 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Hydro Pure Aloe Vera Kalıp Sabun",
+      "tr": "Duru Hydro Pure Aloe Vera Kalıp Sabun",
+      "az": "Duru Hydro Pure Aloe Vera Kalıp Sabun",
+      "ka": "Duru Hydro Pure Aloe Vera Kalıp Sabun",
+      "ru": "Duru Hydro Pure Aloe Vera Kalıp Sabun"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-007",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x150 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Saf & Doğal Gül Sabun",
+      "tr": "Duru Saf & Doğal Gül Sabun",
+      "az": "Duru Saf & Doğal Gül Sabun",
+      "ka": "Duru Saf & Doğal Gül Sabun",
+      "ru": "Duru Saf & Doğal Gül Sabun"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-008",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x150 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Saf & Doğal Lavanta Sabun",
+      "tr": "Duru Saf & Doğal Lavanta Sabun",
+      "az": "Duru Saf & Doğal Lavanta Sabun",
+      "ka": "Duru Saf & Doğal Lavanta Sabun",
+      "ru": "Duru Saf & Doğal Lavanta Sabun"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-009",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x100 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Fresh Çiçek Tazeliği Sabun",
+      "tr": "Duru Fresh Çiçek Tazeliği Sabun",
+      "az": "Duru Fresh Çiçek Tazeliği Sabun",
+      "ka": "Duru Fresh Çiçek Tazeliği Sabun",
+      "ru": "Duru Fresh Çiçek Tazeliği Sabun"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-010",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x100 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Fresh Okyanus Tazeliği Sabun",
+      "tr": "Duru Fresh Okyanus Tazeliği Sabun",
+      "az": "Duru Fresh Okyanus Tazeliği Sabun",
+      "ka": "Duru Fresh Okyanus Tazeliği Sabun",
+      "ru": "Duru Fresh Okyanus Tazeliği Sabun"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-011",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x90 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Diamonds Red Sabun",
+      "tr": "Duru Diamonds Red Sabun",
+      "az": "Duru Diamonds Red Sabun",
+      "ka": "Duru Diamonds Red Sabun",
+      "ru": "Duru Diamonds Red Sabun"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-012",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x90 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Diamonds Green Sabun",
+      "tr": "Duru Diamonds Green Sabun",
+      "az": "Duru Diamonds Green Sabun",
+      "ka": "Duru Diamonds Green Sabun",
+      "ru": "Duru Diamonds Green Sabun"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-013",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x90 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Diamonds Blue Sabun",
+      "tr": "Duru Diamonds Blue Sabun",
+      "az": "Duru Diamonds Blue Sabun",
+      "ka": "Duru Diamonds Blue Sabun",
+      "ru": "Duru Diamonds Blue Sabun"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-014",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x90 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Moods Energy Sabun",
+      "tr": "Duru Moods Energy Sabun",
+      "az": "Duru Moods Energy Sabun",
+      "ka": "Duru Moods Energy Sabun",
+      "ru": "Duru Moods Energy Sabun"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-015",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x90 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Moods Relax Sabun",
+      "tr": "Duru Moods Relax Sabun",
+      "az": "Duru Moods Relax Sabun",
+      "ka": "Duru Moods Relax Sabun",
+      "ru": "Duru Moods Relax Sabun"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-016",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x150 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Fax Ayvalık Zeytinyağlı Kalıp Sabun",
+      "tr": "Fax Ayvalık Zeytinyağlı Kalıp Sabun",
+      "az": "Fax Ayvalık Zeytinyağlı Kalıp Sabun",
+      "ka": "Fax Ayvalık Zeytinyağlı Kalıp Sabun",
+      "ru": "Fax Ayvalık Zeytinyağlı Kalıp Sabun"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-017",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x150 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Fax Kapadokya Lavanta Kalıp Sabun",
+      "tr": "Fax Kapadokya Lavanta Kalıp Sabun",
+      "az": "Fax Kapadokya Lavanta Kalıp Sabun",
+      "ka": "Fax Kapadokya Lavanta Kalıp Sabun",
+      "ru": "Fax Kapadokya Lavanta Kalıp Sabun"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-018",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x150 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Fax Klasik Saf Kalıp Sabun",
+      "tr": "Fax Klasik Saf Kalıp Sabun",
+      "az": "Fax Klasik Saf Kalıp Sabun",
+      "ka": "Fax Klasik Saf Kalıp Sabun",
+      "ru": "Fax Klasik Saf Kalıp Sabun"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-019",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "4x70 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Fax Saf Sabun Beyaz Ecopack",
+      "tr": "Fax Saf Sabun Beyaz Ecopack",
+      "az": "Fax Saf Sabun Beyaz Ecopack",
+      "ka": "Fax Saf Sabun Beyaz Ecopack",
+      "ru": "Fax Saf Sabun Beyaz Ecopack"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-020",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "Sıvı Sabun",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Activex Sıvı Sabun Aktif Koruma",
+      "tr": "Activex Sıvı Sabun Aktif Koruma",
+      "az": "Activex Sıvı Sabun Aktif Koruma",
+      "ka": "Activex Sıvı Sabun Aktif Koruma",
+      "ru": "Activex Sıvı Sabun Aktif Koruma"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-021",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "Sıvı Sabun",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Activex Sıvı Sabun Hassas Koruma",
+      "tr": "Activex Sıvı Sabun Hassas Koruma",
+      "az": "Activex Sıvı Sabun Hassas Koruma",
+      "ka": "Activex Sıvı Sabun Hassas Koruma",
+      "ru": "Activex Sıvı Sabun Hassas Koruma"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-022",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "Sıvı Sabun",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Sıvı Sabun Kiraz Çiçeği",
+      "tr": "Duru Sıvı Sabun Kiraz Çiçeği",
+      "az": "Duru Sıvı Sabun Kiraz Çiçeği",
+      "ka": "Duru Sıvı Sabun Kiraz Çiçeği",
+      "ru": "Duru Sıvı Sabun Kiraz Çiçeği"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-023",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "Sıvı Sabun",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Sıvı Sabun Mandalina & Greyfurt",
+      "tr": "Duru Sıvı Sabun Mandalina & Greyfurt",
+      "az": "Duru Sıvı Sabun Mandalina & Greyfurt",
+      "ka": "Duru Sıvı Sabun Mandalina & Greyfurt",
+      "ru": "Duru Sıvı Sabun Mandalina & Greyfurt"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-024",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "Sıvı Sabun",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Sıvı Sabun Avokado",
+      "tr": "Duru Sıvı Sabun Avokado",
+      "az": "Duru Sıvı Sabun Avokado",
+      "ka": "Duru Sıvı Sabun Avokado",
+      "ru": "Duru Sıvı Sabun Avokado"
+    }
+  },
+  {
+    "id": "pm-catalog-catalog-025",
+    "brand": "PM Catalog",
+    "logo": "assets/app-icon.svg",
+    "category": "cleaning-products",
+    "liter": "Granül Deterjan",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 18,
+    "kgPerCarton": 10,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Duru Doğal Granül Matik Sabun Lavanta",
+      "tr": "Duru Doğal Granül Matik Sabun Lavanta",
+      "az": "Duru Doğal Granül Matik Sabun Lavanta",
+      "ka": "Duru Doğal Granül Matik Sabun Lavanta",
+      "ru": "Duru Doğal Granül Matik Sabun Lavanta"
+    }
+  },
+  {
+    "id": "reckitt-catalog-001",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "40 Adet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Ultimate Plus Tablet",
+      "tr": "Finish Ultimate Plus Tablet",
+      "az": "Finish Ultimate Plus Tablet",
+      "ka": "Finish Ultimate Plus Tablet",
+      "ru": "Finish Ultimate Plus Tablet"
+    }
+  },
+  {
+    "id": "reckitt-catalog-002",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "20 Adet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Ultimate Plus Tablet",
+      "tr": "Finish Ultimate Plus Tablet",
+      "az": "Finish Ultimate Plus Tablet",
+      "ka": "Finish Ultimate Plus Tablet",
+      "ru": "Finish Ultimate Plus Tablet"
+    }
+  },
+  {
+    "id": "reckitt-catalog-003",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "60 Adet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Ultimate Plus Tablet",
+      "tr": "Finish Ultimate Plus Tablet",
+      "az": "Finish Ultimate Plus Tablet",
+      "ka": "Finish Ultimate Plus Tablet",
+      "ru": "Finish Ultimate Plus Tablet"
+    }
+  },
+  {
+    "id": "reckitt-catalog-004",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "60 Adet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Ultimate Plus Limon Tablet",
+      "tr": "Finish Ultimate Plus Limon Tablet",
+      "az": "Finish Ultimate Plus Limon Tablet",
+      "ka": "Finish Ultimate Plus Limon Tablet",
+      "ru": "Finish Ultimate Plus Limon Tablet"
+    }
+  },
+  {
+    "id": "reckitt-catalog-005",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "75 Adet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Ultimate Plus Tablet",
+      "tr": "Finish Ultimate Plus Tablet",
+      "az": "Finish Ultimate Plus Tablet",
+      "ka": "Finish Ultimate Plus Tablet",
+      "ru": "Finish Ultimate Plus Tablet"
+    }
+  },
+  {
+    "id": "reckitt-catalog-006",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "48 Adet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Ultimate Tablet",
+      "tr": "Finish Ultimate Tablet",
+      "az": "Finish Ultimate Tablet",
+      "ka": "Finish Ultimate Tablet",
+      "ru": "Finish Ultimate Tablet"
+    }
+  },
+  {
+    "id": "reckitt-catalog-007",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "65 Adet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Ultimate Tablet",
+      "tr": "Finish Ultimate Tablet",
+      "az": "Finish Ultimate Tablet",
+      "ka": "Finish Ultimate Tablet",
+      "ru": "Finish Ultimate Tablet"
+    }
+  },
+  {
+    "id": "reckitt-catalog-008",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "50 Adet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Quantum Tablet",
+      "tr": "Finish Quantum Tablet",
+      "az": "Finish Quantum Tablet",
+      "ka": "Finish Quantum Tablet",
+      "ru": "Finish Quantum Tablet"
+    }
+  },
+  {
+    "id": "reckitt-catalog-009",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "72 Adet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Quantum Tablet",
+      "tr": "Finish Quantum Tablet",
+      "az": "Finish Quantum Tablet",
+      "ka": "Finish Quantum Tablet",
+      "ru": "Finish Quantum Tablet"
+    }
+  },
+  {
+    "id": "reckitt-catalog-010",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "80 Adet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Quantum Tablet",
+      "tr": "Finish Quantum Tablet",
+      "az": "Finish Quantum Tablet",
+      "ka": "Finish Quantum Tablet",
+      "ru": "Finish Quantum Tablet"
+    }
+  },
+  {
+    "id": "reckitt-catalog-011",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "100 Adet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Power Tablet",
+      "tr": "Finish Power Tablet",
+      "az": "Finish Power Tablet",
+      "ka": "Finish Power Tablet",
+      "ru": "Finish Power Tablet"
+    }
+  },
+  {
+    "id": "reckitt-catalog-012",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "800 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Parlatıcı Limon",
+      "tr": "Finish Parlatıcı Limon",
+      "az": "Finish Parlatıcı Limon",
+      "ka": "Finish Parlatıcı Limon",
+      "ru": "Finish Parlatıcı Limon"
+    }
+  },
+  {
+    "id": "reckitt-catalog-013",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "1500 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Tuz",
+      "tr": "Finish Tuz",
+      "az": "Finish Tuz",
+      "ka": "Finish Tuz",
+      "ru": "Finish Tuz"
+    }
+  },
+  {
+    "id": "reckitt-catalog-014",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "1000 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Hepsi Bir Arada Jel",
+      "tr": "Finish Hepsi Bir Arada Jel",
+      "az": "Finish Hepsi Bir Arada Jel",
+      "ka": "Finish Hepsi Bir Arada Jel",
+      "ru": "Finish Hepsi Bir Arada Jel"
+    }
+  },
+  {
+    "id": "reckitt-catalog-015",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "1000 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Hepsi Bir Arada Jel Limon",
+      "tr": "Finish Hepsi Bir Arada Jel Limon",
+      "az": "Finish Hepsi Bir Arada Jel Limon",
+      "ka": "Finish Hepsi Bir Arada Jel Limon",
+      "ru": "Finish Hepsi Bir Arada Jel Limon"
+    }
+  },
+  {
+    "id": "reckitt-catalog-016",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "250 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Makine Temizleyici",
+      "tr": "Finish Makine Temizleyici",
+      "az": "Finish Makine Temizleyici",
+      "ka": "Finish Makine Temizleyici",
+      "ru": "Finish Makine Temizleyici"
+    }
+  },
+  {
+    "id": "reckitt-catalog-017",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "Set",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Finish Temizlik ve Bakım Seti",
+      "tr": "Finish Temizlik ve Bakım Seti",
+      "az": "Finish Temizlik ve Bakım Seti",
+      "ka": "Finish Temizlik ve Bakım Seti",
+      "ru": "Finish Temizlik ve Bakım Seti"
+    }
+  },
+  {
+    "id": "reckitt-catalog-018",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "1000 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Vanish Kosla Gold Sıvı Pembe",
+      "tr": "Vanish Kosla Gold Sıvı Pembe",
+      "az": "Vanish Kosla Gold Sıvı Pembe",
+      "ka": "Vanish Kosla Gold Sıvı Pembe",
+      "ru": "Vanish Kosla Gold Sıvı Pembe"
+    }
+  },
+  {
+    "id": "reckitt-catalog-019",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "1000 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Vanish Kosla Gold Sıvı Beyaz",
+      "tr": "Vanish Kosla Gold Sıvı Beyaz",
+      "az": "Vanish Kosla Gold Sıvı Beyaz",
+      "ka": "Vanish Kosla Gold Sıvı Beyaz",
+      "ru": "Vanish Kosla Gold Sıvı Beyaz"
+    }
+  },
+  {
+    "id": "reckitt-catalog-020",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "200 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Vanish Kosla Ön İşlem Leke Çıkarıcı Jel",
+      "tr": "Vanish Kosla Ön İşlem Leke Çıkarıcı Jel",
+      "az": "Vanish Kosla Ön İşlem Leke Çıkarıcı Jel",
+      "ka": "Vanish Kosla Ön İşlem Leke Çıkarıcı Jel",
+      "ru": "Vanish Kosla Ön İşlem Leke Çıkarıcı Jel"
+    }
+  },
+  {
+    "id": "reckitt-catalog-021",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "850 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Vanish Kosla Halı Elde",
+      "tr": "Vanish Kosla Halı Elde",
+      "az": "Vanish Kosla Halı Elde",
+      "ka": "Vanish Kosla Halı Elde",
+      "ru": "Vanish Kosla Halı Elde"
+    }
+  },
+  {
+    "id": "reckitt-catalog-022",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "480 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Vanish Multipower Toz Pembe",
+      "tr": "Vanish Multipower Toz Pembe",
+      "az": "Vanish Multipower Toz Pembe",
+      "ka": "Vanish Multipower Toz Pembe",
+      "ru": "Vanish Multipower Toz Pembe"
+    }
+  },
+  {
+    "id": "reckitt-catalog-023",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "480 gr",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Vanish Multipower Toz Beyaz",
+      "tr": "Vanish Multipower Toz Beyaz",
+      "az": "Vanish Multipower Toz Beyaz",
+      "ka": "Vanish Multipower Toz Beyaz",
+      "ru": "Vanish Multipower Toz Beyaz"
+    }
+  },
+  {
+    "id": "reckitt-catalog-024",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "19 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Air Wick Elektrikli Kit + Yedek Şişe Vanilya Büyüsü",
+      "tr": "Air Wick Elektrikli Kit + Yedek Şişe Vanilya Büyüsü",
+      "az": "Air Wick Elektrikli Kit + Yedek Şişe Vanilya Büyüsü",
+      "ka": "Air Wick Elektrikli Kit + Yedek Şişe Vanilya Büyüsü",
+      "ru": "Air Wick Elektrikli Kit + Yedek Şişe Vanilya Büyüsü"
+    }
+  },
+  {
+    "id": "reckitt-catalog-025",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "19 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Air Wick Elektrikli Kit + Yedek Şişe Lavanta",
+      "tr": "Air Wick Elektrikli Kit + Yedek Şişe Lavanta",
+      "az": "Air Wick Elektrikli Kit + Yedek Şişe Lavanta",
+      "ka": "Air Wick Elektrikli Kit + Yedek Şişe Lavanta",
+      "ru": "Air Wick Elektrikli Kit + Yedek Şişe Lavanta"
+    }
+  },
+  {
+    "id": "reckitt-catalog-026",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "19 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Air Wick Elektrikli Yedek Şişe Sakura Bahçesi",
+      "tr": "Air Wick Elektrikli Yedek Şişe Sakura Bahçesi",
+      "az": "Air Wick Elektrikli Yedek Şişe Sakura Bahçesi",
+      "ka": "Air Wick Elektrikli Yedek Şişe Sakura Bahçesi",
+      "ru": "Air Wick Elektrikli Yedek Şişe Sakura Bahçesi"
+    }
+  },
+  {
+    "id": "reckitt-catalog-027",
+    "brand": "Reckitt",
+    "logo": "assets/reckitt-logo.svg",
+    "category": "cleaning-products",
+    "liter": "Katalog",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 6,
+    "kgPerCarton": 8,
+    "kgPerPallet": 480,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Cillit Bang Temizlik Ürünleri",
+      "tr": "Cillit Bang Temizlik Ürünleri",
+      "az": "Cillit Bang Temizlik Ürünleri",
+      "ka": "Cillit Bang Temizlik Ürünleri",
+      "ru": "Cillit Bang Temizlik Ürünleri"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-001",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "300 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Raid Sinek Öldürücü Sprey Pure Kokusuz",
+      "tr": "Raid Sinek Öldürücü Sprey Pure Kokusuz",
+      "az": "Raid Sinek Öldürücü Sprey Pure Kokusuz",
+      "ka": "Raid Sinek Öldürücü Sprey Pure Kokusuz",
+      "ru": "Raid Sinek Öldürücü Sprey Pure Kokusuz"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-002",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "300 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Raid Kokusuz Sinek Öldürücü Sprey",
+      "tr": "Raid Kokusuz Sinek Öldürücü Sprey",
+      "az": "Raid Kokusuz Sinek Öldürücü Sprey",
+      "ka": "Raid Kokusuz Sinek Öldürücü Sprey",
+      "ru": "Raid Kokusuz Sinek Öldürücü Sprey"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-003",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "300 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Raid Max Hamam Böceği Karınca ve Örümcek Öldürücü Sprey",
+      "tr": "Raid Max Hamam Böceği Karınca ve Örümcek Öldürücü Sprey",
+      "az": "Raid Max Hamam Böceği Karınca ve Örümcek Öldürücü Sprey",
+      "ka": "Raid Max Hamam Böceği Karınca ve Örümcek Öldürücü Sprey",
+      "ru": "Raid Max Hamam Böceği Karınca ve Örümcek Öldürücü Sprey"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-004",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "Sprey",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Raid Böcek Öldürücü Sprey",
+      "tr": "Raid Böcek Öldürücü Sprey",
+      "az": "Raid Böcek Öldürücü Sprey",
+      "ka": "Raid Böcek Öldürücü Sprey",
+      "ru": "Raid Böcek Öldürücü Sprey"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-005",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "20 Tablet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Raid Sinek Öldürücü Tabletler",
+      "tr": "Raid Sinek Öldürücü Tabletler",
+      "az": "Raid Sinek Öldürücü Tabletler",
+      "ka": "Raid Sinek Öldürücü Tabletler",
+      "ru": "Raid Sinek Öldürücü Tabletler"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-006",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "30 Tablet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Raid Sinek Öldürücü Tabletler",
+      "tr": "Raid Sinek Öldürücü Tabletler",
+      "az": "Raid Sinek Öldürücü Tabletler",
+      "ka": "Raid Sinek Öldürücü Tabletler",
+      "ru": "Raid Sinek Öldürücü Tabletler"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-007",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "1 Isıtıcı + 10 Tablet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Raid Elektro Isıtıcı Cihaz ve Mat",
+      "tr": "Raid Elektro Isıtıcı Cihaz ve Mat",
+      "az": "Raid Elektro Isıtıcı Cihaz ve Mat",
+      "ka": "Raid Elektro Isıtıcı Cihaz ve Mat",
+      "ru": "Raid Elektro Isıtıcı Cihaz ve Mat"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-008",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "Yedek",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Raid Elektro Mat Yedek",
+      "tr": "Raid Elektro Mat Yedek",
+      "az": "Raid Elektro Mat Yedek",
+      "ka": "Raid Elektro Mat Yedek",
+      "ru": "Raid Elektro Mat Yedek"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-009",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "1 Yedek",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Raid Gece & Gündüz Elektro Isıtıcı",
+      "tr": "Raid Gece & Gündüz Elektro Isıtıcı",
+      "az": "Raid Gece & Gündüz Elektro Isıtıcı",
+      "ka": "Raid Gece & Gündüz Elektro Isıtıcı",
+      "ru": "Raid Gece & Gündüz Elektro Isıtıcı"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-010",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "12 Adet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Raid Hamam Böceği Yemi",
+      "tr": "Raid Hamam Böceği Yemi",
+      "az": "Raid Hamam Böceği Yemi",
+      "ka": "Raid Hamam Böceği Yemi",
+      "ru": "Raid Hamam Böceği Yemi"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-011",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "2 Adet",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Raid Karınca Yemi",
+      "tr": "Raid Karınca Yemi",
+      "az": "Raid Karınca Yemi",
+      "ka": "Raid Karınca Yemi",
+      "ru": "Raid Karınca Yemi"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-012",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "45 Gece",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Raid Elektro Likit Cihaz",
+      "tr": "Raid Elektro Likit Cihaz",
+      "az": "Raid Elektro Likit Cihaz",
+      "ka": "Raid Elektro Likit Cihaz",
+      "ru": "Raid Elektro Likit Cihaz"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-013",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "100 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Off Sinekkovar Losyon",
+      "tr": "Off Sinekkovar Losyon",
+      "az": "Off Sinekkovar Losyon",
+      "ka": "Off Sinekkovar Losyon",
+      "ru": "Off Sinekkovar Losyon"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-014",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "100 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Off Sinekkovar Pro Care Sprey",
+      "tr": "Off Sinekkovar Pro Care Sprey",
+      "az": "Off Sinekkovar Pro Care Sprey",
+      "ka": "Off Sinekkovar Pro Care Sprey",
+      "ru": "Off Sinekkovar Pro Care Sprey"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-015",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "300 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Glade Aerosol Okyanus Sessizliği",
+      "tr": "Glade Aerosol Okyanus Sessizliği",
+      "az": "Glade Aerosol Okyanus Sessizliği",
+      "ka": "Glade Aerosol Okyanus Sessizliği",
+      "ru": "Glade Aerosol Okyanus Sessizliği"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-016",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "300 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Glade Aerosol Lavanta",
+      "tr": "Glade Aerosol Lavanta",
+      "az": "Glade Aerosol Lavanta",
+      "ka": "Glade Aerosol Lavanta",
+      "ru": "Glade Aerosol Lavanta"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-017",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "300 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Glade Aerosol Oryantal Oud",
+      "tr": "Glade Aerosol Oryantal Oud",
+      "az": "Glade Aerosol Oryantal Oud",
+      "ka": "Glade Aerosol Oryantal Oud",
+      "ru": "Glade Aerosol Oryantal Oud"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-018",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "300 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Glade Aerosol Aşkın Büyüsü",
+      "tr": "Glade Aerosol Aşkın Büyüsü",
+      "az": "Glade Aerosol Aşkın Büyüsü",
+      "ka": "Glade Aerosol Aşkın Büyüsü",
+      "ru": "Glade Aerosol Aşkın Büyüsü"
+    }
+  },
+  {
+    "id": "sc-johnson-catalog-019",
+    "brand": "SC Johnson",
+    "logo": "assets/scjohnson-logo.svg",
+    "category": "cleaning-products",
+    "liter": "300 ml",
+    "cartonsPerPallet": 60,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5,
+    "kgPerPallet": 300,
+    "m3PerPallet": 1.6,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Glade Aerosol İpeksi Vanilya",
+      "tr": "Glade Aerosol İpeksi Vanilya",
+      "az": "Glade Aerosol İpeksi Vanilya",
+      "ka": "Glade Aerosol İpeksi Vanilya",
+      "ru": "Glade Aerosol İpeksi Vanilya"
+    }
   }
 ];
