@@ -11,15 +11,15 @@
     <title>Sidya Global | Product Showcase and Export</title>
     <meta
       name="description"
-      content="Sidya Global is a modern export showcase for presenting products professionally to international buyers."
+      content="Sidya Global helps international buyers source quality products from trusted Turkish suppliers."
     />
     <meta name="google-site-verification" content="" data-tracking-placeholder="google-search-console" />
     <meta name="yandex-verification" content="" data-tracking-placeholder="yandex-webmaster" />
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
-    <link rel="preload" href="assets/sidya-global-hero-clean.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260601-4" />
+    <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
+    <link rel="stylesheet" href="styles.css?v=20260601-5" />
   </head>
   <body>
     <header class="site-header">
@@ -33,7 +33,7 @@
           <a href="#products" data-i18n="navProducts">Products</a>
           <div class="products-menu" aria-label="Product categories">
             <div class="products-menu-column">
-              <a class="category-shortcut" href="#home-products" data-i18n="navHome">Home</a>
+              <a class="category-shortcut" href="#home-products" data-i18n="navHome">Home & Living</a>
               <a class="firm-link" href="https://www.garipleryapimarket.com/">Garipler Yapı Market</a>
             </div>
             <div class="products-menu-column">
@@ -61,6 +61,7 @@
         <a href="#partners" data-i18n="navPartners">Partners</a>
         <a href="#process" data-i18n="navProcess">Process</a>
         <a href="#markets" data-i18n="navMarkets">Markets</a>
+        <a href="#proforma" data-i18n="navProforma">Proforma</a>
       </nav>
 
       <div class="header-actions">
@@ -69,7 +70,7 @@
           <a href="https://wa.me/905534546118" target="_blank" rel="noopener">WhatsApp</a>
           <a href="https://t.me/sidyaglobal" target="_blank" rel="noopener">Telegram</a>
         </div>
-        <div class="lang-switch" aria-label="Dil seçimi">
+        <div class="lang-switch" aria-label="Language selection">
           <button class="lang-option" type="button" data-lang="tr" aria-label="Türkçe">
             <img src="assets/flag-tr.svg" alt="" aria-hidden="true" /> TR
           </button>
@@ -93,19 +94,19 @@
 
     <div class="install-panel" id="installPanel" hidden>
       <div class="install-panel-card" role="dialog" aria-modal="true" aria-labelledby="installPanelTitle">
-        <button class="install-panel-close" type="button" aria-label="Kapat">×</button>
-        <h2 id="installPanelTitle">Sidya Global uygulaması</h2>
-        <p id="installPanelCopy">
-          Telefon uygulaması için site HTTPS olarak yayında olmalı. Android Chrome veya iPhone Safari ile ana ekrana eklenebilir.
+        <button class="install-panel-close" type="button" aria-label="Close">x</button>
+        <h2 id="installPanelTitle" data-i18n="installPanelTitle">Sidya Global app</h2>
+        <p id="installPanelCopy" data-i18n="installPanelCopy">
+          Open sidyaglobal.com on Android Chrome or iPhone Safari to add the site to your home screen.
         </p>
         <div class="install-steps">
           <div>
             <strong>Android</strong>
-            <span>Chrome ile açın, Uygulama butonuna basın ve tarayıcının kurulum penceresini onaylayın.</span>
+            <span data-i18n="installAndroid">Open in Chrome, tap App, and confirm the install prompt.</span>
           </div>
           <div>
             <strong>iPhone</strong>
-            <span>Safari ile açın, Paylaş düğmesine basın ve Ana Ekrana Ekle seçeneğini kullanın.</span>
+            <span data-i18n="installIos">Open in Safari, tap Share, then choose Add to Home Screen.</span>
           </div>
         </div>
       </div>
@@ -115,170 +116,123 @@
       <section class="hero" aria-labelledby="hero-title">
         <img
           class="hero-image"
-          src="assets/sidya-global-hero-clean.jpeg"
-          alt="Modern depoda ihracata hazir paketlenmis urunler"
+          src="assets/sidya-global-hero-wide.jpeg"
+          alt="Sidya Global logistics truck and containers at port"
         />
         <div class="hero-overlay"></div>
         <div class="hero-content">
-          <p class="eyebrow" data-i18n="heroEyebrow">Türkiye'den dünyaya ürün tedariği</p>
-          <h1 id="hero-title" data-i18n="heroTitle">
-            Ürünlerinizi uluslararası alıcılarla buluşturan modern ihracat vitrini
-          </h1>
+          <p class="eyebrow" data-i18n="heroEyebrow">Cleaning • Industrial • Home &amp; Living</p>
+          <h1 id="hero-title" data-i18n="heroTitle">Your Trusted Gateway to Reliable Products from Türkiye</h1>
           <p class="hero-copy" data-i18n="heroCopy">
-            Katalog, kalite belgeleri, lojistik ve teklif süreçlerini tek bir profesyonel web deneyiminde toplayın.
+            Sidya Global helps international buyers source quality products from trusted Turkish suppliers — quickly,
+            transparently, and professionally.
           </p>
           <div class="hero-actions">
-            <a class="primary-action" href="#products" data-i18n="heroPrimary">Ürünleri İncele</a>
-            <a class="secondary-action" href="mailto:info@sidyaglobal.com?subject=Sidya%20Global%20Quote%20Request" data-i18n="heroSecondary">B2B Teklif Formu</a>
+            <a class="primary-action" href="#contact" data-i18n="heroPrimary">Get a Quote</a>
+            <a class="secondary-action" href="#products" data-i18n="heroSecondary">View Products</a>
           </div>
         </div>
-        <div class="hero-metrics" aria-label="İhracat metrikleri">
+        <div class="hero-metrics" aria-label="Export metrics">
           <div>
             <strong>38+</strong>
-            <span data-i18n="metricCountries">Hedef ülke</span>
+            <span data-i18n="metricCountries">Target markets</span>
           </div>
           <div>
-            <strong>3+</strong>
-            <span data-i18n="metricCategories">Ürün kategorisi</span>
+            <strong>5</strong>
+            <span data-i18n="metricCategories">Product groups</span>
           </div>
           <div>
             <strong>72h</strong>
-            <span data-i18n="metricQuote">Teklif dönüşü</span>
+            <span data-i18n="metricQuote">Quote turnaround</span>
           </div>
         </div>
       </section>
 
-      <section class="trust-band" aria-label="Güven unsurları">
-        <span data-i18n="trustOne">CE ve ISO belgeli tedarik ağı</span>
-        <span data-i18n="trustTwo">FOB, CIF ve EXW teslim opsiyonları</span>
-        <span data-i18n="trustThree">Numune ve özel etiket desteği</span>
-        <span data-i18n="trustFour">Çok dilli katalog hazırlığı</span>
-      </section>
-
-      <section class="section intro-section" id="about" aria-labelledby="about-title">
-        <div>
-          <p class="section-kicker" data-i18n="introKicker">Biz kimiz</p>
-          <h2 id="about-title" data-i18n="introTitle">Sidya Global, güvenilir tedarik ile doğru pazarı buluşturur.</h2>
-        </div>
-        <div class="about-copy">
-          <p data-i18n="introCopy">
-            Sidya Global; Trabzon merkezli, hızlı tüketim, temizlik, gıda ve endüstriyel ürünlerde üretici ve marka iş ortaklarını uluslararası alıcılarla buluşturan ihracat odaklı bir ticaret platformudur.
-          </p>
-          <div class="mission-grid">
-            <article>
-              <h3 data-i18n="missionTitle">Misyonumuz</h3>
-              <p data-i18n="missionCopy">Alıcıların doğru ürüne, güvenilir tedarikçiye ve şeffaf ihracat sürecine hızlı ulaşmasını sağlamak.</p>
-            </article>
-            <article>
-              <h3 data-i18n="visionTitle">Vizyonumuz</h3>
-              <p data-i18n="visionCopy">Türkiye merkezli ürünleri bölgesel ve küresel pazarlarda güçlü, sürdürülebilir ve tercih edilen markalar haline getirmek.</p>
-            </article>
-          </div>
-        </div>
+      <section class="trust-band" aria-label="Trust points">
+        <span data-i18n="trustOne">Trusted Turkish supplier network</span>
+        <span data-i18n="trustTwo">FOB, CIF and EXW delivery options</span>
+        <span data-i18n="trustThree">Transparent proforma preparation</span>
+        <span data-i18n="trustFour">Multilingual catalog support</span>
       </section>
 
       <section class="section products-section" id="products" aria-labelledby="products-title">
         <div class="section-heading">
-          <p class="section-kicker" data-i18n="productsKicker">Katalog</p>
-          <h2 id="products-title" data-i18n="productsTitle">Öne çıkan ürün grupları</h2>
+          <p class="section-kicker" data-i18n="productsKicker">Catalog</p>
+          <h2 id="products-title" data-i18n="productsTitle">Featured product groups</h2>
         </div>
         <div class="product-grid" id="productGrid"></div>
       </section>
 
       <section class="section partners-section" id="partners" aria-labelledby="partners-title">
         <div class="section-heading">
-          <p class="section-kicker" data-i18n="partnersKicker">İş birlikleri</p>
-          <h2 id="partners-title" data-i18n="partnersTitle">Stratejik ortaklarımız</h2>
+          <p class="section-kicker" data-i18n="partnersKicker">Collaborations</p>
+          <h2 id="partners-title" data-i18n="partnersTitle">Our strategic partners</h2>
         </div>
         <div class="partner-grid">
           <article class="partner-card">
-            <img src="assets/abc-logo.jpg" alt="ABC Deterjan logosu" />
+            <img src="assets/abc-logo.jpg" alt="ABC Deterjan logo" />
             <span>ABC Deterjan</span>
             <div class="partner-actions">
-              <a class="site-action" href="https://www.abcdeterjan.com.tr/" data-i18n="partnerSiteCta">Web Sitesi</a>
-              <a
-                class="catalog-action"
-                href="assets/abc-deterjan-urunleri-katalog-2025.pdf"
-                target="_blank"
-                rel="noopener"
-                data-i18n="sampleCatalogCta"
-              >
-                Kataloğu Aç
-              </a>
+              <a class="site-action" href="https://www.abcdeterjan.com.tr/" data-i18n="partnerSiteCta">Website</a>
+              <a class="catalog-action" href="assets/abc-deterjan-urunleri-katalog-2025.pdf" target="_blank" rel="noopener" data-i18n="sampleCatalogCta">Open Catalog</a>
             </div>
           </article>
           <article class="partner-card">
-            <img src="assets/unilever-logo.svg" alt="Unilever logosu" />
+            <img src="assets/unilever-logo.svg" alt="Unilever logo" />
             <span>Unilever</span>
             <div class="partner-actions">
-              <a class="site-action" href="https://www.unilever.com.tr/" data-i18n="partnerSiteCta">Web Sitesi</a>
+              <a class="site-action" href="https://www.unilever.com.tr/" data-i18n="partnerSiteCta">Website</a>
             </div>
           </article>
           <article class="partner-card">
-            <img src="assets/pg-logo.svg" alt="P&G logosu" />
+            <img src="assets/pg-logo.svg" alt="P&G logo" />
             <span>P&amp;G</span>
             <div class="partner-actions">
-              <a class="site-action" href="https://www.pg.com.tr/" data-i18n="partnerSiteCta">Web Sitesi</a>
+              <a class="site-action" href="https://www.pg.com.tr/" data-i18n="partnerSiteCta">Website</a>
             </div>
           </article>
           <article class="partner-card">
-            <img src="assets/henkel-logo.svg" alt="Henkel logosu" />
+            <img src="assets/henkel-logo.svg" alt="Henkel logo" />
             <span>Henkel</span>
             <div class="partner-actions">
-              <a class="site-action" href="https://www.henkel.com.tr/" data-i18n="partnerSiteCta">Web Sitesi</a>
+              <a class="site-action" href="https://www.henkel.com.tr/" data-i18n="partnerSiteCta">Website</a>
             </div>
           </article>
           <article class="partner-card">
-            <img src="assets/johnson-logo.svg" alt="Johnson & Johnson logosu" />
+            <img src="assets/johnson-logo.svg" alt="Johnson & Johnson logo" />
             <span>Johnson &amp; Johnson</span>
             <div class="partner-actions">
-              <a class="site-action" href="https://www.jnjmedicalcloud.com.tr/tr-tr" data-i18n="partnerSiteCta">Web Sitesi</a>
-              <a
-                class="catalog-action"
-                href="assets/johnson-katalog.pdf"
-                target="_blank"
-                rel="noopener"
-                data-i18n="sampleCatalogCta"
-              >
-                Kataloğu Aç
-              </a>
+              <a class="site-action" href="https://www.jnjmedicalcloud.com.tr/tr-tr" data-i18n="partnerSiteCta">Website</a>
+              <a class="catalog-action" href="assets/johnson-katalog.pdf" target="_blank" rel="noopener" data-i18n="sampleCatalogCta">Open Catalog</a>
             </div>
           </article>
           <article class="partner-card">
-            <img src="assets/evyap-logo.svg" alt="Evyap logosu" />
+            <img src="assets/evyap-logo.svg" alt="Evyap logo" />
             <span>Evyap</span>
             <div class="partner-actions">
-              <a class="site-action" href="https://www.evyap.com.tr/" data-i18n="partnerSiteCta">Web Sitesi</a>
-              <a
-                class="catalog-action"
-                href="assets/evyap-katalog.pdf"
-                target="_blank"
-                rel="noopener"
-                data-i18n="sampleCatalogCta"
-              >
-                Kataloğu Aç
-              </a>
+              <a class="site-action" href="https://www.evyap.com.tr/" data-i18n="partnerSiteCta">Website</a>
+              <a class="catalog-action" href="assets/evyap-katalog.pdf" target="_blank" rel="noopener" data-i18n="sampleCatalogCta">Open Catalog</a>
             </div>
           </article>
           <article class="partner-card">
-            <img src="assets/demet-temizlik-logo.svg" alt="Demet Temizlik logosu" />
+            <img src="assets/demet-temizlik-logo.svg" alt="Demet Temizlik logo" />
             <span>Demet Temizlik</span>
             <div class="partner-actions">
-              <a class="site-action" href="https://demettemizlik.com/" data-i18n="partnerSiteCta">Web Sitesi</a>
+              <a class="site-action" href="https://demettemizlik.com/" data-i18n="partnerSiteCta">Website</a>
             </div>
           </article>
           <article class="partner-card">
-            <img src="assets/oncu-salca-logo.svg" alt="Öncü Salça logosu" />
+            <img src="assets/oncu-salca-logo.svg" alt="Öncü Salça logo" />
             <span>Öncü Salça</span>
             <div class="partner-actions">
-              <a class="site-action" href="https://www.oncusalca.com.tr/" data-i18n="partnerSiteCta">Web Sitesi</a>
+              <a class="site-action" href="https://www.oncusalca.com.tr/" data-i18n="partnerSiteCta">Website</a>
             </div>
           </article>
           <article class="partner-card">
-            <img src="assets/garipler-yapi-market-logo.svg" alt="Garipler Yapı Market logosu" />
+            <img src="assets/garipler-yapi-market-logo.svg" alt="Garipler Yapı Market logo" />
             <span>Garipler Yapı Market</span>
             <div class="partner-actions">
-              <a class="site-action" href="https://www.garipleryapimarket.com/" data-i18n="partnerSiteCta">Web Sitesi</a>
+              <a class="site-action" href="https://www.garipleryapimarket.com/" data-i18n="partnerSiteCta">Website</a>
             </div>
           </article>
         </div>
@@ -286,106 +240,204 @@
 
       <section class="section process-section" id="process" aria-labelledby="process-title">
         <div class="section-heading">
-          <p class="section-kicker" data-i18n="processKicker">İhracat akışı</p>
-          <h2 id="process-title" data-i18n="processTitle">Sorgudan sevkiyata kadar kontrollü süreç</h2>
+          <p class="section-kicker" data-i18n="processKicker">Export flow</p>
+          <h2 id="process-title" data-i18n="processTitle">A controlled path from inquiry to shipment</h2>
         </div>
         <div class="process-list">
           <article>
             <span>01</span>
-            <h3 data-i18n="stepOneTitle">Talep analizi</h3>
-            <p data-i18n="stepOneCopy">Ürün, miktar, hedef ülke ve sertifika ihtiyacı netleştirilir.</p>
+            <h3 data-i18n="stepOneTitle">Inquiry review</h3>
+            <p data-i18n="stepOneCopy">Product, quantity, market and delivery needs are clarified.</p>
           </article>
           <article>
             <span>02</span>
-            <h3 data-i18n="stepTwoTitle">Numune ve teklif</h3>
-            <p data-i18n="stepTwoCopy">Birim fiyat, ambalaj, termin ve teslim şekli alıcıya sunulur.</p>
+            <h3 data-i18n="stepTwoTitle">Proforma setup</h3>
+            <p data-i18n="stepTwoCopy">Pallet count, gross weight and volume are calculated clearly.</p>
           </article>
           <article>
             <span>03</span>
-            <h3 data-i18n="stepThreeTitle">Üretim takibi</h3>
-            <p data-i18n="stepThreeCopy">Kalite kontrol, etiketleme ve yükleme planı yönetilir.</p>
+            <h3 data-i18n="stepThreeTitle">Supply follow-up</h3>
+            <p data-i18n="stepThreeCopy">Supplier, stock, packaging and loading details are coordinated.</p>
           </article>
           <article>
             <span>04</span>
-            <h3 data-i18n="stepFourTitle">Lojistik teslim</h3>
-            <p data-i18n="stepFourCopy">Konteyner, evrak ve gümrük hazırlığı koordineli ilerler.</p>
+            <h3 data-i18n="stepFourTitle">Logistics delivery</h3>
+            <p data-i18n="stepFourCopy">Truck, container, documentation and shipment planning move together.</p>
           </article>
         </div>
       </section>
 
       <section class="markets-section" id="markets" aria-labelledby="markets-title">
         <div class="market-copy">
-          <p class="section-kicker" data-i18n="marketsKicker">Hedef pazarlar</p>
-          <h2 id="markets-title" data-i18n="marketsTitle">Avrupa, Orta Doğu ve Kuzey Afrika alıcılarına hazır sunum.</h2>
+          <p class="section-kicker" data-i18n="marketsKicker">Target markets</p>
+          <h2 id="markets-title" data-i18n="marketsTitle">Ready for nearby, northern and eastern markets from Türkiye.</h2>
           <p data-i18n="marketsCopy">
-            Ürün portföyünüzü bölgeye göre fiyat, belge, ambalaj ve dil ihtiyaçlarına uyarlayan bir yapı ile sunun.
+            Sidya Global prepares offers for buyers across Europe, the Caucasus, the Black Sea region, Central Asia and the Middle East.
           </p>
         </div>
-        <div class="market-map" aria-label="Hedef pazar listesi">
+        <div class="market-map" aria-label="Target market list">
+          <span>Georgia</span>
+          <span>Azerbaijan</span>
+          <span>Armenia</span>
+          <span>Iran</span>
+          <span>Iraq</span>
+          <span>Russia</span>
+          <span>Ukraine</span>
+          <span>Romania</span>
+          <span>Bulgaria</span>
+          <span>Kazakhstan</span>
           <span>Germany</span>
-          <span>United Kingdom</span>
           <span>UAE</span>
-          <span>Saudi Arabia</span>
-          <span>Morocco</span>
-          <span>Netherlands</span>
-          <span>Qatar</span>
-          <span>France</span>
+        </div>
+      </section>
+
+      <section class="section proforma-section" id="proforma" aria-labelledby="proforma-title">
+        <div class="section-heading">
+          <p class="section-kicker" data-i18n="proformaKicker">Proforma platform</p>
+          <h2 id="proforma-title" data-i18n="proformaTitle">Purchase proforma and loading calculator</h2>
+          <p data-i18n="proformaCopy">
+            Select a product line, enter pallet quantity and see total pallet, weight and volume values instantly.
+          </p>
+        </div>
+
+        <div class="proforma-layout">
+          <form class="proforma-form" id="proformaForm">
+            <label>
+              <span data-i18n="proformaBuyer">Buyer company</span>
+              <input name="buyer" value="Sample Buyer Ltd." />
+            </label>
+            <label>
+              <span data-i18n="proformaProduct">Product line</span>
+              <select name="product" id="proformaProduct"></select>
+            </label>
+            <label>
+              <span data-i18n="proformaPallets">Pallet quantity</span>
+              <input name="pallets" id="proformaPallets" type="number" min="1" value="10" />
+            </label>
+          </form>
+
+          <div class="proforma-summary">
+            <div>
+              <span data-i18n="palletFactor">Pallet factor</span>
+              <strong id="palletFactorValue">-</strong>
+            </div>
+            <div>
+              <span data-i18n="singleWeight">Weight / pallet</span>
+              <strong id="singleWeightValue">-</strong>
+            </div>
+            <div>
+              <span data-i18n="singleVolume">m3 / pallet</span>
+              <strong id="singleVolumeValue">-</strong>
+            </div>
+            <div>
+              <span data-i18n="totalWeight">Total weight</span>
+              <strong id="totalWeightValue">-</strong>
+            </div>
+            <div>
+              <span data-i18n="totalVolume">Total volume</span>
+              <strong id="totalVolumeValue">-</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="proforma-table-wrap">
+          <table class="proforma-table">
+            <thead>
+              <tr>
+                <th data-i18n="tableItem">Item</th>
+                <th data-i18n="tablePallet">Pallets</th>
+                <th data-i18n="tableWeight">Gross kg</th>
+                <th data-i18n="tableVolume">Volume m3</th>
+              </tr>
+            </thead>
+            <tbody id="proformaRows"></tbody>
+          </table>
+        </div>
+
+        <div class="transport-grid">
+          <article class="transport-card">
+            <img src="assets/transport-truck.svg" alt="Standard TIR visual" />
+            <h3 data-i18n="truckTitle">Standard TIR</h3>
+            <p data-i18n="truckCapacity">Approx. 90 m3 and 24,000 kg payload capacity.</p>
+          </article>
+          <article class="transport-card">
+            <img src="assets/transport-container.svg" alt="40 HC container visual" />
+            <h3 data-i18n="containerTitle">40 HC Container</h3>
+            <p data-i18n="containerCapacity">Approx. 76 m3 and 26,500 kg payload capacity.</p>
+          </article>
         </div>
       </section>
 
       <section class="section contact-section" id="contact" aria-labelledby="contact-title">
         <div class="contact-copy">
-          <p class="section-kicker" data-i18n="contactKicker">Teklif ve görüşme</p>
-          <h2 id="contact-title" data-i18n="contactTitle">Alıcı taleplerini hızlıca toplayın.</h2>
+          <p class="section-kicker" data-i18n="contactKicker">Quote and meeting</p>
+          <h2 id="contact-title" data-i18n="contactTitle">Send your buying request quickly.</h2>
           <p data-i18n="contactCopy">
-            Formu gönderen alıcı için otomatik e-posta taslağı hazırlanır. E-posta adresini kendi şirket adresinizle değiştirebilirsiniz.
+            The form prepares an email draft for your request. You can also reach us directly through WhatsApp, Telegram or email.
           </p>
-          <div class="contact-points">
-            <span data-i18n="contactPointOne">Katalog ve numune talebi</span>
-            <span data-i18n="contactPointTwo">Hedef ülkeye göre belge kontrolü</span>
-            <span data-i18n="contactPointThree">Konteyner veya palet bazlı fiyatlama</span>
-          </div>
           <a class="whatsapp-link" href="https://wa.me/905534546118" target="_blank" rel="noopener">
-            <span data-i18n="whatsappCta">WhatsApp ile iletişim ve sorular</span>
+            <span data-i18n="whatsappCta">Contact and questions via WhatsApp</span>
             <strong>+90 553 454 61 18</strong>
           </a>
           <div class="direct-contact-links">
-            <a href="mailto:info@sidyaglobal.com?subject=Sidya%20Global%20Quote%20Request" data-i18n="mailCta">Mail ile teklif iste</a>
-            <a href="https://t.me/sidyaglobal" target="_blank" rel="noopener" data-i18n="telegramCta">Telegram</a>
+            <a href="mailto:info@sidyaglobal.com?subject=Sidya%20Global%20Quote%20Request" data-i18n="mailCta">Request quote by email</a>
+            <a href="https://t.me/sidyaglobal" target="_blank" rel="noopener" data-i18n="telegramCta">Message on Telegram</a>
           </div>
         </div>
 
         <form class="quote-form" id="quoteForm">
           <label>
-            <span data-i18n="formName">Ad Soyad</span>
+            <span data-i18n="formName">Full Name</span>
             <input name="name" autocomplete="name" required />
           </label>
           <label>
-            <span data-i18n="formCompany">Şirket</span>
+            <span data-i18n="formCompany">Company</span>
             <input name="company" autocomplete="organization" required />
           </label>
           <label>
-            <span data-i18n="formEmail">E-posta</span>
+            <span data-i18n="formEmail">Email</span>
             <input name="email" type="email" autocomplete="email" required />
           </label>
           <label>
-            <span data-i18n="formProduct">İlgilenilen ürün</span>
+            <span data-i18n="formProduct">Product of interest</span>
             <select name="product" required>
-              <option value="" data-i18n="formProductPlaceholder">Seçiniz</option>
-              <option value="Homeware" data-i18n="productOptionHomeware">Ev ve Yaşam Ürünleri</option>
-              <option value="Cleaning Products" data-i18n="productOptionCleaning">Temizlik Ürünleri</option>
-              <option value="Food Products" data-i18n="productOptionFood">Gıda Ürünleri</option>
-              <option value="Industrial Supplies" data-i18n="productOptionIndustrial">Endüstriyel Sarf</option>
-              <option value="Medical Products" data-i18n="productOptionMedical">Medikal Ürünler</option>
+              <option value="" data-i18n="formProductPlaceholder">Select</option>
+              <option value="Homeware" data-i18n="productOptionHomeware">Home and Lifestyle</option>
+              <option value="Cleaning Products" data-i18n="productOptionCleaning">Cleaning Products</option>
+              <option value="Food Products" data-i18n="productOptionFood">Food Products</option>
+              <option value="Industrial Supplies" data-i18n="productOptionIndustrial">Industrial Supplies</option>
+              <option value="Medical Products" data-i18n="productOptionMedical">Medical Products</option>
             </select>
           </label>
           <label class="full-field">
-            <span data-i18n="formMessage">Talep detayı</span>
+            <span data-i18n="formMessage">Inquiry details</span>
             <textarea name="message" rows="5" required></textarea>
           </label>
-          <button class="form-submit" type="submit" data-i18n="formSubmit">Teklif Taslağı Oluştur</button>
+          <button class="form-submit" type="submit" data-i18n="formSubmit">Create Quote Draft</button>
           <p class="form-status" id="formStatus" role="status"></p>
         </form>
+      </section>
+
+      <section class="section intro-section" id="about" aria-labelledby="about-title">
+        <div>
+          <p class="section-kicker" data-i18n="introKicker">Who we are</p>
+          <h2 id="about-title" data-i18n="introTitle">Sidya Global connects reliable supply with the right markets.</h2>
+        </div>
+        <div class="about-copy">
+          <p data-i18n="introCopy">
+            Sidya Global is a Trabzon, Türkiye based export-focused trading platform connecting manufacturers and brand partners with international buyers.
+          </p>
+          <div class="mission-grid">
+            <article>
+              <h3 data-i18n="missionTitle">Our mission</h3>
+              <p data-i18n="missionCopy">To help buyers reach the right products, reliable suppliers and transparent export processes quickly.</p>
+            </article>
+            <article>
+              <h3 data-i18n="visionTitle">Our vision</h3>
+              <p data-i18n="visionCopy">To make Türkiye-based products strong, sustainable and preferred brands in regional and global markets.</p>
+            </article>
+          </div>
+        </div>
       </section>
     </main>
 
@@ -397,11 +449,20 @@
       <a href="https://wa.me/905534546118" target="_blank" rel="noopener">WhatsApp: +90 553 454 61 18</a>
       <a href="https://t.me/sidyaglobal" target="_blank" rel="noopener">Telegram: @sidyaglobal</a>
       <div class="social-links" aria-label="Social media">
-        <span>Instagram</span>
-        <span>Facebook</span>
-        <span>TikTok</span>
+        <a href="https://www.instagram.com/sidyaglobal/" target="_blank" rel="noopener">
+          <img src="assets/icon-instagram.svg" alt="" aria-hidden="true" />
+          <span>Instagram</span>
+        </a>
+        <span class="social-placeholder">
+          <img src="assets/icon-facebook.svg" alt="" aria-hidden="true" />
+          Facebook
+        </span>
+        <span class="social-placeholder">
+          <img src="assets/icon-tiktok.svg" alt="" aria-hidden="true" />
+          TikTok
+        </span>
       </div>
-      <span data-i18n="footerText">Trabzon merkezli ihracat tanıtım sitesi</span>
+      <span data-i18n="footerText">Trabzon-based export showcase website</span>
     </footer>
 
     <script>
@@ -413,6 +474,6 @@
         yandexWebmasterToken: "",
       };
     </script>
-    <script src="script.js?v=20260601-4"></script>
+    <script src="script.js?v=20260601-5"></script>
   </body>
 </html>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 180" role="img" aria-label="TIR">
+  <rect width="420" height="180" rx="18" fill="#f2f2f2"/>
+  <rect x="28" y="54" width="250" height="68" rx="6" fill="#3a3d3f"/>
+  <path d="M285 76h45l30 30v16h-75z" fill="#55595c"/>
+  <rect x="302" y="84" width="25" height="19" rx="3" fill="#dfe7ea"/>
+  <circle cx="92" cy="132" r="18" fill="#202224"/>
+  <circle cx="265" cy="132" r="18" fill="#202224"/>
+  <circle cx="332" cy="132" r="18" fill="#202224"/>
+  <path d="M47 75h208" stroke="#fff" stroke-opacity=".25" stroke-width="3"/>
+  <text x="32" y="36" fill="#2f3131" font-family="Arial, sans-serif" font-size="19" font-weight="700">Standard TIR</text>
+</svg>

@@ -375,20 +375,20 @@ textarea {
 .hero-image {
   object-fit: cover;
   object-position: center;
-  filter: grayscale(0.48) contrast(0.96) brightness(0.82);
+  filter: grayscale(0.18) contrast(0.98) brightness(0.98);
 }
 
 .hero-overlay {
   background:
-    linear-gradient(90deg, rgba(18, 18, 18, 0.94), rgba(42, 42, 42, 0.7) 42%, rgba(20, 20, 20, 0.18)),
-    linear-gradient(0deg, rgba(17, 17, 17, 0.68), rgba(34, 34, 34, 0.08) 50%);
+    linear-gradient(90deg, rgba(248, 248, 248, 0.94), rgba(246, 246, 246, 0.76) 39%, rgba(246, 246, 246, 0.08) 68%),
+    linear-gradient(0deg, rgba(16, 16, 16, 0.18), rgba(255, 255, 255, 0.04) 52%);
 }
 
 .hero-content {
   position: relative;
   z-index: 1;
-  max-width: 680px;
-  color: #fff;
+  max-width: 610px;
+  color: #181a1b;
 }
 
 .eyebrow,
@@ -412,7 +412,7 @@ textarea {
 .hero-copy {
   max-width: 520px;
   margin: 14px 0 0;
-  color: rgba(255, 255, 255, 0.86);
+  color: rgba(24, 26, 27, 0.76);
   font-size: clamp(0.92rem, 1.18vw, 1.02rem);
   line-height: 1.52;
 }
@@ -439,9 +439,9 @@ textarea {
 }
 
 .secondary-action {
-  border: 1px solid rgba(255, 255, 255, 0.38);
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(47, 49, 49, 0.28);
+  color: #252728;
+  background: rgba(255, 255, 255, 0.58);
 }
 
 .hero-metrics {
@@ -821,6 +821,134 @@ h2 {
   font-weight: 850;
 }
 
+.proforma-section {
+  background: #f5f5f5;
+}
+
+.proforma-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.9fr) minmax(300px, 1.1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.proforma-form,
+.proforma-summary,
+.proforma-table-wrap,
+.transport-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.proforma-form {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.proforma-form label,
+.proforma-form span {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.proforma-form input,
+.proforma-form select {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 12px;
+  color: var(--ink);
+  background: #f8f8f8;
+  font: inherit;
+}
+
+.proforma-summary {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  overflow: hidden;
+}
+
+.proforma-summary div {
+  display: grid;
+  gap: 7px;
+  padding: 18px 14px;
+  border-right: 1px solid var(--line);
+}
+
+.proforma-summary div:last-child {
+  border-right: 0;
+}
+
+.proforma-summary span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.proforma-summary strong {
+  color: var(--ink);
+  font-size: 1.08rem;
+}
+
+.proforma-table-wrap {
+  margin-top: 18px;
+  overflow-x: auto;
+}
+
+.proforma-table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+}
+
+.proforma-table th,
+.proforma-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.proforma-table th {
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.transport-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.transport-card {
+  padding: 16px;
+}
+
+.transport-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.transport-card h3 {
+  margin: 12px 0 6px;
+  font-size: 1rem;
+}
+
+.transport-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
 .contact-section {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(340px, 1.1fr);
@@ -981,6 +1109,7 @@ h2 {
 .social-links a {
   display: inline-flex;
   align-items: center;
+  gap: 7px;
   min-height: 28px;
   padding: 0 10px;
   border: 1px solid rgba(255, 255, 255, 0.16);
@@ -988,6 +1117,15 @@ h2 {
   color: rgba(255, 255, 255, 0.82);
   font-size: 0.86rem;
   font-weight: 800;
+}
+
+.social-links img {
+  width: 18px;
+  height: 18px;
+}
+
+.social-placeholder {
+  opacity: 0.78;
 }
 
 @media (max-width: 1060px) {
@@ -1032,6 +1170,10 @@ h2 {
   .process-list {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .proforma-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 760px) {
@@ -1071,13 +1213,13 @@ h2 {
   }
 
   .hero-image {
-    object-position: 58% center;
+    object-position: 62% center;
   }
 
   .hero-overlay {
     background:
-      linear-gradient(0deg, rgba(11, 27, 43, 0.86), rgba(11, 27, 43, 0.28)),
-      linear-gradient(90deg, rgba(11, 27, 43, 0.82), rgba(11, 27, 43, 0.36));
+      linear-gradient(0deg, rgba(248, 248, 248, 0.88), rgba(248, 248, 248, 0.28)),
+      linear-gradient(90deg, rgba(248, 248, 248, 0.92), rgba(248, 248, 248, 0.26));
   }
 
   .hero h1 {
@@ -1096,7 +1238,9 @@ h2 {
   .mission-grid,
   .markets-section,
   .contact-section,
-  .quote-form {
+  .quote-form,
+  .proforma-layout,
+  .transport-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1113,6 +1257,10 @@ h2 {
   .partner-grid,
   .process-list,
   .market-map {
+    grid-template-columns: 1fr;
+  }
+
+  .proforma-summary {
     grid-template-columns: 1fr;
   }
 
