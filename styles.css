@@ -1166,13 +1166,22 @@ h2 {
 
 .proforma-product-row {
   display: grid;
-  grid-template-columns: minmax(180px, 1fr) minmax(230px, 1.1fr) 110px auto;
+  grid-template-columns: 58px minmax(180px, 1fr) minmax(230px, 1.1fr) 110px auto;
   gap: 12px;
   align-items: center;
   padding: 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fafafa;
+}
+
+.proforma-product-image {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(16, 42, 67, 0.08);
 }
 
 .proforma-product-row strong,

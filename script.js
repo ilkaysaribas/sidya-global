@@ -759,6 +759,8 @@ const productCatalog = [
   },
 ];
 
+productCatalog.push(...(window.SIDYA_CATALOG_PRODUCTS || []));
+
 const proformaOrder = new Map();
 
 const marketNames = {
@@ -827,6 +829,7 @@ const renderProformaProducts = () => {
       const unitsPerCarton = getUnitsPerCarton(product);
       const kgPerCarton = getKgPerCarton(product);
       return `<article class="proforma-product-row">
+        <img class="proforma-product-image" src="${product.logo}" alt="" loading="lazy" />
         <div>
           <strong>${getProductName(product)}</strong>
           <span>${product.brand} · ${product.liter}</span>
