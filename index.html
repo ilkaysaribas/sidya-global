@@ -30,7 +30,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260601-10" />
+    <link rel="stylesheet" href="styles.css?v=20260601-11" />
   </head>
   <body>
     <header class="site-header">
@@ -428,10 +428,12 @@
 
         <div class="transport-grid">
           <article class="transport-card">
-            <div class="transport-visual">
+            <div class="transport-visual transport-visual-truck">
               <img src="assets/transport-truck.svg" alt="Standard TIR visual" />
-              <div class="load-fill" id="truckFillBar"></div>
-              <div class="load-stack" id="truckLoadStack"></div>
+              <div class="load-zone">
+                <div class="load-fill" id="truckFillBar"></div>
+                <div class="load-stack" id="truckLoadStack"></div>
+              </div>
             </div>
             <h3 data-i18n="truckTitle">Standard TIR</h3>
             <p data-i18n="truckCapacity">Approx. 90 m3 and 24,000 kg payload capacity.</p>
@@ -440,10 +442,12 @@
             </div>
           </article>
           <article class="transport-card">
-            <div class="transport-visual">
+            <div class="transport-visual transport-visual-container">
               <img src="assets/transport-container.svg" alt="40 HC container visual" />
-              <div class="load-fill" id="containerFillBar"></div>
-              <div class="load-stack" id="containerLoadStack"></div>
+              <div class="load-zone">
+                <div class="load-fill" id="containerFillBar"></div>
+                <div class="load-stack" id="containerLoadStack"></div>
+              </div>
             </div>
             <h3 data-i18n="containerTitle">40 HC Container</h3>
             <p data-i18n="containerCapacity">Approx. 76 m3 and 26,500 kg payload capacity.</p>
