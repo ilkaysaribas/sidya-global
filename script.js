@@ -734,11 +734,11 @@ const productCatalog = [
 const cart = new Map();
 
 const marketNames = {
-  en: ["Georgia", "Azerbaijan", "Armenia", "Iran", "Iraq", "Russia", "Ukraine", "Romania", "Kazakhstan"],
-  tr: ["Gürcistan", "Azerbaycan", "Ermenistan", "İran", "Irak", "Rusya", "Ukrayna", "Romanya", "Kazakistan"],
-  az: ["Gürcüstan", "Azərbaycan", "Ermənistan", "İran", "İraq", "Rusiya", "Ukrayna", "Rumıniya", "Qazaxıstan"],
-  ka: ["საქართველო", "აზერბაიჯანი", "სომხეთი", "ირანი", "ერაყი", "რუსეთი", "უკრაინა", "რუმინეთი", "ყაზახეთი"],
-  ru: ["Грузия", "Азербайджан", "Армения", "Иран", "Ирак", "Россия", "Украина", "Румыния", "Казахстан"],
+  en: ["Georgia", "Azerbaijan", "Armenia", "Iran", "Iraq", "Russia", "Ukraine", "Kazakhstan"],
+  tr: ["Gürcistan", "Azerbaycan", "Ermenistan", "İran", "Irak", "Rusya", "Ukrayna", "Kazakistan"],
+  az: ["Gürcüstan", "Azərbaycan", "Ermənistan", "İran", "İraq", "Rusiya", "Ukrayna", "Qazaxıstan"],
+  ka: ["საქართველო", "აზერბაიჯანი", "სომხეთი", "ირანი", "ერაყი", "რუსეთი", "უკრაინა", "ყაზახეთი"],
+  ru: ["Грузия", "Азербайджан", "Армения", "Иран", "Ирак", "Россия", "Украина", "Казахстан"],
 };
 
 const businessEmail = "info@sidyaglobal.com";
