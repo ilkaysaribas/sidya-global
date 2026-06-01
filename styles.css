@@ -1139,6 +1139,7 @@ h2 {
 }
 
 .proforma-search-label {
+  position: relative;
   display: grid;
   gap: 8px;
   color: var(--muted);
@@ -1150,10 +1151,21 @@ h2 {
   min-height: 44px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 0 14px;
+  padding: 0 42px 0 14px;
   color: var(--ink);
   background: #f8f8f8;
   font: inherit;
+}
+
+.proforma-search-label::after {
+  content: "🔍";
+  position: absolute;
+  right: 14px;
+  bottom: 11px;
+  color: var(--muted);
+  font-size: 1.1rem;
+  font-weight: 900;
+  pointer-events: none;
 }
 
 .proforma-product-list {
@@ -1243,7 +1255,8 @@ h2 {
 }
 
 .proforma-add-button,
-.proforma-remove-button {
+.proforma-remove-button,
+.proforma-qty-button {
   border: 0;
   border-radius: 999px;
   font: inherit;
@@ -1288,6 +1301,27 @@ h2 {
   background: #fafafa;
 }
 
+.proforma-line-actions {
+  display: grid;
+  grid-template-columns: 30px minmax(36px, auto) 30px 30px;
+  gap: 6px;
+  align-items: center;
+  text-align: center;
+}
+
+.proforma-line-actions strong {
+  min-width: 34px;
+  color: #151515;
+  font-size: 0.82rem;
+}
+
+.proforma-qty-button {
+  width: 30px;
+  height: 30px;
+  color: #151515;
+  background: #e7e7e7;
+}
+
 .proforma-remove-button {
   width: 30px;
   height: 30px;
@@ -1313,15 +1347,23 @@ h2 {
   color: #151515;
 }
 
+.proforma-actions {
+  display: grid;
+  gap: 8px;
+}
+
 .proforma-quote-link {
   min-height: 42px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border: 0;
   border-radius: 999px;
   color: #fff;
   background: #ef1237;
+  font: inherit;
   font-weight: 900;
+  cursor: pointer;
 }
 
 .proforma-layout {
@@ -1446,6 +1488,52 @@ h2 {
   margin: 0;
   color: var(--muted);
   line-height: 1.5;
+}
+
+.load-meter {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.load-visual {
+  position: relative;
+  height: 96px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #fff 0%, #f3f3f3 100%);
+}
+
+.load-fill {
+  position: absolute;
+  inset: auto 0 0;
+  height: 0%;
+  background: linear-gradient(180deg, rgba(239, 18, 55, 0.28), rgba(21, 21, 21, 0.65));
+  transition: height 0.28s ease;
+}
+
+.load-stack {
+  position: absolute;
+  inset: 8px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  gap: 3px;
+  pointer-events: none;
+}
+
+.load-segment {
+  display: block;
+  min-height: 5px;
+  border-radius: 4px;
+  opacity: 0.9;
+}
+
+.load-meter strong {
+  color: #151515;
+  font-size: 0.78rem;
+  line-height: 1.35;
 }
 
 .contact-section {
@@ -1604,18 +1692,30 @@ h2 {
   gap: 8px;
 }
 
-.social-links span,
-.social-links a {
+.social-links > span,
+.social-links > a {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  min-height: 28px;
-  padding: 0 10px;
+  min-height: 34px;
+  padding: 5px 10px;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 999px;
   color: rgba(255, 255, 255, 0.82);
   font-size: 0.86rem;
   font-weight: 800;
+}
+
+.social-links > span span,
+.social-links > a span {
+  display: grid;
+  gap: 1px;
+}
+
+.social-links small {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.68rem;
+  font-weight: 700;
 }
 
 .social-links img {

@@ -70,6 +70,12 @@ const content = {
     proformaTotalWeight: "Estimated gross weight",
     proformaTotalVolume: "Estimated volume",
     proformaM3PerCarton: "m3 / carton",
+    proformaExcelCta: "Download Excel",
+    proformaMailCta: "Send by Mail",
+    proformaWhatsappCta: "Send by WhatsApp",
+    proformaQuoteEmpty: "Please add at least one product to the proforma list.",
+    truckFillLabel: "TIR load",
+    containerFillLabel: "Container load",
     cartKicker: "Cart",
     cartTitle: "Create a product cart and review shipment tonnage",
     cartCopy: "Add products from the product cards above. The cart calculates pallet count, total gross weight and total m3 automatically.",
@@ -200,6 +206,12 @@ const content = {
     proformaTotalWeight: "Tahmini brüt ağırlık",
     proformaTotalVolume: "Tahmini hacim",
     proformaM3PerCarton: "Koli m3",
+    proformaExcelCta: "Excel indir",
+    proformaMailCta: "Mail ile gönder",
+    proformaWhatsappCta: "WhatsApp ile gönder",
+    proformaQuoteEmpty: "Lütfen proforma listesine en az bir ürün ekleyin.",
+    truckFillLabel: "TIR dolumu",
+    containerFillLabel: "Konteyner dolumu",
     cartKicker: "Sepet",
     cartTitle: "Ürün sepeti oluşturun ve sevkiyat tonajını görün",
     cartCopy: "Ürün kartlarından sepete ekleyin. Sepet palet adedini, toplam brüt ağırlığı ve toplam m3 değerini otomatik hesaplar.",
@@ -596,6 +608,12 @@ const productPartners = {
     { name: "P&G", site: "https://www.pg.com.tr/", logo: "assets/pg-logo.svg" },
     { name: "Henkel", site: "https://www.henkel.com.tr/", logo: "assets/henkel-logo.svg" },
     { name: "Evyap", site: "https://www.evyap.com.tr/", catalog: "assets/evyap-katalog.pdf", logo: "assets/evyap-logo.svg" },
+    { name: "Eczacıbaşı / Selpak", site: "https://www.eczacibasi.com.tr/", logo: "assets/selpak-logo.svg" },
+    { name: "SC Johnson", site: "https://scjohnson.com/en", catalog: "assets/sc-johnson-katalog.pdf", logo: "assets/scjohnson-logo.svg" },
+    { name: "Nivea", site: "https://www.nivea.com.tr/", catalog: "assets/nivea-katalog.pdf", logo: "assets/nivea-logo.svg" },
+    { name: "Sebamed", site: "https://www.sebamed.com.tr/", logo: "assets/sebamed-logo.svg" },
+    { name: "Vileda", site: "https://www.vileda.com.tr/", logo: "assets/vileda-logo.svg" },
+    { name: "Reckitt Benckiser Home Group", site: "https://www.reckitt.com/offices/turkey/", catalog: "assets/reckitt-katalog.pdf", logo: "assets/reckitt-logo.svg" },
   ],
   "food-products": [
     { name: "Öncü Salça", site: "https://www.oncusalca.com.tr/", logo: "assets/oncu-salca-logo.svg" },
@@ -605,6 +623,9 @@ const productPartners = {
   ],
   "medical-products": [
     { name: "Johnson & Johnson", site: "https://www.jnjmedicalcloud.com.tr/tr-tr", catalog: "assets/johnson-katalog.pdf", logo: "assets/johnson-logo.svg" },
+    { name: "İkihan Medikal", site: "https://www.ikihanmedikal.com/", logo: "assets/ikihan-medikal-logo.svg" },
+    { name: "Omron Healthcare", site: "https://www.omron-healthcare.com.tr/", logo: "assets/omron-logo.svg" },
+    { name: "Hanymish", site: "https://www.hanymish.com/", logo: "assets/hanymish-logo.svg" },
   ],
 };
 
@@ -633,6 +654,8 @@ const marketNames = {
 const businessEmail = "info@sidyaglobal.com";
 let currentLang = "en";
 let deferredInstallPrompt = null;
+const truckCapacity = { volume: 90, weight: 24000 };
+const containerCapacity = { volume: 76, weight: 26500 };
 
 const t = (key) => content[currentLang][key] || content.en[key] || key;
 
@@ -643,6 +666,10 @@ const getCartonsPerPallet = (product) => product.cartonsPerPallet || 60;
 const getUnitsPerCarton = (product) => product.unitsPerCarton || 12;
 const getKgPerCarton = (product) => product.kgPerCarton || product.kgPerPallet / getCartonsPerPallet(product);
 const getM3PerCarton = (product) => product.m3PerCarton || product.m3PerPallet / getCartonsPerPallet(product);
+const getProformaEntries = () =>
+  [...proformaOrder.entries()]
+    .map(([productId, cartons]) => ({ product: productCatalog.find((item) => item.id === productId), cartons }))
+    .filter((entry) => entry.product);
 
 const renderProducts = () => {
   const grid = document.querySelector("#productGrid");
@@ -719,13 +746,55 @@ const addProformaLine = (productId) => {
   renderProformaOrder();
 };
 
+const updateProformaQuantity = (productId, delta) => {
+  const current = proformaOrder.get(productId) || 0;
+  const next = current + delta;
+  if (next <= 0) {
+    proformaOrder.delete(productId);
+  } else {
+    proformaOrder.set(productId, next);
+  }
+  renderProformaOrder();
+};
+
+const renderLoadStack = (selector, entries, capacityVolume) => {
+  const stack = document.querySelector(selector);
+  if (!stack) return;
+  const sorted = [...entries].sort((a, b) => getKgPerCarton(b.product) / getM3PerCarton(b.product) - getKgPerCarton(a.product) / getM3PerCarton(a.product));
+  stack.innerHTML = sorted
+    .map((entry, index) => {
+      const volume = entry.cartons * getM3PerCarton(entry.product);
+      const height = Math.max(5, Math.min(100, (volume / capacityVolume) * 100));
+      const shade = 34 + (index % 5) * 9;
+      return `<span class="load-segment" title="${getProductName(entry.product)}" style="height:${height}%; background:hsl(205 10% ${shade}%);"></span>`;
+    })
+    .join("");
+};
+
+const updateLoadMeter = (prefix, capacity, entries, totalWeight, totalVolume) => {
+  const fill = document.querySelector(`#${prefix}FillBar`);
+  const text = document.querySelector(`#${prefix}FillText`);
+  const volumeRatio = totalVolume / capacity.volume;
+  const weightRatio = totalWeight / capacity.weight;
+  const percent = Math.min(100, Math.round(Math.max(volumeRatio, weightRatio) * 100));
+  if (fill) fill.style.height = `${percent}%`;
+  if (text) {
+    const label = prefix === "truck" ? t("truckFillLabel") : t("containerFillLabel");
+    text.textContent = `${label}: ${percent}% · ${formatVolume(totalVolume)} / ${capacity.volume} m3 · ${formatWeight(totalWeight)} / ${capacity.weight.toLocaleString("en-US")} kg`;
+  }
+  renderLoadStack(`#${prefix}LoadStack`, entries, capacity.volume);
+};
+
+const renderLoadMeters = (entries, totalWeight, totalVolume) => {
+  updateLoadMeter("truck", truckCapacity, entries, totalWeight, totalVolume);
+  updateLoadMeter("container", containerCapacity, entries, totalWeight, totalVolume);
+};
+
 const renderProformaOrder = () => {
   const lines = document.querySelector("#proformaOrderLines");
   const empty = document.querySelector("#proformaEmpty");
   if (!lines || !empty) return;
-  const entries = [...proformaOrder.entries()]
-    .map(([productId, cartons]) => ({ product: productCatalog.find((item) => item.id === productId), cartons }))
-    .filter((entry) => entry.product);
+  const entries = getProformaEntries();
 
   empty.hidden = entries.length > 0;
   lines.innerHTML = entries
@@ -738,7 +807,12 @@ const renderProformaOrder = () => {
           <strong>${getProductName(product)}</strong>
           <span>${cartons.toLocaleString("en-US")} ${t("proformaCartonQty")} · ${pallets.toFixed(2)} PLT · ${formatWeight(weight)} · ${formatVolume(volume)}</span>
         </div>
-        <button type="button" class="proforma-remove-button" data-product-id="${product.id}">×</button>
+        <div class="proforma-line-actions">
+          <button type="button" class="proforma-qty-button" data-product-id="${product.id}" data-delta="-1" aria-label="Decrease">−</button>
+          <strong>${cartons.toLocaleString("en-US")}</strong>
+          <button type="button" class="proforma-qty-button" data-product-id="${product.id}" data-delta="1" aria-label="Increase">+</button>
+          <button type="button" class="proforma-remove-button" data-product-id="${product.id}" aria-label="Remove">×</button>
+        </div>
       </article>`;
     })
     .join("");
@@ -751,6 +825,71 @@ const renderProformaOrder = () => {
   document.querySelector("#proformaTotalPallets").textContent = totalPallets.toFixed(2);
   document.querySelector("#proformaTotalWeight").textContent = formatWeight(totalWeight);
   document.querySelector("#proformaTotalVolume").textContent = formatVolume(totalVolume);
+  renderLoadMeters(entries, totalWeight, totalVolume);
+};
+
+const buildProformaRows = () =>
+  getProformaEntries().map(({ product, cartons }) => {
+    const cartonsPerPallet = getCartonsPerPallet(product);
+    const unitsPerCarton = getUnitsPerCarton(product);
+    const kgPerCarton = getKgPerCarton(product);
+    const m3PerCarton = getM3PerCarton(product);
+    return {
+      brand: product.brand,
+      product: getProductName(product),
+      volume: product.liter,
+      cartons,
+      unitsPerCarton,
+      cartonsPerPallet,
+      pallets: cartons / cartonsPerPallet,
+      kgPerCarton,
+      totalWeight: cartons * kgPerCarton,
+      m3PerCarton,
+      totalVolume: cartons * m3PerCarton,
+    };
+  });
+
+const toCsvCell = (value) => `"${String(value).replace(/"/g, '""')}"`;
+const downloadProformaCsv = () => {
+  const rows = buildProformaRows();
+  if (!rows.length) {
+    alert(t("proformaQuoteEmpty"));
+    return false;
+  }
+  const headers = ["Brand", "Product", "Volume", "Cartons", "Units/Carton", "Cartons/Pallet", "Pallets", "Kg/Carton", "Total Kg", "m3/Carton", "Total m3"];
+  const csvRows = rows.map((row) =>
+    [row.brand, row.product, row.volume, row.cartons, row.unitsPerCarton, row.cartonsPerPallet, row.pallets.toFixed(2), row.kgPerCarton.toFixed(2), row.totalWeight.toFixed(2), row.m3PerCarton.toFixed(3), row.totalVolume.toFixed(3)]
+      .map(toCsvCell)
+      .join(";"),
+  );
+  const blob = new Blob(["\ufeff", headers.map(toCsvCell).join(";"), "\n", csvRows.join("\n")], { type: "text/csv;charset=utf-8" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "sidya-global-proforma.csv";
+  link.click();
+  URL.revokeObjectURL(link.href);
+  return true;
+};
+
+const buildProformaMessage = () => {
+  const rows = buildProformaRows();
+  const totalCartons = rows.reduce((sum, row) => sum + row.cartons, 0);
+  const totalWeight = rows.reduce((sum, row) => sum + row.totalWeight, 0);
+  const totalVolume = rows.reduce((sum, row) => sum + row.totalVolume, 0);
+  const lines = rows.map((row) => `- ${row.brand} / ${row.product}: ${row.cartons} koli, ${row.pallets.toFixed(2)} PLT, ${formatWeight(row.totalWeight)}, ${formatVolume(row.totalVolume)}`);
+  return [`Sidya Global proforma request`, "", ...lines, "", `Total cartons: ${totalCartons}`, `Total weight: ${formatWeight(totalWeight)}`, `Total volume: ${formatVolume(totalVolume)}`].join("\n");
+};
+
+const sendProformaMail = () => {
+  if (!downloadProformaCsv()) return;
+  const subject = encodeURIComponent("Sidya Global proforma request");
+  const body = encodeURIComponent(`${buildProformaMessage()}\n\nExcel-compatible CSV file has been downloaded. Please attach it to this email if needed.`);
+  window.location.href = `mailto:${businessEmail}?subject=${subject}&body=${body}`;
+};
+
+const sendProformaWhatsApp = () => {
+  if (!downloadProformaCsv()) return;
+  window.open(`https://wa.me/905534546118?text=${encodeURIComponent(buildProformaMessage())}`, "_blank", "noopener");
 };
 
 const translatePage = () => {
@@ -935,10 +1074,18 @@ document.querySelector("#proformaProductList")?.addEventListener("click", (event
   addProformaLine(button.dataset.productId);
 });
 document.querySelector("#proformaOrderLines")?.addEventListener("click", (event) => {
-  const button = event.target.closest(".proforma-remove-button");
-  if (!button) return;
-  proformaOrder.delete(button.dataset.productId);
+  const quantityButton = event.target.closest(".proforma-qty-button");
+  if (quantityButton) {
+    updateProformaQuantity(quantityButton.dataset.productId, Number(quantityButton.dataset.delta));
+    return;
+  }
+  const removeButton = event.target.closest(".proforma-remove-button");
+  if (!removeButton) return;
+  proformaOrder.delete(removeButton.dataset.productId);
   renderProformaOrder();
 });
+document.querySelector("#downloadProformaExcel")?.addEventListener("click", downloadProformaCsv);
+document.querySelector("#mailProforma")?.addEventListener("click", sendProformaMail);
+document.querySelector("#whatsappProforma")?.addEventListener("click", sendProformaWhatsApp);
 translatePage();
 setupTracking();
