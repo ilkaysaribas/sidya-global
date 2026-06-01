@@ -698,6 +698,18 @@ const formatTryRate = (value) =>
     minimumFractionDigits: 2,
     maximumFractionDigits: 4,
   }).format(value);
+
+const formatCrossRate = (value) =>
+  new Intl.NumberFormat("tr-TR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 4,
+  }).format(value);
+
+const localizedExchangeViews = {
+  az: { code: "AZN", usdLabel: "Dolar/Manat", eurLabel: "Euro/Manat" },
+  ka: { code: "GEL", usdLabel: "Dolar/Lari", eurLabel: "Euro/Lari" },
+  ru: { code: "RUB", usdLabel: "Dolar/Ruble", eurLabel: "Euro/Ruble" },
+};
 const getCartonsPerPallet = (product) => product.cartonsPerPallet || 60;
 const getUnitsPerCarton = (product) => product.unitsPerCarton || 12;
 const getKgPerCarton = (product) => product.kgPerCarton || product.kgPerPallet / getCartonsPerPallet(product);
@@ -750,12 +762,34 @@ const renderExchangeRates = () => {
     return;
   }
 
-  list.innerHTML = exchangeRatesData.rates
-    .map((rate) => `<span>${rate.label} <strong>${formatTryRate(rate.value)} TL</strong></span>`)
-    .join("");
+  const localizedView = localizedExchangeViews[currentLang];
+  const localizedRates = localizedView ? exchangeRatesData.crossRates?.[currentLang] : null;
+  let sourceLabel = "TCMB";
+
+  if (localizedView && localizedRates) {
+    const rows = [
+      { label: localizedView.usdLabel, value: localizedRates.usd },
+      { label: localizedView.eurLabel, value: localizedRates.eur },
+    ].filter((rate) => Number.isFinite(rate.value));
+
+    if (rows.length) {
+      list.innerHTML = rows
+        .map((rate) => `<span>${rate.label} <strong>1 = ${formatCrossRate(rate.value)} ${localizedView.code}</strong></span>`)
+        .join("");
+      sourceLabel = localizedRates.source || sourceLabel;
+    } else {
+      list.innerHTML = exchangeRatesData.rates
+        .map((rate) => `<span>${rate.label} <strong>${formatTryRate(rate.value)} TL</strong></span>`)
+        .join("");
+    }
+  } else {
+    list.innerHTML = exchangeRatesData.rates
+      .map((rate) => `<span>${rate.label} <strong>${formatTryRate(rate.value)} TL</strong></span>`)
+      .join("");
+  }
 
   const stamp = exchangeRatesData.date || new Date(exchangeRatesData.updatedAt).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
-  updated.textContent = `${t("exchangeUpdated")}: ${stamp} · TCMB`;
+  updated.textContent = `${t("exchangeUpdated")}: ${stamp} · ${sourceLabel}`;
 };
 
 const loadExchangeRates = async () => {

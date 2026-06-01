@@ -36,6 +36,17 @@ const readCurrency = (xml, code) => {
   };
 };
 
+const buildCrossRate = (currencyRate, usdRate, eurRate) => {
+  if (!currencyRate || !usdRate || !eurRate) return null;
+  return {
+    currency: currencyRate.code,
+    label: currencyRate.label,
+    usd: usdRate.value / currencyRate.value,
+    eur: eurRate.value / currencyRate.value,
+    source: "TCMB",
+  };
+};
+
 const readLariFromNbg = async (usdTry) => {
   const response = await fetch(NBG_URL, {
     headers: { "User-Agent": "SidyaGlobal/1.0" },
@@ -46,7 +57,9 @@ const readLariFromNbg = async (usdTry) => {
   const data = await response.json();
   const currencies = Array.isArray(data?.[0]?.currencies) ? data[0].currencies : [];
   const usdGel = currencies.find((currency) => currency.code === "USD");
+  const eurGel = currencies.find((currency) => currency.code === "EUR");
   const usdGelValue = Number(usdGel?.rate);
+  const eurGelValue = Number(eurGel?.rate);
 
   if (!Number.isFinite(usdGelValue) || !Number.isFinite(usdTry)) return null;
 
@@ -57,7 +70,8 @@ const readLariFromNbg = async (usdTry) => {
     value: usdTry / usdGelValue,
     crossRate: {
       source: "National Bank of Georgia",
-      usdGel: usdGelValue,
+      usd: usdGelValue,
+      eur: Number.isFinite(eurGelValue) ? eurGelValue : null,
       date: data?.[0]?.date || usdGel?.validFromDate || "",
     },
   };
@@ -77,11 +91,27 @@ module.exports = async function handler(request, response) {
     const dateMatch = xml.match(/Tarih="([^"]+)"/) || xml.match(/Date="([^"]+)"/);
     const rates = Object.keys(wantedCurrencies).map((code) => readCurrency(xml, code)).filter(Boolean);
     const usd = rates.find((rate) => rate.code === "USD");
+    const eur = rates.find((rate) => rate.code === "EUR");
+    const azn = rates.find((rate) => rate.code === "AZN");
+    const rub = rates.find((rate) => rate.code === "RUB");
+    const crossRates = {
+      az: buildCrossRate(azn, usd, eur),
+      ru: buildCrossRate(rub, usd, eur),
+    };
 
     if (usd) {
       rates.splice(2, 0, { ...usd, code: "USDTRY", label: "Dolar/TL" });
       const lari = await readLariFromNbg(usd.value);
-      if (lari) rates.push(lari);
+      if (lari) {
+        rates.push(lari);
+        crossRates.ka = {
+          currency: "GEL",
+          label: "Lari",
+          usd: lari.crossRate.usd,
+          eur: lari.crossRate.eur,
+          source: lari.crossRate.source,
+        };
+      }
     }
 
     response.setHeader("Cache-Control", "s-maxage=900, stale-while-revalidate=1800");
@@ -90,6 +120,7 @@ module.exports = async function handler(request, response) {
       date: dateMatch ? dateMatch[1] : "",
       updatedAt: new Date().toISOString(),
       rates,
+      crossRates,
     });
   } catch (error) {
     response.setHeader("Cache-Control", "no-store");
