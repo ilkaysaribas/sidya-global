@@ -1097,6 +1097,222 @@ h2 {
   font-weight: 900;
 }
 
+.proforma-order-section {
+  background: #f5f5f5;
+}
+
+.proforma-order-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(290px, 0.8fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.proforma-picker,
+.proforma-order-summary {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.proforma-picker {
+  padding: 18px;
+}
+
+.proforma-open-button {
+  min-height: 46px;
+  width: 100%;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: #151515;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.proforma-product-panel {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.proforma-search-label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 850;
+}
+
+.proforma-search-label input {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 14px;
+  color: var(--ink);
+  background: #f8f8f8;
+  font: inherit;
+}
+
+.proforma-product-list {
+  display: grid;
+  gap: 10px;
+  max-height: 520px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.proforma-product-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(230px, 1.1fr) 110px auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.proforma-product-row strong,
+.proforma-line strong {
+  display: block;
+  color: #151515;
+  font-size: 0.92rem;
+}
+
+.proforma-product-row span,
+.proforma-line span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.proforma-product-row dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.proforma-product-row dl div {
+  padding: 8px;
+  border-radius: 8px;
+  background: #fff;
+  text-align: center;
+}
+
+.proforma-product-row dt {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.proforma-product-row dd {
+  margin: 3px 0 0;
+  color: #151515;
+  font-weight: 900;
+}
+
+.proforma-product-row label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.proforma-product-row input {
+  min-height: 38px;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 10px;
+  font: inherit;
+}
+
+.proforma-add-button,
+.proforma-remove-button {
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.proforma-add-button {
+  min-height: 38px;
+  padding: 0 16px;
+  color: #fff;
+  background: #ef1237;
+}
+
+.proforma-order-summary {
+  position: sticky;
+  top: 92px;
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.proforma-order-summary h3,
+.proforma-empty {
+  margin: 0;
+}
+
+.proforma-lines {
+  display: grid;
+  gap: 8px;
+}
+
+.proforma-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.proforma-remove-button {
+  width: 30px;
+  height: 30px;
+  color: #fff;
+  background: #151515;
+}
+
+.proforma-total-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.proforma-total-row span,
+.proforma-empty {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.proforma-total-row strong {
+  color: #151515;
+}
+
+.proforma-quote-link {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: #fff;
+  background: #ef1237;
+  font-weight: 900;
+}
+
 .proforma-layout {
   display: grid;
   grid-template-columns: minmax(260px, 0.9fr) minmax(300px, 1.1fr);
@@ -1454,6 +1670,15 @@ h2 {
   .cart-summary {
     position: static;
   }
+
+  .proforma-order-layout,
+  .proforma-product-row {
+    grid-template-columns: 1fr;
+  }
+
+  .proforma-order-summary {
+    position: static;
+  }
 }
 
 @media (max-width: 760px) {
@@ -1521,6 +1746,7 @@ h2 {
   .quote-form,
   .proforma-layout,
   .cart-layout,
+  .proforma-order-layout,
   .transport-grid {
     grid-template-columns: 1fr;
   }

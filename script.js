@@ -7,7 +7,7 @@ const content = {
     navPartners: "Partners",
     navProcess: "Process",
     navMarkets: "Markets",
-    navProforma: "Cart",
+    navProforma: "Proforma",
     headerCta: "Get Quote",
     installAppCta: "App",
     installPanelTitle: "Sidya Global app",
@@ -54,6 +54,20 @@ const content = {
     proformaBuyer: "Buyer company",
     proformaProduct: "Product line",
     proformaPallets: "Pallet quantity",
+    proformaOrderTitle: "Create a proforma order",
+    proformaOrderCopy: "Open the product selector, search by brand or product name, enter carton quantity and add items to the proforma total.",
+    proformaOpenProducts: "Create Proforma Order",
+    proformaSearchLabel: "Search product",
+    proformaAddLine: "Add",
+    proformaCartonQty: "Carton qty",
+    proformaUnitsPerCarton: "Units / carton",
+    proformaCartonsPerPallet: "Cartons / pallet",
+    proformaKgPerCarton: "Kg / carton",
+    proformaSummaryTitle: "Proforma total",
+    proformaEmpty: "No product added yet.",
+    proformaTotalCartons: "Total cartons",
+    proformaTotalPallets: "Estimated pallets",
+    proformaTotalWeight: "Estimated gross weight",
     cartKicker: "Cart",
     cartTitle: "Create a product cart and review shipment tonnage",
     cartCopy: "Add products from the product cards above. The cart calculates pallet count, total gross weight and total m3 automatically.",
@@ -121,7 +135,7 @@ const content = {
     navPartners: "Ortaklar",
     navProcess: "Süreç",
     navMarkets: "Pazarlar",
-    navProforma: "Sepet",
+    navProforma: "Proforma",
     headerCta: "Teklif Al",
     installAppCta: "Uygulama",
     installPanelTitle: "Sidya Global uygulaması",
@@ -168,6 +182,20 @@ const content = {
     proformaBuyer: "Alıcı firma",
     proformaProduct: "Ürün grubu",
     proformaPallets: "Palet adedi",
+    proformaOrderTitle: "Proforma sipariş oluştur",
+    proformaOrderCopy: "Ürün seçiciyi açın, marka veya ürün adıyla arayın, koli miktarını girin ve kalemi proforma toplamına ekleyin.",
+    proformaOpenProducts: "Proforma Sipariş Oluştur",
+    proformaSearchLabel: "Ürün ara",
+    proformaAddLine: "Ekle",
+    proformaCartonQty: "Koli adedi",
+    proformaUnitsPerCarton: "Koli içi",
+    proformaCartonsPerPallet: "Palet içi koli",
+    proformaKgPerCarton: "Koli kg",
+    proformaSummaryTitle: "Proforma toplamı",
+    proformaEmpty: "Henüz ürün eklenmedi.",
+    proformaTotalCartons: "Toplam koli",
+    proformaTotalPallets: "Tahmini palet",
+    proformaTotalWeight: "Tahmini brüt ağırlık",
     cartKicker: "Sepet",
     cartTitle: "Ürün sepeti oluşturun ve sevkiyat tonajını görün",
     cartCopy: "Ürün kartlarından sepete ekleyin. Sepet palet adedini, toplam brüt ağırlığı ve toplam m3 değerini otomatik hesaplar.",
@@ -731,7 +759,7 @@ const productCatalog = [
   },
 ];
 
-const cart = new Map();
+const proformaOrder = new Map();
 
 const marketNames = {
   en: ["Georgia", "Azerbaijan", "Armenia", "Iran", "Iraq", "Russia", "Ukraine", "Kazakhstan"],
@@ -750,37 +778,29 @@ const t = (key) => content[currentLang][key] || content.en[key] || key;
 const getProductName = (product) => product.names[currentLang] || product.names.en;
 const formatWeight = (value) => `${value.toLocaleString("en-US")} kg`;
 const formatVolume = (value) => `${value.toFixed(2)} m3`;
+const getCartonsPerPallet = (product) => product.cartonsPerPallet || 60;
+const getUnitsPerCarton = (product) => product.unitsPerCarton || 12;
+const getKgPerCarton = (product) => product.kgPerCarton || product.kgPerPallet / getCartonsPerPallet(product);
 
 const renderProducts = () => {
   const grid = document.querySelector("#productGrid");
   if (!grid) return;
-  grid.innerHTML = productCatalog
+  grid.innerHTML = products[currentLang]
     .map((product) => {
-      const name = getProductName(product);
-      return `<article class="product-card store-product-card" id="${product.id}">
-        <div class="product-visual" style="--product-color: ${product.color}">
-          <img src="${product.logo}" alt="${product.brand}" loading="lazy" />
-        </div>
-        <div class="store-product-body">
-          <span class="store-brand">${product.brand}</span>
-          <h3>${name}</h3>
-          <div class="store-badges" aria-label="Product logistics">
-            <span>${product.liter}</span>
-            <span>${product.pallet} PLT</span>
-          </div>
-          <dl class="tonnage-list">
-            <div><dt>${t("unitWeight")}</dt><dd>${formatWeight(product.kgPerPallet)}</dd></div>
-            <div><dt>${t("unitVolume")}</dt><dd>${formatVolume(product.m3PerPallet)}</dd></div>
-          </dl>
-        </div>
-        <div class="store-product-actions">
-          <a class="detail-button" href="#catalogs">${t("productDetail")} &gt;</a>
-          <button class="buy-button add-to-cart" type="button" data-product-id="${product.id}">
-            <span>${t("addToCart")}</span>
-            <span aria-hidden="true">+</span>
-          </button>
-        </div>
-      </article>`;
+      const related = productPartners[product.id] || [];
+      const relatedMarkup = related.length
+        ? `<div class="related-companies"><strong>${t("relatedCompanies")}</strong><div>${related
+            .map(
+              (company) =>
+                `<span class="related-company"><a class="site-action" href="${company.site}"><img src="${company.logo}" alt="" aria-hidden="true" /><span>${company.name}</span></a>${
+                  company.catalog ? `<a class="catalog-action" href="${company.catalog}">${t("sampleCatalogCta")}</a>` : ""
+                }</span>`,
+            )
+            .join("")}</div></div>`
+        : "";
+      return `<article class="product-card" id="${product.id}"><div><span class="product-icon" aria-hidden="true">${product.icon}</span><h3>${product.title}</h3><p>${product.copy}</p></div><div class="product-meta">${product.meta
+        .map((item) => `<span>${item}</span>`)
+        .join("")}</div>${relatedMarkup}</article>`;
     })
     .join("");
 };
@@ -792,62 +812,78 @@ const renderMarkets = () => {
   marketList.innerHTML = names.map((name) => `<span>${name}</span>`).join("");
 };
 
-const addToCart = (productId) => {
+const renderProformaProducts = () => {
+  const list = document.querySelector("#proformaProductList");
+  const search = document.querySelector("#proformaSearch");
+  if (!list) return;
+  const query = (search?.value || "").trim().toLocaleLowerCase("tr-TR");
+  const filteredProducts = productCatalog.filter((product) => {
+    const haystack = `${product.brand} ${getProductName(product)} ${product.liter}`.toLocaleLowerCase("tr-TR");
+    return !query || haystack.includes(query);
+  });
+  list.innerHTML = filteredProducts
+    .map((product) => {
+      const cartonsPerPallet = getCartonsPerPallet(product);
+      const unitsPerCarton = getUnitsPerCarton(product);
+      const kgPerCarton = getKgPerCarton(product);
+      return `<article class="proforma-product-row">
+        <div>
+          <strong>${getProductName(product)}</strong>
+          <span>${product.brand} · ${product.liter}</span>
+        </div>
+        <dl>
+          <div><dt>${t("proformaUnitsPerCarton")}</dt><dd>${unitsPerCarton}</dd></div>
+          <div><dt>${t("proformaCartonsPerPallet")}</dt><dd>${cartonsPerPallet}</dd></div>
+          <div><dt>${t("proformaKgPerCarton")}</dt><dd>${kgPerCarton.toFixed(2)}</dd></div>
+        </dl>
+        <label>
+          <span>${t("proformaCartonQty")}</span>
+          <input type="number" min="1" value="1" data-qty-for="${product.id}" />
+        </label>
+        <button type="button" class="proforma-add-button" data-product-id="${product.id}">${t("proformaAddLine")}</button>
+      </article>`;
+    })
+    .join("");
+};
+
+const addProformaLine = (productId) => {
   const product = productCatalog.find((item) => item.id === productId);
+  const quantityInput = document.querySelector(`[data-qty-for="${productId}"]`);
+  const quantity = Math.max(Number(quantityInput?.value) || 1, 1);
   if (!product) return;
-  cart.set(productId, (cart.get(productId) || 0) + 1);
-  renderCart();
-  document.querySelector("#proforma")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  proformaOrder.set(productId, (proformaOrder.get(productId) || 0) + quantity);
+  renderProformaOrder();
 };
 
-const changeCartQuantity = (productId, delta) => {
-  const nextQuantity = (cart.get(productId) || 0) + delta;
-  if (nextQuantity <= 0) {
-    cart.delete(productId);
-  } else {
-    cart.set(productId, nextQuantity);
-  }
-  renderCart();
-};
-
-const renderCart = () => {
-  const list = document.querySelector("#cartItems");
-  const empty = document.querySelector("#cartEmpty");
-  if (!list || !empty) return;
-  const entries = [...cart.entries()]
-    .map(([productId, quantity]) => ({ product: productCatalog.find((item) => item.id === productId), quantity }))
+const renderProformaOrder = () => {
+  const lines = document.querySelector("#proformaOrderLines");
+  const empty = document.querySelector("#proformaEmpty");
+  if (!lines || !empty) return;
+  const entries = [...proformaOrder.entries()]
+    .map(([productId, cartons]) => ({ product: productCatalog.find((item) => item.id === productId), cartons }))
     .filter((entry) => entry.product);
 
   empty.hidden = entries.length > 0;
-  list.innerHTML = entries
-    .map(({ product, quantity }) => {
-      const totalWeight = product.kgPerPallet * quantity;
-      const totalVolume = product.m3PerPallet * quantity;
-      return `<article class="cart-item">
-        <img src="${product.logo}" alt="" aria-hidden="true" />
-        <div class="cart-item-main">
+  lines.innerHTML = entries
+    .map(({ product, cartons }) => {
+      const pallets = cartons / getCartonsPerPallet(product);
+      const weight = cartons * getKgPerCarton(product);
+      return `<article class="proforma-line">
+        <div>
           <strong>${getProductName(product)}</strong>
-          <span>${formatWeight(product.kgPerPallet)} / ${formatVolume(product.m3PerPallet)} ${t("perPallet")}</span>
+          <span>${cartons.toLocaleString("en-US")} ${t("proformaCartonQty")} · ${pallets.toFixed(2)} PLT · ${formatWeight(weight)}</span>
         </div>
-        <div class="cart-quantity" aria-label="${t("palletCount")}">
-          <button class="cart-qty-btn" type="button" data-product-id="${product.id}" data-delta="-1">-</button>
-          <span>${quantity}</span>
-          <button class="cart-qty-btn" type="button" data-product-id="${product.id}" data-delta="1">+</button>
-        </div>
-        <div class="cart-item-total">
-          <strong>${formatWeight(totalWeight)}</strong>
-          <span>${formatVolume(totalVolume)}</span>
-        </div>
+        <button type="button" class="proforma-remove-button" data-product-id="${product.id}">×</button>
       </article>`;
     })
     .join("");
 
-  const totalPallets = entries.reduce((sum, entry) => sum + entry.quantity, 0);
-  const totalWeight = entries.reduce((sum, entry) => sum + entry.product.kgPerPallet * entry.quantity, 0);
-  const totalVolume = entries.reduce((sum, entry) => sum + entry.product.m3PerPallet * entry.quantity, 0);
-  document.querySelector("#cartTotalPallets").textContent = totalPallets.toLocaleString("en-US");
-  document.querySelector("#cartTotalWeight").textContent = formatWeight(totalWeight);
-  document.querySelector("#cartTotalVolume").textContent = formatVolume(totalVolume);
+  const totalCartons = entries.reduce((sum, entry) => sum + entry.cartons, 0);
+  const totalPallets = entries.reduce((sum, entry) => sum + entry.cartons / getCartonsPerPallet(entry.product), 0);
+  const totalWeight = entries.reduce((sum, entry) => sum + entry.cartons * getKgPerCarton(entry.product), 0);
+  document.querySelector("#proformaTotalCartons").textContent = totalCartons.toLocaleString("en-US");
+  document.querySelector("#proformaTotalPallets").textContent = totalPallets.toFixed(2);
+  document.querySelector("#proformaTotalWeight").textContent = formatWeight(totalWeight);
 };
 
 const translatePage = () => {
@@ -861,7 +897,8 @@ const translatePage = () => {
   });
   renderProducts();
   renderMarkets();
-  renderCart();
+  renderProformaProducts();
+  renderProformaOrder();
   document.documentElement.classList.remove("is-loading");
 };
 
@@ -1017,15 +1054,24 @@ document.querySelector("#quoteForm")?.addEventListener("submit", async (event) =
   }
 });
 
-document.querySelector("#productGrid")?.addEventListener("click", (event) => {
-  const button = event.target.closest(".add-to-cart");
-  if (!button) return;
-  addToCart(button.dataset.productId);
+document.querySelector("#openProformaProducts")?.addEventListener("click", () => {
+  const panel = document.querySelector("#proformaProductPanel");
+  panel?.toggleAttribute("hidden");
+  if (!panel?.hasAttribute("hidden")) {
+    document.querySelector("#proformaSearch")?.focus();
+  }
 });
-document.querySelector("#cartItems")?.addEventListener("click", (event) => {
-  const button = event.target.closest(".cart-qty-btn");
+document.querySelector("#proformaSearch")?.addEventListener("input", renderProformaProducts);
+document.querySelector("#proformaProductList")?.addEventListener("click", (event) => {
+  const button = event.target.closest(".proforma-add-button");
   if (!button) return;
-  changeCartQuantity(button.dataset.productId, Number(button.dataset.delta));
+  addProformaLine(button.dataset.productId);
+});
+document.querySelector("#proformaOrderLines")?.addEventListener("click", (event) => {
+  const button = event.target.closest(".proforma-remove-button");
+  if (!button) return;
+  proformaOrder.delete(button.dataset.productId);
+  renderProformaOrder();
 });
 translatePage();
 setupTracking();

@@ -30,7 +30,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260601-6" />
+    <link rel="stylesheet" href="styles.css?v=20260601-7" />
   </head>
   <body>
     <header class="site-header">
@@ -72,7 +72,7 @@
         <a href="#partners" data-i18n="navPartners">Partners</a>
         <a href="#process" data-i18n="navProcess">Process</a>
         <a href="#markets" data-i18n="navMarkets">Markets</a>
-        <a href="#proforma" data-i18n="navProforma">Cart</a>
+        <a href="#proforma" data-i18n="navProforma">Proforma</a>
       </nav>
 
       <div class="header-actions">
@@ -298,33 +298,42 @@
         </div>
       </section>
 
-      <section class="section cart-section" id="proforma" aria-labelledby="cart-title">
+      <section class="section proforma-order-section" id="proforma" aria-labelledby="proforma-order-title">
         <div class="section-heading">
-          <p class="section-kicker" data-i18n="cartKicker">Cart</p>
-          <h2 id="cart-title" data-i18n="cartTitle">Create a product cart and review shipment tonnage</h2>
-          <p data-i18n="cartCopy">Add products from the product cards above. The cart calculates pallet count, total gross weight and total m3 automatically.</p>
+          <p class="section-kicker" data-i18n="proformaKicker">Proforma platform</p>
+          <h2 id="proforma-order-title" data-i18n="proformaOrderTitle">Create a proforma order</h2>
+          <p data-i18n="proformaOrderCopy">Open the product selector, search by brand or product name, enter carton quantity and add items to the proforma total.</p>
         </div>
 
-        <div class="cart-layout">
-          <div class="cart-panel">
-            <div class="cart-items" id="cartItems"></div>
-            <p class="cart-empty" id="cartEmpty" data-i18n="cartEmpty">Your cart is empty. Add products from the catalog above.</p>
+        <div class="proforma-order-layout">
+          <div class="proforma-picker">
+            <button class="proforma-open-button" type="button" id="openProformaProducts" data-i18n="proformaOpenProducts">Create Proforma Order</button>
+            <div class="proforma-product-panel" id="proformaProductPanel" hidden>
+              <label class="proforma-search-label">
+                <span data-i18n="proformaSearchLabel">Search product</span>
+                <input id="proformaSearch" type="search" placeholder="abc" autocomplete="off" />
+              </label>
+              <div class="proforma-product-list" id="proformaProductList"></div>
+            </div>
           </div>
-          <aside class="cart-summary">
-            <h3 data-i18n="cartSummaryTitle">Shipment summary</h3>
-            <div class="cart-total-row">
-              <span data-i18n="cartTotalPallets">Total pallets</span>
-              <strong id="cartTotalPallets">0</strong>
+
+          <aside class="proforma-order-summary">
+            <h3 data-i18n="proformaSummaryTitle">Proforma total</h3>
+            <div class="proforma-lines" id="proformaOrderLines"></div>
+            <p class="proforma-empty" id="proformaEmpty" data-i18n="proformaEmpty">No product added yet.</p>
+            <div class="proforma-total-row">
+              <span data-i18n="proformaTotalCartons">Total cartons</span>
+              <strong id="proformaTotalCartons">0</strong>
             </div>
-            <div class="cart-total-row">
-              <span data-i18n="cartTotalWeight">Total gross weight</span>
-              <strong id="cartTotalWeight">0 kg</strong>
+            <div class="proforma-total-row">
+              <span data-i18n="proformaTotalPallets">Estimated pallets</span>
+              <strong id="proformaTotalPallets">0</strong>
             </div>
-            <div class="cart-total-row">
-              <span data-i18n="cartTotalVolume">Total volume</span>
-              <strong id="cartTotalVolume">0 m3</strong>
+            <div class="proforma-total-row">
+              <span data-i18n="proformaTotalWeight">Estimated gross weight</span>
+              <strong id="proformaTotalWeight">0 kg</strong>
             </div>
-            <a class="cart-quote-link" href="#contact" data-i18n="cartQuote">Request Quote</a>
+            <a class="proforma-quote-link" href="#contact" data-i18n="cartQuote">Request Quote</a>
           </aside>
         </div>
 
@@ -464,6 +473,6 @@
         "sameAs": ["https://www.instagram.com/sidyaglobal/"]
       }
     </script>
-    <script src="script.js?v=20260601-7"></script>
+    <script src="script.js?v=20260601-8"></script>
   </body>
 </html>
