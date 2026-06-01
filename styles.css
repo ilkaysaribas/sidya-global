@@ -1166,7 +1166,7 @@ h2 {
 
 .proforma-product-row {
   display: grid;
-  grid-template-columns: 58px minmax(180px, 1fr) minmax(230px, 1.1fr) 110px auto;
+  grid-template-columns: 64px minmax(220px, 1.2fr) minmax(320px, 1.5fr) 110px 86px;
   gap: 12px;
   align-items: center;
   padding: 12px;
@@ -1176,8 +1176,9 @@ h2 {
 }
 
 .proforma-product-image {
-  width: 58px;
-  height: 58px;
+  width: 64px;
+  height: 64px;
+  justify-self: center;
   object-fit: contain;
   border-radius: 8px;
   background: #fff;
@@ -1200,7 +1201,7 @@ h2 {
 
 .proforma-product-row dl {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
   margin: 0;
 }
@@ -1253,6 +1254,7 @@ h2 {
 .proforma-add-button {
   min-height: 38px;
   padding: 0 16px;
+  width: 100%;
   color: #fff;
   background: #ef1237;
 }

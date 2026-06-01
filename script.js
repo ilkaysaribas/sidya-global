@@ -68,6 +68,8 @@ const content = {
     proformaTotalCartons: "Total cartons",
     proformaTotalPallets: "Estimated pallets",
     proformaTotalWeight: "Estimated gross weight",
+    proformaTotalVolume: "Estimated volume",
+    proformaM3PerCarton: "m3 / carton",
     cartKicker: "Cart",
     cartTitle: "Create a product cart and review shipment tonnage",
     cartCopy: "Add products from the product cards above. The cart calculates pallet count, total gross weight and total m3 automatically.",
@@ -196,6 +198,8 @@ const content = {
     proformaTotalCartons: "Toplam koli",
     proformaTotalPallets: "Tahmini palet",
     proformaTotalWeight: "Tahmini brüt ağırlık",
+    proformaTotalVolume: "Tahmini hacim",
+    proformaM3PerCarton: "Koli m3",
     cartKicker: "Sepet",
     cartTitle: "Ürün sepeti oluşturun ve sevkiyat tonajını görün",
     cartCopy: "Ürün kartlarından sepete ekleyin. Sepet palet adedini, toplam brüt ağırlığı ve toplam m3 değerini otomatik hesaplar.",
@@ -612,152 +616,7 @@ const proformaItems = [
   { id: "medical", name: "Medical products", palletFactor: 1, kgPerPallet: 360, m3PerPallet: 1.7 },
 ];
 
-const productCatalog = [
-  {
-    id: "abc-soft-frezya",
-    brand: "ABC",
-    logo: "assets/abc-logo.jpg",
-    category: "cleaning-products",
-    liter: "5 L",
-    pallet: 1,
-    kgPerPallet: 720,
-    m3PerPallet: 1.65,
-    color: "#6d35b8",
-    names: {
-      en: "ABC Soft Freesia",
-      tr: "ABC Soft Frezya",
-      az: "ABC Soft Frezya",
-      ka: "ABC Soft Freesia",
-      ru: "ABC Soft Freesia",
-    },
-  },
-  {
-    id: "abc-aktif-jel-renkliler",
-    brand: "ABC",
-    logo: "assets/abc-logo.jpg",
-    category: "cleaning-products",
-    liter: "2.145 L",
-    pallet: 1,
-    kgPerPallet: 690,
-    m3PerPallet: 1.58,
-    color: "#f4f4f4",
-    names: {
-      en: "ABC Active Gel Detergent Colors",
-      tr: "ABC Sıvı Performans Aktif Jel Gücü Renkliler",
-      az: "ABC Aktiv Gel Rənglilər",
-      ka: "ABC Active Gel Colors",
-      ru: "ABC Active Gel для цветного",
-    },
-  },
-  {
-    id: "abc-aktif-jel-beyazlar",
-    brand: "ABC",
-    logo: "assets/abc-logo.jpg",
-    category: "cleaning-products",
-    liter: "2.145 L",
-    pallet: 1,
-    kgPerPallet: 700,
-    m3PerPallet: 1.58,
-    color: "#f4f4f4",
-    names: {
-      en: "ABC Active Gel Detergent Whites",
-      tr: "ABC Sıvı Performans Aktif Jel Gücü Beyazlar",
-      az: "ABC Aktiv Gel Ağlar",
-      ka: "ABC Active Gel Whites",
-      ru: "ABC Active Gel для белого",
-    },
-  },
-  {
-    id: "abc-leke-karsiti",
-    brand: "ABC",
-    logo: "assets/abc-logo.jpg",
-    category: "cleaning-products",
-    liter: "3 L",
-    pallet: 1,
-    kgPerPallet: 760,
-    m3PerPallet: 1.62,
-    color: "#2384c6",
-    names: {
-      en: "ABC Liquid Laundry Detergent Stain Remover",
-      tr: "ABC Sıvı Çamaşır Deterjanı Leke Karşıtı",
-      az: "ABC Maye Yuyucu Ləkəyə Qarşı",
-      ka: "ABC Liquid Detergent Stain Remover",
-      ru: "ABC жидкий порошок против пятен",
-    },
-  },
-  {
-    id: "oncu-domates-salcasi",
-    brand: "Öncü",
-    logo: "assets/oncu-salca-logo.svg",
-    category: "food-products",
-    liter: "830 g",
-    pallet: 1,
-    kgPerPallet: 780,
-    m3PerPallet: 1.45,
-    color: "#c3262d",
-    names: {
-      en: "Öncü Tomato Paste",
-      tr: "Öncü Domates Salçası",
-      az: "Öncü Tomat Pastası",
-      ka: "Öncü Tomato Paste",
-      ru: "Öncü томатная паста",
-    },
-  },
-  {
-    id: "demet-endustriyel-sarf",
-    brand: "Demet",
-    logo: "assets/demet-temizlik-logo.svg",
-    category: "industrial-products",
-    liter: "Bulk",
-    pallet: 1,
-    kgPerPallet: 650,
-    m3PerPallet: 1.55,
-    color: "#4e5559",
-    names: {
-      en: "Demet Industrial Cleaning Supplies",
-      tr: "Demet Endüstriyel Temizlik Sarfı",
-      az: "Demet Sənaye Təmizlik Sərfiyyatı",
-      ka: "Demet Industrial Supplies",
-      ru: "Demet промышленные расходники",
-    },
-  },
-  {
-    id: "garipler-ev-yasam",
-    brand: "Garipler",
-    logo: "assets/garipler-yapi-market-logo.svg",
-    category: "home-products",
-    liter: "Mixed",
-    pallet: 1,
-    kgPerPallet: 420,
-    m3PerPallet: 1.8,
-    color: "#2f3437",
-    names: {
-      en: "Garipler Home & Living Products",
-      tr: "Garipler Ev ve Yaşam Ürünleri",
-      az: "Garipler Ev və Yaşam Məhsulları",
-      ka: "Garipler Home & Living",
-      ru: "Garipler товары для дома",
-    },
-  },
-  {
-    id: "johnson-medikal",
-    brand: "J&J",
-    logo: "assets/johnson-logo.svg",
-    category: "medical-products",
-    liter: "Case",
-    pallet: 1,
-    kgPerPallet: 360,
-    m3PerPallet: 1.7,
-    color: "#ffffff",
-    names: {
-      en: "Johnson & Johnson Medical Products",
-      tr: "Johnson & Johnson Medikal Ürünler",
-      az: "Johnson & Johnson Tibbi Məhsullar",
-      ka: "Johnson & Johnson Medical",
-      ru: "Johnson & Johnson медицинские товары",
-    },
-  },
-];
+const productCatalog = [];
 
 productCatalog.push(...(window.SIDYA_CATALOG_PRODUCTS || []));
 
@@ -783,6 +642,7 @@ const formatVolume = (value) => `${value.toFixed(2)} m3`;
 const getCartonsPerPallet = (product) => product.cartonsPerPallet || 60;
 const getUnitsPerCarton = (product) => product.unitsPerCarton || 12;
 const getKgPerCarton = (product) => product.kgPerCarton || product.kgPerPallet / getCartonsPerPallet(product);
+const getM3PerCarton = (product) => product.m3PerCarton || product.m3PerPallet / getCartonsPerPallet(product);
 
 const renderProducts = () => {
   const grid = document.querySelector("#productGrid");
@@ -838,6 +698,7 @@ const renderProformaProducts = () => {
           <div><dt>${t("proformaUnitsPerCarton")}</dt><dd>${unitsPerCarton}</dd></div>
           <div><dt>${t("proformaCartonsPerPallet")}</dt><dd>${cartonsPerPallet}</dd></div>
           <div><dt>${t("proformaKgPerCarton")}</dt><dd>${kgPerCarton.toFixed(2)}</dd></div>
+          <div><dt>${t("proformaM3PerCarton")}</dt><dd>${getM3PerCarton(product).toFixed(3)}</dd></div>
         </dl>
         <label>
           <span>${t("proformaCartonQty")}</span>
@@ -871,10 +732,11 @@ const renderProformaOrder = () => {
     .map(({ product, cartons }) => {
       const pallets = cartons / getCartonsPerPallet(product);
       const weight = cartons * getKgPerCarton(product);
+      const volume = cartons * getM3PerCarton(product);
       return `<article class="proforma-line">
         <div>
           <strong>${getProductName(product)}</strong>
-          <span>${cartons.toLocaleString("en-US")} ${t("proformaCartonQty")} · ${pallets.toFixed(2)} PLT · ${formatWeight(weight)}</span>
+          <span>${cartons.toLocaleString("en-US")} ${t("proformaCartonQty")} · ${pallets.toFixed(2)} PLT · ${formatWeight(weight)} · ${formatVolume(volume)}</span>
         </div>
         <button type="button" class="proforma-remove-button" data-product-id="${product.id}">×</button>
       </article>`;
@@ -884,9 +746,11 @@ const renderProformaOrder = () => {
   const totalCartons = entries.reduce((sum, entry) => sum + entry.cartons, 0);
   const totalPallets = entries.reduce((sum, entry) => sum + entry.cartons / getCartonsPerPallet(entry.product), 0);
   const totalWeight = entries.reduce((sum, entry) => sum + entry.cartons * getKgPerCarton(entry.product), 0);
+  const totalVolume = entries.reduce((sum, entry) => sum + entry.cartons * getM3PerCarton(entry.product), 0);
   document.querySelector("#proformaTotalCartons").textContent = totalCartons.toLocaleString("en-US");
   document.querySelector("#proformaTotalPallets").textContent = totalPallets.toFixed(2);
   document.querySelector("#proformaTotalWeight").textContent = formatWeight(totalWeight);
+  document.querySelector("#proformaTotalVolume").textContent = formatVolume(totalVolume);
 };
 
 const translatePage = () => {
