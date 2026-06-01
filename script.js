@@ -605,7 +605,10 @@ const productPartners = {
   "cleaning-products": [
     { name: "ABC Deterjan", site: "https://www.abcdeterjan.com.tr/", catalog: "assets/abc-deterjan-urunleri-katalog-2025.pdf", logo: "assets/abc-logo.jpg" },
     { name: "Unilever", site: "https://www.unilever.com.tr/", logo: "assets/unilever-logo.svg" },
-    { name: "P&G", site: "https://www.pg.com.tr/", logo: "assets/pg-logo.svg" },
+    { name: "P&G", site: "https://www.pg.com.tr/", logo: "assets/pg-logo.svg", catalogs: [
+      { label: "AZ Catalog", href: "assets/pm-catalog-azerbaijani.pdf" },
+      { label: "KA Catalog", href: "assets/pm-catalog-georgian.pdf" },
+    ] },
     { name: "Henkel", site: "https://www.henkel.com.tr/", logo: "assets/henkel-logo.svg" },
     { name: "Evyap", site: "https://www.evyap.com.tr/", catalog: "assets/evyap-katalog.pdf", logo: "assets/evyap-logo.svg" },
     { name: "Eczacıbaşı / Selpak", site: "https://www.eczacibasi.com.tr/", logo: "assets/selpak-logo.svg" },
@@ -622,7 +625,11 @@ const productPartners = {
     { name: "Demet Temizlik", site: "https://demettemizlik.com/", logo: "assets/demet-temizlik-logo.svg" },
   ],
   "medical-products": [
-    { name: "Johnson & Johnson", site: "https://www.jnjmedicalcloud.com.tr/tr-tr", catalog: "assets/johnson-katalog.pdf", logo: "assets/johnson-logo.svg" },
+    { name: "Johnson & Johnson", site: "https://www.jnjmedicalcloud.com.tr/tr-tr", catalog: "assets/johnson-katalog.pdf", logo: "assets/johnson-logo.svg", catalogs: [
+      { label: "EN Catalog", href: "assets/johnson-catalog-english.pdf" },
+      { label: "AZ Catalog", href: "assets/johnson-catalog-azerbaijani.pdf" },
+      { label: "KA Catalog", href: "assets/johnson-catalog-georgian.pdf" },
+    ] },
     { name: "İkihan Medikal", site: "https://www.ikihanmedikal.com/", logo: "assets/ikihan-medikal-logo.svg" },
     { name: "Omron Healthcare", site: "https://www.omron-healthcare.com.tr/", logo: "assets/omron-logo.svg" },
     { name: "Hanymish", site: "https://www.hanymish.com/", logo: "assets/hanymish-logo.svg" },
@@ -681,9 +688,10 @@ const renderProducts = () => {
         ? `<div class="related-companies"><strong>${t("relatedCompanies")}</strong><div>${related
             .map(
               (company) =>
-                `<span class="related-company"><a class="site-action" href="${company.site}"><img src="${company.logo}" alt="" aria-hidden="true" /><span>${company.name}</span></a>${
-                  company.catalog ? `<a class="catalog-action" href="${company.catalog}">${t("sampleCatalogCta")}</a>` : ""
-                }</span>`,
+                `<span class="related-company"><a class="site-action" href="${company.site}"><img src="${company.logo}" alt="" aria-hidden="true" /><span>${company.name}</span></a>${[
+                  company.catalog ? `<a class="catalog-action" href="${company.catalog}">${t("sampleCatalogCta")}</a>` : "",
+                  ...(company.catalogs || []).map((catalog) => `<a class="catalog-action" href="${catalog.href}">${catalog.label}</a>`),
+                ].join("")}</span>`,
             )
             .join("")}</div></div>`
         : "";
