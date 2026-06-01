@@ -30,7 +30,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260601-5" />
+    <link rel="stylesheet" href="styles.css?v=20260601-6" />
   </head>
   <body>
     <header class="site-header">
@@ -72,7 +72,7 @@
         <a href="#partners" data-i18n="navPartners">Partners</a>
         <a href="#process" data-i18n="navProcess">Process</a>
         <a href="#markets" data-i18n="navMarkets">Markets</a>
-        <a href="#proforma" data-i18n="navProforma">Proforma</a>
+        <a href="#proforma" data-i18n="navProforma">Cart</a>
       </nav>
 
       <div class="header-actions">
@@ -299,67 +299,34 @@
         </div>
       </section>
 
-      <section class="section proforma-section" id="proforma" aria-labelledby="proforma-title">
+      <section class="section cart-section" id="proforma" aria-labelledby="cart-title">
         <div class="section-heading">
-          <p class="section-kicker" data-i18n="proformaKicker">Proforma platform</p>
-          <h2 id="proforma-title" data-i18n="proformaTitle">Purchase proforma and loading calculator</h2>
-          <p data-i18n="proformaCopy">
-            Select a product line, enter pallet quantity and see total pallet, weight and volume values instantly.
-          </p>
+          <p class="section-kicker" data-i18n="cartKicker">Cart</p>
+          <h2 id="cart-title" data-i18n="cartTitle">Create a product cart and review shipment tonnage</h2>
+          <p data-i18n="cartCopy">Add products from the product cards above. The cart calculates pallet count, total gross weight and total m3 automatically.</p>
         </div>
 
-        <div class="proforma-layout">
-          <form class="proforma-form" id="proformaForm">
-            <label>
-              <span data-i18n="proformaBuyer">Buyer company</span>
-              <input name="buyer" value="Sample Buyer Ltd." />
-            </label>
-            <label>
-              <span data-i18n="proformaProduct">Product line</span>
-              <select name="product" id="proformaProduct"></select>
-            </label>
-            <label>
-              <span data-i18n="proformaPallets">Pallet quantity</span>
-              <input name="pallets" id="proformaPallets" type="number" min="1" value="10" />
-            </label>
-          </form>
-
-          <div class="proforma-summary">
-            <div>
-              <span data-i18n="palletFactor">Pallet factor</span>
-              <strong id="palletFactorValue">-</strong>
-            </div>
-            <div>
-              <span data-i18n="singleWeight">Weight / pallet</span>
-              <strong id="singleWeightValue">-</strong>
-            </div>
-            <div>
-              <span data-i18n="singleVolume">m3 / pallet</span>
-              <strong id="singleVolumeValue">-</strong>
-            </div>
-            <div>
-              <span data-i18n="totalWeight">Total weight</span>
-              <strong id="totalWeightValue">-</strong>
-            </div>
-            <div>
-              <span data-i18n="totalVolume">Total volume</span>
-              <strong id="totalVolumeValue">-</strong>
-            </div>
+        <div class="cart-layout">
+          <div class="cart-panel">
+            <div class="cart-items" id="cartItems"></div>
+            <p class="cart-empty" id="cartEmpty" data-i18n="cartEmpty">Your cart is empty. Add products from the catalog above.</p>
           </div>
-        </div>
-
-        <div class="proforma-table-wrap">
-          <table class="proforma-table">
-            <thead>
-              <tr>
-                <th data-i18n="tableItem">Item</th>
-                <th data-i18n="tablePallet">Pallets</th>
-                <th data-i18n="tableWeight">Gross kg</th>
-                <th data-i18n="tableVolume">Volume m3</th>
-              </tr>
-            </thead>
-            <tbody id="proformaRows"></tbody>
-          </table>
+          <aside class="cart-summary">
+            <h3 data-i18n="cartSummaryTitle">Shipment summary</h3>
+            <div class="cart-total-row">
+              <span data-i18n="cartTotalPallets">Total pallets</span>
+              <strong id="cartTotalPallets">0</strong>
+            </div>
+            <div class="cart-total-row">
+              <span data-i18n="cartTotalWeight">Total gross weight</span>
+              <strong id="cartTotalWeight">0 kg</strong>
+            </div>
+            <div class="cart-total-row">
+              <span data-i18n="cartTotalVolume">Total volume</span>
+              <strong id="cartTotalVolume">0 m3</strong>
+            </div>
+            <a class="cart-quote-link" href="#contact" data-i18n="cartQuote">Request Quote</a>
+          </aside>
         </div>
 
         <div class="transport-grid">
@@ -498,6 +465,6 @@
         "sameAs": ["https://www.instagram.com/sidyaglobal/"]
       }
     </script>
-    <script src="script.js?v=20260601-6"></script>
+    <script src="script.js?v=20260601-7"></script>
   </body>
 </html>

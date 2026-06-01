@@ -7,7 +7,7 @@ const content = {
     navPartners: "Partners",
     navProcess: "Process",
     navMarkets: "Markets",
-    navProforma: "Proforma",
+    navProforma: "Cart",
     headerCta: "Get Quote",
     installAppCta: "App",
     installPanelTitle: "Sidya Global app",
@@ -54,6 +54,21 @@ const content = {
     proformaBuyer: "Buyer company",
     proformaProduct: "Product line",
     proformaPallets: "Pallet quantity",
+    cartKicker: "Cart",
+    cartTitle: "Create a product cart and review shipment tonnage",
+    cartCopy: "Add products from the product cards above. The cart calculates pallet count, total gross weight and total m3 automatically.",
+    cartEmpty: "Your cart is empty. Add products from the catalog above.",
+    cartSummaryTitle: "Shipment summary",
+    cartTotalPallets: "Total pallets",
+    cartTotalWeight: "Total gross weight",
+    cartTotalVolume: "Total volume",
+    cartQuote: "Request Quote",
+    productDetail: "Product Detail",
+    addToCart: "Add to Cart",
+    unitWeight: "Weight",
+    unitVolume: "Volume",
+    perPallet: "per pallet",
+    palletCount: "Pallet",
     palletFactor: "Pallet factor",
     singleWeight: "Weight / pallet",
     singleVolume: "m3 / pallet",
@@ -106,7 +121,7 @@ const content = {
     navPartners: "Ortaklar",
     navProcess: "Süreç",
     navMarkets: "Pazarlar",
-    navProforma: "Proforma",
+    navProforma: "Sepet",
     headerCta: "Teklif Al",
     installAppCta: "Uygulama",
     installPanelTitle: "Sidya Global uygulaması",
@@ -153,6 +168,21 @@ const content = {
     proformaBuyer: "Alıcı firma",
     proformaProduct: "Ürün grubu",
     proformaPallets: "Palet adedi",
+    cartKicker: "Sepet",
+    cartTitle: "Ürün sepeti oluşturun ve sevkiyat tonajını görün",
+    cartCopy: "Ürün kartlarından sepete ekleyin. Sepet palet adedini, toplam brüt ağırlığı ve toplam m3 değerini otomatik hesaplar.",
+    cartEmpty: "Sepetiniz boş. Yukarıdaki katalogdan ürün ekleyin.",
+    cartSummaryTitle: "Sevkiyat özeti",
+    cartTotalPallets: "Toplam palet",
+    cartTotalWeight: "Toplam brüt ağırlık",
+    cartTotalVolume: "Toplam hacim",
+    cartQuote: "Teklif İste",
+    productDetail: "Ürün Detayı",
+    addToCart: "Sepete Ekle",
+    unitWeight: "Ağırlık",
+    unitVolume: "Hacim",
+    perPallet: "palet başı",
+    palletCount: "Palet",
     palletFactor: "Palet katsayısı",
     singleWeight: "Palet başı ağırlık",
     singleVolume: "Palet başı m3",
@@ -554,6 +584,155 @@ const proformaItems = [
   { id: "medical", name: "Medical products", palletFactor: 1, kgPerPallet: 360, m3PerPallet: 1.7 },
 ];
 
+const productCatalog = [
+  {
+    id: "abc-soft-frezya",
+    brand: "ABC",
+    logo: "assets/abc-logo.jpg",
+    category: "cleaning-products",
+    liter: "5 L",
+    pallet: 1,
+    kgPerPallet: 720,
+    m3PerPallet: 1.65,
+    color: "#6d35b8",
+    names: {
+      en: "ABC Soft Freesia",
+      tr: "ABC Soft Frezya",
+      az: "ABC Soft Frezya",
+      ka: "ABC Soft Freesia",
+      ru: "ABC Soft Freesia",
+    },
+  },
+  {
+    id: "abc-aktif-jel-renkliler",
+    brand: "ABC",
+    logo: "assets/abc-logo.jpg",
+    category: "cleaning-products",
+    liter: "2.145 L",
+    pallet: 1,
+    kgPerPallet: 690,
+    m3PerPallet: 1.58,
+    color: "#f4f4f4",
+    names: {
+      en: "ABC Active Gel Detergent Colors",
+      tr: "ABC Sıvı Performans Aktif Jel Gücü Renkliler",
+      az: "ABC Aktiv Gel Rənglilər",
+      ka: "ABC Active Gel Colors",
+      ru: "ABC Active Gel для цветного",
+    },
+  },
+  {
+    id: "abc-aktif-jel-beyazlar",
+    brand: "ABC",
+    logo: "assets/abc-logo.jpg",
+    category: "cleaning-products",
+    liter: "2.145 L",
+    pallet: 1,
+    kgPerPallet: 700,
+    m3PerPallet: 1.58,
+    color: "#f4f4f4",
+    names: {
+      en: "ABC Active Gel Detergent Whites",
+      tr: "ABC Sıvı Performans Aktif Jel Gücü Beyazlar",
+      az: "ABC Aktiv Gel Ağlar",
+      ka: "ABC Active Gel Whites",
+      ru: "ABC Active Gel для белого",
+    },
+  },
+  {
+    id: "abc-leke-karsiti",
+    brand: "ABC",
+    logo: "assets/abc-logo.jpg",
+    category: "cleaning-products",
+    liter: "3 L",
+    pallet: 1,
+    kgPerPallet: 760,
+    m3PerPallet: 1.62,
+    color: "#2384c6",
+    names: {
+      en: "ABC Liquid Laundry Detergent Stain Remover",
+      tr: "ABC Sıvı Çamaşır Deterjanı Leke Karşıtı",
+      az: "ABC Maye Yuyucu Ləkəyə Qarşı",
+      ka: "ABC Liquid Detergent Stain Remover",
+      ru: "ABC жидкий порошок против пятен",
+    },
+  },
+  {
+    id: "oncu-domates-salcasi",
+    brand: "Öncü",
+    logo: "assets/oncu-salca-logo.svg",
+    category: "food-products",
+    liter: "830 g",
+    pallet: 1,
+    kgPerPallet: 780,
+    m3PerPallet: 1.45,
+    color: "#c3262d",
+    names: {
+      en: "Öncü Tomato Paste",
+      tr: "Öncü Domates Salçası",
+      az: "Öncü Tomat Pastası",
+      ka: "Öncü Tomato Paste",
+      ru: "Öncü томатная паста",
+    },
+  },
+  {
+    id: "demet-endustriyel-sarf",
+    brand: "Demet",
+    logo: "assets/demet-temizlik-logo.svg",
+    category: "industrial-products",
+    liter: "Bulk",
+    pallet: 1,
+    kgPerPallet: 650,
+    m3PerPallet: 1.55,
+    color: "#4e5559",
+    names: {
+      en: "Demet Industrial Cleaning Supplies",
+      tr: "Demet Endüstriyel Temizlik Sarfı",
+      az: "Demet Sənaye Təmizlik Sərfiyyatı",
+      ka: "Demet Industrial Supplies",
+      ru: "Demet промышленные расходники",
+    },
+  },
+  {
+    id: "garipler-ev-yasam",
+    brand: "Garipler",
+    logo: "assets/garipler-yapi-market-logo.svg",
+    category: "home-products",
+    liter: "Mixed",
+    pallet: 1,
+    kgPerPallet: 420,
+    m3PerPallet: 1.8,
+    color: "#2f3437",
+    names: {
+      en: "Garipler Home & Living Products",
+      tr: "Garipler Ev ve Yaşam Ürünleri",
+      az: "Garipler Ev və Yaşam Məhsulları",
+      ka: "Garipler Home & Living",
+      ru: "Garipler товары для дома",
+    },
+  },
+  {
+    id: "johnson-medikal",
+    brand: "J&J",
+    logo: "assets/johnson-logo.svg",
+    category: "medical-products",
+    liter: "Case",
+    pallet: 1,
+    kgPerPallet: 360,
+    m3PerPallet: 1.7,
+    color: "#ffffff",
+    names: {
+      en: "Johnson & Johnson Medical Products",
+      tr: "Johnson & Johnson Medikal Ürünler",
+      az: "Johnson & Johnson Tibbi Məhsullar",
+      ka: "Johnson & Johnson Medical",
+      ru: "Johnson & Johnson медицинские товары",
+    },
+  },
+];
+
+const cart = new Map();
+
 const marketNames = {
   en: ["Georgia", "Azerbaijan", "Armenia", "Iran", "Iraq", "Russia", "Ukraine", "Romania", "Kazakhstan"],
   tr: ["Gürcistan", "Azerbaycan", "Ermenistan", "İran", "Irak", "Rusya", "Ukrayna", "Romanya", "Kazakistan"],
@@ -568,25 +747,40 @@ let deferredInstallPrompt = null;
 
 const t = (key) => content[currentLang][key] || content.en[key] || key;
 
+const getProductName = (product) => product.names[currentLang] || product.names.en;
+const formatWeight = (value) => `${value.toLocaleString("en-US")} kg`;
+const formatVolume = (value) => `${value.toFixed(2)} m3`;
+
 const renderProducts = () => {
   const grid = document.querySelector("#productGrid");
   if (!grid) return;
-  grid.innerHTML = products[currentLang]
+  grid.innerHTML = productCatalog
     .map((product) => {
-      const related = productPartners[product.id] || [];
-      const relatedMarkup = related.length
-        ? `<div class="related-companies"><strong>${t("relatedCompanies")}</strong><div>${related
-            .map(
-              (company) =>
-                `<span class="related-company"><a class="site-action" href="${company.site}"><img src="${company.logo}" alt="" aria-hidden="true" /><span>${company.name}</span></a>${
-                  company.catalog ? `<a class="catalog-action" href="${company.catalog}">${t("sampleCatalogCta")}</a>` : ""
-                }</span>`,
-            )
-            .join("")}</div></div>`
-        : "";
-      return `<article class="product-card" id="${product.id}"><div><span class="product-icon" aria-hidden="true">${product.icon}</span><h3>${product.title}</h3><p>${product.copy}</p></div><div class="product-meta">${product.meta
-        .map((item) => `<span>${item}</span>`)
-        .join("")}</div>${relatedMarkup}</article>`;
+      const name = getProductName(product);
+      return `<article class="product-card store-product-card" id="${product.id}">
+        <div class="product-visual" style="--product-color: ${product.color}">
+          <img src="${product.logo}" alt="${product.brand}" loading="lazy" />
+        </div>
+        <div class="store-product-body">
+          <span class="store-brand">${product.brand}</span>
+          <h3>${name}</h3>
+          <div class="store-badges" aria-label="Product logistics">
+            <span>${product.liter}</span>
+            <span>${product.pallet} PLT</span>
+          </div>
+          <dl class="tonnage-list">
+            <div><dt>${t("unitWeight")}</dt><dd>${formatWeight(product.kgPerPallet)}</dd></div>
+            <div><dt>${t("unitVolume")}</dt><dd>${formatVolume(product.m3PerPallet)}</dd></div>
+          </dl>
+        </div>
+        <div class="store-product-actions">
+          <a class="detail-button" href="#catalogs">${t("productDetail")} &gt;</a>
+          <button class="buy-button add-to-cart" type="button" data-product-id="${product.id}">
+            <span>${t("addToCart")}</span>
+            <span aria-hidden="true">+</span>
+          </button>
+        </div>
+      </article>`;
     })
     .join("");
 };
@@ -598,31 +792,62 @@ const renderMarkets = () => {
   marketList.innerHTML = names.map((name) => `<span>${name}</span>`).join("");
 };
 
-const renderProformaOptions = () => {
-  const select = document.querySelector("#proformaProduct");
-  if (!select) return;
-  select.innerHTML = proformaItems.map((item) => `<option value="${item.id}">${item.name}</option>`).join("");
+const addToCart = (productId) => {
+  const product = productCatalog.find((item) => item.id === productId);
+  if (!product) return;
+  cart.set(productId, (cart.get(productId) || 0) + 1);
+  renderCart();
+  document.querySelector("#proforma")?.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
-const updateProforma = () => {
-  const select = document.querySelector("#proformaProduct");
-  const palletsInput = document.querySelector("#proformaPallets");
-  if (!select || !palletsInput) return;
-  const item = proformaItems.find((entry) => entry.id === select.value) || proformaItems[0];
-  const pallets = Math.max(Number(palletsInput.value) || 1, 1);
-  const totalWeight = item.kgPerPallet * pallets * item.palletFactor;
-  const totalVolume = item.m3PerPallet * pallets * item.palletFactor;
-
-  document.querySelector("#palletFactorValue").textContent = `${item.palletFactor}x`;
-  document.querySelector("#singleWeightValue").textContent = `${item.kgPerPallet.toLocaleString("en-US")} kg`;
-  document.querySelector("#singleVolumeValue").textContent = `${item.m3PerPallet.toFixed(2)} m3`;
-  document.querySelector("#totalWeightValue").textContent = `${totalWeight.toLocaleString("en-US")} kg`;
-  document.querySelector("#totalVolumeValue").textContent = `${totalVolume.toFixed(2)} m3`;
-
-  const rows = document.querySelector("#proformaRows");
-  if (rows) {
-    rows.innerHTML = `<tr><td>${item.name}</td><td>${pallets}</td><td>${totalWeight.toLocaleString("en-US")}</td><td>${totalVolume.toFixed(2)}</td></tr>`;
+const changeCartQuantity = (productId, delta) => {
+  const nextQuantity = (cart.get(productId) || 0) + delta;
+  if (nextQuantity <= 0) {
+    cart.delete(productId);
+  } else {
+    cart.set(productId, nextQuantity);
   }
+  renderCart();
+};
+
+const renderCart = () => {
+  const list = document.querySelector("#cartItems");
+  const empty = document.querySelector("#cartEmpty");
+  if (!list || !empty) return;
+  const entries = [...cart.entries()]
+    .map(([productId, quantity]) => ({ product: productCatalog.find((item) => item.id === productId), quantity }))
+    .filter((entry) => entry.product);
+
+  empty.hidden = entries.length > 0;
+  list.innerHTML = entries
+    .map(({ product, quantity }) => {
+      const totalWeight = product.kgPerPallet * quantity;
+      const totalVolume = product.m3PerPallet * quantity;
+      return `<article class="cart-item">
+        <img src="${product.logo}" alt="" aria-hidden="true" />
+        <div class="cart-item-main">
+          <strong>${getProductName(product)}</strong>
+          <span>${formatWeight(product.kgPerPallet)} / ${formatVolume(product.m3PerPallet)} ${t("perPallet")}</span>
+        </div>
+        <div class="cart-quantity" aria-label="${t("palletCount")}">
+          <button class="cart-qty-btn" type="button" data-product-id="${product.id}" data-delta="-1">-</button>
+          <span>${quantity}</span>
+          <button class="cart-qty-btn" type="button" data-product-id="${product.id}" data-delta="1">+</button>
+        </div>
+        <div class="cart-item-total">
+          <strong>${formatWeight(totalWeight)}</strong>
+          <span>${formatVolume(totalVolume)}</span>
+        </div>
+      </article>`;
+    })
+    .join("");
+
+  const totalPallets = entries.reduce((sum, entry) => sum + entry.quantity, 0);
+  const totalWeight = entries.reduce((sum, entry) => sum + entry.product.kgPerPallet * entry.quantity, 0);
+  const totalVolume = entries.reduce((sum, entry) => sum + entry.product.m3PerPallet * entry.quantity, 0);
+  document.querySelector("#cartTotalPallets").textContent = totalPallets.toLocaleString("en-US");
+  document.querySelector("#cartTotalWeight").textContent = formatWeight(totalWeight);
+  document.querySelector("#cartTotalVolume").textContent = formatVolume(totalVolume);
 };
 
 const translatePage = () => {
@@ -636,7 +861,7 @@ const translatePage = () => {
   });
   renderProducts();
   renderMarkets();
-  updateProforma();
+  renderCart();
   document.documentElement.classList.remove("is-loading");
 };
 
@@ -792,8 +1017,15 @@ document.querySelector("#quoteForm")?.addEventListener("submit", async (event) =
   }
 });
 
-renderProformaOptions();
-document.querySelector("#proformaProduct")?.addEventListener("change", updateProforma);
-document.querySelector("#proformaPallets")?.addEventListener("input", updateProforma);
+document.querySelector("#productGrid")?.addEventListener("click", (event) => {
+  const button = event.target.closest(".add-to-cart");
+  if (!button) return;
+  addToCart(button.dataset.productId);
+});
+document.querySelector("#cartItems")?.addEventListener("click", (event) => {
+  const button = event.target.closest(".cart-qty-btn");
+  if (!button) return;
+  changeCartQuantity(button.dataset.productId, Number(button.dataset.delta));
+});
 translatePage();
 setupTracking();
