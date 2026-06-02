@@ -24,6 +24,8 @@ const content = {
     exchangeTitle: "Current TCMB rates",
     exchangeLoading: "Loading...",
     exchangeUpdated: "Updated",
+    exchangeChecked: "Checked",
+    exchangeDataDate: "TCMB data",
     exchangeUnavailable: "Rates could not be loaded",
     heroEyebrow: "Cleaning • Industrial • Home & Living",
     heroTitle: "Your Trusted Gateway to Reliable Products from Türkiye",
@@ -172,6 +174,8 @@ const content = {
     exchangeTitle: "Güncel TCMB kurları",
     exchangeLoading: "Yükleniyor...",
     exchangeUpdated: "Güncellendi",
+    exchangeChecked: "Kontrol",
+    exchangeDataDate: "TCMB veri",
     exchangeUnavailable: "Kur bilgileri alınamadı",
     heroEyebrow: "Temizlik • Endüstriyel • Ev ve Yaşam",
     heroTitle: "Türkiye'den Güvenilir Ürünlere Açılan Kapınız",
@@ -859,15 +863,22 @@ const renderExchangeRates = () => {
       .join("");
   }
 
-  const stamp = exchangeRatesData.date || new Date(exchangeRatesData.updatedAt).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
-  updated.textContent = `${t("exchangeUpdated")}: ${stamp} · ${sourceLabel}`;
+  const checkedAt = new Date(exchangeRatesData.updatedAt || Date.now()).toLocaleString("tr-TR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const dataDate = exchangeRatesData.date ? ` · ${t("exchangeDataDate")}: ${exchangeRatesData.date}` : "";
+  updated.textContent = `${t("exchangeChecked")}: ${checkedAt}${dataDate} - ${sourceLabel}`;
 };
 
 const loadExchangeRates = async () => {
   const updated = document.querySelector("#exchangeUpdated");
   if (!updated || window.location.protocol === "file:") return;
   try {
-    const response = await fetch("/api/exchange-rates", { cache: "no-store" });
+    const response = await fetch(`/api/exchange-rates?t=${Date.now()}`, { cache: "no-store" });
     if (!response.ok) throw new Error("Exchange API failed");
     exchangeRatesData = await response.json();
     renderExchangeRates();
@@ -886,11 +897,12 @@ const renderProformaProducts = () => {
     return !query || haystack.includes(query);
   });
   list.innerHTML = filteredProducts
-    .map((product) => {
+    .map((product, index) => {
       const cartonsPerPallet = getCartonsPerPallet(product);
       const unitsPerCarton = getUnitsPerCarton(product);
       const kgPerCarton = getKgPerCarton(product);
       return `<article class="proforma-product-row">
+        <span class="proforma-product-index">${index + 1}</span>
         <img class="proforma-product-image proforma-brand-logo" src="${getBrandLogo(product)}" alt="${product.brand} logo" loading="lazy" />
         <div>
           <strong>${getProductName(product)}</strong>

@@ -1265,13 +1265,27 @@ h2 {
 
 .proforma-product-row {
   display: grid;
-  grid-template-columns: 54px minmax(190px, 1.2fr) minmax(280px, 1.5fr) 96px 78px;
+  grid-template-columns: 34px 54px minmax(190px, 1.2fr) minmax(280px, 1.5fr) 96px 78px;
   gap: 10px;
   align-items: center;
   padding: 10px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fafafa;
+}
+
+.proforma-product-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  justify-self: center;
+  border-radius: 999px;
+  color: #fff;
+  background: #151515;
+  font-size: 0.78rem;
+  font-weight: 900;
 }
 
 .proforma-product-image {

@@ -114,7 +114,7 @@ module.exports = async function handler(request, response) {
       }
     }
 
-    response.setHeader("Cache-Control", "s-maxage=900, stale-while-revalidate=1800");
+    response.setHeader("Cache-Control", "no-store, max-age=0");
     response.status(200).json({
       source: "Türkiye Cumhuriyet Merkez Bankası + National Bank of Georgia",
       date: dateMatch ? dateMatch[1] : "",
