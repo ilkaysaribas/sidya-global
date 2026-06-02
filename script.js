@@ -944,18 +944,24 @@ const updateProformaQuantity = (productId, delta) => {
   renderProformaOrder();
 };
 
-const renderLoadStack = (selector, entries, capacityVolume) => {
+const renderLoadStack = (selector, entries, capacityVolume, percent) => {
   const stack = document.querySelector(selector);
   if (!stack) return;
+  const maxBoxes = 42;
+  const activeBoxes = Math.min(maxBoxes, Math.round((percent / 100) * maxBoxes));
+  if (!entries.length || !activeBoxes) {
+    stack.innerHTML = "";
+    return;
+  }
   const sorted = [...entries].sort((a, b) => getKgPerCarton(b.product) / getM3PerCarton(b.product) - getKgPerCarton(a.product) / getM3PerCarton(a.product));
-  stack.innerHTML = sorted
-    .map((entry, index) => {
-      const volume = entry.cartons * getM3PerCarton(entry.product);
-      const height = Math.max(5, Math.min(100, (volume / capacityVolume) * 100));
-      const shade = 34 + (index % 5) * 9;
-      return `<span class="load-segment" title="${getProductName(entry.product)}" style="height:${height}%; background:hsl(205 10% ${shade}%);"></span>`;
-    })
-    .join("");
+  const boxes = sorted.flatMap((entry) => {
+    const volume = entry.cartons * getM3PerCarton(entry.product);
+    const share = Math.max(1, Math.round((volume / capacityVolume) * maxBoxes));
+    return Array.from({ length: share }, () => getProductName(entry.product));
+  });
+  const visibleBoxes = boxes.slice(0, activeBoxes);
+  while (visibleBoxes.length < activeBoxes) visibleBoxes.push(visibleBoxes[visibleBoxes.length - 1] || "Load");
+  stack.innerHTML = visibleBoxes.map((title) => `<span class="load-box" title="${title}"></span>`).join("");
 };
 
 const updateLoadMeter = (prefix, capacity, entries, totalWeight, totalVolume) => {
@@ -969,7 +975,7 @@ const updateLoadMeter = (prefix, capacity, entries, totalWeight, totalVolume) =>
     const label = prefix === "truck" ? t("truckFillLabel") : t("containerFillLabel");
     text.textContent = `${label}: ${percent}% · ${formatVolume(totalVolume)} / ${capacity.volume} m3 · ${formatWeight(totalWeight)} / ${capacity.weight.toLocaleString("en-US")} kg`;
   }
-  renderLoadStack(`#${prefix}LoadStack`, entries, capacity.volume);
+  renderLoadStack(`#${prefix}LoadStack`, entries, capacity.volume, percent);
 };
 
 const renderLoadMeters = (entries, totalWeight, totalVolume) => {
