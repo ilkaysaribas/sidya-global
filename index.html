@@ -99,6 +99,7 @@
         <a href="#process" data-i18n="navProcess">Process</a>
         <a href="#markets" data-i18n="navMarkets">Markets</a>
         <a href="#proforma" data-i18n="navProforma">Proforma</a>
+        <a href="#customs" data-i18n="navCustoms">Customs</a>
         <a href="#b2b" data-i18n="navB2B">B2B Portal</a>
       </nav>
 
@@ -325,6 +326,82 @@
             <span>04</span>
             <h3 data-i18n="stepFourTitle">Logistics delivery</h3>
             <p data-i18n="stepFourCopy">Truck, container, documentation and shipment planning move together.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section customs-section" id="customs" aria-labelledby="customs-title">
+        <div class="section-heading">
+          <p class="section-kicker" data-i18n="customsKicker">Customs platform</p>
+          <h2 id="customs-title" data-i18n="customsTitle">End-to-end export customs control desk</h2>
+          <p data-i18n="customsCopy">Plan the export file from buyer verification to customs declaration, shipment handover and archive closure.</p>
+        </div>
+
+        <div class="customs-dashboard">
+          <form class="customs-planner" id="customsPlanner">
+            <div class="customs-planner-header">
+              <h3 data-i18n="customsPlannerTitle">Export route planner</h3>
+              <p data-i18n="customsPlannerCopy">Select the destination, transport type and Incoterm to see the operational customs file.</p>
+            </div>
+            <label>
+              <span data-i18n="customsDestination">Destination market</span>
+              <select id="customsDestination">
+                <option value="eu" data-i18n="customsMarketEu">European Union</option>
+                <option value="caucasus" data-i18n="customsMarketCaucasus">Caucasus</option>
+                <option value="middleEast" data-i18n="customsMarketMiddleEast">Middle East</option>
+                <option value="centralAsia" data-i18n="customsMarketCentralAsia">Central Asia</option>
+              </select>
+            </label>
+            <label>
+              <span data-i18n="customsTransport">Transport mode</span>
+              <select id="customsTransport">
+                <option value="truck" data-i18n="customsTransportTruck">Truck</option>
+                <option value="container" data-i18n="customsTransportContainer">Container</option>
+                <option value="air" data-i18n="customsTransportAir">Air cargo</option>
+              </select>
+            </label>
+            <label>
+              <span data-i18n="customsIncoterm">Incoterm</span>
+              <select id="customsIncoterm">
+                <option value="EXW">EXW</option>
+                <option value="FOB">FOB</option>
+                <option value="CIF">CIF</option>
+                <option value="DAP">DAP</option>
+              </select>
+            </label>
+            <label>
+              <span data-i18n="customsProduct">Product risk group</span>
+              <select id="customsProduct">
+                <option value="standard" data-i18n="customsProductStandard">Standard commercial goods</option>
+                <option value="food" data-i18n="customsProductFood">Food products</option>
+                <option value="cosmetics" data-i18n="customsProductCosmetics">Cosmetics / hygiene</option>
+                <option value="medical" data-i18n="customsProductMedical">Medical products</option>
+              </select>
+            </label>
+          </form>
+
+          <aside class="customs-status-card">
+            <span class="customs-status-label" data-i18n="customsStatusLabel">File status</span>
+            <strong id="customsStatusTitle">Ready for document review</strong>
+            <p id="customsStatusCopy">Commercial documents, origin documents and shipment instructions should be checked before declaration.</p>
+            <a class="customs-mail-link" id="customsMailLink" href="#contact" data-i18n="customsMailCta">Send customs file request</a>
+          </aside>
+        </div>
+
+        <div class="customs-flow" id="customsFlow" aria-label="Customs process stages"></div>
+
+        <div class="customs-output-grid">
+          <article class="customs-output">
+            <h3 data-i18n="customsDocsTitle">Required document pack</h3>
+            <ul id="customsDocumentList"></ul>
+          </article>
+          <article class="customs-output">
+            <h3 data-i18n="customsActionTitle">Action checklist</h3>
+            <ul id="customsActionList"></ul>
+          </article>
+          <article class="customs-output">
+            <h3 data-i18n="customsRiskTitle">Risk notes</h3>
+            <ul id="customsRiskList"></ul>
           </article>
         </div>
       </section>
@@ -588,6 +665,6 @@
       }
     </script>
     <script src="catalog-products.generated.js?v=20260601-5"></script>
-    <script src="script.js?v=20260608-1"></script>
+    <script src="script.js?v=20260608-2"></script>
   </body>
 </html>

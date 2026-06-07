@@ -8,6 +8,7 @@ const content = {
     navProcess: "Process",
     navMarkets: "Markets",
     navProforma: "Create Proforma",
+    navCustoms: "Customs",
     navB2B: "B2B Portal",
     headerCta: "Get Quote",
     installAppCta: "App",
@@ -136,6 +137,33 @@ const content = {
     b2bStepThreeCopy: "Incoterm, currency, payment term, pallet plan, loading volume and delivery responsibility are confirmed.",
     b2bStepFour: "Customs and origin file",
     b2bStepFourCopy: "Invoice, packing list, transport document, origin certificate and required conformity documents are prepared in sequence.",
+    customsKicker: "Customs platform",
+    customsTitle: "End-to-end export customs control desk",
+    customsCopy: "Plan the export file from buyer verification to customs declaration, shipment handover and archive closure.",
+    customsPlannerTitle: "Export route planner",
+    customsPlannerCopy: "Select the destination, transport type and Incoterm to see the operational customs file.",
+    customsDestination: "Destination market",
+    customsMarketEu: "European Union",
+    customsMarketCaucasus: "Caucasus",
+    customsMarketMiddleEast: "Middle East",
+    customsMarketCentralAsia: "Central Asia",
+    customsTransport: "Transport mode",
+    customsTransportTruck: "Truck",
+    customsTransportContainer: "Container",
+    customsTransportAir: "Air cargo",
+    customsIncoterm: "Incoterm",
+    customsProduct: "Product risk group",
+    customsProductStandard: "Standard commercial goods",
+    customsProductFood: "Food products",
+    customsProductCosmetics: "Cosmetics / hygiene",
+    customsProductMedical: "Medical products",
+    customsStatusLabel: "File status",
+    customsStatusReady: "Ready for document review",
+    customsStatusReadyCopy: "Commercial documents, origin documents and shipment instructions should be checked before declaration.",
+    customsMailCta: "Send customs file request",
+    customsDocsTitle: "Required document pack",
+    customsActionTitle: "Action checklist",
+    customsRiskTitle: "Risk notes",
     truckFillLabel: "TIR load",
     containerFillLabel: "Container load",
     cartKicker: "Cart",
@@ -209,6 +237,7 @@ const content = {
     navProcess: "Süreç",
     navMarkets: "Pazarlar",
     navProforma: "Proforma Oluştur",
+    navCustoms: "Gümrük",
     navB2B: "B2B Portal",
     headerCta: "Teklif Al",
     installAppCta: "Uygulama",
@@ -337,6 +366,33 @@ const content = {
     b2bStepThreeCopy: "Incoterm, para birimi, ödeme şartı, palet planı, yükleme hacmi ve teslim sorumluluğu netleştirilir.",
     b2bStepFour: "Gümrük ve menşe dosyası",
     b2bStepFourCopy: "Fatura, çeki listesi, taşıma belgesi, menşe evrakı ve gerekli uygunluk belgeleri sırayla hazırlanır.",
+    customsKicker: "Gümrük platformu",
+    customsTitle: "Baştan sona ihracat gümrük kontrol masası",
+    customsCopy: "Alıcı doğrulamadan gümrük beyannamesine, sevkiyat teslimine ve dosya arşivine kadar ihracat dosyasını planlayın.",
+    customsPlannerTitle: "İhracat rota planlayıcı",
+    customsPlannerCopy: "Operasyonel gümrük dosyasını görmek için varış pazarı, taşıma tipi ve Incoterm seçin.",
+    customsDestination: "Varış pazarı",
+    customsMarketEu: "Avrupa Birliği",
+    customsMarketCaucasus: "Kafkasya",
+    customsMarketMiddleEast: "Orta Doğu",
+    customsMarketCentralAsia: "Orta Asya",
+    customsTransport: "Taşıma şekli",
+    customsTransportTruck: "Tır",
+    customsTransportContainer: "Konteyner",
+    customsTransportAir: "Hava kargo",
+    customsIncoterm: "Incoterm",
+    customsProduct: "Ürün risk grubu",
+    customsProductStandard: "Standart ticari ürün",
+    customsProductFood: "Gıda ürünleri",
+    customsProductCosmetics: "Kozmetik / hijyen",
+    customsProductMedical: "Medikal ürünler",
+    customsStatusLabel: "Dosya durumu",
+    customsStatusReady: "Evrak kontrolüne hazır",
+    customsStatusReadyCopy: "Beyanname öncesi ticari evraklar, menşe evrakları ve sevkiyat talimatları kontrol edilmelidir.",
+    customsMailCta: "Gümrük dosyası talebi gönder",
+    customsDocsTitle: "Gerekli evrak paketi",
+    customsActionTitle: "Aksiyon kontrol listesi",
+    customsRiskTitle: "Risk notları",
     truckFillLabel: "TIR dolumu",
     containerFillLabel: "Konteyner dolumu",
     cartKicker: "Sepet",
@@ -887,6 +943,81 @@ const containerCapacity = { volume: 76, weight: 26500 };
 
 const t = (key) => content[currentLang][key] || content.en[key] || key;
 
+const customsText = {
+  en: {
+    stages: [
+      ["Buyer file", "Confirm company registry, tax number, contact authority and delivery country before pricing."],
+      ["Product classification", "Match every item with HS code, brand, origin, net weight, gross weight and packaging data."],
+      ["Commercial file", "Prepare proforma, payment term, commercial invoice and packing list with matching values."],
+      ["Origin and compliance", "Check A.TR, EUR.1, certificate of origin, conformity and product certificate needs."],
+      ["Declaration", "Share the complete file with the customs broker and confirm declaration data before exit."],
+      ["Shipment archive", "Close the file with transport document, export declaration, delivery proof and payment record."],
+    ],
+    baseDocs: ["Proforma invoice", "Commercial invoice", "Packing list", "HS code / GTIP list", "Buyer company registry", "Payment and Incoterm confirmation"],
+    baseActions: ["Verify buyer and destination country", "Confirm unit, carton, pallet, kg and m3 data", "Align invoice and packing list values", "Send customs broker the final document pack"],
+    baseRisks: ["HS code mismatch can delay declaration", "Invoice, packing list and transport document values must match", "Country-specific certificates should be checked before loading"],
+    markets: {
+      eu: { docs: ["A.TR or EUR.1 review", "CE / conformity documents when required"], actions: ["Check EU product rules and origin preference"], risks: ["EU market may require strict conformity and labeling controls"] },
+      caucasus: { docs: ["Certificate of origin", "Road transport CMR"], actions: ["Check border route and consignee import registration"], risks: ["Border waiting times can change truck delivery planning"] },
+      middleEast: { docs: ["Certificate of origin", "Legalization or chamber approval if requested"], actions: ["Confirm Arabic labeling or importer document needs"], risks: ["Importer-specific approvals can be requested before shipment"] },
+      centralAsia: { docs: ["Certificate of origin", "Transit route documents"], actions: ["Confirm transit country document requirements"], risks: ["Long-route shipments need careful seal, route and document tracking"] },
+    },
+    transport: {
+      truck: { docs: ["CMR transport document", "Vehicle plate and driver details"], actions: ["Book truck, loading slot and border route"], risks: ["Truck overload and axle limits must be checked"] },
+      container: { docs: ["Bill of lading instructions", "Container and seal number"], actions: ["Confirm vessel cut-off and container VGM"], risks: ["Port cut-off, demurrage and detention dates must be monitored"] },
+      air: { docs: ["Air waybill instructions", "Air cargo security data"], actions: ["Confirm airport handling and chargeable weight"], risks: ["Air cargo restrictions and battery/liquid rules may apply"] },
+    },
+    incoterms: {
+      EXW: { actions: ["Clarify buyer responsibility for pickup, export clearance support and loading"], risks: ["EXW can create responsibility gaps in export clearance"] },
+      FOB: { actions: ["Confirm port handover point and export customs responsibility"], risks: ["FOB is sea-focused; do not use it loosely for road shipments"] },
+      CIF: { actions: ["Arrange freight and insurance values on the commercial file"], risks: ["Insurance coverage and destination charges must be clear"] },
+      DAP: { actions: ["Plan door delivery, destination handover and buyer import responsibility"], risks: ["Destination customs duties and import taxes remain buyer-side unless agreed otherwise"] },
+    },
+    products: {
+      standard: { docs: ["Product photos or catalog page"], actions: ["Check ordinary commercial restrictions"], risks: ["Standard goods still need correct HS code and origin data"] },
+      food: { docs: ["Health certificate if required", "Shelf life and batch information"], actions: ["Confirm ingredients, labeling and destination food rules"], risks: ["Food products can require pre-approval, label control and sanitary checks"] },
+      cosmetics: { docs: ["Product safety / MSDS file", "Ingredient and labeling information"], actions: ["Check cosmetics notification and importer obligations"], risks: ["Cosmetics and hygiene goods may face labeling and safety-document controls"] },
+      medical: { docs: ["Medical product certificate", "Manufacturer authorization if required"], actions: ["Confirm medical device registration and importer license needs"], risks: ["Medical products can require strict registration before customs release"] },
+    },
+  },
+  tr: {
+    stages: [
+      ["Alıcı dosyası", "Fiyatlama öncesi firma sicili, vergi numarası, yetkili kişi ve varış ülkesi doğrulanır."],
+      ["Ürün sınıflandırma", "Her ürün GTIP/HS kodu, marka, menşe, net ağırlık, brüt ağırlık ve ambalaj verisiyle eşleştirilir."],
+      ["Ticari dosya", "Proforma, ödeme şartı, ticari fatura ve çeki listesi aynı değerlerle hazırlanır."],
+      ["Menşe ve uygunluk", "A.TR, EUR.1, menşe şahadetnamesi, uygunluk ve ürün sertifikası ihtiyacı kontrol edilir."],
+      ["Beyanname", "Tam dosya gümrük müşavirine iletilir ve çıkış öncesi beyanname verileri teyit edilir."],
+      ["Sevkiyat arşivi", "Taşıma belgesi, ihracat beyannamesi, teslim kanıtı ve ödeme kaydıyla dosya kapatılır."],
+    ],
+    baseDocs: ["Proforma fatura", "Ticari fatura", "Çeki listesi", "GTIP / HS kod listesi", "Alıcı firma sicil evrakı", "Ödeme ve Incoterm teyidi"],
+    baseActions: ["Alıcıyı ve varış ülkesini doğrula", "Koli, palet, kg ve m3 verilerini kesinleştir", "Fatura ve çeki listesi değerlerini eşleştir", "Son evrak paketini gümrük müşavirine gönder"],
+    baseRisks: ["GTIP uyumsuzluğu beyannameyi geciktirebilir", "Fatura, çeki listesi ve taşıma belgesi değerleri aynı olmalıdır", "Ülkeye özel sertifikalar yükleme öncesi kontrol edilmelidir"],
+    markets: {
+      eu: { docs: ["A.TR veya EUR.1 kontrolü", "Gerekiyorsa CE / uygunluk evrakları"], actions: ["AB ürün kuralları ve menşe avantajını kontrol et"], risks: ["AB pazarı sıkı uygunluk ve etiket kontrolü isteyebilir"] },
+      caucasus: { docs: ["Menşe şahadetnamesi", "Karayolu CMR belgesi"], actions: ["Sınır rotasını ve alıcı ithalat kaydını kontrol et"], risks: ["Sınır beklemeleri tır teslim planını değiştirebilir"] },
+      middleEast: { docs: ["Menşe şahadetnamesi", "Talep edilirse oda onayı veya legalizasyon"], actions: ["Arapça etiket veya ithalatçı evrak ihtiyacını teyit et"], risks: ["Sevkiyat öncesi ithalatçıya özel onay istenebilir"] },
+      centralAsia: { docs: ["Menşe şahadetnamesi", "Transit rota evrakları"], actions: ["Transit ülke evrak gerekliliklerini kontrol et"], risks: ["Uzun rotalarda mühür, güzergah ve evrak takibi kritik olur"] },
+    },
+    transport: {
+      truck: { docs: ["CMR taşıma belgesi", "Araç plakası ve sürücü bilgileri"], actions: ["Tır, yükleme saati ve sınır rotasını planla"], risks: ["Tır tonajı ve aks limitleri kontrol edilmelidir"] },
+      container: { docs: ["Konşimento talimatı", "Konteyner ve mühür numarası"], actions: ["Gemi kapanış tarihi ve konteyner VGM bilgisini teyit et"], risks: ["Liman kapanış, demuraj ve detention tarihleri izlenmelidir"] },
+      air: { docs: ["Hava konşimentosu talimatı", "Hava kargo güvenlik bilgileri"], actions: ["Havalimanı elleçleme ve hacimsel ağırlığı teyit et"], risks: ["Hava kargo kısıtları, batarya ve sıvı kuralları uygulanabilir"] },
+    },
+    incoterms: {
+      EXW: { actions: ["Alıcının teslim alma, ihracat çıkış desteği ve yükleme sorumluluğunu netleştir"], risks: ["EXW ihracat gümrük sorumluluğunda boşluk oluşturabilir"] },
+      FOB: { actions: ["Liman teslim noktası ve ihracat gümrük sorumluluğunu teyit et"], risks: ["FOB denizyolu odaklıdır; karayolu için gelişigüzel kullanılmamalıdır"] },
+      CIF: { actions: ["Navlun ve sigorta değerlerini ticari dosyada göster"], risks: ["Sigorta kapsamı ve varış masrafları açık olmalıdır"] },
+      DAP: { actions: ["Kapıya teslim, varış teslimi ve alıcı ithalat sorumluluğunu planla"], risks: ["Varış gümrük vergileri ve ithalat masrafları aksi anlaşılmadıkça alıcı tarafındadır"] },
+    },
+    products: {
+      standard: { docs: ["Ürün fotoğrafı veya katalog sayfası"], actions: ["Standart ticari kısıtlamaları kontrol et"], risks: ["Standart ürünlerde de doğru GTIP ve menşe bilgisi gerekir"] },
+      food: { docs: ["Gerekiyorsa sağlık sertifikası", "Raf ömrü ve parti bilgisi"], actions: ["İçerik, etiket ve varış ülkesi gıda kurallarını teyit et"], risks: ["Gıda ürünleri ön izin, etiket kontrolü ve sağlık denetimi gerektirebilir"] },
+      cosmetics: { docs: ["Ürün güvenlik / MSDS dosyası", "İçerik ve etiket bilgisi"], actions: ["Kozmetik bildirim ve ithalatçı yükümlülüklerini kontrol et"], risks: ["Kozmetik ve hijyen ürünlerinde etiket ve güvenlik evrakı kontrolü olabilir"] },
+      medical: { docs: ["Medikal ürün sertifikası", "Gerekiyorsa üretici yetki belgesi"], actions: ["Medikal cihaz kaydı ve ithalatçı lisansı ihtiyacını teyit et"], risks: ["Medikal ürünlerde gümrük çıkışı öncesi sıkı kayıt şartı olabilir"] },
+    },
+  },
+};
+
 const getProductName = (product) => product.names[currentLang] || product.names.en;
 const formatWeight = (value) => `${value.toLocaleString("en-US")} kg`;
 const formatVolume = (value) => `${value.toFixed(2)} m3`;
@@ -949,6 +1080,57 @@ const renderMarkets = () => {
   marketList.innerHTML = names
     .map((name, index) => `<a href="${links[index] || links[0]}" target="_blank" rel="noopener">${name}</a>`)
     .join("");
+};
+
+const customsContent = {
+  en: {
+    statusTitle: "Ready for document review",
+    statusCopy: "Commercial documents, origin documents and shipment instructions should be checked before declaration.",
+    flow: [
+      ["01", "Buyer file", "Company registration, tax details and authorized contact are confirmed."],
+      ["02", "HS code review", "Product group, certificates and country-specific import rules are checked."],
+      ["03", "Commercial pack", "Proforma, commercial invoice, packing list and payment term are prepared."],
+      ["04", "Origin file", "Certificate of origin, A.TR, EUR.1 or market-specific origin document is selected."],
+      ["05", "Shipment handover", "Truck/container booking, loading plan and customs declaration move together."],
+    ],
+    docs: ["Buyer registry and tax document", "Proforma invoice", "Commercial invoice", "Packing list", "Transport document", "Origin document", "Product certificate if required"],
+    actions: ["Confirm Incoterm and payment term", "Match product with HS code", "Check pallet, kg and m3 totals", "Prepare loading plan", "Archive final customs file"],
+    risks: ["Food, cosmetics and medical products can require additional conformity checks.", "Destination country rules must be confirmed before shipment.", "Weights and volumes should match the final packing list."],
+  },
+  tr: {
+    statusTitle: "Evrak kontrolüne hazır",
+    statusCopy: "Beyan öncesi ticari evrak, menşe evrakı ve sevkiyat talimatları kontrol edilmelidir.",
+    flow: [
+      ["01", "Alıcı dosyası", "Firma kaydı, vergi bilgisi ve yetkili kişi doğrulanır."],
+      ["02", "GTİP kontrolü", "Ürün grubu, sertifikalar ve ülkeye özel ithalat kuralları kontrol edilir."],
+      ["03", "Ticari evrak", "Proforma, ticari fatura, çeki listesi ve ödeme koşulu hazırlanır."],
+      ["04", "Menşe dosyası", "Menşe şahadetnamesi, A.TR, EUR.1 veya pazara özel menşe evrakı seçilir."],
+      ["05", "Sevkiyat teslimi", "TIR/konteyner rezervasyonu, yükleme planı ve gümrük beyanı birlikte yürür."],
+    ],
+    docs: ["Alıcı firma kaydı ve vergi evrakı", "Proforma fatura", "Ticari fatura", "Çeki listesi", "Taşıma evrakı", "Menşe evrakı", "Gerekiyorsa ürün sertifikası"],
+    actions: ["Incoterm ve ödeme koşulunu onayla", "Ürünü GTİP ile eşleştir", "Palet, kg ve m3 toplamlarını kontrol et", "Yükleme planını hazırla", "Final gümrük dosyasını arşivle"],
+    risks: ["Gıda, kozmetik ve medikal ürünlerde ek uygunluk kontrolleri gerekebilir.", "Sevkiyat öncesi hedef ülke kuralları teyit edilmelidir.", "Ağırlık ve hacimler final çeki listesiyle uyumlu olmalıdır."],
+  },
+};
+
+const renderCustomsDesk = () => {
+  const flow = document.querySelector("#customsFlow");
+  if (!flow) return;
+  const data = customsContent[currentLang] || customsContent.en;
+  const statusTitle = document.querySelector("#customsStatusTitle");
+  const statusCopy = document.querySelector("#customsStatusCopy");
+  const documentList = document.querySelector("#customsDocumentList");
+  const actionList = document.querySelector("#customsActionList");
+  const riskList = document.querySelector("#customsRiskList");
+
+  if (statusTitle) statusTitle.textContent = data.statusTitle;
+  if (statusCopy) statusCopy.textContent = data.statusCopy;
+  flow.innerHTML = data.flow
+    .map(([no, title, copy]) => `<article><span>${no}</span><h3>${title}</h3><p>${copy}</p></article>`)
+    .join("");
+  if (documentList) documentList.innerHTML = data.docs.map((item) => `<li>${item}</li>`).join("");
+  if (actionList) actionList.innerHTML = data.actions.map((item) => `<li>${item}</li>`).join("");
+  if (riskList) riskList.innerHTML = data.risks.map((item) => `<li>${item}</li>`).join("");
 };
 
 let exchangeRatesData = null;
@@ -1219,6 +1401,7 @@ const translatePage = () => {
   });
   renderProducts();
   renderMarkets();
+  renderCustomsDesk();
   renderExchangeRates();
   renderProformaProducts();
   renderProformaOrder();
