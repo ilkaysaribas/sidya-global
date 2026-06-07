@@ -1082,55 +1082,52 @@ const renderMarkets = () => {
     .join("");
 };
 
-const customsContent = {
-  en: {
-    statusTitle: "Ready for document review",
-    statusCopy: "Commercial documents, origin documents and shipment instructions should be checked before declaration.",
-    flow: [
-      ["01", "Buyer file", "Company registration, tax details and authorized contact are confirmed."],
-      ["02", "HS code review", "Product group, certificates and country-specific import rules are checked."],
-      ["03", "Commercial pack", "Proforma, commercial invoice, packing list and payment term are prepared."],
-      ["04", "Origin file", "Certificate of origin, A.TR, EUR.1 or market-specific origin document is selected."],
-      ["05", "Shipment handover", "Truck/container booking, loading plan and customs declaration move together."],
-    ],
-    docs: ["Buyer registry and tax document", "Proforma invoice", "Commercial invoice", "Packing list", "Transport document", "Origin document", "Product certificate if required"],
-    actions: ["Confirm Incoterm and payment term", "Match product with HS code", "Check pallet, kg and m3 totals", "Prepare loading plan", "Archive final customs file"],
-    risks: ["Food, cosmetics and medical products can require additional conformity checks.", "Destination country rules must be confirmed before shipment.", "Weights and volumes should match the final packing list."],
-  },
-  tr: {
-    statusTitle: "Evrak kontrolüne hazır",
-    statusCopy: "Beyan öncesi ticari evrak, menşe evrakı ve sevkiyat talimatları kontrol edilmelidir.",
-    flow: [
-      ["01", "Alıcı dosyası", "Firma kaydı, vergi bilgisi ve yetkili kişi doğrulanır."],
-      ["02", "GTİP kontrolü", "Ürün grubu, sertifikalar ve ülkeye özel ithalat kuralları kontrol edilir."],
-      ["03", "Ticari evrak", "Proforma, ticari fatura, çeki listesi ve ödeme koşulu hazırlanır."],
-      ["04", "Menşe dosyası", "Menşe şahadetnamesi, A.TR, EUR.1 veya pazara özel menşe evrakı seçilir."],
-      ["05", "Sevkiyat teslimi", "TIR/konteyner rezervasyonu, yükleme planı ve gümrük beyanı birlikte yürür."],
-    ],
-    docs: ["Alıcı firma kaydı ve vergi evrakı", "Proforma fatura", "Ticari fatura", "Çeki listesi", "Taşıma evrakı", "Menşe evrakı", "Gerekiyorsa ürün sertifikası"],
-    actions: ["Incoterm ve ödeme koşulunu onayla", "Ürünü GTİP ile eşleştir", "Palet, kg ve m3 toplamlarını kontrol et", "Yükleme planını hazırla", "Final gümrük dosyasını arşivle"],
-    risks: ["Gıda, kozmetik ve medikal ürünlerde ek uygunluk kontrolleri gerekebilir.", "Sevkiyat öncesi hedef ülke kuralları teyit edilmelidir.", "Ağırlık ve hacimler final çeki listesiyle uyumlu olmalıdır."],
-  },
-};
+const uniqueItems = (items) => [...new Set(items.filter(Boolean))];
+const getCustomsLocale = () => customsText[currentLang] || customsText.en;
 
 const renderCustomsDesk = () => {
   const flow = document.querySelector("#customsFlow");
-  if (!flow) return;
-  const data = customsContent[currentLang] || customsContent.en;
-  const statusTitle = document.querySelector("#customsStatusTitle");
-  const statusCopy = document.querySelector("#customsStatusCopy");
   const documentList = document.querySelector("#customsDocumentList");
   const actionList = document.querySelector("#customsActionList");
   const riskList = document.querySelector("#customsRiskList");
+  if (!flow || !documentList || !actionList || !riskList) return;
 
-  if (statusTitle) statusTitle.textContent = data.statusTitle;
-  if (statusCopy) statusCopy.textContent = data.statusCopy;
-  flow.innerHTML = data.flow
-    .map(([no, title, copy]) => `<article><span>${no}</span><h3>${title}</h3><p>${copy}</p></article>`)
+  const data = getCustomsLocale();
+  const destination = document.querySelector("#customsDestination")?.value || "eu";
+  const transport = document.querySelector("#customsTransport")?.value || "truck";
+  const incoterm = document.querySelector("#customsIncoterm")?.value || "EXW";
+  const product = document.querySelector("#customsProduct")?.value || "standard";
+  const marketPlan = data.markets[destination] || data.markets.eu;
+  const transportPlan = data.transport[transport] || data.transport.truck;
+  const incotermPlan = data.incoterms[incoterm] || data.incoterms.EXW;
+  const productPlan = data.products[product] || data.products.standard;
+
+  flow.innerHTML = data.stages
+    .map(([title, copy], index) => `<article><span>${String(index + 1).padStart(2, "0")}</span><h3>${title}</h3><p>${copy}</p></article>`)
     .join("");
-  if (documentList) documentList.innerHTML = data.docs.map((item) => `<li>${item}</li>`).join("");
-  if (actionList) actionList.innerHTML = data.actions.map((item) => `<li>${item}</li>`).join("");
-  if (riskList) riskList.innerHTML = data.risks.map((item) => `<li>${item}</li>`).join("");
+  documentList.innerHTML = uniqueItems([...data.baseDocs, ...marketPlan.docs, ...transportPlan.docs, ...productPlan.docs]).map((item) => `<li>${item}</li>`).join("");
+  actionList.innerHTML = uniqueItems([...data.baseActions, ...marketPlan.actions, ...transportPlan.actions, ...incotermPlan.actions, ...productPlan.actions]).map((item) => `<li>${item}</li>`).join("");
+  riskList.innerHTML = uniqueItems([...data.baseRisks, ...marketPlan.risks, ...transportPlan.risks, ...incotermPlan.risks, ...productPlan.risks]).map((item) => `<li>${item}</li>`).join("");
+
+  const statusTitle = document.querySelector("#customsStatusTitle");
+  const statusCopy = document.querySelector("#customsStatusCopy");
+  const mailLink = document.querySelector("#customsMailLink");
+  if (statusTitle) statusTitle.textContent = t("customsStatusReady");
+  if (statusCopy) statusCopy.textContent = t("customsStatusReadyCopy");
+  if (mailLink) {
+    const subject = encodeURIComponent("Sidya Global customs file request");
+    const body = encodeURIComponent([
+      "Customs file request",
+      "",
+      `Destination: ${destination}`,
+      `Transport: ${transport}`,
+      `Incoterm: ${incoterm}`,
+      `Product group: ${product}`,
+      "",
+      "Please review the export customs document pack.",
+    ].join("\n"));
+    mailLink.href = `mailto:${businessEmail}?subject=${subject}&body=${body}`;
+  }
 };
 
 let exchangeRatesData = null;
@@ -1705,6 +1702,9 @@ document.querySelector("#b2bSignOut")?.addEventListener("click", async () => {
 });
 
 document.querySelector("#b2bDocuments")?.addEventListener("change", updateB2BFileSummary);
+document.querySelectorAll("#customsPlanner select").forEach((select) => {
+  select.addEventListener("change", renderCustomsDesk);
+});
 document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => {
   event.preventDefault();
   const form = new FormData(event.currentTarget);
