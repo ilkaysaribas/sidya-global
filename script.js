@@ -213,6 +213,12 @@ const content = {
     productOptionCosmetics: "Cosmetics & Personal Care",
     productOptionAutomotive: "Automotive",
     productOptionHardware: "Construction & Hardware",
+    tradeMoq: "MOQ",
+    tradeDelivery: "Delivery",
+    tradeLeadTime: "Lead time",
+    tradeMarkets: "Export markets",
+    tradeCertificates: "Certificates",
+    tradeQuoteCta: "Request quote",
     formMessage: "Inquiry details",
     formSubmit: "Create Quote Draft",
     formReady: "Email draft is ready. Opening your mail app.",
@@ -442,6 +448,12 @@ const content = {
     productOptionCosmetics: "Kozmetik ve Kişisel Bakım",
     productOptionAutomotive: "Otomotiv",
     productOptionHardware: "Yapı Hırdavat",
+    tradeMoq: "Minimum sipariş / MOQ",
+    tradeDelivery: "Teslim şekilleri",
+    tradeLeadTime: "Temin süresi",
+    tradeMarkets: "İhracat yapılan ülkeler",
+    tradeCertificates: "Sertifikalar",
+    tradeQuoteCta: "Teklif iste",
     formMessage: "Talep detayı",
     formSubmit: "Teklif Taslağı Oluştur",
     formReady: "E-posta taslağı hazırlandı. Mail uygulamanız açılıyor.",
@@ -600,6 +612,12 @@ Object.assign(content.az, {
   productOptionCosmetics: "Kosmetika və şəxsi qulluq",
   productOptionAutomotive: "Avtomotiv",
   productOptionHardware: "Tikinti və alətlər",
+  tradeMoq: "Minimum sifariş / MOQ",
+  tradeDelivery: "Çatdırılma şərtləri",
+  tradeLeadTime: "Təmin müddəti",
+  tradeMarkets: "İxrac bazarları",
+  tradeCertificates: "Sertifikatlar",
+  tradeQuoteCta: "Təklif istə",
   formMessage: "Sorğu detalları",
   formSubmit: "Təklif layihəsi yarat",
   formReady: "E-poçt layihəsi hazırdır. Poçt tətbiqi açılır.",
@@ -675,6 +693,12 @@ Object.assign(content.ka, {
   productOptionCosmetics: "კოსმეტიკა და პირადი მოვლა",
   productOptionAutomotive: "ავტომობილი",
   productOptionHardware: "მშენებლობა და ხელსაწყოები",
+  tradeMoq: "მინ. შეკვეთა / MOQ",
+  tradeDelivery: "მიწოდების პირობები",
+  tradeLeadTime: "მომარაგების ვადა",
+  tradeMarkets: "საექსპორტო ბაზრები",
+  tradeCertificates: "სერტიფიკატები",
+  tradeQuoteCta: "მოითხოვე შეთავაზება",
   formMessage: "მოთხოვნის დეტალები",
   formSubmit: "შეთავაზების პროექტი",
   introKicker: "ვინ ვართ",
@@ -747,6 +771,12 @@ Object.assign(content.ru, {
   productOptionCosmetics: "Косметика и личный уход",
   productOptionAutomotive: "Автомотив",
   productOptionHardware: "Строительство и инструменты",
+  tradeMoq: "Мин. заказ / MOQ",
+  tradeDelivery: "Условия поставки",
+  tradeLeadTime: "Срок поставки",
+  tradeMarkets: "Экспортные рынки",
+  tradeCertificates: "Сертификаты",
+  tradeQuoteCta: "Запросить предложение",
   formMessage: "Детали запроса",
   formSubmit: "Создать черновик",
   introKicker: "Кто мы",
@@ -849,6 +879,73 @@ const productPartners = {
     { name: "Omron Healthcare", site: "https://www.omron-healthcare.com.tr/", logo: "assets/omron-logo.svg" },
     { name: "Hanymish", site: "https://www.hanymish.com/", logo: "assets/hanymish-logo.svg" },
   ],
+};
+
+const productTradeDetails = {
+  "home-products": {
+    moq: "1 mixed pallet / category",
+    delivery: "EXW, FOB, CIF, DAP",
+    leadTime: "7-14 business days",
+    markets: "Georgia, Azerbaijan, Iraq, Kazakhstan",
+    certificates: "CO, A.TR / EUR.1 when applicable",
+    optionValue: "Homeware",
+  },
+  "cleaning-products": {
+    moq: "1 pallet per brand / SKU mix by approval",
+    delivery: "EXW, FOB, CIF, DAP",
+    leadTime: "5-12 business days",
+    markets: "Georgia, Azerbaijan, Iraq, Iran, Kazakhstan",
+    certificates: "MSDS, CO, A.TR / EUR.1 when applicable",
+    optionValue: "Cleaning Products",
+  },
+  "food-products": {
+    moq: "1 pallet / shelf-life controlled lots",
+    delivery: "EXW, FOB, CIF, DAP",
+    leadTime: "5-15 business days",
+    markets: "Georgia, Azerbaijan, Iraq, Iran",
+    certificates: "CO, health certificate if required",
+    optionValue: "Food Products",
+  },
+  "industrial-products": {
+    moq: "1 pallet / bulk order by product",
+    delivery: "EXW, FOB, CIF, DAP",
+    leadTime: "7-15 business days",
+    markets: "Georgia, Azerbaijan, Iraq, Kazakhstan",
+    certificates: "MSDS, CO, technical sheet when required",
+    optionValue: "Industrial Supplies",
+  },
+  "medical-products": {
+    moq: "Brand and product based MOQ",
+    delivery: "EXW, FOB, CIF, DAP",
+    leadTime: "10-21 business days",
+    markets: "Georgia, Azerbaijan, Iraq, Central Asia",
+    certificates: "CE, CO, product certificate when required",
+    optionValue: "Medical Products",
+  },
+  "cosmetics-products": {
+    moq: "1 pallet / brand mix by approval",
+    delivery: "EXW, FOB, CIF, DAP",
+    leadTime: "7-18 business days",
+    markets: "Georgia, Azerbaijan, Iraq, Iran, Kazakhstan",
+    certificates: "MSDS, CO, product safety file if required",
+    optionValue: "Cosmetics and Personal Care",
+  },
+  "automotive-products": {
+    moq: "Product based MOQ / mixed carton possible",
+    delivery: "EXW, FOB, CIF, DAP",
+    leadTime: "10-25 business days",
+    markets: "Georgia, Azerbaijan, Iraq, Kazakhstan",
+    certificates: "CO, technical sheet, conformity if required",
+    optionValue: "Automotive",
+  },
+  "hardware-products": {
+    moq: "1 pallet / mixed hardware order",
+    delivery: "EXW, FOB, CIF, DAP",
+    leadTime: "7-20 business days",
+    markets: "Georgia, Azerbaijan, Iraq, Kazakhstan",
+    certificates: "CO, CE / conformity when required",
+    optionValue: "Construction and Hardware",
+  },
 };
 
 const proformaItems = [
@@ -1054,6 +1151,7 @@ const renderProducts = () => {
   grid.innerHTML = products[currentLang]
     .map((product) => {
       const related = productPartners[product.id] || [];
+      const trade = productTradeDetails[product.id];
       const relatedMarkup = related.length
         ? `<div class="related-companies"><strong>${t("relatedCompanies")}</strong><div>${related
             .map(
@@ -1065,9 +1163,21 @@ const renderProducts = () => {
             )
             .join("")}</div></div>`
         : "";
+      const tradeMarkup = trade
+        ? `<div class="trade-details">
+            <dl>
+              <div><dt>${t("tradeMoq")}</dt><dd>${trade.moq}</dd></div>
+              <div><dt>${t("tradeDelivery")}</dt><dd>${trade.delivery}</dd></div>
+              <div><dt>${t("tradeLeadTime")}</dt><dd>${trade.leadTime}</dd></div>
+              <div><dt>${t("tradeMarkets")}</dt><dd>${trade.markets}</dd></div>
+              <div><dt>${t("tradeCertificates")}</dt><dd>${trade.certificates}</dd></div>
+            </dl>
+            <a class="product-quote-button" href="#contact" data-product-option="${trade.optionValue}" data-product-title="${product.title}">${t("tradeQuoteCta")}</a>
+          </div>`
+        : "";
       return `<article class="product-card" id="${product.id}"><div><span class="product-icon" aria-hidden="true">${product.icon}</span><h3>${product.title}</h3><p>${product.copy}</p></div><div class="product-meta">${product.meta
         .map((item) => `<span>${item}</span>`)
-        .join("")}</div>${relatedMarkup}</article>`;
+        .join("")}</div>${relatedMarkup}${tradeMarkup}</article>`;
     })
     .join("");
 };
@@ -1554,6 +1664,19 @@ document.querySelector("#quoteForm")?.addEventListener("submit", async (event) =
   } catch (error) {
     status.textContent = t("formError");
     openMailDraft(form);
+  }
+});
+
+document.addEventListener("click", (event) => {
+  const button = event.target.closest(".product-quote-button");
+  if (!button) return;
+  const form = document.querySelector("#quoteForm");
+  if (!form) return;
+  const productSelect = form.querySelector("[name='product']");
+  const message = form.querySelector("[name='message']");
+  if (productSelect && button.dataset.productOption) productSelect.value = button.dataset.productOption;
+  if (message && !message.value.trim()) {
+    message.value = `Quote request for: ${button.dataset.productTitle || button.dataset.productOption}`;
   }
 });
 

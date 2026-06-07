@@ -654,6 +654,7 @@ h2 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 12px;
   padding: 14px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -755,6 +756,61 @@ h2 {
   object-fit: contain;
   background: #fff;
   box-shadow: 0 0 0 1px rgba(16, 42, 67, 0.08);
+}
+
+.trade-details {
+  display: grid;
+  gap: 10px;
+  margin-top: 2px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.trade-details dl {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+}
+
+.trade-details dl div {
+  display: grid;
+  grid-template-columns: minmax(92px, 0.82fr) minmax(0, 1.18fr);
+  gap: 8px;
+  align-items: start;
+}
+
+.trade-details dt {
+  color: #4f565c;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.trade-details dd {
+  margin: 0;
+  color: var(--navy);
+  font-size: 0.78rem;
+  font-weight: 760;
+  line-height: 1.35;
+}
+
+.product-quote-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 8px;
+  color: #fff;
+  background: #1f2327;
+  font-size: 0.82rem;
+  font-weight: 900;
+  box-shadow: 0 8px 18px rgba(31, 35, 39, 0.16);
+}
+
+.product-quote-button:hover {
+  background: #3a3f44;
+  transform: translateY(-1px);
 }
 
 .store-product-card {
