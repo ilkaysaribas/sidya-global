@@ -182,6 +182,9 @@ const content = {
     productOptionFood: "Food Products",
     productOptionIndustrial: "Industrial Supplies",
     productOptionMedical: "Medical Products",
+    productOptionCosmetics: "Cosmetics & Personal Care",
+    productOptionAutomotive: "Automotive",
+    productOptionHardware: "Construction & Hardware",
     formMessage: "Inquiry details",
     formSubmit: "Create Quote Draft",
     formReady: "Email draft is ready. Opening your mail app.",
@@ -380,6 +383,9 @@ const content = {
     productOptionFood: "Gıda Ürünleri",
     productOptionIndustrial: "Endüstriyel Sarf",
     productOptionMedical: "Medikal Ürünler",
+    productOptionCosmetics: "Kozmetik ve Kişisel Bakım",
+    productOptionAutomotive: "Otomotiv",
+    productOptionHardware: "Yapı Hırdavat",
     formMessage: "Talep detayı",
     formSubmit: "Teklif Taslağı Oluştur",
     formReady: "E-posta taslağı hazırlandı. Mail uygulamanız açılıyor.",
@@ -535,6 +541,9 @@ Object.assign(content.az, {
   productOptionFood: "Qida Məhsulları",
   productOptionIndustrial: "Sənaye Sərfiyyatı",
   productOptionMedical: "Tibbi Məhsullar",
+  productOptionCosmetics: "Kosmetika və şəxsi qulluq",
+  productOptionAutomotive: "Avtomotiv",
+  productOptionHardware: "Tikinti və alətlər",
   formMessage: "Sorğu detalları",
   formSubmit: "Təklif layihəsi yarat",
   formReady: "E-poçt layihəsi hazırdır. Poçt tətbiqi açılır.",
@@ -607,6 +616,9 @@ Object.assign(content.ka, {
   productOptionFood: "საკვები პროდუქტები",
   productOptionIndustrial: "ინდუსტრიული მასალები",
   productOptionMedical: "სამედიცინო პროდუქტები",
+  productOptionCosmetics: "კოსმეტიკა და პირადი მოვლა",
+  productOptionAutomotive: "ავტომობილი",
+  productOptionHardware: "მშენებლობა და ხელსაწყოები",
   formMessage: "მოთხოვნის დეტალები",
   formSubmit: "შეთავაზების პროექტი",
   introKicker: "ვინ ვართ",
@@ -676,6 +688,9 @@ Object.assign(content.ru, {
   productOptionFood: "Пищевые продукты",
   productOptionIndustrial: "Промышленные материалы",
   productOptionMedical: "Медицинские товары",
+  productOptionCosmetics: "Косметика и личный уход",
+  productOptionAutomotive: "Автомотив",
+  productOptionHardware: "Строительство и инструменты",
   formMessage: "Детали запроса",
   formSubmit: "Создать черновик",
   introKicker: "Кто мы",
@@ -694,6 +709,9 @@ const products = {
     { id: "food-products", icon: "FD", title: "Food Products", copy: "Packaged food, sauces, tomato paste, snacks and grocery products.", meta: ["Shelf Life", "Retail", "Wholesale"] },
     { id: "industrial-products", icon: "IN", title: "Industrial Supplies", copy: "Consumables, cleaning supplies, packaging and operational materials.", meta: ["FOB", "CIF", "Bulk"] },
     { id: "medical-products", icon: "MD", title: "Medical Products", copy: "Healthcare, hygiene and medical product catalog sourcing options.", meta: ["Catalog", "Docs", "Supply"] },
+    { id: "cosmetics-products", icon: "CP", title: "Cosmetics and Personal Care", copy: "Skin care, hair care, oral care, beauty and personal care products for retail and wholesale channels.", meta: ["Beauty", "Care", "Retail"] },
+    { id: "automotive-products", icon: "AU", title: "Automotive", copy: "Spare parts, maintenance products, fluids, accessories and export-ready automotive supply options.", meta: ["Parts", "Fluids", "B2B"] },
+    { id: "hardware-products", icon: "HW", title: "Construction and Hardware", copy: "Hand tools, fasteners, building supplies, repair materials and hardware product sourcing.", meta: ["Tools", "Building", "Wholesale"] },
   ],
   tr: [
     { id: "home-products", icon: "HM", title: "Ev ve Yaşam Ürünleri", copy: "Seramik, mutfak gereçleri, dekoratif ürünler ve ev yaşam ürünleri.", meta: ["Karma koli", "Katalog", "Numune"] },
@@ -701,6 +719,9 @@ const products = {
     { id: "food-products", icon: "FD", title: "Gıda Ürünleri", copy: "Paketli gıda, sos, salça, atıştırmalık ve market ürünleri.", meta: ["Raf ömrü", "Perakende", "Toptan"] },
     { id: "industrial-products", icon: "IN", title: "Endüstriyel Sarf", copy: "Sarf malzemeleri, temizlik sarfı, ambalaj ve operasyon destek ürünleri.", meta: ["FOB", "CIF", "Bulk"] },
     { id: "medical-products", icon: "MD", title: "Medikal Ürünler", copy: "Sağlık, hijyen ve medikal ürün katalogları için tedarik seçenekleri.", meta: ["Katalog", "Belge", "Tedarik"] },
+    { id: "cosmetics-products", icon: "CP", title: "Kozmetik ve Kişisel Bakım", copy: "Cilt bakımı, saç bakımı, ağız bakım, güzellik ve kişisel bakım ürünlerinde toptan tedarik.", meta: ["Kozmetik", "Bakım", "Perakende"] },
+    { id: "automotive-products", icon: "AU", title: "Otomotiv", copy: "Yedek parça, bakım ürünleri, oto kimyasalları, aksesuar ve ihracata uygun otomotiv ürünleri.", meta: ["Parça", "Bakım", "B2B"] },
+    { id: "hardware-products", icon: "HW", title: "Yapı Hırdavat", copy: "El aletleri, bağlantı elemanları, yapı malzemeleri, tamir ve hırdavat ürünleri.", meta: ["Alet", "Yapı", "Toptan"] },
   ],
 };
 products.az = [
@@ -709,6 +730,9 @@ products.az = [
   { id: "food-products", icon: "FD", title: "Qida Məhsulları", copy: "Qablaşdırılmış qida, sous, tomat pastası, qəlyanaltı və market məhsulları.", meta: ["Raf ömrü", "Pərakəndə", "Topdan"] },
   { id: "industrial-products", icon: "IN", title: "Sənaye Sərfiyyatı", copy: "Sərf materialları, təmizlik sərfiyyatı, qablaşdırma və əməliyyat dəstək məhsulları.", meta: ["FOB", "CIF", "Bulk"] },
   { id: "medical-products", icon: "MD", title: "Tibbi Məhsullar", copy: "Sağlamlıq, gigiyena və tibbi məhsul kataloqları üçün təchizat seçimləri.", meta: ["Kataloq", "Sənəd", "Təchizat"] },
+  { id: "cosmetics-products", icon: "CP", title: "Kosmetika və şəxsi qulluq", copy: "Dəri, saç, ağız baxımı və gözəllik məhsulları üçün topdan təchizat.", meta: ["Kosmetika", "Qulluq", "Topdan"] },
+  { id: "automotive-products", icon: "AU", title: "Avtomotiv", copy: "Ehtiyat hissələri, texniki qulluq məhsulları, mayelər və aksesuarlar.", meta: ["Hissə", "Maye", "B2B"] },
+  { id: "hardware-products", icon: "HW", title: "Tikinti və alətlər", copy: "Əl alətləri, bərkidicilər, tikinti materialları və təmir məhsulları.", meta: ["Alət", "Tikinti", "Topdan"] },
 ];
 products.ka = [
   { id: "home-products", icon: "HM", title: "სახლი და ცხოვრება", copy: "კერამიკა, სამზარეულოს ნივთები, დეკორატიული პროდუქტები და სახლის საქონელი.", meta: ["შერეული ყუთი", "კატალოგი", "ნიმუში"] },
@@ -716,6 +740,9 @@ products.ka = [
   { id: "food-products", icon: "FD", title: "საკვები პროდუქტები", copy: "შეფუთული საკვები, სოუსები, ტომატის პასტა, სნექები და მარკეტის პროდუქტები.", meta: ["ვადა", "საცალო", "საბითუმო"] },
   { id: "industrial-products", icon: "IN", title: "ინდუსტრიული მასალები", copy: "სარეცხი მასალები, შეფუთვა და ოპერაციული მხარდაჭერის პროდუქტები.", meta: ["FOB", "CIF", "Bulk"] },
   { id: "medical-products", icon: "MD", title: "სამედიცინო პროდუქტები", copy: "ჯანმრთელობის, ჰიგიენისა და სამედიცინო კატალოგების მიწოდების ვარიანტები.", meta: ["კატალოგი", "დოკუმენტი", "მიწოდება"] },
+  { id: "cosmetics-products", icon: "CP", title: "კოსმეტიკა და პირადი მოვლა", copy: "კანის, თმის, პირის მოვლისა და სილამაზის პროდუქტების საბითუმო მიწოდება.", meta: ["კოსმეტიკა", "მოვლა", "საბითუმო"] },
+  { id: "automotive-products", icon: "AU", title: "ავტომობილი", copy: "სათადარიგო ნაწილები, მოვლის პროდუქტები, სითხეები და აქსესუარები.", meta: ["ნაწილები", "სითხეები", "B2B"] },
+  { id: "hardware-products", icon: "HW", title: "მშენებლობა და ხელსაწყოები", copy: "ხელის ხელსაწყოები, სამაგრები, სამშენებლო მასალები და სარემონტო პროდუქტები.", meta: ["ხელსაწყო", "მშენებლობა", "საბითუმო"] },
 ];
 products.ru = [
   { id: "home-products", icon: "HM", title: "Дом и быт", copy: "Керамика, кухонные товары, декоративные изделия и товары для дома.", meta: ["Сборный короб", "Каталог", "Образец"] },
@@ -723,6 +750,9 @@ products.ru = [
   { id: "food-products", icon: "FD", title: "Пищевые продукты", copy: "Упакованные продукты, соусы, томатная паста, снеки и товары для магазинов.", meta: ["Срок годности", "Розница", "Опт"] },
   { id: "industrial-products", icon: "IN", title: "Промышленные материалы", copy: "Расходные материалы, чистящие средства, упаковка и операционные товары.", meta: ["FOB", "CIF", "Bulk"] },
   { id: "medical-products", icon: "MD", title: "Медицинские товары", copy: "Варианты поставки для медицинских, гигиенических и healthcare-каталогов.", meta: ["Каталог", "Документы", "Поставка"] },
+  { id: "cosmetics-products", icon: "CP", title: "Косметика и личный уход", copy: "Средства ухода за кожей, волосами, полостью рта и товары красоты для опта.", meta: ["Косметика", "Уход", "Опт"] },
+  { id: "automotive-products", icon: "AU", title: "Автомотив", copy: "Запчасти, товары обслуживания, жидкости, аксессуары и B2B-поставка.", meta: ["Запчасти", "Жидкости", "B2B"] },
+  { id: "hardware-products", icon: "HW", title: "Строительство и инструменты", copy: "Ручные инструменты, крепеж, строительные материалы и товары для ремонта.", meta: ["Инструмент", "Стройка", "Опт"] },
 ];
 
 const productPartners = {
