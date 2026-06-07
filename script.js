@@ -106,6 +106,21 @@ const content = {
     b2bNotes: "Products, market notes and customs requirements",
     b2bSubmit: "Create B2B onboarding draft",
     b2bReady: "B2B onboarding draft is ready. Opening your mail app.",
+    b2bAuthTitle: "Customer account",
+    b2bAuthCopy: "Create an account or sign in to upload documents to the secure B2B file area.",
+    b2bAuthEmail: "Account email",
+    b2bAuthPassword: "Password",
+    b2bSignUp: "Register",
+    b2bSignIn: "Sign in",
+    b2bSignOut: "Sign out",
+    b2bAuthNotReady: "Backend is not configured yet.",
+    b2bSignedIn: "Signed in",
+    b2bSignedOut: "Signed out",
+    b2bCheckEmail: "Registration started. Check your email if confirmation is enabled.",
+    b2bUploadLoginRequired: "Sign in before uploading documents.",
+    b2bUploadStarted: "Uploading documents...",
+    b2bUploadDone: "B2B request saved. Documents uploaded.",
+    b2bBackendFallback: "Backend is not configured. Opening email draft instead.",
     b2bChecklistTitle: "Core export document checklist",
     b2bDocBuyer: "Buyer company registry, tax certificate and authorized signatory",
     b2bDocProduct: "Product list, HS code, quantity, pallet, weight and m3 confirmation",
@@ -289,6 +304,21 @@ const content = {
     b2bNotes: "Ürün, pazar notu ve gümrük gereklilikleri",
     b2bSubmit: "B2B kayıt taslağı oluştur",
     b2bReady: "B2B kayıt taslağı hazır. Mail uygulamanız açılıyor.",
+    b2bAuthTitle: "Müşteri hesabı",
+    b2bAuthCopy: "Evrakları güvenli B2B dosya alanına yüklemek için hesap oluşturun veya giriş yapın.",
+    b2bAuthEmail: "Hesap e-postası",
+    b2bAuthPassword: "Şifre",
+    b2bSignUp: "Kayıt ol",
+    b2bSignIn: "Giriş yap",
+    b2bSignOut: "Çıkış yap",
+    b2bAuthNotReady: "Backend henüz yapılandırılmadı.",
+    b2bSignedIn: "Giriş yapıldı",
+    b2bSignedOut: "Çıkış yapıldı",
+    b2bCheckEmail: "Kayıt başlatıldı. E-posta doğrulaması açıksa mailinizi kontrol edin.",
+    b2bUploadLoginRequired: "Evrak yüklemek için önce giriş yapın.",
+    b2bUploadStarted: "Evraklar yükleniyor...",
+    b2bUploadDone: "B2B talebi kaydedildi. Evraklar yüklendi.",
+    b2bBackendFallback: "Backend yapılandırılmadı. Mail taslağı açılıyor.",
     b2bChecklistTitle: "Temel ihracat evrak kontrol listesi",
     b2bDocBuyer: "Alıcı firma sicil kaydı, vergi belgesi ve imza/yetki belgesi",
     b2bDocProduct: "Ürün listesi, GTIP/HS kodu, miktar, palet, ağırlık ve m3 teyidi",
@@ -1358,14 +1388,136 @@ const openB2BMailDraft = (form, files) => {
   window.location.href = `mailto:${businessEmail}?subject=${subject}&body=${body}`;
 };
 
+const getBackendConfig = () => window.SIDYA_BACKEND || {};
+const isBackendConfigured = () => {
+  const config = getBackendConfig();
+  return Boolean(config.supabaseUrl && config.supabaseAnonKey && window.supabase?.createClient);
+};
+let sidyaSupabase = null;
+
+const getSupabaseClient = () => {
+  if (!isBackendConfigured()) return null;
+  if (!sidyaSupabase) {
+    const config = getBackendConfig();
+    sidyaSupabase = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
+  }
+  return sidyaSupabase;
+};
+
+const setB2BAuthStatus = (message) => {
+  const status = document.querySelector("#b2bAuthStatus");
+  if (status) status.textContent = message;
+};
+
+const refreshB2BSession = async () => {
+  const client = getSupabaseClient();
+  if (!client) {
+    setB2BAuthStatus(t("b2bAuthNotReady"));
+    return null;
+  }
+  const { data } = await client.auth.getSession();
+  const email = data.session?.user?.email;
+  setB2BAuthStatus(email ? `${t("b2bSignedIn")}: ${email}` : t("b2bSignedOut"));
+  return data.session;
+};
+
+const safeStorageName = (name) =>
+  String(name || "document")
+    .normalize("NFKD")
+    .replace(/[^\w.\-]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 120) || "document";
+
+const uploadB2BDocuments = async (client, userId, files) => {
+  const bucket = getBackendConfig().storageBucket || "b2b-documents";
+  const paths = [];
+  for (const file of files) {
+    const path = `${userId}/${Date.now()}-${crypto.randomUUID()}-${safeStorageName(file.name)}`;
+    const { error } = await client.storage.from(bucket).upload(path, file, {
+      cacheControl: "3600",
+      upsert: false,
+      contentType: file.type || "application/octet-stream",
+    });
+    if (error) throw error;
+    paths.push(path);
+  }
+  return paths;
+};
+
+const saveB2BRequest = async (client, userId, form, documentPaths) => {
+  const payload = {
+    user_id: userId,
+    company: String(form.get("company") || ""),
+    contact: String(form.get("contact") || ""),
+    email: String(form.get("email") || ""),
+    country: String(form.get("country") || ""),
+    tax_number: String(form.get("tax") || ""),
+    incoterm: String(form.get("incoterm") || ""),
+    notes: String(form.get("notes") || ""),
+    document_paths: documentPaths,
+  };
+  const { error } = await client.from("b2b_onboarding_requests").insert(payload);
+  if (error) throw error;
+};
+
+const getB2BAuthValues = () => ({
+  email: document.querySelector("#b2bAuthEmail")?.value.trim() || "",
+  password: document.querySelector("#b2bAuthPassword")?.value || "",
+});
+
+document.querySelector("#b2bSignUp")?.addEventListener("click", async () => {
+  const client = getSupabaseClient();
+  if (!client) return setB2BAuthStatus(t("b2bAuthNotReady"));
+  const { email, password } = getB2BAuthValues();
+  const { error } = await client.auth.signUp({ email, password });
+  setB2BAuthStatus(error ? error.message : t("b2bCheckEmail"));
+  refreshB2BSession();
+});
+
+document.querySelector("#b2bSignIn")?.addEventListener("click", async () => {
+  const client = getSupabaseClient();
+  if (!client) return setB2BAuthStatus(t("b2bAuthNotReady"));
+  const { email, password } = getB2BAuthValues();
+  const { error } = await client.auth.signInWithPassword({ email, password });
+  if (error) setB2BAuthStatus(error.message);
+  refreshB2BSession();
+});
+
+document.querySelector("#b2bSignOut")?.addEventListener("click", async () => {
+  const client = getSupabaseClient();
+  if (!client) return setB2BAuthStatus(t("b2bAuthNotReady"));
+  await client.auth.signOut();
+  refreshB2BSession();
+});
+
 document.querySelector("#b2bDocuments")?.addEventListener("change", updateB2BFileSummary);
-document.querySelector("#b2bForm")?.addEventListener("submit", (event) => {
+document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => {
   event.preventDefault();
   const form = new FormData(event.currentTarget);
   const files = Array.from(document.querySelector("#b2bDocuments")?.files || []);
   const status = document.querySelector("#b2bStatus");
-  if (status) status.textContent = t("b2bReady");
-  openB2BMailDraft(form, files);
+  const client = getSupabaseClient();
+  if (!client) {
+    if (status) status.textContent = t("b2bBackendFallback");
+    openB2BMailDraft(form, files);
+    return;
+  }
+  const session = await refreshB2BSession();
+  if (!session?.user) {
+    if (status) status.textContent = t("b2bUploadLoginRequired");
+    return;
+  }
+  try {
+    if (status) status.textContent = t("b2bUploadStarted");
+    const paths = await uploadB2BDocuments(client, session.user.id, files);
+    await saveB2BRequest(client, session.user.id, form, paths);
+    if (status) status.textContent = t("b2bUploadDone");
+    event.currentTarget.reset();
+    updateB2BFileSummary();
+  } catch (error) {
+    if (status) status.textContent = error.message || t("formError");
+  }
 });
 
 document.querySelector("#openProformaProducts")?.addEventListener("click", () => {
@@ -1396,4 +1548,5 @@ document.querySelector("#downloadProformaExcel")?.addEventListener("click", down
 document.querySelector("#mailProforma")?.addEventListener("click", sendProformaMail);
 translatePage();
 setupTracking();
+refreshB2BSession();
 loadExchangeRates();

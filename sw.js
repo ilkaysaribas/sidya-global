@@ -1,12 +1,12 @@
-const CACHE_NAME = "sidya-global-v34";
+const CACHE_NAME = "sidya-global-v35";
 
 const SHELL_ASSETS = [
   "./",
   "./index.html",
   "./offline.html",
-  "./styles.css?v=20260607-1",
+  "./styles.css?v=20260607-2",
   "./catalog-products.generated.js?v=20260601-5",
-  "./script.js?v=20260607-1",
+  "./script.js?v=20260607-2",
   "./manifest.webmanifest",
   "./assets/app-icon.svg",
   "./assets/app-icon-192.png",
@@ -65,7 +65,7 @@ self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  if (request.method !== "GET" || url.pathname.endsWith(".pdf") || url.pathname.startsWith("/api/")) {
+  if (request.method !== "GET" || url.pathname.endsWith(".pdf") || url.pathname.endsWith("/backend-config.js") || url.pathname.startsWith("/api/")) {
     return;
   }
 

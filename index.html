@@ -30,7 +30,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260607-1" />
+    <link rel="stylesheet" href="styles.css?v=20260607-2" />
   </head>
   <body>
     <header class="site-header">
@@ -367,6 +367,24 @@
           </form>
 
           <div class="b2b-panel">
+            <div class="b2b-auth-card">
+              <h3 data-i18n="b2bAuthTitle">Customer account</h3>
+              <p data-i18n="b2bAuthCopy">Create an account or sign in to upload documents to the secure B2B file area.</p>
+              <label>
+                <span data-i18n="b2bAuthEmail">Account email</span>
+                <input id="b2bAuthEmail" type="email" autocomplete="email" />
+              </label>
+              <label>
+                <span data-i18n="b2bAuthPassword">Password</span>
+                <input id="b2bAuthPassword" type="password" autocomplete="current-password" />
+              </label>
+              <div class="b2b-auth-actions">
+                <button type="button" id="b2bSignUp" data-i18n="b2bSignUp">Register</button>
+                <button type="button" id="b2bSignIn" data-i18n="b2bSignIn">Sign in</button>
+                <button type="button" id="b2bSignOut" data-i18n="b2bSignOut">Sign out</button>
+              </div>
+              <p class="form-status" id="b2bAuthStatus" role="status" data-i18n="b2bAuthNotReady">Backend is not configured yet.</p>
+            </div>
             <h3 data-i18n="b2bChecklistTitle">Core export document checklist</h3>
             <div class="b2b-checklist">
               <article><span>01</span><strong data-i18n="b2bDocBuyer">Buyer company registry, tax certificate and authorized signatory</strong></article>
@@ -530,6 +548,8 @@
         yandexWebmasterToken: "",
       };
     </script>
+    <script src="backend-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -547,6 +567,6 @@
       }
     </script>
     <script src="catalog-products.generated.js?v=20260601-5"></script>
-    <script src="script.js?v=20260607-1"></script>
+    <script src="script.js?v=20260607-2"></script>
   </body>
 </html>
