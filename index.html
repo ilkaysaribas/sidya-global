@@ -30,7 +30,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260602-5" />
+    <link rel="stylesheet" href="styles.css?v=20260607-1" />
   </head>
   <body>
     <header class="site-header">
@@ -81,6 +81,7 @@
         <a href="#process" data-i18n="navProcess">Process</a>
         <a href="#markets" data-i18n="navMarkets">Markets</a>
         <a href="#proforma" data-i18n="navProforma">Proforma</a>
+        <a href="#b2b" data-i18n="navB2B">B2B Portal</a>
       </nav>
 
       <div class="header-actions">
@@ -330,6 +331,98 @@
         </div>
       </section>
 
+      <section class="section b2b-section" id="b2b" aria-labelledby="b2b-title">
+        <div class="section-heading">
+          <p class="section-kicker" data-i18n="b2bKicker">B2B export portal</p>
+          <h2 id="b2b-title" data-i18n="b2bTitle">Buyer registration, document intake and export compliance flow.</h2>
+          <p data-i18n="b2bCopy">Register buyers, collect required documents and follow the export path from proforma to customs clearance.</p>
+        </div>
+
+        <div class="b2b-layout">
+          <form class="b2b-form" id="b2bForm">
+            <div class="b2b-form-header">
+              <h3 data-i18n="b2bRegisterTitle">Buyer registration</h3>
+              <p data-i18n="b2bRegisterCopy">This prepares a B2B onboarding draft. Uploaded files must be attached from the buyer's email client until backend storage is connected.</p>
+            </div>
+            <label>
+              <span data-i18n="b2bCompany">Company legal name</span>
+              <input name="company" autocomplete="organization" required />
+            </label>
+            <label>
+              <span data-i18n="b2bContact">Authorized contact</span>
+              <input name="contact" autocomplete="name" required />
+            </label>
+            <label>
+              <span data-i18n="b2bEmail">Business email</span>
+              <input name="email" type="email" autocomplete="email" required />
+            </label>
+            <label>
+              <span data-i18n="b2bCountry">Destination country</span>
+              <input name="country" autocomplete="country-name" required />
+            </label>
+            <label>
+              <span data-i18n="b2bTax">Tax / registration number</span>
+              <input name="tax" required />
+            </label>
+            <label>
+              <span data-i18n="b2bIncoterm">Preferred Incoterm</span>
+              <select name="incoterm" required>
+                <option value="EXW">EXW</option>
+                <option value="FOB">FOB</option>
+                <option value="CIF">CIF</option>
+                <option value="DAP">DAP</option>
+              </select>
+            </label>
+            <label class="full-field">
+              <span data-i18n="b2bDocuments">Upload company and import documents</span>
+              <input id="b2bDocuments" name="documents" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" />
+              <small id="b2bFileSummary" data-i18n="b2bNoFiles">No files selected.</small>
+            </label>
+            <label class="full-field">
+              <span data-i18n="b2bNotes">Products, market notes and customs requirements</span>
+              <textarea name="notes" rows="4"></textarea>
+            </label>
+            <button class="form-submit" type="submit" data-i18n="b2bSubmit">Create B2B onboarding draft</button>
+            <p class="form-status" id="b2bStatus" role="status"></p>
+          </form>
+
+          <div class="b2b-panel">
+            <h3 data-i18n="b2bChecklistTitle">Core export document checklist</h3>
+            <div class="b2b-checklist">
+              <article><span>01</span><strong data-i18n="b2bDocBuyer">Buyer company registry, tax certificate and authorized signatory</strong></article>
+              <article><span>02</span><strong data-i18n="b2bDocProduct">Product list, HS code, quantity, pallet, weight and m3 confirmation</strong></article>
+              <article><span>03</span><strong data-i18n="b2bDocCommercial">Proforma invoice, sales confirmation and payment term</strong></article>
+              <article><span>04</span><strong data-i18n="b2bDocShipment">Commercial invoice, packing list and transport document</strong></article>
+              <article><span>05</span><strong data-i18n="b2bDocOrigin">Certificate of origin, A.TR, EUR.1 or market-specific origin document</strong></article>
+              <article><span>06</span><strong data-i18n="b2bDocCustoms">Customs declaration, conformity documents and product certificates if required</strong></article>
+            </div>
+          </div>
+        </div>
+
+        <div class="export-roadmap" aria-label="Export compliance roadmap">
+          <article>
+            <span>01</span>
+            <h3 data-i18n="b2bStepOne">Buyer verification</h3>
+            <p data-i18n="b2bStepOneCopy">Company identity, tax registration, authorization and destination market are checked before a standing customer file is opened.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3 data-i18n="b2bStepTwo">Product and HS code review</h3>
+            <p data-i18n="b2bStepTwoCopy">Products are matched with HS codes, certificates, restrictions and country-specific import requirements.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3 data-i18n="b2bStepThree">Proforma and payment approval</h3>
+            <p data-i18n="b2bStepThreeCopy">Incoterm, currency, payment term, pallet plan, loading volume and delivery responsibility are confirmed.</p>
+          </article>
+          <article>
+            <span>04</span>
+            <h3 data-i18n="b2bStepFour">Customs and origin file</h3>
+            <p data-i18n="b2bStepFourCopy">Invoice, packing list, transport document, origin certificate and required conformity documents are prepared in sequence.</p>
+          </article>
+        </div>
+      </section>
+
       <section class="section contact-section" id="contact" aria-labelledby="contact-title">
         <div class="contact-copy">
           <p class="section-kicker" data-i18n="contactKicker">Quote and meeting</p>
@@ -454,6 +547,6 @@
       }
     </script>
     <script src="catalog-products.generated.js?v=20260601-5"></script>
-    <script src="script.js?v=20260602-3"></script>
+    <script src="script.js?v=20260607-1"></script>
   </body>
 </html>

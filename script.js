@@ -8,6 +8,7 @@ const content = {
     navProcess: "Process",
     navMarkets: "Markets",
     navProforma: "Create Proforma",
+    navB2B: "B2B Portal",
     headerCta: "Get Quote",
     installAppCta: "App",
     installPanelTitle: "Sidya Global app",
@@ -88,6 +89,38 @@ const content = {
     proformaMailCta: "Send by Mail",
     proformaWhatsappCta: "Send by message",
     proformaQuoteEmpty: "Please add at least one product to the proforma list.",
+    b2bKicker: "B2B export portal",
+    b2bTitle: "Buyer registration, document intake and export compliance flow.",
+    b2bCopy: "Register buyers, collect required documents and follow the export path from proforma to customs clearance.",
+    b2bRegisterTitle: "Buyer registration",
+    b2bRegisterCopy: "This prepares a B2B onboarding draft. Uploaded files must be attached from the buyer's email client until backend storage is connected.",
+    b2bCompany: "Company legal name",
+    b2bContact: "Authorized contact",
+    b2bEmail: "Business email",
+    b2bCountry: "Destination country",
+    b2bTax: "Tax / registration number",
+    b2bIncoterm: "Preferred Incoterm",
+    b2bDocuments: "Upload company and import documents",
+    b2bNoFiles: "No files selected.",
+    b2bFilesSelected: "files selected",
+    b2bNotes: "Products, market notes and customs requirements",
+    b2bSubmit: "Create B2B onboarding draft",
+    b2bReady: "B2B onboarding draft is ready. Opening your mail app.",
+    b2bChecklistTitle: "Core export document checklist",
+    b2bDocBuyer: "Buyer company registry, tax certificate and authorized signatory",
+    b2bDocProduct: "Product list, HS code, quantity, pallet, weight and m3 confirmation",
+    b2bDocCommercial: "Proforma invoice, sales confirmation and payment term",
+    b2bDocShipment: "Commercial invoice, packing list and transport document",
+    b2bDocOrigin: "Certificate of origin, A.TR, EUR.1 or market-specific origin document",
+    b2bDocCustoms: "Customs declaration, conformity documents and product certificates if required",
+    b2bStepOne: "Buyer verification",
+    b2bStepOneCopy: "Company identity, tax registration, authorization and destination market are checked before a standing customer file is opened.",
+    b2bStepTwo: "Product and HS code review",
+    b2bStepTwoCopy: "Products are matched with HS codes, certificates, restrictions and country-specific import requirements.",
+    b2bStepThree: "Proforma and payment approval",
+    b2bStepThreeCopy: "Incoterm, currency, payment term, pallet plan, loading volume and delivery responsibility are confirmed.",
+    b2bStepFour: "Customs and origin file",
+    b2bStepFourCopy: "Invoice, packing list, transport document, origin certificate and required conformity documents are prepared in sequence.",
     truckFillLabel: "TIR load",
     containerFillLabel: "Container load",
     cartKicker: "Cart",
@@ -158,6 +191,7 @@ const content = {
     navProcess: "Süreç",
     navMarkets: "Pazarlar",
     navProforma: "Proforma Oluştur",
+    navB2B: "B2B Portal",
     headerCta: "Teklif Al",
     installAppCta: "Uygulama",
     installPanelTitle: "Sidya Global uygulaması",
@@ -238,6 +272,38 @@ const content = {
     proformaMailCta: "Mail ile gönder",
     proformaWhatsappCta: "Mesaj ile gönder",
     proformaQuoteEmpty: "Lütfen proforma listesine en az bir ürün ekleyin.",
+    b2bKicker: "B2B ihracat portalı",
+    b2bTitle: "Alıcı kaydı, evrak toplama ve ihracat uygunluk akışı.",
+    b2bCopy: "Alıcıyı kayıt altına alın, gerekli evrakları toplayın ve proformadan gümrük çıkışına kadar ihracat yolunu takip edin.",
+    b2bRegisterTitle: "Alıcı kayıt",
+    b2bRegisterCopy: "Bu alan B2B müşteri dosyası için e-posta taslağı hazırlar. Backend depo bağlanana kadar seçilen dosyalar alıcının mail uygulamasından eklenmelidir.",
+    b2bCompany: "Firma resmi unvanı",
+    b2bContact: "Yetkili kişi",
+    b2bEmail: "Kurumsal e-posta",
+    b2bCountry: "Varış ülkesi",
+    b2bTax: "Vergi / kayıt numarası",
+    b2bIncoterm: "Tercih edilen Incoterm",
+    b2bDocuments: "Firma ve ithalat evraklarını yükle",
+    b2bNoFiles: "Dosya seçilmedi.",
+    b2bFilesSelected: "dosya seçildi",
+    b2bNotes: "Ürün, pazar notu ve gümrük gereklilikleri",
+    b2bSubmit: "B2B kayıt taslağı oluştur",
+    b2bReady: "B2B kayıt taslağı hazır. Mail uygulamanız açılıyor.",
+    b2bChecklistTitle: "Temel ihracat evrak kontrol listesi",
+    b2bDocBuyer: "Alıcı firma sicil kaydı, vergi belgesi ve imza/yetki belgesi",
+    b2bDocProduct: "Ürün listesi, GTIP/HS kodu, miktar, palet, ağırlık ve m3 teyidi",
+    b2bDocCommercial: "Proforma fatura, satış teyidi ve ödeme şartı",
+    b2bDocShipment: "Ticari fatura, çeki listesi ve taşıma belgesi",
+    b2bDocOrigin: "Menşe şahadetnamesi, A.TR, EUR.1 veya pazara özel menşe evrakı",
+    b2bDocCustoms: "Gümrük beyannamesi, uygunluk belgeleri ve gerekiyorsa ürün sertifikaları",
+    b2bStepOne: "Alıcı doğrulama",
+    b2bStepOneCopy: "Daimi müşteri dosyası açılmadan önce firma kimliği, vergi kaydı, yetki ve varış pazarı kontrol edilir.",
+    b2bStepTwo: "Ürün ve GTIP kontrolü",
+    b2bStepTwoCopy: "Ürünler GTIP/HS kodu, sertifika, kısıtlama ve ülkeye özel ithalat şartlarıyla eşleştirilir.",
+    b2bStepThree: "Proforma ve ödeme onayı",
+    b2bStepThreeCopy: "Incoterm, para birimi, ödeme şartı, palet planı, yükleme hacmi ve teslim sorumluluğu netleştirilir.",
+    b2bStepFour: "Gümrük ve menşe dosyası",
+    b2bStepFourCopy: "Fatura, çeki listesi, taşıma belgesi, menşe evrakı ve gerekli uygunluk belgeleri sırayla hazırlanır.",
     truckFillLabel: "TIR dolumu",
     containerFillLabel: "Konteyner dolumu",
     cartKicker: "Sepet",
@@ -1249,6 +1315,57 @@ document.querySelector("#quoteForm")?.addEventListener("submit", async (event) =
     status.textContent = t("formError");
     openMailDraft(form);
   }
+});
+
+const updateB2BFileSummary = () => {
+  const input = document.querySelector("#b2bDocuments");
+  const summary = document.querySelector("#b2bFileSummary");
+  if (!input || !summary) return;
+  const files = Array.from(input.files || []);
+  summary.textContent = files.length
+    ? `${files.length} ${t("b2bFilesSelected")}: ${files.map((file) => file.name).join(", ")}`
+    : t("b2bNoFiles");
+};
+
+const openB2BMailDraft = (form, files) => {
+  const subject = encodeURIComponent(`B2B buyer onboarding - ${form.get("company")}`);
+  const body = encodeURIComponent([
+    "Sidya Global B2B buyer onboarding",
+    "",
+    `Company: ${form.get("company")}`,
+    `Authorized contact: ${form.get("contact")}`,
+    `Email: ${form.get("email")}`,
+    `Destination country: ${form.get("country")}`,
+    `Tax / registration number: ${form.get("tax")}`,
+    `Incoterm: ${form.get("incoterm")}`,
+    "",
+    "Selected documents:",
+    ...(files.length ? files.map((file, index) => `${index + 1}. ${file.name}`) : ["No file selected"]),
+    "",
+    "Notes:",
+    form.get("notes") || "-",
+    "",
+    "Required export flow:",
+    "1. Buyer verification",
+    "2. Product and HS code review",
+    "3. Proforma and payment approval",
+    "4. Commercial invoice and packing list",
+    "5. Origin / A.TR / EUR.1 or market-specific document",
+    "6. Customs declaration and logistics handover",
+    "",
+    "Note: Attach the selected files to this email before sending.",
+  ].join("\n"));
+  window.location.href = `mailto:${businessEmail}?subject=${subject}&body=${body}`;
+};
+
+document.querySelector("#b2bDocuments")?.addEventListener("change", updateB2BFileSummary);
+document.querySelector("#b2bForm")?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const form = new FormData(event.currentTarget);
+  const files = Array.from(document.querySelector("#b2bDocuments")?.files || []);
+  const status = document.querySelector("#b2bStatus");
+  if (status) status.textContent = t("b2bReady");
+  openB2BMailDraft(form, files);
 });
 
 document.querySelector("#openProformaProducts")?.addEventListener("click", () => {
