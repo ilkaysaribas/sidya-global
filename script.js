@@ -115,6 +115,7 @@ const content = {
     b2bSignIn: "Sign in",
     b2bSignOut: "Sign out",
     b2bAuthNotReady: "Backend is not configured yet.",
+    b2bAuthEmailMode: "Customer account is waiting for backend setup. You can still send the B2B request form.",
     b2bSignedIn: "Signed in",
     b2bSignedOut: "Signed out",
     b2bCheckEmail: "Registration started. Check your email if confirmation is enabled.",
@@ -122,6 +123,8 @@ const content = {
     b2bUploadStarted: "Uploading documents...",
     b2bUploadDone: "B2B request saved. Documents uploaded.",
     b2bBackendFallback: "Backend is not configured. Opening email draft instead.",
+    b2bServerSubmit: "Sending B2B request with documents...",
+    b2bServerMissing: "Mail upload endpoint is not configured yet. Opening email draft instead.",
     b2bChecklistTitle: "Core export document checklist",
     b2bDocBuyer: "Buyer company registry, tax certificate and authorized signatory",
     b2bDocProduct: "Product list, HS code, quantity, pallet, weight and m3 confirmation",
@@ -161,6 +164,7 @@ const content = {
     customsStatusReady: "Ready for document review",
     customsStatusReadyCopy: "Commercial documents, origin documents and shipment instructions should be checked before declaration.",
     customsMailCta: "Send customs file request",
+    customsWhatsappCta: "Send by WhatsApp",
     customsDocsTitle: "Required document pack",
     customsActionTitle: "Action checklist",
     customsRiskTitle: "Risk notes",
@@ -350,6 +354,7 @@ const content = {
     b2bSignIn: "Giriş yap",
     b2bSignOut: "Çıkış yap",
     b2bAuthNotReady: "Backend henüz yapılandırılmadı.",
+    b2bAuthEmailMode: "Müşteri hesabı backend kurulumu bekliyor. B2B talep formunu yine de gönderebilirsiniz.",
     b2bSignedIn: "Giriş yapıldı",
     b2bSignedOut: "Çıkış yapıldı",
     b2bCheckEmail: "Kayıt başlatıldı. E-posta doğrulaması açıksa mailinizi kontrol edin.",
@@ -357,6 +362,8 @@ const content = {
     b2bUploadStarted: "Evraklar yükleniyor...",
     b2bUploadDone: "B2B talebi kaydedildi. Evraklar yüklendi.",
     b2bBackendFallback: "Backend yapılandırılmadı. Mail taslağı açılıyor.",
+    b2bServerSubmit: "B2B talebi evraklarla gönderiliyor...",
+    b2bServerMissing: "Mail yükleme altyapısı henüz yapılandırılmadı. Mail taslağı açılıyor.",
     b2bChecklistTitle: "Temel ihracat evrak kontrol listesi",
     b2bDocBuyer: "Alıcı firma sicil kaydı, vergi belgesi ve imza/yetki belgesi",
     b2bDocProduct: "Ürün listesi, GTIP/HS kodu, miktar, palet, ağırlık ve m3 teyidi",
@@ -396,6 +403,7 @@ const content = {
     customsStatusReady: "Evrak kontrolüne hazır",
     customsStatusReadyCopy: "Beyanname öncesi ticari evraklar, menşe evrakları ve sevkiyat talimatları kontrol edilmelidir.",
     customsMailCta: "Gümrük dosyası talebi gönder",
+    customsWhatsappCta: "WhatsApp ile gönder",
     customsDocsTitle: "Gerekli evrak paketi",
     customsActionTitle: "Aksiyon kontrol listesi",
     customsRiskTitle: "Risk notları",
@@ -857,7 +865,6 @@ const productPartners = {
     { name: "Eczacıbaşı / Selpak", site: "https://www.eczacibasi.com.tr/", logo: "assets/selpak-logo.svg" },
     { name: "SC Johnson", site: "https://scjohnson.com/en", catalog: "assets/sc-johnson-katalog.pdf", logo: "assets/scjohnson-logo.svg" },
     { name: "Nivea", site: "https://www.nivea.com.tr/", catalog: "assets/nivea-katalog.pdf", logo: "assets/nivea-logo.svg" },
-    { name: "Sebamed", site: "https://www.sebamed.com.tr/", logo: "assets/sebamed-logo.svg" },
     { name: "Vileda", site: "https://www.vileda.com.tr/", logo: "assets/vileda-logo.svg" },
     { name: "Reckitt Benckiser Home Group", site: "https://www.reckitt.com/offices/turkey/", catalog: "assets/reckitt-katalog.pdf", logo: "assets/reckitt-logo.svg", catalogs: [
       { label: "Core 2024 Catalog", href: "assets/reckitt-core-2024-katalog.pdf" },
@@ -878,6 +885,10 @@ const productPartners = {
     { name: "İkihan Medikal", site: "https://www.ikihanmedikal.com/", logo: "assets/ikihan-medikal-logo.svg" },
     { name: "Omron Healthcare", site: "https://www.omron-healthcare.com.tr/", logo: "assets/omron-logo.svg" },
     { name: "Hanymish", site: "https://www.hanymish.com/", logo: "assets/hanymish-logo.svg" },
+    { name: "Medcare", site: "#medical-products", catalog: "assets/medcare-katalog-2025.pdf", logo: "assets/medcare-logo.svg" },
+  ],
+  "cosmetics-products": [
+    { name: "Sebamed", site: "https://www.sebamed.com.tr/", catalog: "assets/sebamed-katalog-2024.pdf", logo: "assets/sebamed-logo.svg" },
   ],
 };
 
@@ -1033,6 +1044,7 @@ const marketLinks = {
 };
 
 const businessEmail = "info@sidyaglobal.com";
+const businessWhatsAppNumber = "905534546118";
 let currentLang = "en";
 let deferredInstallPrompt = null;
 const truckCapacity = { volume: 90, weight: 24000 };
@@ -1222,21 +1234,26 @@ const renderCustomsDesk = () => {
   const statusTitle = document.querySelector("#customsStatusTitle");
   const statusCopy = document.querySelector("#customsStatusCopy");
   const mailLink = document.querySelector("#customsMailLink");
+  const whatsappLink = document.querySelector("#customsWhatsappLink");
   if (statusTitle) statusTitle.textContent = t("customsStatusReady");
   if (statusCopy) statusCopy.textContent = t("customsStatusReadyCopy");
+  const customsMessage = [
+    "Sidya Global customs file request",
+    "",
+    `Destination: ${destination}`,
+    `Transport: ${transport}`,
+    `Incoterm: ${incoterm}`,
+    `Product group: ${product}`,
+    "",
+    "Please review the export customs document pack.",
+  ].join("\n");
   if (mailLink) {
     const subject = encodeURIComponent("Sidya Global customs file request");
-    const body = encodeURIComponent([
-      "Customs file request",
-      "",
-      `Destination: ${destination}`,
-      `Transport: ${transport}`,
-      `Incoterm: ${incoterm}`,
-      `Product group: ${product}`,
-      "",
-      "Please review the export customs document pack.",
-    ].join("\n"));
+    const body = encodeURIComponent(customsMessage);
     mailLink.href = `mailto:${businessEmail}?subject=${subject}&body=${body}`;
+  }
+  if (whatsappLink) {
+    whatsappLink.href = `https://wa.me/${businessWhatsAppNumber}?text=${encodeURIComponent(customsMessage)}`;
   }
 };
 
@@ -1721,6 +1738,20 @@ const openB2BMailDraft = (form, files) => {
   window.location.href = `mailto:${businessEmail}?subject=${subject}&body=${body}`;
 };
 
+const submitB2BServerRequest = async (formElement) => {
+  if (window.location.protocol === "file:") return { ok: false, configured: false };
+  const response = await fetch("/api/b2b-request", {
+    method: "POST",
+    body: new FormData(formElement),
+  });
+  if (response.status === 501) return { ok: false, configured: false };
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({}));
+    throw new Error(payload.error || "B2B request could not be sent.");
+  }
+  return { ok: true, configured: true };
+};
+
 const getBackendConfig = () => window.SIDYA_BACKEND || {};
 const isBackendConfigured = () => {
   const config = getBackendConfig();
@@ -1745,7 +1776,7 @@ const setB2BAuthStatus = (message) => {
 const refreshB2BSession = async () => {
   const client = getSupabaseClient();
   if (!client) {
-    setB2BAuthStatus(t("b2bAuthNotReady"));
+    setB2BAuthStatus(t("b2bAuthEmailMode"));
     return null;
   }
   const { data } = await client.auth.getSession();
@@ -1801,7 +1832,7 @@ const getB2BAuthValues = () => ({
 
 document.querySelector("#b2bSignUp")?.addEventListener("click", async () => {
   const client = getSupabaseClient();
-  if (!client) return setB2BAuthStatus(t("b2bAuthNotReady"));
+  if (!client) return setB2BAuthStatus(t("b2bAuthEmailMode"));
   const { email, password } = getB2BAuthValues();
   const { error } = await client.auth.signUp({ email, password });
   setB2BAuthStatus(error ? error.message : t("b2bCheckEmail"));
@@ -1810,7 +1841,7 @@ document.querySelector("#b2bSignUp")?.addEventListener("click", async () => {
 
 document.querySelector("#b2bSignIn")?.addEventListener("click", async () => {
   const client = getSupabaseClient();
-  if (!client) return setB2BAuthStatus(t("b2bAuthNotReady"));
+  if (!client) return setB2BAuthStatus(t("b2bAuthEmailMode"));
   const { email, password } = getB2BAuthValues();
   const { error } = await client.auth.signInWithPassword({ email, password });
   if (error) setB2BAuthStatus(error.message);
@@ -1819,7 +1850,7 @@ document.querySelector("#b2bSignIn")?.addEventListener("click", async () => {
 
 document.querySelector("#b2bSignOut")?.addEventListener("click", async () => {
   const client = getSupabaseClient();
-  if (!client) return setB2BAuthStatus(t("b2bAuthNotReady"));
+  if (!client) return setB2BAuthStatus(t("b2bAuthEmailMode"));
   await client.auth.signOut();
   refreshB2BSession();
 });
@@ -1835,8 +1866,21 @@ document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => 
   const status = document.querySelector("#b2bStatus");
   const client = getSupabaseClient();
   if (!client) {
-    if (status) status.textContent = t("b2bBackendFallback");
-    openB2BMailDraft(form, files);
+    try {
+      if (status) status.textContent = t("b2bServerSubmit");
+      const result = await submitB2BServerRequest(event.currentTarget);
+      if (result.ok) {
+        if (status) status.textContent = t("b2bUploadDone");
+        event.currentTarget.reset();
+        updateB2BFileSummary();
+        return;
+      }
+      if (status) status.textContent = t("b2bServerMissing");
+      openB2BMailDraft(form, files);
+    } catch (error) {
+      if (status) status.textContent = error.message || t("b2bBackendFallback");
+      openB2BMailDraft(form, files);
+    }
     return;
   }
   const session = await refreshB2BSession();

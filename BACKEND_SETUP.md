@@ -6,6 +6,8 @@ This project uses Supabase for the B2B customer portal:
 - Storage: private B2B document uploads
 - Database: onboarding request records
 
+The site also includes `/api/b2b-request`, a Vercel serverless mail fallback for sending B2B request forms with uploaded documents.
+
 ## 1. Create Supabase Project
 
 1. Go to Supabase and create a project.
@@ -38,12 +40,26 @@ Commit and push after filling `backend-config.js`.
 
 For production, keep the storage bucket private. Buyers must sign in before uploading files.
 
-## 4. Current Behavior
+## 4. Mail Upload Fallback
+
+To receive B2B form documents by email without Supabase storage, add these Vercel environment variables:
+
+```txt
+RESEND_API_KEY=your_resend_api_key
+B2B_TO_EMAIL=info@sidyaglobal.com
+B2B_FROM_EMAIL=Sidya Global <onboarding@sidyaglobal.com>
+```
+
+`B2B_FROM_EMAIL` must be a verified sender/domain in Resend.
+
+## 5. Current Behavior
 
 If Supabase config is empty:
 
-- the form falls back to an email draft
-- files are not stored
+- the customer account panel shows email/upload mode
+- the form tries `/api/b2b-request` first
+- if Resend is not configured, the form falls back to an email draft
+- browser mail drafts cannot attach files automatically, so the buyer must attach them manually in that fallback
 
 If Supabase config is filled and the buyer is signed in:
 

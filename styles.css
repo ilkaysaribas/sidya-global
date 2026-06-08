@@ -1820,7 +1820,13 @@ h2 {
   line-height: 1.2;
 }
 
-.customs-mail-link {
+.customs-action-links {
+  display: grid;
+  gap: 8px;
+}
+
+.customs-mail-link,
+.customs-whatsapp-link {
   min-height: 42px;
   display: inline-flex;
   align-items: center;
@@ -1831,6 +1837,11 @@ h2 {
   background: var(--gold);
   font-weight: 900;
   text-decoration: none;
+}
+
+.customs-whatsapp-link {
+  color: #fff;
+  background: #222;
 }
 
 .customs-flow {
