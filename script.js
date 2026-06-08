@@ -1420,9 +1420,9 @@ const renderProducts = () => {
         ? `<div class="related-companies"><strong>${t("relatedCompanies")}</strong><div>${related
             .map(
               (company) =>
-                `<span class="related-company"><a class="site-action" href="${company.site}"><img src="${company.logo}" alt="" aria-hidden="true" /><span>${company.name}</span></a>${[
-                  company.catalog ? `<a class="catalog-action" href="${company.catalog}">${t("sampleCatalogCta")}</a>` : "",
-                  ...(company.catalogs || []).map((catalog) => `<a class="catalog-action" href="${catalog.href}">${catalog.label}</a>`),
+                `<span class="related-company"><a class="site-action" href="${company.site}" target="_blank" rel="noopener"><img src="${company.logo}" alt="" aria-hidden="true" /><span>${company.name}</span></a>${[
+                  company.catalog ? `<a class="catalog-action" href="${company.catalog}" target="_blank" rel="noopener">${t("sampleCatalogCta")}</a>` : "",
+                  ...(company.catalogs || []).map((catalog) => `<a class="catalog-action" href="${catalog.href}" target="_blank" rel="noopener">${catalog.label}</a>`),
                 ].join("")}</span>`,
             )
             .join("")}</div></div>`
@@ -1630,9 +1630,9 @@ const renderCatalogProformaProducts = () => {
       const kgPerCarton = getKgPerCarton(product);
       const catalogLinks = company
         ? [
-            company.catalog ? `<a class="catalog-action" href="${company.catalog}">${t("sampleCatalogCta")}</a>` : "",
-            ...(company.catalogs || []).map((catalog) => `<a class="catalog-action" href="${catalog.href}">${catalog.label}</a>`),
-            company.site ? `<a class="site-action" href="${company.site}">${t("partnerSiteCta")}</a>` : "",
+            company.catalog ? `<a class="catalog-action" href="${company.catalog}" target="_blank" rel="noopener">${t("sampleCatalogCta")}</a>` : "",
+            ...(company.catalogs || []).map((catalog) => `<a class="catalog-action" href="${catalog.href}" target="_blank" rel="noopener">${catalog.label}</a>`),
+            company.site ? `<a class="site-action" href="${company.site}" target="_blank" rel="noopener">${t("partnerSiteCta")}</a>` : "",
           ].join("")
         : "";
       return `<article class="proforma-product-row catalog-proforma-row">
@@ -1866,7 +1866,14 @@ document.addEventListener("click", (event) => {
   const link = event.target.closest(".catalog-action, .site-action");
   if (!link) return;
   event.preventDefault();
-  window.location.assign(link.href);
+  window.open(link.href, "_blank", "noopener");
+});
+
+document.addEventListener("click", (event) => {
+  const link = event.target.closest(".firm-link");
+  if (!link || link.getAttribute("href")?.startsWith("#")) return;
+  event.preventDefault();
+  window.open(link.href, "_blank", "noopener");
 });
 
 const installButton = document.querySelector(".install-app-link");
