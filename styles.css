@@ -1549,6 +1549,49 @@ h2 {
   background: #f5f5f5;
 }
 
+.b2b-entry-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.b2b-entry-card h3 {
+  margin: 0 0 6px;
+  color: #151515;
+  font-size: 1.05rem;
+}
+
+.b2b-entry-card p {
+  max-width: 680px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.b2b-register-button {
+  min-height: 40px;
+  flex: 0 0 auto;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: #1f2327;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(31, 35, 39, 0.16);
+}
+
+.b2b-register-button:hover {
+  background: #3a3f44;
+}
+
 .b2b-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
@@ -1709,11 +1752,106 @@ h2 {
   line-height: 1.45;
 }
 
+.b2b-modal[hidden] {
+  display: none;
+}
+
+.is-modal-open {
+  overflow: hidden;
+}
+
+.b2b-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.b2b-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 18, 18, 0.58);
+  backdrop-filter: blur(7px);
+}
+
+.b2b-modal-dialog {
+  position: relative;
+  z-index: 1;
+  width: min(1080px, 100%);
+  max-height: min(86vh, 820px);
+  overflow: auto;
+  padding: 18px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+}
+
+.b2b-modal-close {
+  position: sticky;
+  top: 0;
+  float: right;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 999px;
+  color: #151515;
+  background: #fff;
+  font: inherit;
+  font-size: 1.2rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.b2b-modal-header {
+  margin-bottom: 14px;
+  padding-right: 44px;
+}
+
+.b2b-modal-header p:last-child {
+  max-width: 740px;
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.b2b-modal-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.b2b-modal-side {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.b2b-modal-side h3 {
+  margin: 0;
+  color: #151515;
+  font-size: 1rem;
+}
+
 .export-roadmap {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
   margin-top: 16px;
+}
+
+.b2b-roadmap-compact {
+  margin-top: 12px;
 }
 
 .export-roadmap article {
@@ -2384,6 +2522,7 @@ h2 {
 
   .proforma-order-layout,
   .b2b-layout,
+  .b2b-modal-grid,
   .customs-dashboard,
   .proforma-product-row {
     grid-template-columns: 1fr;
@@ -2401,6 +2540,24 @@ h2 {
 
   .proforma-order-summary {
     position: static;
+  }
+
+  .b2b-entry-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .b2b-register-button {
+    width: 100%;
+  }
+
+  .b2b-modal {
+    padding: 10px;
+  }
+
+  .b2b-modal-dialog {
+    max-height: 92vh;
+    padding: 14px;
   }
 }
 

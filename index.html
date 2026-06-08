@@ -30,7 +30,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260608-4" />
+    <link rel="stylesheet" href="styles.css?v=20260608-5" />
   </head>
   <body>
     <header class="site-header">
@@ -417,82 +417,15 @@
           <p data-i18n="b2bCopy">Register buyers, collect required documents and follow the export path from proforma to customs clearance.</p>
         </div>
 
-        <div class="b2b-layout">
-          <form class="b2b-form" id="b2bForm">
-            <div class="b2b-form-header">
-              <h3 data-i18n="b2bRegisterTitle">Buyer registration</h3>
-              <p data-i18n="b2bRegisterCopy">Fill the buyer details, attach company/import documents and send the B2B onboarding request directly.</p>
-            </div>
-            <label>
-              <span data-i18n="b2bCompany">Company legal name</span>
-              <input name="company" autocomplete="organization" required />
-            </label>
-            <label>
-              <span data-i18n="b2bContact">Authorized contact</span>
-              <input name="contact" autocomplete="name" required />
-            </label>
-            <label>
-              <span data-i18n="b2bEmail">Business email</span>
-              <input name="email" type="email" autocomplete="email" required />
-            </label>
-            <label>
-              <span data-i18n="b2bCountry">Destination country</span>
-              <input name="country" autocomplete="country-name" required />
-            </label>
-            <label>
-              <span data-i18n="b2bTax">Tax / registration number</span>
-              <input name="tax" required />
-            </label>
-            <label>
-              <span data-i18n="b2bIncoterm">Preferred Incoterm</span>
-              <select name="incoterm" required>
-                <option value="EXW">EXW</option>
-                <option value="FOB">FOB</option>
-                <option value="CIF">CIF</option>
-                <option value="DAP">DAP</option>
-              </select>
-            </label>
-            <label class="full-field">
-              <span data-i18n="b2bDocuments">Upload company and import documents</span>
-              <input id="b2bDocuments" name="documents" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" />
-              <small id="b2bFileSummary" data-i18n="b2bNoFiles">No files selected.</small>
-            </label>
-            <label class="full-field">
-              <span data-i18n="b2bNotes">Products, market notes and customs requirements</span>
-              <textarea name="notes" rows="4"></textarea>
-            </label>
-            <button class="form-submit" type="submit" data-i18n="b2bSubmit">Create B2B onboarding draft</button>
-            <p class="form-status" id="b2bStatus" role="status"></p>
-          </form>
-
-          <div class="b2b-panel">
-            <div class="b2b-auth-card">
-              <h3 data-i18n="b2bAuthTitle">Customer account</h3>
-              <p data-i18n="b2bAuthCopy">Enter the buyer email, move it to the form and attach documents before sending.</p>
-              <label>
-                <span data-i18n="b2bAuthEmail">Account email</span>
-                <input id="b2bAuthEmail" type="email" autocomplete="email" />
-              </label>
-              <div class="b2b-auth-actions">
-                <button type="button" id="b2bSignUp" data-i18n="b2bSignUp">Use this email</button>
-                <button type="button" id="b2bSignIn" data-i18n="b2bSignIn">Go to form</button>
-                <button type="button" id="b2bSignOut" data-i18n="b2bSignOut">Select files</button>
-              </div>
-              <p class="form-status" id="b2bAuthStatus" role="status" data-i18n="b2bAuthNotReady">Enter an email and complete the B2B request form.</p>
-            </div>
-            <h3 data-i18n="b2bChecklistTitle">Core export document checklist</h3>
-            <div class="b2b-checklist">
-              <article><span>01</span><strong data-i18n="b2bDocBuyer">Buyer company registry, tax certificate and authorized signatory</strong></article>
-              <article><span>02</span><strong data-i18n="b2bDocProduct">Product list, HS code, quantity, pallet, weight and m3 confirmation</strong></article>
-              <article><span>03</span><strong data-i18n="b2bDocCommercial">Proforma invoice, sales confirmation and payment term</strong></article>
-              <article><span>04</span><strong data-i18n="b2bDocShipment">Commercial invoice, packing list and transport document</strong></article>
-              <article><span>05</span><strong data-i18n="b2bDocOrigin">Certificate of origin, A.TR, EUR.1 or market-specific origin document</strong></article>
-              <article><span>06</span><strong data-i18n="b2bDocCustoms">Customs declaration, conformity documents and product certificates if required</strong></article>
-            </div>
+        <div class="b2b-entry-card">
+          <div>
+            <h3 data-i18n="b2bEntryTitle">Register as a buyer</h3>
+            <p data-i18n="b2bEntryCopy">Open the secure buyer registration screen to enter company details, tax information and upload required documents.</p>
           </div>
+          <button class="b2b-register-button" type="button" id="openB2BRegistration" data-i18n="b2bRegisterCta">Buyer Register</button>
         </div>
 
-        <div class="export-roadmap" aria-label="Export compliance roadmap">
+        <div class="export-roadmap b2b-roadmap-compact" aria-label="Export compliance roadmap">
           <article>
             <span>01</span>
             <h3 data-i18n="b2bStepOne">Buyer verification</h3>
@@ -515,6 +448,75 @@
           </article>
         </div>
       </section>
+
+      <div class="b2b-modal" id="b2bRegistrationModal" hidden>
+        <div class="b2b-modal-backdrop" data-close-b2b></div>
+        <div class="b2b-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="b2b-register-title">
+          <button class="b2b-modal-close" type="button" data-close-b2b aria-label="Close">×</button>
+          <div class="b2b-modal-header">
+            <p class="section-kicker" data-i18n="b2bKicker">B2B export portal</p>
+            <h2 id="b2b-register-title" data-i18n="b2bRegisterTitle">Buyer registration</h2>
+            <p data-i18n="b2bRegisterCopy">Fill the buyer details, attach company/import documents and send the B2B onboarding request directly.</p>
+          </div>
+
+          <div class="b2b-modal-grid">
+            <form class="b2b-form" id="b2bForm">
+              <label>
+                <span data-i18n="b2bCompany">Company legal name</span>
+                <input name="company" autocomplete="organization" required />
+              </label>
+              <label>
+                <span data-i18n="b2bContact">Authorized contact</span>
+                <input name="contact" autocomplete="name" required />
+              </label>
+              <label>
+                <span data-i18n="b2bEmail">Business email</span>
+                <input name="email" type="email" autocomplete="email" required />
+              </label>
+              <label>
+                <span data-i18n="b2bCountry">Destination country</span>
+                <input name="country" autocomplete="country-name" required />
+              </label>
+              <label>
+                <span data-i18n="b2bTax">Tax / registration number</span>
+                <input name="tax" required />
+              </label>
+              <label>
+                <span data-i18n="b2bIncoterm">Preferred Incoterm</span>
+                <select name="incoterm" required>
+                  <option value="EXW">EXW</option>
+                  <option value="FOB">FOB</option>
+                  <option value="CIF">CIF</option>
+                  <option value="DAP">DAP</option>
+                </select>
+              </label>
+              <label class="full-field">
+                <span data-i18n="b2bDocuments">Upload company and import documents</span>
+                <input id="b2bDocuments" name="documents" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" />
+                <small id="b2bFileSummary" data-i18n="b2bNoFiles">No files selected.</small>
+              </label>
+              <label class="full-field">
+                <span data-i18n="b2bNotes">Products, market notes and customs requirements</span>
+                <textarea name="notes" rows="4"></textarea>
+              </label>
+              <button class="form-submit" type="submit" data-i18n="b2bSubmit">Create B2B onboarding draft</button>
+              <p class="form-status" id="b2bStatus" role="status"></p>
+            </form>
+
+            <aside class="b2b-modal-side">
+              <h3 data-i18n="b2bChecklistTitle">Core export document checklist</h3>
+              <div class="b2b-checklist">
+                <article><span>01</span><strong data-i18n="b2bDocBuyer">Buyer company registry, tax certificate and authorized signatory</strong></article>
+                <article><span>02</span><strong data-i18n="b2bDocProduct">Product list, HS code, quantity, pallet, weight and m3 confirmation</strong></article>
+                <article><span>03</span><strong data-i18n="b2bDocCommercial">Proforma invoice, sales confirmation and payment term</strong></article>
+                <article><span>04</span><strong data-i18n="b2bDocShipment">Commercial invoice, packing list and transport document</strong></article>
+                <article><span>05</span><strong data-i18n="b2bDocOrigin">Certificate of origin, A.TR, EUR.1 or market-specific origin document</strong></article>
+                <article><span>06</span><strong data-i18n="b2bDocCustoms">Customs declaration, conformity documents and product certificates if required</strong></article>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
 
       <section class="markets-section" id="markets" aria-labelledby="markets-title">
         <div class="market-copy">
@@ -665,6 +667,6 @@
       }
     </script>
     <script src="catalog-products.generated.js?v=20260601-5"></script>
-    <script src="script.js?v=20260608-5"></script>
+    <script src="script.js?v=20260608-6"></script>
   </body>
 </html>

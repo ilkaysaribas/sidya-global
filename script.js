@@ -93,6 +93,9 @@ const content = {
     b2bKicker: "B2B export portal",
     b2bTitle: "Buyer registration, document intake and export compliance flow.",
     b2bCopy: "Register buyers, collect required documents and follow the export path from proforma to customs clearance.",
+    b2bEntryTitle: "Register as a buyer",
+    b2bEntryCopy: "Open the buyer registration screen to enter company details, tax information and upload required documents.",
+    b2bRegisterCta: "Buyer Register",
     b2bRegisterTitle: "Buyer registration",
     b2bRegisterCopy: "Fill the buyer details, attach company/import documents and send the B2B onboarding request directly.",
     b2bCompany: "Company legal name",
@@ -336,6 +339,9 @@ const content = {
     b2bKicker: "B2B ihracat portalı",
     b2bTitle: "Alıcı kaydı, evrak toplama ve ihracat uygunluk akışı.",
     b2bCopy: "Alıcıyı kayıt altına alın, gerekli evrakları toplayın ve proformadan gümrük çıkışına kadar ihracat yolunu takip edin.",
+    b2bEntryTitle: "Alıcı olarak kayıt ol",
+    b2bEntryCopy: "Firma bilgileri, vergi bilgileri ve gerekli evrakları girmek için alıcı kayıt ekranını açın.",
+    b2bRegisterCta: "Alıcı Kayıt Ol",
     b2bRegisterTitle: "Alıcı kayıt",
     b2bRegisterCopy: "Alıcı bilgilerini doldurun, firma/ithalat evraklarını ekleyin ve B2B kayıt talebini doğrudan gönderin.",
     b2bCompany: "Firma resmi unvanı",
@@ -1849,6 +1855,28 @@ const copyB2BEmailToForm = () => {
   focusB2BForm();
   setB2BAuthStatus(email ? t("b2bAuthEmailCopied") : t("b2bAuthEmailRequired"));
 };
+
+const b2bModal = document.querySelector("#b2bRegistrationModal");
+const openB2BModal = () => {
+  if (!b2bModal) return;
+  b2bModal.hidden = false;
+  document.body.classList.add("is-modal-open");
+  setTimeout(() => document.querySelector("#b2bForm [name='company']")?.focus(), 0);
+};
+
+const closeB2BModal = () => {
+  if (!b2bModal) return;
+  b2bModal.hidden = true;
+  document.body.classList.remove("is-modal-open");
+};
+
+document.querySelector("#openB2BRegistration")?.addEventListener("click", openB2BModal);
+document.querySelectorAll("[data-close-b2b]").forEach((button) => {
+  button.addEventListener("click", closeB2BModal);
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && b2bModal && !b2bModal.hidden) closeB2BModal();
+});
 
 document.querySelector("#b2bSignUp")?.addEventListener("click", () => {
   copyB2BEmailToForm();
