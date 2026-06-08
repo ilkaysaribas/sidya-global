@@ -1,77 +1,68 @@
-# Sidya Global B2B Giriş Sistemi
+# Sidya Global B2B Kayıt Sistemi
 
-Bu bölüm müşteri kayıt/giriş sistemini aktif etmek içindir.
+Bu bölüm gerçek müşteri hesabı oluşturma, firma kaydı alma ve evrak yükleme sistemini aktif etmek içindir.
 
-Kısa açıklama:
+## 1. Supabase SQL Kurulumu
 
-- Supabase, müşterilerin e-posta/şifre ile giriş yapacağı veritabanı ve hesap sistemidir.
-- SQL, Supabase içinde tablo ve dosya alanlarını oluşturan kurulum komutudur.
-- Bu kodlar GitHub/Vercel tarafında hazırdır; canlı girişin çalışması için Supabase hesabı bağlanmalıdır.
+Supabase panelinde:
 
-## 1. Supabase Projesi Oluştur
-
-1. https://supabase.com adresine gir.
-2. Yeni proje oluştur.
-3. Proje açılınca sol menüden `SQL Editor` bölümüne gir.
-4. Bu projedeki [supabase/schema.sql](/C:/Users/ilkaysaribas/Documents/İhracat%20Sitesi/supabase/schema.sql) dosyasının içeriğini kopyala.
-5. Supabase `SQL Editor` ekranına yapıştır ve `Run` butonuna bas.
+1. `SQL Editor` bölümüne gir.
+2. Bu projedeki `supabase/schema.sql` dosyasının içeriğini kopyala.
+3. SQL Editor ekranına yapıştır ve `Run` butonuna bas.
 
 Bu işlem şunları oluşturur:
 
-- Müşteri kayıt tablosu
-- Evrak yükleme alanı
-- Müşterinin sadece kendi evraklarını görebileceği güvenlik kuralları
+- B2B müşteri kayıt tablosu
+- Evrak yükleme bucket'ı: `b2b-documents`
+- Dosya güvenlik kuralları
 
-## 2. Supabase Bilgilerini Al
+## 2. Vercel Environment Variables
 
-Supabase projesinde:
+Vercel panelinde Sidya Global projesine gir:
 
-1. Sol menüden `Project Settings` aç.
-2. `API` bölümüne gir.
-3. Şu iki bilgiyi al:
+`Settings > Environment Variables`
+
+Aşağıdaki değişkenleri ekle:
 
 ```txt
-Project URL
-publishable key
+SIDYA_SUPABASE_URL=https://jhjforyykkxklfarjtjl.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://jhjforyykkxklfarjtjl.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_obANQZIOM1xpMIBsJPZcoA__6TGFYBc
+SIDYA_SUPABASE_STORAGE_BUCKET=b2b-documents
+```
+
+Gerçek kayıt oluşturmak için ayrıca Supabase `service_role key` gerekir:
+
+```txt
+SIDYA_SUPABASE_SERVICE_ROLE_KEY=Supabase panelindeki service_role key
 ```
 
 Önemli:
 
-- `publishable key` ya da `anon public key` kullanılacak.
-- `service_role key` kullanılmayacak.
+- `service_role key` kesinlikle frontend dosyalarına yazılmaz.
+- Sadece Vercel Environment Variables içine eklenir.
+- Bu anahtar olmadan backend müşteri hesabını doğrulanmış şekilde oluşturamaz.
 
-## 3. Vercel'e Bağla
+## 3. Service Role Key Nereden Alınır?
 
-Vercel panelinde Sidya Global projesine gir:
+Supabase panelinde:
 
-1. `Settings`
-2. `Environment Variables`
-3. Aşağıdaki 3 değişkeni ekle:
+1. `Project Settings`
+2. `API`
+3. `Project API keys`
+4. `service_role` anahtarını kopyala.
+5. Vercel'e `SIDYA_SUPABASE_SERVICE_ROLE_KEY` olarak ekle.
 
-```txt
-SIDYA_SUPABASE_URL=https://jhjforyykkxklfarjtjl.supabase.co
-SIDYA_SUPABASE_ANON_KEY=sb_publishable_obANQZIOM1xpMIBsJPZcoA__6TGFYBc
-SIDYA_SUPABASE_STORAGE_BUCKET=b2b-documents
-```
+Sonra Vercel'de yeniden deploy et.
 
-Alternatif olarak Vercel'de şu isimler de çalışır:
-
-```txt
-NEXT_PUBLIC_SUPABASE_URL=https://jhjforyykkxklfarjtjl.supabase.co
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_obANQZIOM1xpMIBsJPZcoA__6TGFYBc
-```
-
-Sonra Vercel'de projeyi yeniden deploy et.
-
-## 4. Aktif Olduğunu Kontrol Et
+## 4. Kontrol
 
 Canlı sitede:
 
 1. `B2B Portal Giriş` ekranını aç.
-2. Alıcı kayıt formundan bir müşteri oluştur.
-3. Aynı e-posta ve şifreyle giriş yap.
-4. Giriş başarılı olursa proforma sipariş ekranı açılır.
+2. Üstte e-posta ve şifre gir.
+3. Alttaki `Yeni alıcı kaydı` formunu doldur.
+4. `Alıcı hesabı oluştur` butonuna bas.
+5. Kayıt başarılıysa Supabase Auth içinde kullanıcı, `b2b_onboarding_requests` tablosunda firma kaydı ve storage içinde evraklar oluşur.
 
-## Not
-
-Benim kod tarafında yaptığım hazırlık tamamdır. Supabase paneli senin hesabında olduğu için SQL çalıştırma ve Vercel'e Supabase anahtarlarını girme adımları dış panelden yapılmalıdır.
+Bu yapı e-posta doğrulamasına takılmadan hesap oluşturur; `Email not confirmed` hatasını bu yüzden çözer.

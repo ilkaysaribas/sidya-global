@@ -30,7 +30,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260608-10" />
+    <link rel="stylesheet" href="styles.css?v=20260608-11" />
   </head>
   <body>
     <header class="site-header">
@@ -480,7 +480,6 @@
               </label>
               <div class="b2b-auth-actions">
                 <button class="form-submit" type="button" id="b2bSignIn" data-i18n="b2bSignIn">Sign in</button>
-                <button class="proforma-quote-link" type="button" id="b2bSignUp" data-i18n="b2bSignUp">Register</button>
                 <button class="proforma-quote-link" type="button" id="b2bSignOut" data-i18n="b2bSignOut">Sign out</button>
                 <button class="form-submit b2b-order-button" type="button" id="openRegisteredProforma" data-i18n="b2bOpenOrderScreen" hidden>Open order screen</button>
               </div>
@@ -490,6 +489,10 @@
 
           <div class="b2b-modal-grid">
             <form class="b2b-form" id="b2bForm">
+              <div class="b2b-form-header">
+                <h3 data-i18n="b2bNewRegistrationTitle">New buyer registration</h3>
+                <p data-i18n="b2bPasswordHint">Enter the account password in the login panel above, then complete this form.</p>
+              </div>
               <label>
                 <span data-i18n="b2bCompany">Company legal name</span>
                 <input name="company" autocomplete="organization" required />
@@ -528,7 +531,7 @@
                 <span data-i18n="b2bNotes">Products, market notes and customs requirements</span>
                 <textarea name="notes" rows="4"></textarea>
               </label>
-              <button class="form-submit" type="submit" data-i18n="b2bSubmit">Create B2B onboarding draft</button>
+              <button class="form-submit" type="submit" data-i18n="b2bSubmit">Create buyer account</button>
               <p class="form-status" id="b2bStatus" role="status"></p>
             </form>
 
@@ -720,6 +723,6 @@
       }
     </script>
     <script src="catalog-products.generated.js?v=20260608-2"></script>
-    <script src="script.js?v=20260608-23"></script>
+    <script src="script.js?v=20260608-24"></script>
   </body>
 </html>

@@ -109,7 +109,9 @@ const content = {
     guestProformaCopy: "Open the proforma order screen directly, select products and calculate carton, pallet, kg and m3 totals.",
     guestProformaCta: "Create Proforma Order",
     b2bRegisterTitle: "Buyer registration",
-    b2bRegisterCopy: "Fill the buyer details, attach company/import documents and send the B2B onboarding request directly.",
+    b2bRegisterCopy: "Sign in if you already have an account, or create a new buyer account from the registration form below.",
+    b2bNewRegistrationTitle: "New buyer registration",
+    b2bPasswordHint: "Enter the account password in the login panel above, then complete this form.",
     b2bCompany: "Company legal name",
     b2bContact: "Authorized contact",
     b2bEmail: "Business email",
@@ -122,10 +124,10 @@ const content = {
     b2bNoFiles: "No files selected.",
     b2bFilesSelected: "files selected",
     b2bNotes: "Products, market notes and customs requirements",
-    b2bSubmit: "Create B2B onboarding draft",
-    b2bReady: "B2B onboarding draft is ready. Opening your mail app.",
-    b2bAuthTitle: "B2B customer login",
-    b2bAuthCopy: "Registered buyers can sign in with email and password to open the proforma order screen.",
+    b2bSubmit: "Create buyer account",
+    b2bReady: "Buyer account was created and saved.",
+    b2bAuthTitle: "Registered customer login",
+    b2bAuthCopy: "Use this area only if your buyer account is already active.",
     b2bAuthEmail: "Account email",
     b2bAuthPassword: "Password",
     b2bSignUp: "Register",
@@ -150,11 +152,11 @@ const content = {
     b2bUploadLoginRequired: "Sign in before uploading documents.",
     b2bUploadStarted: "Uploading documents...",
     b2bUploadDone: "B2B request saved. Documents uploaded.",
-    b2bRegisteredOpenProforma: "Registration received. You can now open the order screen.",
+    b2bRegisteredOpenProforma: "Buyer account created. You can now sign in and open the order screen.",
     b2bOpenOrderScreen: "Open order screen",
     b2bBackendFallback: "Opening email draft.",
-    b2bServerSubmit: "Sending B2B request with documents...",
-    b2bServerMissing: "Document email service is not active yet. The email draft will open; attach the selected files manually.",
+    b2bServerSubmit: "Creating buyer account and saving documents...",
+    b2bServerMissing: "B2B registration backend is not active yet. Supabase service role key must be added in Vercel.",
     b2bChecklistTitle: "Core export document checklist",
     b2bDocBuyer: "Buyer company registry, tax certificate and authorized signatory",
     b2bDocProduct: "Product list, HS code, quantity, pallet, weight and m3 confirmation",
@@ -378,7 +380,9 @@ const content = {
     guestProformaCopy: "Proforma sipariş ekranını doğrudan açın, ürün seçin ve koli, palet, kg ve m3 toplamlarını hesaplayın.",
     guestProformaCta: "Kayıt Olmadan Proforma Sipariş Oluştur",
     b2bRegisterTitle: "Alıcı kayıt",
-    b2bRegisterCopy: "Alıcı bilgilerini doldurun, firma/ithalat evraklarını ekleyin ve B2B kayıt talebini doğrudan gönderin.",
+    b2bRegisterCopy: "Hesabınız varsa giriş yapın; yeni alıcı hesabı için aşağıdaki kayıt formunu doldurun.",
+    b2bNewRegistrationTitle: "Yeni alıcı kaydı",
+    b2bPasswordHint: "Hesap şifresini üstteki giriş alanına yazın, sonra bu formu tamamlayın.",
     b2bCompany: "Firma resmi unvanı",
     b2bContact: "Yetkili kişi",
     b2bEmail: "Kurumsal e-posta",
@@ -391,10 +395,10 @@ const content = {
     b2bNoFiles: "Dosya seçilmedi.",
     b2bFilesSelected: "dosya seçildi",
     b2bNotes: "Ürün, pazar notu ve gümrük gereklilikleri",
-    b2bSubmit: "B2B kayıt taslağı oluştur",
-    b2bReady: "B2B kayıt taslağı hazır. Mail uygulamanız açılıyor.",
-    b2bAuthTitle: "B2B müşteri girişi",
-    b2bAuthCopy: "Kayıtlı müşteriler e-posta ve şifre ile giriş yaparak proforma sipariş ekranını açabilir.",
+    b2bSubmit: "Alıcı hesabı oluştur",
+    b2bReady: "Alıcı hesabı oluşturuldu ve kayıt altına alındı.",
+    b2bAuthTitle: "Kayıtlı müşteri girişi",
+    b2bAuthCopy: "Bu alan sadece hesabı aktif olan kayıtlı müşteriler içindir.",
     b2bAuthEmail: "Hesap e-postası",
     b2bAuthPassword: "Şifre",
     b2bSignUp: "Kayıt ol",
@@ -419,11 +423,11 @@ const content = {
     b2bUploadLoginRequired: "Evrak yüklemek için önce giriş yapın.",
     b2bUploadStarted: "Evraklar yükleniyor...",
     b2bUploadDone: "B2B talebi kaydedildi. Evraklar yüklendi.",
-    b2bRegisteredOpenProforma: "Kayıt alındı. Artık sipariş ekranını açabilirsiniz.",
+    b2bRegisteredOpenProforma: "Alıcı hesabı oluşturuldu. Artık giriş yapıp sipariş ekranını açabilirsiniz.",
     b2bOpenOrderScreen: "Sipariş ekranını aç",
     b2bBackendFallback: "Mail taslağı açılıyor.",
-    b2bServerSubmit: "B2B talebi evraklarla gönderiliyor...",
-    b2bServerMissing: "Evrak mail servisi henüz aktif değil. Mail taslağı açılacak; seçilen dosyaları maile manuel ekleyin.",
+    b2bServerSubmit: "Alıcı hesabı oluşturuluyor ve evraklar kaydediliyor...",
+    b2bServerMissing: "B2B kayıt backend'i aktif değil. Vercel'e Supabase service role key eklenmeli.",
     b2bChecklistTitle: "Temel ihracat evrak kontrol listesi",
     b2bDocBuyer: "Alıcı firma sicil kaydı, vergi belgesi ve imza/yetki belgesi",
     b2bDocProduct: "Ürün listesi, GTIP/HS kodu, miktar, palet, ağırlık ve m3 teyidi",
@@ -2063,11 +2067,14 @@ const openB2BMailDraft = (form, files) => {
   window.location.href = `mailto:${businessEmail}?subject=${subject}&body=${body}`;
 };
 
-const submitB2BServerRequest = async (formElement) => {
+const submitB2BRegistration = async (formElement) => {
   if (window.location.protocol === "file:") return { ok: false, configured: false };
-  const response = await fetch("/api/b2b-request", {
+  const formData = new FormData(formElement);
+  const { password } = getB2BAuthValues();
+  formData.set("password", password);
+  const response = await fetch("/api/b2b-register", {
     method: "POST",
-    body: new FormData(formElement),
+    body: formData,
   });
   if (response.status === 501) return { ok: false, configured: false };
   if (!response.ok) {
@@ -2316,10 +2323,6 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && !document.querySelector("#proforma")?.hidden) closeMainProformaPanel();
 });
 
-document.querySelector("#b2bSignUp")?.addEventListener("click", () => {
-  copyB2BEmailToForm();
-});
-
 document.querySelector("#b2bSignIn")?.addEventListener("click", () => {
   signInB2BCustomer();
 });
@@ -2335,48 +2338,22 @@ document.querySelectorAll("#customsPlanner select").forEach((select) => {
 document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => {
   event.preventDefault();
   const form = new FormData(event.currentTarget);
-  const files = Array.from(document.querySelector("#b2bDocuments")?.files || []);
   const status = document.querySelector("#b2bStatus");
-  const client = getSupabaseClient();
-  if (!client) {
-    try {
-      if (status) status.textContent = t("b2bServerSubmit");
-      const result = await submitB2BServerRequest(event.currentTarget);
-      if (result.ok) {
-        if (status) status.textContent = t("b2bRegisteredOpenProforma");
-        event.currentTarget.reset();
-        updateB2BFileSummary();
-        setB2BOrderButtonVisible(true);
-        return;
-      }
-    } catch (error) {
-      if (status) status.textContent = error.message || t("b2bBackendFallback");
-    }
-
-    if (status) status.textContent = t("b2bServerMissing");
-    openB2BMailDraft(form, files);
-    setB2BOrderButtonVisible(true);
+  const authEmailInput = document.querySelector("#b2bAuthEmail");
+  const formEmail = String(form.get("email") || "").trim();
+  if (authEmailInput && !authEmailInput.value.trim()) authEmailInput.value = formEmail;
+  if (!getB2BAuthValues().password) {
+    if (status) status.textContent = t("b2bAuthLoginRequired");
     return;
   }
-
   try {
-    let session = await refreshB2BSession();
-    if (!session?.user) {
-      session = await createB2BCustomerAccount(client, form);
-    }
-    if (!session?.user) {
-      if (status) status.textContent = t("b2bCheckEmail");
-      openB2BMailDraft(form, files);
-      setB2BOrderButtonVisible(false);
-      return;
-    }
-    if (status) status.textContent = t("b2bUploadStarted");
-    const paths = await uploadB2BDocuments(client, session.user.id, files);
-    await saveB2BRequest(client, session.user.id, form, paths);
+    if (status) status.textContent = t("b2bServerSubmit");
+    const result = await submitB2BRegistration(event.currentTarget);
+    if (!result.ok) throw new Error(t("b2bServerMissing"));
     if (status) status.textContent = t("b2bRegisteredOpenProforma");
     event.currentTarget.reset();
     updateB2BFileSummary();
-    setB2BOrderButtonVisible(true);
+    setB2BOrderButtonVisible(false);
   } catch (error) {
     if (status) status.textContent = error.message || t("formError");
   }
