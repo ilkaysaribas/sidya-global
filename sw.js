@@ -1,12 +1,12 @@
-const CACHE_NAME = "sidya-global-v60";
+const CACHE_NAME = "sidya-global-v61";
 
 const SHELL_ASSETS = [
   "./",
   "./index.html",
   "./offline.html",
   "./styles.css?v=20260608-10",
-  "./catalog-products.generated.js?v=20260608-1",
-  "./script.js?v=20260608-22",
+  "./catalog-products.generated.js?v=20260608-2",
+  "./script.js?v=20260608-23",
   "./manifest.webmanifest",
   "./assets/app-icon.svg",
   "./assets/app-icon-192.png",
@@ -36,6 +36,7 @@ const SHELL_ASSETS = [
   "./assets/evyap-logo.svg",
   "./assets/demet-temizlik-logo.svg",
   "./assets/oncu-salca-logo.svg",
+  "./assets/heinz-logo.svg",
   "./assets/garipler-yapi-market-logo.svg",
   "./assets/selpak-logo.svg",
   "./assets/ikihan-medikal-logo.svg",

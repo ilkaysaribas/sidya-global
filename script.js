@@ -932,6 +932,7 @@ const productPartners = {
   ],
   "food-products": [
     { name: "Öncü Salça", site: "https://www.oncusalca.com.tr/", logo: "assets/oncu-salca-logo.svg" },
+    { name: "Heinz", site: "https://www.heinz.com/tr-TR/products", catalog: "assets/heinz-urun-listesi.pdf", logo: "assets/heinz-logo.svg" },
   ],
   "industrial-products": [
     { name: "Demet Temizlik", site: "https://demettemizlik.com/", logo: "assets/demet-temizlik-logo.svg" },

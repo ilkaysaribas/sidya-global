@@ -10170,5 +10170,320 @@ window.SIDYA_CATALOG_PRODUCTS = [
       "ka": "Sebamed Bebe Losyonu 200 ml",
       "ru": "Sebamed Bebe Losyonu 200 ml"
     }
+  },
+  {
+    "id": "heinz-catalog-001",
+    "brand": "Heinz",
+    "logo": "assets/heinz-logo.svg",
+    "category": "food-products",
+    "liter": "460 g",
+    "cartonsPerPallet": 90,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6.2,
+    "kgPerPallet": 558,
+    "m3PerPallet": 1.8,
+    "m3PerCarton": 0.02,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Heinz Tomato Ketchup 460 g",
+      "tr": "Heinz Domates Ketçabı 460 g",
+      "az": "Heinz Domates Ketçabı 460 g",
+      "ka": "Heinz Domates Ketçabı 460 g",
+      "ru": "Heinz Domates Ketçabı 460 g"
+    }
+  },
+  {
+    "id": "heinz-catalog-002",
+    "brand": "Heinz",
+    "logo": "assets/heinz-logo.svg",
+    "category": "food-products",
+    "liter": "570 g",
+    "cartonsPerPallet": 80,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 7.5,
+    "kgPerPallet": 600,
+    "m3PerPallet": 1.76,
+    "m3PerCarton": 0.022,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Heinz Tomato Ketchup 570 g",
+      "tr": "Heinz Domates Ketçabı 570 g",
+      "az": "Heinz Domates Ketçabı 570 g",
+      "ka": "Heinz Domates Ketçabı 570 g",
+      "ru": "Heinz Domates Ketçabı 570 g"
+    }
+  },
+  {
+    "id": "heinz-catalog-003",
+    "brand": "Heinz",
+    "logo": "assets/heinz-logo.svg",
+    "category": "food-products",
+    "liter": "580 g",
+    "cartonsPerPallet": 80,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 7.6,
+    "kgPerPallet": 608,
+    "m3PerPallet": 1.76,
+    "m3PerCarton": 0.022,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Heinz Organic Tomato Ketchup 580 g",
+      "tr": "Heinz Organik Domates Ketçabı 580 g",
+      "az": "Heinz Organik Domates Ketçabı 580 g",
+      "ka": "Heinz Organik Domates Ketçabı 580 g",
+      "ru": "Heinz Organik Domates Ketçabı 580 g"
+    }
+  },
+  {
+    "id": "heinz-catalog-004",
+    "brand": "Heinz",
+    "logo": "assets/heinz-logo.svg",
+    "category": "food-products",
+    "liter": "400 g",
+    "cartonsPerPallet": 90,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 5.5,
+    "kgPerPallet": 495,
+    "m3PerPallet": 1.62,
+    "m3PerCarton": 0.018,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Heinz Mayonnaise 400 g",
+      "tr": "Heinz Mayonez 400 g",
+      "az": "Heinz Mayonez 400 g",
+      "ka": "Heinz Mayonez 400 g",
+      "ru": "Heinz Mayonez 400 g"
+    }
+  },
+  {
+    "id": "heinz-catalog-005",
+    "brand": "Heinz",
+    "logo": "assets/heinz-logo.svg",
+    "category": "food-products",
+    "liter": "460 g",
+    "cartonsPerPallet": 90,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6.2,
+    "kgPerPallet": 558,
+    "m3PerPallet": 1.8,
+    "m3PerCarton": 0.02,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Heinz Mayonnaise 460 g",
+      "tr": "Heinz Mayonez 460 g",
+      "az": "Heinz Mayonez 460 g",
+      "ka": "Heinz Mayonez 460 g",
+      "ru": "Heinz Mayonez 460 g"
+    }
+  },
+  {
+    "id": "heinz-catalog-006",
+    "brand": "Heinz",
+    "logo": "assets/heinz-logo.svg",
+    "category": "food-products",
+    "liter": "445 g",
+    "cartonsPerPallet": 90,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 6,
+    "kgPerPallet": 540,
+    "m3PerPallet": 1.71,
+    "m3PerCarton": 0.019,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Heinz Mustard 445 g",
+      "tr": "Heinz Hardal 445 g",
+      "az": "Heinz Hardal 445 g",
+      "ka": "Heinz Hardal 445 g",
+      "ru": "Heinz Hardal 445 g"
+    }
+  },
+  {
+    "id": "heinz-catalog-007",
+    "brand": "Heinz",
+    "logo": "assets/heinz-logo.svg",
+    "category": "food-products",
+    "liter": "240 g",
+    "cartonsPerPallet": 120,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 3.5,
+    "kgPerPallet": 420,
+    "m3PerPallet": 1.44,
+    "m3PerCarton": 0.012,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Heinz Yellow Mustard 240 g",
+      "tr": "Heinz Sarı Hardal 240 g",
+      "az": "Heinz Sarı Hardal 240 g",
+      "ka": "Heinz Sarı Hardal 240 g",
+      "ru": "Heinz Sarı Hardal 240 g"
+    }
+  },
+  {
+    "id": "heinz-catalog-008",
+    "brand": "Heinz",
+    "logo": "assets/heinz-logo.svg",
+    "category": "food-products",
+    "liter": "240 g",
+    "cartonsPerPallet": 120,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 3.5,
+    "kgPerPallet": 420,
+    "m3PerPallet": 1.44,
+    "m3PerCarton": 0.012,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Heinz Hot Chili Sauce 240 g",
+      "tr": "Heinz Acı Chili Sos 240 g",
+      "az": "Heinz Acı Chili Sos 240 g",
+      "ka": "Heinz Acı Chili Sos 240 g",
+      "ru": "Heinz Acı Chili Sos 240 g"
+    }
+  },
+  {
+    "id": "heinz-catalog-009",
+    "brand": "Heinz",
+    "logo": "assets/heinz-logo.svg",
+    "category": "food-products",
+    "liter": "240 g",
+    "cartonsPerPallet": 120,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 3.5,
+    "kgPerPallet": 420,
+    "m3PerPallet": 1.44,
+    "m3PerCarton": 0.012,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Heinz Garlic Sauce 240 g",
+      "tr": "Heinz Sarımsaklı Sos 240 g",
+      "az": "Heinz Sarımsaklı Sos 240 g",
+      "ka": "Heinz Sarımsaklı Sos 240 g",
+      "ru": "Heinz Sarımsaklı Sos 240 g"
+    }
+  },
+  {
+    "id": "heinz-catalog-010",
+    "brand": "Heinz",
+    "logo": "assets/heinz-logo.svg",
+    "category": "food-products",
+    "liter": "230 g",
+    "cartonsPerPallet": 120,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 3.4,
+    "kgPerPallet": 408,
+    "m3PerPallet": 1.44,
+    "m3PerCarton": 0.012,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Heinz Barbecue Sauce 230 g",
+      "tr": "Heinz Barbekü Sos 230 g",
+      "az": "Heinz Barbekü Sos 230 g",
+      "ka": "Heinz Barbekü Sos 230 g",
+      "ru": "Heinz Barbekü Sos 230 g"
+    }
+  },
+  {
+    "id": "heinz-catalog-011",
+    "brand": "Heinz",
+    "logo": "assets/heinz-logo.svg",
+    "category": "food-products",
+    "liter": "230 g",
+    "cartonsPerPallet": 120,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 3.4,
+    "kgPerPallet": 408,
+    "m3PerPallet": 1.44,
+    "m3PerCarton": 0.012,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Heinz Burger Sauce 230 g",
+      "tr": "Heinz Burger Sos 230 g",
+      "az": "Heinz Burger Sos 230 g",
+      "ka": "Heinz Burger Sos 230 g",
+      "ru": "Heinz Burger Sos 230 g"
+    }
+  },
+  {
+    "id": "heinz-catalog-012",
+    "brand": "Heinz",
+    "logo": "assets/heinz-logo.svg",
+    "category": "food-products",
+    "liter": "230 g",
+    "cartonsPerPallet": 120,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 3.4,
+    "kgPerPallet": 408,
+    "m3PerPallet": 1.44,
+    "m3PerCarton": 0.012,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Heinz Sweet Chilli Sauce 230 g",
+      "tr": "Heinz Sweet Chilli Sos 230 g",
+      "az": "Heinz Sweet Chilli Sos 230 g",
+      "ka": "Heinz Sweet Chilli Sos 230 g",
+      "ru": "Heinz Sweet Chilli Sos 230 g"
+    }
+  },
+  {
+    "id": "heinz-catalog-013",
+    "brand": "Heinz",
+    "logo": "assets/heinz-logo.svg",
+    "category": "food-products",
+    "liter": "220 g",
+    "cartonsPerPallet": 120,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 3.3,
+    "kgPerPallet": 396,
+    "m3PerPallet": 1.44,
+    "m3PerCarton": 0.012,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Heinz Honey Mustard Sauce 220 g",
+      "tr": "Heinz Ballı Hardal Sos 220 g",
+      "az": "Heinz Ballı Hardal Sos 220 g",
+      "ka": "Heinz Ballı Hardal Sos 220 g",
+      "ru": "Heinz Ballı Hardal Sos 220 g"
+    }
+  },
+  {
+    "id": "heinz-catalog-014",
+    "brand": "Heinz",
+    "logo": "assets/heinz-logo.svg",
+    "category": "food-products",
+    "liter": "220 g",
+    "cartonsPerPallet": 120,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 3.3,
+    "kgPerPallet": 396,
+    "m3PerPallet": 1.44,
+    "m3PerCarton": 0.012,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Heinz Red Pepper Garlic Sauce 220 g",
+      "tr": "Heinz Kırmızı Biberli Sarımsaklı Sos 220 g",
+      "az": "Heinz Kırmızı Biberli Sarımsaklı Sos 220 g",
+      "ka": "Heinz Kırmızı Biberli Sarımsaklı Sos 220 g",
+      "ru": "Heinz Kırmızı Biberli Sarımsaklı Sos 220 g"
+    }
+  },
+  {
+    "id": "heinz-catalog-015",
+    "brand": "Heinz",
+    "logo": "assets/heinz-logo.svg",
+    "category": "food-products",
+    "liter": "220 g",
+    "cartonsPerPallet": 120,
+    "unitsPerCarton": 12,
+    "kgPerCarton": 3.3,
+    "kgPerPallet": 396,
+    "m3PerPallet": 1.44,
+    "m3PerCarton": 0.012,
+    "color": "#f4f4f4",
+    "names": {
+      "en": "Heinz American Burger Sauce 220 g",
+      "tr": "Heinz Amerikan Burger Sos 220 g",
+      "az": "Heinz Amerikan Burger Sos 220 g",
+      "ka": "Heinz Amerikan Burger Sos 220 g",
+      "ru": "Heinz Amerikan Burger Sos 220 g"
+    }
   }
 ];
