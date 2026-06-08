@@ -29,7 +29,7 @@ const content = {
     exchangeChecked: "Checked",
     exchangeDataDate: "TCMB data",
     exchangeUnavailable: "Rates could not be loaded",
-    heroEyebrow: "Cleaning • Industrial • Home & Living",
+    heroEyebrow: "Cleaning • Industrial • Home & Living • Health • Personal Care",
     heroTitle: "Your Trusted Gateway to Reliable Products from Türkiye",
     heroCopy:
       "Sidya Global helps international buyers source quality products from trusted Turkish suppliers — quickly, transparently, and professionally.",
@@ -297,7 +297,7 @@ const content = {
     exchangeChecked: "Kontrol",
     exchangeDataDate: "TCMB veri",
     exchangeUnavailable: "Kur bilgileri alınamadı",
-    heroEyebrow: "Temizlik • Endüstriyel • Ev ve Yaşam",
+    heroEyebrow: "Temizlik • Endüstriyel • Ev ve Yaşam • Sağlık • Kişisel Bakım",
     heroTitle: "Türkiye'den Güvenilir Ürünlere Açılan Kapınız",
     heroCopy:
       "Sidya Global, uluslararası alıcıların güvenilir Türk tedarikçilerden kaliteli ürünleri hızlı, şeffaf ve profesyonel şekilde temin etmesine yardımcı olur.",
@@ -546,7 +546,7 @@ const content = {
     navProforma: "Proforma yarat",
     headerCta: "Təklif Al",
     installAppCta: "Tətbiq",
-    heroEyebrow: "Təmizlik • Sənaye • Ev və Yaşam",
+    heroEyebrow: "Təmizlik • Sənaye • Ev və Yaşam • Sağlamlıq • Şəxsi Baxım",
     heroTitle: "Türkiyədən Etibarlı Məhsullara Açılan Qapınız",
     heroCopy:
       "Sidya Global beynəlxalq alıcılara etibarlı türk təchizatçılarından keyfiyyətli məhsulları sürətli, şəffaf və peşəkar şəkildə tapmağa kömək edir.",
@@ -571,7 +571,7 @@ const content = {
     navProforma: "პროფორმის შექმნა",
     headerCta: "შეთავაზება",
     installAppCta: "აპი",
-    heroEyebrow: "დასუფთავება • ინდუსტრიული • სახლი და ცხოვრება",
+    heroEyebrow: "დასუფთავება • ინდუსტრიული • სახლი და ცხოვრება • ჯანმრთელობა • პირადი მოვლა",
     heroTitle: "თქვენი სანდო გზა ხარისხიან პროდუქტებზე თურქეთიდან",
     heroCopy:
       "Sidya Global ეხმარება საერთაშორისო მყიდველებს სანდო თურქი მომწოდებლებისგან ხარისხიანი პროდუქციის სწრაფად, გამჭვირვალედ და პროფესიონალურად მოძიებაში.",
@@ -596,7 +596,7 @@ const content = {
     navProforma: "Создать проформу",
     headerCta: "Получить предложение",
     installAppCta: "Приложение",
-    heroEyebrow: "Чистящие средства • Промышленное • Дом и быт",
+    heroEyebrow: "Чистящие средства • Промышленное • Дом и быт • Здоровье • Личный уход",
     heroTitle: "Ваш надежный путь к качественным продуктам из Турции",
     heroCopy:
       "Sidya Global помогает международным покупателям быстро, прозрачно и профессионально находить качественные товары у надежных турецких поставщиков.",
