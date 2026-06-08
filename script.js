@@ -1138,6 +1138,110 @@ const productCategoryImages = {
   "automotive-products": "assets/category-automotive.svg",
   "hardware-products": "assets/category-hardware.svg",
 };
+
+const supplierSearchItems = [
+  {
+    brand: "ABC Deterjan",
+    category: "Temizlik Ürünleri",
+    keywords: ["çamaşır deterjanı", "deterjan", "temizlik", "abc", "sıvı deterjan", "toz deterjan"],
+    moq: "1 mixed pallet / ürün grubu",
+    loading: "Koli, palet ve konteyner bazlı yükleme",
+    contact: "#catalog-proforma",
+    categoryId: "cleaning-products",
+  },
+  {
+    brand: "Nilco",
+    category: "Temizlik Ürünleri",
+    keywords: ["çamaşır deterjanı", "deterjan", "temizlik", "nilco", "yüzey temizleyici"],
+    moq: "1 palet ve üzeri",
+    loading: "Paletli hızlı sevkiyat",
+    contact: "#contact",
+    categoryId: "cleaning-products",
+  },
+  {
+    brand: "Evyap",
+    category: "Temizlik ve Kişisel Bakım",
+    keywords: ["çamaşır deterjanı", "sabun", "şampuan", "kişisel bakım", "evyap"],
+    moq: "1 mixed pallet / marka grubu",
+    loading: "Koli ve palet bazlı yükleme",
+    contact: "#catalog-proforma",
+    categoryId: "cleaning-products",
+  },
+  {
+    brand: "Hayat Kimya",
+    category: "Temizlik ve Hijyen",
+    keywords: ["çamaşır deterjanı", "deterjan", "kağıt ürünleri", "hijyen", "hayat kimya"],
+    moq: "1 palet ve üzeri",
+    loading: "Palet, parsiyel ve konteyner planlama",
+    contact: "#contact",
+    categoryId: "cleaning-products",
+  },
+  {
+    brand: "Heinz",
+    category: "Gıda Ürünleri",
+    keywords: ["gıda", "sos", "ketçap", "mayonez", "heinz"],
+    moq: "1 palet ve üzeri",
+    loading: "Koli ve palet bazlı yükleme",
+    contact: "#catalog-proforma",
+    categoryId: "food-products",
+  },
+  {
+    brand: "Omron Healthcare",
+    category: "Medikal Ürünler",
+    keywords: ["medikal", "tansiyon", "ateş ölçer", "omron", "sağlık"],
+    moq: "Ürün bazlı teklif",
+    loading: "Koli ve kontrollü sevkiyat",
+    contact: "#catalog-proforma",
+    categoryId: "medical-products",
+  },
+  {
+    brand: "Garipler Yapı Market",
+    category: "Yapı Hırdavat",
+    keywords: ["hırdavat", "matkap", "el aleti", "yapı", "garipler"],
+    moq: "Karma koli / palet",
+    loading: "Paletli ve koli bazlı sevkiyat",
+    contact: "#catalog-proforma",
+    categoryId: "hardware-products",
+  },
+];
+
+const borderGateData = [
+  { flag: "🇬🇪", name: "Gürcistan / Sarp", vehicles: 64, wait: "1 sa 35 dk", density: "yellow", trend: [28, 36, 41, 52, 64, 58, 61], camera: "https://www.google.com/search?q=Sarp+s%C4%B1n%C4%B1r+kap%C4%B1s%C4%B1+canl%C4%B1+kamera" },
+  { flag: "🇦🇿", name: "Azerbaycan", vehicles: 38, wait: "55 dk", density: "green", trend: [34, 39, 35, 31, 38, 36, 37], camera: "https://www.google.com/search?q=Azerbaycan+s%C4%B1n%C4%B1r+kap%C4%B1s%C4%B1+canl%C4%B1+kamera" },
+  { flag: "🇮🇷", name: "İran / Gürbulak", vehicles: 82, wait: "2 sa 10 dk", density: "red", trend: [56, 62, 68, 75, 82, 79, 84], camera: "https://www.google.com/search?q=G%C3%BCrbulak+s%C4%B1n%C4%B1r+kap%C4%B1s%C4%B1+canl%C4%B1+kamera" },
+  { flag: "🇮🇶", name: "Irak / Habur", vehicles: 71, wait: "1 sa 50 dk", density: "yellow", trend: [48, 52, 57, 63, 71, 66, 69], camera: "https://www.google.com/search?q=Habur+s%C4%B1n%C4%B1r+kap%C4%B1s%C4%B1+canl%C4%B1+kamera" },
+  { flag: "🇺🇦", name: "Ukrayna", vehicles: 29, wait: "40 dk", density: "green", trend: [25, 24, 28, 31, 29, 27, 26], camera: "https://www.google.com/search?q=Ukrayna+s%C4%B1n%C4%B1r+kap%C4%B1s%C4%B1+canl%C4%B1+kamera" },
+  { flag: "🇰🇿", name: "Kazakistan", vehicles: 44, wait: "1 sa 05 dk", density: "green", trend: [37, 42, 45, 48, 44, 41, 43], camera: "https://www.google.com/search?q=Kazakistan+s%C4%B1n%C4%B1r+kap%C4%B1s%C4%B1+canl%C4%B1+kamera" },
+];
+
+const portTrackingData = [
+  { name: "Trabzon Limanı", href: "https://www.marinetraffic.com/en/ais/home/centerx:39.75/centery:41.00/zoom:12" },
+  { name: "Samsun Limanı", href: "https://www.marinetraffic.com/en/ais/home/centerx:36.34/centery:41.29/zoom:12" },
+  { name: "Mersin Limanı", href: "https://www.marinetraffic.com/en/ais/home/centerx:34.64/centery:36.80/zoom:12" },
+  { name: "Ambarlı Limanı", href: "https://www.marinetraffic.com/en/ais/home/centerx:28.68/centery:40.96/zoom:12" },
+];
+
+const airCargoData = [
+  { name: "THY Kargo", href: "https://www.turkishcargo.com.tr/tr/online-islemler/gonderi-takibi" },
+  { name: "Türk Kargo", href: "https://www.turkishcargo.com.tr/tr/online-islemler/gonderi-takibi" },
+  { name: "DHL", href: "https://www.dhl.com/tr-tr/home/tracking.html" },
+  { name: "FedEx", href: "https://www.fedex.com/tr-tr/tracking.html" },
+];
+
+const countryGuideData = [
+  {
+    flag: "🇬🇪",
+    country: "Gürcistan",
+    duties: ["Deterjan: %0", "Yiyecek: %12", "Kozmetik: %18"],
+    risks: { "Ödeme": 35, "Gümrük": 42, "Siyasi": 30, "Döviz": 46 },
+  },
+  {
+    flag: "🇦🇿",
+    country: "Azerbaycan",
+    duties: ["Deterjan: %15", "KDV: %18", "Kozmetik: ürün bazlı"],
+    risks: { "Ödeme": 45, "Gümrük": 54, "Siyasi": 38, "Döviz": 50 },
+  },
+];
 const categoryFallbackLogistics = {
   "home-products": { unitsPerCarton: 1, cartonsPerPallet: 36, kgPerCarton: 8, m3PerCarton: 0.05 },
   "cleaning-products": { unitsPerCarton: 12, cartonsPerPallet: 60, kgPerCarton: 12, m3PerCarton: 0.035 },
@@ -1456,6 +1560,136 @@ const renderMarkets = () => {
   marketList.innerHTML = names
     .map((name, index) => `<a href="${links[index] || links[0]}" target="_blank" rel="noopener">${name}</a>`)
     .join("");
+};
+
+const normalizeSupplierSearch = (value) =>
+  String(value || "")
+    .toLocaleLowerCase("tr-TR")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ı/g, "i");
+
+const getSupplierResults = (query) => {
+  const normalizedQuery = normalizeSupplierSearch(query);
+  if (!normalizedQuery) return supplierSearchItems.slice(0, 4);
+  return supplierSearchItems.filter((item) => {
+    const haystack = normalizeSupplierSearch([item.brand, item.category, ...item.keywords].join(" "));
+    return normalizedQuery
+      .split(/\s+/)
+      .filter(Boolean)
+      .every((word) => haystack.includes(word));
+  });
+};
+
+const renderSupplierSearchResults = (query = "") => {
+  const resultsContainer = document.querySelector("#supplierSearchResults");
+  if (!resultsContainer) return;
+  const results = getSupplierResults(query);
+  if (!results.length) {
+    resultsContainer.innerHTML = `<article class="supplier-result-card"><h3>Uygun kayıt bulunamadı</h3><p>Farklı bir ürün adı deneyin veya teklif formundan özel talep gönderin.</p><div class="supplier-result-actions"><a href="#contact">İletişime geç</a></div></article>`;
+    return;
+  }
+  resultsContainer.innerHTML = results
+    .map(
+      (item) => `<article class="supplier-result-card">
+        <div>
+          <h3>${item.brand}</h3>
+          <p>${item.category}</p>
+        </div>
+        <div class="supplier-result-meta">
+          <span>Minimum Sipariş: ${item.moq}</span>
+          <span>Yüklemeler: ${item.loading}</span>
+        </div>
+        <div class="supplier-result-actions">
+          <a href="#${item.categoryId}">Ürün grubu</a>
+          <a class="${item.contact === "#catalog-proforma" ? "product-quote-button" : ""}" href="${item.contact}" data-category-id="${item.categoryId}" data-product-title="${item.category}">İletişim</a>
+        </div>
+      </article>`,
+    )
+    .join("");
+};
+
+const renderGateChart = (trend) => {
+  const max = Math.max(...trend, 1);
+  return trend.map((value) => `<span style="height:${Math.max(18, (value / max) * 100)}%"></span>`).join("");
+};
+
+const renderLogisticsCenter = () => {
+  const gateGrid = document.querySelector("#borderGateGrid");
+  const portGrid = document.querySelector("#portTrackingGrid");
+  const airGrid = document.querySelector("#airCargoGrid");
+  const countryGrid = document.querySelector("#countryGuideGrid");
+
+  if (gateGrid) {
+    gateGrid.innerHTML = borderGateData
+      .map(
+        (gate) => `<article class="border-gate-card">
+          <h3 class="gate-title"><span>${gate.flag}</span>${gate.name}</h3>
+          <strong class="density-pill density-${gate.density}">${gate.density === "red" ? "Yoğun" : gate.density === "yellow" ? "Orta" : "Rahat"}</strong>
+          <div class="gate-stats">
+            <span>Bekleyen araç sayısı <strong>${gate.vehicles}</strong></span>
+            <span>Bekleme süresi <strong>${gate.wait}</strong></span>
+            <span>Son 24 saat değişim grafiği</span>
+          </div>
+          <div class="gate-chart" aria-label="Son 24 saat değişim grafiği">${renderGateChart(gate.trend)}</div>
+          <a class="gate-link" href="${gate.camera}" target="_blank" rel="noopener">Canlı kamera bağlantısı</a>
+        </article>`,
+      )
+      .join("");
+  }
+
+  if (portGrid) {
+    portGrid.innerHTML = portTrackingData
+      .map((port) => `<a href="${port.href}" target="_blank" rel="noopener">${port.name}</a>`)
+      .join("");
+  }
+
+  if (airGrid) {
+    airGrid.innerHTML = airCargoData
+      .map((cargo) => `<a href="${cargo.href}" target="_blank" rel="noopener">${cargo.name}</a>`)
+      .join("");
+  }
+
+  if (countryGrid) {
+    countryGrid.innerHTML = countryGuideData
+      .map(
+        (country) => `<article class="country-card">
+          <h4>${country.flag} ${country.country}</h4>
+          <ul>${country.duties.map((duty) => `<li>${duty}</li>`).join("")}</ul>
+          <div class="risk-meter">${Object.entries(country.risks)
+            .map(([label, value]) => `<span>${label}<i style="--risk:${value}%"></i></span>`)
+            .join("")}</div>
+        </article>`,
+      )
+      .join("");
+  }
+};
+
+const calculateFuelCost = () => {
+  const from = document.querySelector("#fuelFrom")?.value || "Trabzon";
+  const to = document.querySelector("#fuelTo")?.value || "Batum";
+  const load = Number(document.querySelector("#fuelLoad")?.value || 23);
+  const consumption = Number(document.querySelector("#fuelConsumption")?.value || 42);
+  const price = Number(document.querySelector("#fuelPrice")?.value || 45);
+  const routeKey = `${normalizeSupplierSearch(from)}-${normalizeSupplierSearch(to)}`;
+  const routeDistances = {
+    "trabzon-batum": { km: 206, crossings: "Sarp sınır geçişi" },
+    "trabzon-tiflis": { km: 580, crossings: "Sarp / Gürcistan iç hat" },
+    "trabzon-baku": { km: 1030, crossings: "Sarp / Gürcistan / Azerbaycan" },
+  };
+  const route = routeDistances[routeKey] || routeDistances["trabzon-batum"];
+  const loadFactor = 1 + Math.max(load - 20, 0) * 0.006;
+  const liters = (route.km * consumption * loadFactor) / 100;
+  const totalCost = liters * price;
+  const result = document.querySelector("#fuelResult");
+  if (!result) return;
+  result.innerHTML = `
+    <span>Rota: <strong>${from} → ${to}</strong></span>
+    <span>Geçişler: <strong>${route.crossings}</strong></span>
+    <span>Tahmini mesafe: <strong>${route.km} km</strong></span>
+    <span>Yakıt: <strong>${liters.toFixed(1)} lt</strong></span>
+    <span>Tahmini toplam maliyet: <strong>${new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY", maximumFractionDigits: 0 }).format(totalCost)}</strong></span>
+  `;
 };
 
 const uniqueItems = (items) => [...new Set(items.filter(Boolean))];
@@ -1850,6 +2084,9 @@ const translatePage = () => {
   });
   renderProducts();
   renderMarkets();
+  renderSupplierSearchResults(document.querySelector("#supplierSearchInput")?.value || "");
+  renderLogisticsCenter();
+  calculateFuelCost();
   renderCustomsDesk();
   renderExchangeRates();
   renderProformaProducts();
@@ -1862,6 +2099,20 @@ document.querySelectorAll(".lang-option").forEach((button) => {
     currentLang = button.dataset.lang;
     translatePage();
   });
+});
+
+const supplierSearchForm = document.querySelector("#supplierSearchForm");
+const supplierSearchInput = document.querySelector("#supplierSearchInput");
+supplierSearchForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  renderSupplierSearchResults(supplierSearchInput?.value || "");
+});
+supplierSearchInput?.addEventListener("input", () => {
+  renderSupplierSearchResults(supplierSearchInput.value);
+});
+document.querySelector("#calculateFuel")?.addEventListener("click", calculateFuelCost);
+["#fuelFrom", "#fuelTo", "#fuelLoad", "#fuelConsumption", "#fuelPrice"].forEach((selector) => {
+  document.querySelector(selector)?.addEventListener("input", calculateFuelCost);
 });
 
 document.addEventListener("click", (event) => {

@@ -1,12 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 180" role="img" aria-label="Hardware product group">
-  <rect width="360" height="180" rx="18" fill="#f7f6f3"/>
-  <ellipse cx="180" cy="154" rx="130" ry="14" fill="#d8d2c6"/>
-  <rect x="44" y="79" width="70" height="71" rx="8" fill="#d7a645"/>
-  <path d="M44 96h70M64 79v71M94 79v71" stroke="#7f6228" stroke-width="5" opacity=".45"/>
-  <path d="M142 69h33l18 18-48 48-33-33z" fill="#60717a"/>
-  <rect x="129" y="102" width="68" height="23" rx="8" transform="rotate(-45 129 102)" fill="#9ca9ae"/>
-  <rect x="216" y="70" width="32" height="80" rx="8" fill="#3a4650"/>
-  <rect x="211" y="56" width="42" height="18" rx="4" fill="#909da3"/>
-  <path d="M276 70l32 32-48 48-32-32z" fill="#b55d34"/>
-  <path d="M259 87l32 32" stroke="#ffe0c8" stroke-width="7" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 520" role="img" aria-label="Yapı hırdavat ürünleri">
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#fff8ef"/><stop offset="1" stop-color="#f2dcc5"/></linearGradient></defs>
+  <rect width="360" height="520" rx="22" fill="url(#bg)"/>
+  <text x="30" y="58" font-family="Arial, sans-serif" font-size="27" font-weight="900" fill="#c96808">YAPI HIRDAVAT</text>
+  <text x="30" y="94" font-family="Arial, sans-serif" font-size="27" font-weight="900" fill="#c96808">ÜRÜNLERİ</text>
+  <path d="M266 46h62v58h-62zM278 58v46M300 46v58" fill="none" stroke="#c96808" stroke-width="8"/>
+  <ellipse cx="180" cy="382" rx="132" ry="18" fill="#c6a27c" opacity=".3"/>
+  <rect x="64" y="174" width="72" height="86" rx="14" fill="#efb622"/><rect x="82" y="132" width="36" height="46" rx="8" fill="#d68d10"/><path d="M100 260v108" stroke="#222" stroke-width="18" stroke-linecap="round"/>
+  <path d="M170 164h38c18 0 34 14 34 32v64h-106v-64c0-18 15-32 34-32z" fill="#333a40"/><rect x="154" y="212" width="72" height="34" rx="8" fill="#f0a51c"/><path d="M188 260v118" stroke="#333a40" stroke-width="20" stroke-linecap="round"/>
+  <path d="M260 172l42 42-118 118-42-42z" fill="#d9dee1"/><path d="M142 290l42 42-34 34-42-42z" fill="#c96808"/>
+  <path d="M52 406h256" stroke="#4b5054" stroke-width="12" stroke-linecap="round"/><path d="M72 386h42M130 386h42M188 386h42M246 386h42" stroke="#4b5054" stroke-width="10" stroke-linecap="round"/>
+  <rect y="458" width="360" height="62" fill="#c96808"/>
+  <text x="42" y="496" font-family="Arial, sans-serif" font-size="18" font-weight="900" fill="#fff">GÜÇLÜ  •  DAYANIKLI  •  GÜVENİLİR</text>
 </svg>

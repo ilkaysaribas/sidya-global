@@ -1,18 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 180" role="img" aria-label="Cleaning product group">
-  <rect width="360" height="180" rx="18" fill="#f7f8f8"/>
-  <ellipse cx="180" cy="154" rx="126" ry="14" fill="#d7dcdf"/>
-  <rect x="38" y="70" width="48" height="80" rx="12" fill="#18a4c7"/>
-  <rect x="50" y="49" width="24" height="26" rx="5" fill="#0d6f89"/>
-  <rect x="46" y="94" width="32" height="28" rx="7" fill="#eaf8fb"/>
-  <rect x="96" y="50" width="40" height="100" rx="12" fill="#35bfd5"/>
-  <rect x="105" y="34" width="22" height="20" rx="4" fill="#107b90"/>
-  <rect x="103" y="88" width="27" height="30" rx="6" fill="#effbfc"/>
-  <path d="M160 50h42c9 0 16 7 16 16v84h-74V66c0-9 7-16 16-16z" fill="#f7c948"/>
-  <rect x="163" y="35" width="34" height="20" rx="5" fill="#da8d12"/>
-  <rect x="154" y="88" width="54" height="34" rx="8" fill="#fff7d6"/>
-  <rect x="236" y="64" width="52" height="86" rx="14" fill="#eef1f2"/>
-  <rect x="247" y="44" width="31" height="26" rx="6" fill="#59656b"/>
-  <rect x="245" y="94" width="35" height="30" rx="7" fill="#dce9ee"/>
-  <path d="M294 82c18 9 29 25 27 48-20 8-42 4-57-11 1-18 12-32 30-37z" fill="#9bd15f"/>
-  <circle cx="308" cy="95" r="6" fill="#fff" opacity=".75"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 520" role="img" aria-label="Temizlik ürünleri">
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#f7fbff"/><stop offset="1" stop-color="#dceff6"/></linearGradient></defs>
+  <rect width="360" height="520" rx="22" fill="url(#bg)"/>
+  <text x="30" y="58" font-family="Arial, sans-serif" font-size="30" font-weight="900" fill="#11365f">TEMİZLİK</text>
+  <text x="30" y="94" font-family="Arial, sans-serif" font-size="30" font-weight="900" fill="#11365f">ÜRÜNLERİ</text>
+  <rect x="30" y="112" width="86" height="6" rx="3" fill="#2ba8df"/>
+  <circle cx="278" cy="94" r="46" fill="#e8f7fc"/>
+  <path d="M266 82h72" stroke="#116b93" stroke-width="13" stroke-linecap="round"/><path d="M268 104h54" stroke="#116b93" stroke-width="13" stroke-linecap="round"/>
+  <ellipse cx="180" cy="374" rx="132" ry="18" fill="#b8c8cf" opacity=".42"/>
+  <rect x="48" y="180" width="58" height="176" rx="18" fill="#158bc6"/><rect x="62" y="146" width="30" height="42" rx="7" fill="#0d5d88"/><rect x="60" y="238" width="34" height="58" rx="8" fill="#f6fbff"/>
+  <rect x="116" y="150" width="56" height="206" rx="18" fill="#00a7c8"/><rect x="128" y="116" width="32" height="42" rx="7" fill="#0b6f8f"/><rect x="128" y="226" width="33" height="62" rx="8" fill="#e9fbff"/>
+  <path d="M198 166h54c16 0 30 13 30 30v160h-114V196c0-17 13-30 30-30z" fill="#f5c22b"/><rect x="207" y="126" width="42" height="46" rx="8" fill="#d97912"/><rect x="190" y="238" width="70" height="58" rx="10" fill="#fff4cb"/>
+  <rect x="258" y="206" width="54" height="150" rx="16" fill="#18a957"/><rect x="267" y="176" width="36" height="34" rx="8" fill="#0b7137"/><rect x="268" y="260" width="34" height="50" rx="8" fill="#edfff2"/>
+  <rect x="44" y="382" width="96" height="24" rx="12" fill="#28bed5"/><rect x="36" y="407" width="112" height="18" rx="9" fill="#0b6f8f"/><rect x="232" y="374" width="42" height="80" rx="6" fill="#f7f7f7"/><path d="M274 388c20-18 34-44 38-78" stroke="#143b63" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <rect y="458" width="360" height="62" fill="#11365f"/>
+  <text x="34" y="496" font-family="Arial, sans-serif" font-size="18" font-weight="900" fill="#fff">ETKİLİ TEMİZLİK  •  HİJYEN  •  GÜVENİLİR</text>
 </svg>

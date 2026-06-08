@@ -30,7 +30,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260608-11" />
+    <link rel="stylesheet" href="styles.css?v=20260609-1" />
     <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
   </head>
   <body>
@@ -98,8 +98,10 @@
             </div>
           </div>
         </div>
+        <a href="#turkiye-product-search">Ürün Bul</a>
         <a href="#process" data-i18n="navProcess">Process</a>
         <a href="#markets" data-i18n="navMarkets">Markets</a>
+        <a href="#logistics-center">Lojistik</a>
         <a href="#proforma" data-i18n="navProforma">Proforma</a>
         <a href="#customs" data-i18n="navCustoms">Customs</a>
         <a href="#b2b-login" id="openB2BPortal" data-i18n="navB2B">B2B Portal Login</a>
@@ -211,6 +213,24 @@
         <span data-i18n="trustTwo">FOB, CIF and EXW delivery options</span>
         <span data-i18n="trustThree">Transparent proforma preparation</span>
         <span data-i18n="trustFour">Multilingual catalog support</span>
+      </section>
+
+      <section class="section supplier-search-section" id="turkiye-product-search" aria-labelledby="supplier-search-title">
+        <div class="section-heading supplier-search-heading">
+          <div>
+            <p class="section-kicker">B2B Tedarik Arama</p>
+            <h2 id="supplier-search-title">Türkiye'den Ürün Bul</h2>
+          </div>
+          <p>Ürün adını yazın; uygun kategori, marka, minimum sipariş ve yükleme bilgileri tek ekranda listelensin.</p>
+        </div>
+        <form class="supplier-search-box" id="supplierSearchForm">
+          <label for="supplierSearchInput">Alıcı ürün araması</label>
+          <div class="supplier-search-control">
+            <input id="supplierSearchInput" type="search" placeholder="Örn. Çamaşır deterjanı, medikal maske, salça" autocomplete="off" />
+            <button type="submit" aria-label="Türkiye'den ürün bul">⌕</button>
+          </div>
+        </form>
+        <div class="supplier-results" id="supplierSearchResults" aria-live="polite"></div>
       </section>
 
       <section class="section products-section" id="products" aria-labelledby="products-title">
@@ -594,6 +614,66 @@
         </div>
       </section>
 
+      <section class="section logistics-section" id="logistics-center" aria-labelledby="logistics-title">
+        <div class="section-heading logistics-heading">
+          <div>
+            <p class="section-kicker">Lojistik Merkezi</p>
+            <h2 id="logistics-title">Canlı sınır kapıları, liman ve kargo takip paneli.</h2>
+          </div>
+          <p>Trabzon merkezli sevkiyatlar için sınır kapısı yoğunluğu, liman haritası, hava kargo takip linkleri ve tır yakıt hesabı.</p>
+        </div>
+
+        <div class="border-gate-grid" id="borderGateGrid"></div>
+
+        <div class="logistics-grid">
+          <article class="logistics-panel vessel-panel">
+            <div>
+              <p class="section-kicker">Canlı Gemi Takibi</p>
+              <h3>Liman haritası</h3>
+            </div>
+            <div class="port-map" aria-label="Black Sea and Mediterranean port tracking map">
+              <span class="port-pin trabzon">Trabzon</span>
+              <span class="port-pin samsun">Samsun</span>
+              <span class="port-pin mersin">Mersin</span>
+              <span class="port-pin ambarli">Ambarlı</span>
+            </div>
+            <div class="port-link-grid" id="portTrackingGrid"></div>
+          </article>
+
+          <article class="logistics-panel">
+            <div>
+              <p class="section-kicker">Canlı Uçak Kargo Takibi</p>
+              <h3>Kargo takip bağlantıları</h3>
+            </div>
+            <div class="air-cargo-grid" id="airCargoGrid"></div>
+          </article>
+
+          <article class="logistics-panel fuel-panel">
+            <div>
+              <p class="section-kicker">Tır Yakıt Hesaplama</p>
+              <h3>Rota maliyeti</h3>
+            </div>
+            <div class="fuel-form">
+              <label>Çıkış <input id="fuelFrom" value="Trabzon" /></label>
+              <label>Varış <input id="fuelTo" value="Batum" /></label>
+              <label>Yük (ton) <input id="fuelLoad" type="number" min="1" value="23" /></label>
+              <label>Yakıt lt/100 km <input id="fuelConsumption" type="number" min="1" value="42" /></label>
+              <label>Yakıt TL/lt <input id="fuelPrice" type="number" min="1" value="45" /></label>
+              <button type="button" id="calculateFuel">Hesapla</button>
+            </div>
+            <div class="fuel-result" id="fuelResult"></div>
+          </article>
+
+          <article class="logistics-panel country-guide-panel">
+            <div>
+              <p class="section-kicker">Ülke Rehberi</p>
+              <h3>Vergi ve risk analizi</h3>
+            </div>
+            <div class="country-guide-grid" id="countryGuideGrid"></div>
+          </article>
+        </div>
+      </section>
+
       <section class="section contact-section" id="contact" aria-labelledby="contact-title">
         <div class="contact-copy">
           <p class="section-kicker" data-i18n="contactKicker">Quote and meeting</p>
@@ -724,6 +804,6 @@
       }
     </script>
     <script src="catalog-products.generated.js?v=20260608-2"></script>
-    <script src="script.js?v=20260609-2"></script>
+    <script src="script.js?v=20260609-3"></script>
   </body>
 </html>

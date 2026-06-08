@@ -1,16 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 180" role="img" aria-label="Personal care product group">
-  <rect width="360" height="180" rx="18" fill="#f8f5f6"/>
-  <ellipse cx="180" cy="154" rx="124" ry="14" fill="#ded4d8"/>
-  <rect x="53" y="62" width="39" height="88" rx="12" fill="#f1b5c5"/>
-  <rect x="61" y="44" width="23" height="23" rx="5" fill="#8f5f70"/>
-  <rect x="59" y="93" width="27" height="31" rx="7" fill="#fff1f5"/>
-  <rect x="112" y="76" width="46" height="74" rx="11" fill="#d98d70"/>
-  <rect x="121" y="57" width="28" height="23" rx="5" fill="#8b4e3f"/>
-  <rect x="122" y="101" width="25" height="25" rx="6" fill="#ffe9df"/>
-  <rect x="179" y="47" width="43" height="103" rx="13" fill="#e7d9c9"/>
-  <rect x="190" y="30" width="21" height="21" rx="5" fill="#a9825b"/>
-  <rect x="187" y="86" width="27" height="34" rx="7" fill="#fff8ef"/>
-  <rect x="244" y="65" width="56" height="85" rx="15" fill="#9ec0d5"/>
-  <rect x="258" y="45" width="28" height="25" rx="6" fill="#5f8197"/>
-  <rect x="255" y="96" width="34" height="30" rx="7" fill="#eef7fb"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 520" role="img" aria-label="Kozmetik ve kişisel bakım ürünleri">
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#fff7fb"/><stop offset="1" stop-color="#ead8ef"/></linearGradient></defs>
+  <rect width="360" height="520" rx="22" fill="url(#bg)"/>
+  <text x="30" y="58" font-family="Arial, sans-serif" font-size="25" font-weight="900" fill="#7b3f98">KOZMETİK VE</text>
+  <text x="30" y="90" font-family="Arial, sans-serif" font-size="25" font-weight="900" fill="#7b3f98">KİŞİSEL BAKIM</text>
+  <path d="M280 44c28 12 42 36 32 66-25-2-44-20-52-48 6-8 12-14 20-18z" fill="#7b3f98" opacity=".9"/>
+  <ellipse cx="180" cy="384" rx="132" ry="18" fill="#b397b9" opacity=".35"/>
+  <rect x="54" y="202" width="42" height="152" rx="14" fill="#f0d0b4"/><rect x="60" y="172" width="30" height="38" rx="8" fill="#b67b51"/>
+  <rect x="118" y="164" width="48" height="190" rx="16" fill="#fff"/><rect x="128" y="136" width="28" height="36" rx="8" fill="#d6a268"/><rect x="126" y="248" width="32" height="56" rx="8" fill="#f1d4e5"/>
+  <rect x="190" y="210" width="50" height="144" rx="14" fill="#b27990"/><rect x="200" y="184" width="30" height="34" rx="8" fill="#69385a"/>
+  <rect x="260" y="178" width="34" height="176" rx="12" fill="#111"/><rect x="255" y="150" width="44" height="28" rx="10" fill="#d8bfdc"/>
+  <circle cx="96" cy="404" r="34" fill="#fff"/><circle cx="96" cy="404" r="22" fill="#f3c0d8"/><circle cx="152" cy="406" r="28" fill="#d0b181"/><circle cx="208" cy="404" r="32" fill="#fff"/>
+  <rect y="458" width="360" height="62" fill="#7b3f98"/>
+  <text x="38" y="496" font-family="Arial, sans-serif" font-size="18" font-weight="900" fill="#fff">GÜZELLİK  •  BAKIM  •  GÜVENİLİR</text>
 </svg>

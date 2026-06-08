@@ -1,19 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 180" role="img" aria-label="Food product group">
-  <rect width="360" height="180" rx="18" fill="#f8f7f3"/>
-  <ellipse cx="180" cy="154" rx="132" ry="13" fill="#ddd6c8"/>
-  <rect x="42" y="74" width="43" height="76" rx="9" fill="#ba5b27"/>
-  <rect x="48" y="57" width="31" height="20" rx="5" fill="#7d3e1d"/>
-  <rect x="51" y="96" width="25" height="27" rx="5" fill="#fff1d4"/>
-  <rect x="95" y="62" width="46" height="88" rx="10" fill="#d78528"/>
-  <rect x="103" y="45" width="30" height="21" rx="5" fill="#7a4a20"/>
-  <rect x="104" y="91" width="28" height="32" rx="6" fill="#fff3d8"/>
-  <rect x="156" y="52" width="58" height="98" rx="11" fill="#bd3430"/>
-  <path d="M163 52h44v-8c0-6-5-11-11-11h-22c-6 0-11 5-11 11z" fill="#7e2321"/>
-  <rect x="168" y="88" width="34" height="35" rx="7" fill="#ffe6ba"/>
-  <rect x="230" y="70" width="42" height="80" rx="9" fill="#6f9d46"/>
-  <rect x="236" y="54" width="30" height="19" rx="5" fill="#3f6528"/>
-  <rect x="238" y="99" width="26" height="27" rx="5" fill="#eff7df"/>
-  <rect x="282" y="82" width="38" height="68" rx="8" fill="#e7b44a"/>
-  <rect x="288" y="66" width="26" height="18" rx="5" fill="#8f6320"/>
-  <rect x="291" y="104" width="20" height="22" rx="5" fill="#fff3cc"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 520" role="img" aria-label="Gıda ürünleri">
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#fbfff3"/><stop offset="1" stop-color="#e6f0d5"/></linearGradient></defs>
+  <rect width="360" height="520" rx="22" fill="url(#bg)"/>
+  <text x="30" y="58" font-family="Arial, sans-serif" font-size="30" font-weight="900" fill="#2b6120">GIDA</text>
+  <text x="30" y="94" font-family="Arial, sans-serif" font-size="30" font-weight="900" fill="#2b6120">ÜRÜNLERİ</text>
+  <path d="M284 42c-45 4-74 32-78 78 43-5 72-34 78-78z" fill="#63a842"/><path d="M210 118c28-32 50-50 74-76" stroke="#2b6120" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <ellipse cx="182" cy="374" rx="132" ry="18" fill="#b3b878" opacity=".35"/>
+  <rect x="46" y="214" width="58" height="138" rx="8" fill="#e3c36d"/><path d="M50 214h50l-10-44H60z" fill="#f6df94"/><path d="M60 232h34M60 250h34M60 268h34" stroke="#b78323" stroke-width="4"/>
+  <rect x="122" y="176" width="64" height="176" rx="14" fill="#b32020"/><rect x="132" y="150" width="44" height="34" rx="10" fill="#d9b450"/><rect x="132" y="226" width="44" height="54" rx="8" fill="#fff0cc"/>
+  <rect x="206" y="136" width="54" height="216" rx="14" fill="#efc53d"/><rect x="216" y="112" width="34" height="32" rx="8" fill="#d7a522"/><rect x="216" y="216" width="34" height="74" rx="8" fill="#fff6d8"/>
+  <rect x="270" y="238" width="48" height="114" rx="8" fill="#d7c27d"/><rect x="266" y="224" width="56" height="20" rx="8" fill="#8aa048"/>
+  <circle cx="82" cy="388" r="34" fill="#d74b2e"/><circle cx="118" cy="396" r="28" fill="#e6ad2d"/><circle cx="148" cy="392" r="31" fill="#5b8f37"/>
+  <rect y="458" width="360" height="62" fill="#2b6120"/>
+  <text x="34" y="496" font-family="Arial, sans-serif" font-size="18" font-weight="900" fill="#fff">TAZE  •  KALİTELİ  •  GÜVENİLİR</text>
 </svg>
