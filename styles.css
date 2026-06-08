@@ -1843,6 +1843,46 @@ h2 {
   font-size: 1rem;
 }
 
+.catalog-proforma-dialog {
+  width: min(1160px, 100%);
+}
+
+.catalog-proforma-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 12px;
+}
+
+.catalog-proforma-list {
+  display: grid;
+  gap: 10px;
+}
+
+.catalog-proforma-row {
+  background: #f4f5f5;
+}
+
+.catalog-proforma-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 7px;
+}
+
+.catalog-proforma-links .catalog-action,
+.catalog-proforma-links .site-action {
+  min-height: 28px;
+  padding: 0 9px;
+  border-radius: 7px;
+  border: 1px solid #c7c9cc;
+  background: #e7e8e9;
+  color: #151515;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
 .export-roadmap {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2523,6 +2563,7 @@ h2 {
   .proforma-order-layout,
   .b2b-layout,
   .b2b-modal-grid,
+  .catalog-proforma-tools,
   .customs-dashboard,
   .proforma-product-row {
     grid-template-columns: 1fr;

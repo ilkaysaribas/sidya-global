@@ -90,6 +90,14 @@ const content = {
     proformaMailCta: "Send by Mail",
     proformaWhatsappCta: "Send by message",
     proformaQuoteEmpty: "Please add at least one product to the proforma list.",
+    catalogProformaKicker: "Category proforma",
+    catalogProformaTitle: "Create proforma without registration",
+    catalogProformaCopy: "Select products from this category, enter carton quantity and add them to your proforma total.",
+    catalogProformaSearch: "Search in this category",
+    catalogProformaEmpty: "No products are loaded for this category yet. You can add the related company as a category request.",
+    catalogProformaViewSummary: "View proforma total",
+    catalogProformaAdded: "Added to proforma total.",
+    catalogProformaPartnerType: "Category request",
     b2bKicker: "B2B export portal",
     b2bTitle: "Buyer registration, document intake and export compliance flow.",
     b2bCopy: "Register buyers, collect required documents and follow the export path from proforma to customs clearance.",
@@ -339,6 +347,14 @@ const content = {
     proformaMailCta: "Mail ile gönder",
     proformaWhatsappCta: "Mesaj ile gönder",
     proformaQuoteEmpty: "Lütfen proforma listesine en az bir ürün ekleyin.",
+    catalogProformaKicker: "Kategori proforması",
+    catalogProformaTitle: "Kayıt olmadan proforma oluştur",
+    catalogProformaCopy: "Bu kategorideki ürünleri seçin, koli adedini girin ve proforma toplamına ekleyin.",
+    catalogProformaSearch: "Bu kategoride ara",
+    catalogProformaEmpty: "Bu kategori için henüz ürün yüklenmedi. İlgili firmayı kategori talebi olarak ekleyebilirsiniz.",
+    catalogProformaViewSummary: "Proforma toplamını gör",
+    catalogProformaAdded: "Proforma toplamına eklendi.",
+    catalogProformaPartnerType: "Kategori talebi",
     b2bKicker: "B2B ihracat portalı",
     b2bTitle: "Alıcı kaydı, evrak toplama ve ihracat uygunluk akışı.",
     b2bCopy: "Alıcıyı kayıt altına alın, gerekli evrakları toplayın ve proformadan gümrük çıkışına kadar ihracat yolunu takip edin.",
@@ -992,6 +1008,17 @@ const productCatalog = [];
 productCatalog.push(...(window.SIDYA_CATALOG_PRODUCTS || []).filter((product) => product.brand !== "PM Catalog"));
 
 const proformaOrder = new Map();
+const categoryFallbackLogistics = {
+  "home-products": { unitsPerCarton: 1, cartonsPerPallet: 36, kgPerCarton: 8, m3PerCarton: 0.05 },
+  "cleaning-products": { unitsPerCarton: 12, cartonsPerPallet: 60, kgPerCarton: 12, m3PerCarton: 0.035 },
+  "food-products": { unitsPerCarton: 12, cartonsPerPallet: 72, kgPerCarton: 10, m3PerCarton: 0.03 },
+  "industrial-products": { unitsPerCarton: 1, cartonsPerPallet: 40, kgPerCarton: 14, m3PerCarton: 0.045 },
+  "medical-products": { unitsPerCarton: 24, cartonsPerPallet: 80, kgPerCarton: 5, m3PerCarton: 0.04 },
+  "cosmetics-products": { unitsPerCarton: 24, cartonsPerPallet: 72, kgPerCarton: 6, m3PerCarton: 0.032 },
+  "automotive-products": { unitsPerCarton: 1, cartonsPerPallet: 36, kgPerCarton: 15, m3PerCarton: 0.04 },
+  "hardware-products": { unitsPerCarton: 1, cartonsPerPallet: 48, kgPerCarton: 18, m3PerCarton: 0.035 },
+};
+let activeCatalogProformaCategory = null;
 const brandLogoMap = {
   ABC: "assets/abc-logo.jpg",
   Evyap: "assets/evyap-logo.svg",
@@ -1177,6 +1204,58 @@ const getProformaEntries = () =>
     .map(([productId, cartons]) => ({ product: productCatalog.find((item) => item.id === productId), cartons }))
     .filter((entry) => entry.product);
 
+const getCategoryTitle = (categoryId) =>
+  (products[currentLang] || products.en).find((product) => product.id === categoryId)?.title ||
+  products.en.find((product) => product.id === categoryId)?.title ||
+  t("catalogProformaTitle");
+
+const getCategoryProducts = (categoryId) => productCatalog.filter((product) => product.category === categoryId);
+
+const createPartnerProductId = (categoryId, companyName) =>
+  `partner-${categoryId}-${String(companyName || "company")
+    .toLocaleLowerCase("tr-TR")
+    .normalize("NFKD")
+    .replace(/[^\w]+/g, "-")
+    .replace(/^-|-$/g, "")}`;
+
+const ensurePartnerProduct = (categoryId, company) => {
+  const id = createPartnerProductId(categoryId, company.name);
+  const existing = productCatalog.find((product) => product.id === id);
+  if (existing) return existing;
+  const fallback = categoryFallbackLogistics[categoryId] || categoryFallbackLogistics["cleaning-products"];
+  const partnerProduct = {
+    id,
+    brand: company.name,
+    names: {
+      en: `${company.name} ${content.en.catalogProformaPartnerType}`,
+      tr: `${company.name} ${content.tr.catalogProformaPartnerType}`,
+    },
+    liter: getCategoryTitle(categoryId),
+    category: categoryId,
+    logo: company.logo,
+    unitsPerCarton: fallback.unitsPerCarton,
+    cartonsPerPallet: fallback.cartonsPerPallet,
+    kgPerCarton: fallback.kgPerCarton,
+    m3PerCarton: fallback.m3PerCarton,
+  };
+  productCatalog.push(partnerProduct);
+  return partnerProduct;
+};
+
+const getCatalogModalItems = (categoryId) => {
+  const realProducts = getCategoryProducts(categoryId).map((product) => ({ type: "product", product }));
+  const partners = (productPartners[categoryId] || []).map((company) => ({ type: "partner", company, product: ensurePartnerProduct(categoryId, company) }));
+  return [...realProducts, ...partners];
+};
+
+const addProformaLineWithQuantity = (productId, quantity) => {
+  const product = productCatalog.find((item) => item.id === productId);
+  const safeQuantity = Math.max(Number(quantity) || 1, 1);
+  if (!product) return;
+  proformaOrder.set(productId, (proformaOrder.get(productId) || 0) + safeQuantity);
+  renderProformaOrder();
+};
+
 const renderProducts = () => {
   const grid = document.querySelector("#productGrid");
   if (!grid) return;
@@ -1204,7 +1283,7 @@ const renderProducts = () => {
               <div><dt>${t("tradeMarkets")}</dt><dd>${trade.markets}</dd></div>
               <div><dt>${t("tradeCertificates")}</dt><dd>${trade.certificates}</dd></div>
             </dl>
-            <a class="product-quote-button" href="#contact" data-product-option="${trade.optionValue}" data-product-title="${product.title}">${t("tradeQuoteCta")}</a>
+            <a class="product-quote-button" href="#catalog-proforma" data-category-id="${product.id}" data-product-option="${trade.optionValue}" data-product-title="${product.title}">${t("tradeQuoteCta")}</a>
           </div>`
         : "";
       return `<article class="product-card" id="${product.id}"><div><span class="product-icon" aria-hidden="true">${product.icon}</span><h3>${product.title}</h3><p>${product.copy}</p></div><div class="product-meta">${product.meta
@@ -1376,13 +1455,84 @@ const renderProformaProducts = () => {
     .join("");
 };
 
+const renderCatalogProformaProducts = () => {
+  const list = document.querySelector("#catalogProformaList");
+  const search = document.querySelector("#catalogProformaSearch");
+  if (!list || !activeCatalogProformaCategory) return;
+  const query = (search?.value || "").trim().toLocaleLowerCase("tr-TR");
+  const items = getCatalogModalItems(activeCatalogProformaCategory).filter(({ product, company }) => {
+    const haystack = `${product.brand} ${getProductName(product)} ${product.liter} ${company?.name || ""}`.toLocaleLowerCase("tr-TR");
+    return !query || haystack.includes(query);
+  });
+
+  if (!items.length) {
+    list.innerHTML = `<p class="proforma-empty">${t("catalogProformaEmpty")}</p>`;
+    return;
+  }
+
+  list.innerHTML = items
+    .map(({ type, product, company }, index) => {
+      const cartonsPerPallet = getCartonsPerPallet(product);
+      const unitsPerCarton = getUnitsPerCarton(product);
+      const kgPerCarton = getKgPerCarton(product);
+      const catalogLinks = company
+        ? [
+            company.catalog ? `<a class="catalog-action" href="${company.catalog}">${t("sampleCatalogCta")}</a>` : "",
+            ...(company.catalogs || []).map((catalog) => `<a class="catalog-action" href="${catalog.href}">${catalog.label}</a>`),
+            company.site ? `<a class="site-action" href="${company.site}">${t("partnerSiteCta")}</a>` : "",
+          ].join("")
+        : "";
+      return `<article class="proforma-product-row catalog-proforma-row">
+        <span class="proforma-product-index">${index + 1}</span>
+        <img class="proforma-product-image proforma-brand-logo" src="${getBrandLogo(product)}" alt="${product.brand} logo" loading="lazy" />
+        <div>
+          <strong>${getProductName(product)}</strong>
+          <span>${product.brand} · ${type === "partner" ? t("catalogProformaPartnerType") : product.liter}</span>
+          ${catalogLinks ? `<div class="catalog-proforma-links">${catalogLinks}</div>` : ""}
+        </div>
+        <dl>
+          <div><dt>${t("proformaUnitsPerCarton")}</dt><dd>${unitsPerCarton}</dd></div>
+          <div><dt>${t("proformaCartonsPerPallet")}</dt><dd>${cartonsPerPallet}</dd></div>
+          <div><dt>${t("proformaKgPerCarton")}</dt><dd>${kgPerCarton.toFixed(2)}</dd></div>
+          <div><dt>${t("proformaM3PerCarton")}</dt><dd>${getM3PerCarton(product).toFixed(3)}</dd></div>
+        </dl>
+        <label>
+          <span>${t("proformaCartonQty")}</span>
+          <input type="number" min="1" value="1" data-catalog-qty-for="${product.id}" />
+        </label>
+        <button type="button" class="proforma-add-button catalog-proforma-add" data-product-id="${product.id}">${t("proformaAddLine")}</button>
+      </article>`;
+    })
+    .join("");
+};
+
+const catalogProformaModal = document.querySelector("#catalogProformaModal");
+const openCatalogProformaModal = (categoryId, title) => {
+  if (!catalogProformaModal) return;
+  activeCatalogProformaCategory = categoryId;
+  const modalTitle = document.querySelector("#catalog-proforma-title");
+  const modalCopy = document.querySelector("#catalogProformaCopy");
+  const search = document.querySelector("#catalogProformaSearch");
+  if (modalTitle) modalTitle.textContent = title || getCategoryTitle(categoryId);
+  if (modalCopy) modalCopy.textContent = t("catalogProformaCopy");
+  if (search) search.value = "";
+  catalogProformaModal.hidden = false;
+  document.body.classList.add("is-modal-open");
+  renderCatalogProformaProducts();
+  setTimeout(() => search?.focus(), 0);
+};
+
+const closeCatalogProformaModal = () => {
+  if (!catalogProformaModal) return;
+  catalogProformaModal.hidden = true;
+  activeCatalogProformaCategory = null;
+  document.body.classList.remove("is-modal-open");
+};
+
 const addProformaLine = (productId) => {
-  const product = productCatalog.find((item) => item.id === productId);
   const quantityInput = document.querySelector(`[data-qty-for="${productId}"]`);
   const quantity = Math.max(Number(quantityInput?.value) || 1, 1);
-  if (!product) return;
-  proformaOrder.set(productId, (proformaOrder.get(productId) || 0) + quantity);
-  renderProformaOrder();
+  addProformaLineWithQuantity(productId, quantity);
 };
 
 const updateProformaQuantity = (productId, delta) => {
@@ -1707,14 +1857,8 @@ document.querySelector("#quoteForm")?.addEventListener("submit", async (event) =
 document.addEventListener("click", (event) => {
   const button = event.target.closest(".product-quote-button");
   if (!button) return;
-  const form = document.querySelector("#quoteForm");
-  if (!form) return;
-  const productSelect = form.querySelector("[name='product']");
-  const message = form.querySelector("[name='message']");
-  if (productSelect && button.dataset.productOption) productSelect.value = button.dataset.productOption;
-  if (message && !message.value.trim()) {
-    message.value = `Quote request for: ${button.dataset.productTitle || button.dataset.productOption}`;
-  }
+  event.preventDefault();
+  openCatalogProformaModal(button.dataset.categoryId, button.dataset.productTitle);
 });
 
 const updateB2BFileSummary = () => {
@@ -1880,12 +2024,16 @@ const closeB2BModal = () => {
   document.body.classList.remove("is-modal-open");
 };
 
-const openProformaAfterRegistration = () => {
-  closeB2BModal();
+const openMainProformaPanel = () => {
   document.querySelector("#proforma")?.scrollIntoView({ behavior: "smooth", block: "start" });
   const panel = document.querySelector("#proformaProductPanel");
   if (panel?.hasAttribute("hidden")) panel.removeAttribute("hidden");
   setTimeout(() => document.querySelector("#proformaSearch")?.focus(), 250);
+};
+
+const openProformaAfterRegistration = () => {
+  closeB2BModal();
+  openMainProformaPanel();
 };
 
 document.querySelector("#openB2BRegistration")?.addEventListener("click", openB2BModal);
@@ -1894,6 +2042,7 @@ document.querySelectorAll("[data-close-b2b]").forEach((button) => {
 });
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && b2bModal && !b2bModal.hidden) closeB2BModal();
+  if (event.key === "Escape" && catalogProformaModal && !catalogProformaModal.hidden) closeCatalogProformaModal();
 });
 
 document.querySelector("#b2bSignUp")?.addEventListener("click", () => {
@@ -1959,6 +2108,23 @@ document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => 
   } catch (error) {
     if (status) status.textContent = error.message || t("formError");
   }
+});
+
+document.querySelectorAll("[data-close-catalog-proforma]").forEach((button) => {
+  button.addEventListener("click", closeCatalogProformaModal);
+});
+document.querySelector("#catalogProformaSearch")?.addEventListener("input", renderCatalogProformaProducts);
+document.querySelector("#catalogProformaList")?.addEventListener("click", (event) => {
+  const button = event.target.closest(".catalog-proforma-add");
+  if (!button) return;
+  const quantityInput = document.querySelector(`[data-catalog-qty-for="${button.dataset.productId}"]`);
+  addProformaLineWithQuantity(button.dataset.productId, Number(quantityInput?.value) || 1);
+  const status = document.querySelector("#catalogProformaStatus");
+  if (status) status.textContent = t("catalogProformaAdded");
+});
+document.querySelector("#catalogProformaSummary")?.addEventListener("click", () => {
+  closeCatalogProformaModal();
+  openMainProformaPanel();
 });
 
 document.querySelector("#openProformaProducts")?.addEventListener("click", () => {

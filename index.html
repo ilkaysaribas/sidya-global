@@ -30,7 +30,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260608-5" />
+    <link rel="stylesheet" href="styles.css?v=20260608-6" />
   </head>
   <body>
     <header class="site-header">
@@ -526,6 +526,29 @@
         </div>
       </div>
 
+      <div class="b2b-modal catalog-proforma-modal" id="catalogProformaModal" hidden>
+        <div class="b2b-modal-backdrop" data-close-catalog-proforma></div>
+        <div class="b2b-modal-dialog catalog-proforma-dialog" role="dialog" aria-modal="true" aria-labelledby="catalog-proforma-title">
+          <button class="b2b-modal-close" type="button" data-close-catalog-proforma aria-label="Close">&times;</button>
+          <div class="b2b-modal-header">
+            <p class="section-kicker" data-i18n="catalogProformaKicker">Category proforma</p>
+            <h2 id="catalog-proforma-title" data-i18n="catalogProformaTitle">Create proforma without registration</h2>
+            <p id="catalogProformaCopy" data-i18n="catalogProformaCopy">Select products from this category, enter carton quantity and add them to your proforma total.</p>
+          </div>
+
+          <div class="catalog-proforma-tools">
+            <label class="proforma-search-label">
+              <span data-i18n="catalogProformaSearch">Search in this category</span>
+              <input id="catalogProformaSearch" type="search" placeholder="Start searching" autocomplete="off" />
+            </label>
+            <button class="proforma-quote-link" type="button" id="catalogProformaSummary" data-i18n="catalogProformaViewSummary">View proforma total</button>
+          </div>
+
+          <div class="catalog-proforma-list" id="catalogProformaList"></div>
+          <p class="form-status" id="catalogProformaStatus" role="status"></p>
+        </div>
+      </div>
+
       <section class="markets-section" id="markets" aria-labelledby="markets-title">
         <div class="market-copy">
           <p class="section-kicker" data-i18n="marketsKicker">Target markets</p>
@@ -675,6 +698,6 @@
       }
     </script>
     <script src="catalog-products.generated.js?v=20260601-5"></script>
-    <script src="script.js?v=20260608-8"></script>
+    <script src="script.js?v=20260608-9"></script>
   </body>
 </html>
