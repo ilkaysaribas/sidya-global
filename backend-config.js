@@ -1,5 +1,5 @@
 window.SIDYA_BACKEND = {
-  supabaseUrl: "",
-  supabaseAnonKey: "",
+  supabaseUrl: "https://jhjforyykkxklfarjtjl.supabase.co",
+  supabaseAnonKey: "sb_publishable_obANQZIOM1xpMIBsJPZcoA__6TGFYBc",
   storageBucket: "b2b-documents",
 };

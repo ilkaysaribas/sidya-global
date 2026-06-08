@@ -3,8 +3,12 @@ module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store, max-age=0");
 
   const config = {
-    supabaseUrl: process.env.SIDYA_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-    supabaseAnonKey: process.env.SIDYA_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+    supabaseUrl: process.env.SIDYA_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "https://jhjforyykkxklfarjtjl.supabase.co",
+    supabaseAnonKey:
+      process.env.SIDYA_SUPABASE_ANON_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+      "sb_publishable_obANQZIOM1xpMIBsJPZcoA__6TGFYBc",
     storageBucket: process.env.SIDYA_SUPABASE_STORAGE_BUCKET || "b2b-documents",
   };
 

@@ -32,12 +32,12 @@ Supabase projesinde:
 
 ```txt
 Project URL
-anon public key
+publishable key
 ```
 
 Önemli:
 
-- `anon public key` kullanılacak.
+- `publishable key` ya da `anon public key` kullanılacak.
 - `service_role key` kullanılmayacak.
 
 ## 3. Vercel'e Bağla
@@ -49,9 +49,16 @@ Vercel panelinde Sidya Global projesine gir:
 3. Aşağıdaki 3 değişkeni ekle:
 
 ```txt
-SIDYA_SUPABASE_URL=Supabase Project URL
-SIDYA_SUPABASE_ANON_KEY=Supabase anon public key
+SIDYA_SUPABASE_URL=https://jhjforyykkxklfarjtjl.supabase.co
+SIDYA_SUPABASE_ANON_KEY=sb_publishable_obANQZIOM1xpMIBsJPZcoA__6TGFYBc
 SIDYA_SUPABASE_STORAGE_BUCKET=b2b-documents
+```
+
+Alternatif olarak Vercel'de şu isimler de çalışır:
+
+```txt
+NEXT_PUBLIC_SUPABASE_URL=https://jhjforyykkxklfarjtjl.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_obANQZIOM1xpMIBsJPZcoA__6TGFYBc
 ```
 
 Sonra Vercel'de projeyi yeniden deploy et.
