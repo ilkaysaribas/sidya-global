@@ -138,7 +138,7 @@ const content = {
     b2bAuthFormReady: "Complete the B2B form and send the request.",
     b2bAuthLoginRequired: "Enter email and password.",
     b2bAuthLoginStarted: "Signing in...",
-    b2bAuthLoginDone: "Signed in. Proforma screen is opening.",
+    b2bAuthLoginDone: "Signed in. You can now open the order screen.",
     b2bAuthLoginFailed: "Login failed. Check the email/password or account activation status.",
     b2bAuthSignupStarted: "Creating buyer account...",
     b2bAuthSignupDone: "Buyer account created.",
@@ -149,7 +149,8 @@ const content = {
     b2bUploadLoginRequired: "Sign in before uploading documents.",
     b2bUploadStarted: "Uploading documents...",
     b2bUploadDone: "B2B request saved. Documents uploaded.",
-    b2bRegisteredOpenProforma: "Registration received. Proforma order screen is opening.",
+    b2bRegisteredOpenProforma: "Registration received. You can now open the order screen.",
+    b2bOpenOrderScreen: "Open order screen",
     b2bBackendFallback: "Opening email draft.",
     b2bServerSubmit: "Sending B2B request with documents...",
     b2bServerMissing: "Document email service is not active yet. The email draft will open; attach the selected files manually.",
@@ -405,7 +406,7 @@ const content = {
     b2bAuthFormReady: "B2B formunu tamamlayıp talebi gönderin.",
     b2bAuthLoginRequired: "E-posta ve şifre girin.",
     b2bAuthLoginStarted: "Giriş yapılıyor...",
-    b2bAuthLoginDone: "Giriş yapıldı. Proforma ekranı açılıyor.",
+    b2bAuthLoginDone: "Giriş yapıldı. Artık sipariş ekranını açabilirsiniz.",
     b2bAuthLoginFailed: "Giriş başarısız. E-posta/şifreyi veya hesap aktivasyon durumunu kontrol edin.",
     b2bAuthSignupStarted: "Alıcı hesabı oluşturuluyor...",
     b2bAuthSignupDone: "Alıcı hesabı oluşturuldu.",
@@ -416,7 +417,8 @@ const content = {
     b2bUploadLoginRequired: "Evrak yüklemek için önce giriş yapın.",
     b2bUploadStarted: "Evraklar yükleniyor...",
     b2bUploadDone: "B2B talebi kaydedildi. Evraklar yüklendi.",
-    b2bRegisteredOpenProforma: "Kayıt alındı. Proforma sipariş ekranı açılıyor.",
+    b2bRegisteredOpenProforma: "Kayıt alındı. Artık sipariş ekranını açabilirsiniz.",
+    b2bOpenOrderScreen: "Sipariş ekranını aç",
     b2bBackendFallback: "Mail taslağı açılıyor.",
     b2bServerSubmit: "B2B talebi evraklarla gönderiliyor...",
     b2bServerMissing: "Evrak mail servisi henüz aktif değil. Mail taslağı açılacak; seçilen dosyaları maile manuel ekleyin.",
@@ -2100,15 +2102,22 @@ const setB2BAuthStatus = (message) => {
   if (status) status.textContent = message;
 };
 
+const setB2BOrderButtonVisible = (isVisible) => {
+  const button = document.querySelector("#openRegisteredProforma");
+  if (button) button.hidden = !isVisible;
+};
+
 const refreshB2BSession = async () => {
   const client = getSupabaseClient();
   if (!client) {
     setB2BAuthStatus(t("b2bAuthEmailMode"));
+    setB2BOrderButtonVisible(false);
     return null;
   }
   const { data } = await client.auth.getSession();
   const email = data.session?.user?.email;
   setB2BAuthStatus(email ? `${t("b2bSignedIn")}: ${email}` : t("b2bSignedOut"));
+  setB2BOrderButtonVisible(Boolean(email));
   return data.session;
 };
 
@@ -2186,8 +2195,7 @@ const signInB2BCustomer = async () => {
     const { error } = await client.auth.signInWithPassword({ email, password });
     if (error) throw error;
     setB2BAuthStatus(t("b2bAuthLoginDone"));
-    closeB2BModal();
-    openMainProformaPanel();
+    setB2BOrderButtonVisible(true);
   } catch (error) {
     setB2BAuthStatus(error.message || t("b2bAuthLoginFailed"));
   }
@@ -2196,6 +2204,7 @@ const signInB2BCustomer = async () => {
 const signOutB2BCustomer = async () => {
   const client = getSupabaseClient();
   if (client) await client.auth.signOut();
+  setB2BOrderButtonVisible(false);
   await refreshB2BSession();
 };
 
@@ -2239,6 +2248,11 @@ const closeB2BModal = () => {
   document.body.classList.remove("is-modal-open");
 };
 
+const openRegisteredProformaPanel = () => {
+  closeB2BModal();
+  openMainProformaPanel();
+};
+
 const openMainProformaPanel = (options = {}) => {
   const proformaScreen = document.querySelector("#proforma");
   if (proformaScreen) {
@@ -2267,17 +2281,13 @@ const closeMainProformaPanel = () => {
   document.body.classList.remove("is-modal-open");
 };
 
-const openProformaAfterRegistration = () => {
-  closeB2BModal();
-  openMainProformaPanel();
-};
-
 document.querySelector("#openB2BRegistration")?.addEventListener("click", openB2BModal);
 document.querySelector("#openB2BPortal")?.addEventListener("click", (event) => {
   event.preventDefault();
   openB2BModal();
 });
 document.querySelector("#openGuestProforma")?.addEventListener("click", openMainProformaPanel);
+document.querySelector("#openRegisteredProforma")?.addEventListener("click", openRegisteredProformaPanel);
 document.querySelectorAll('a[href="#proforma"]').forEach((link) => {
   link.addEventListener("click", (event) => {
     event.preventDefault();
@@ -2326,7 +2336,7 @@ document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => 
         if (status) status.textContent = t("b2bRegisteredOpenProforma");
         event.currentTarget.reset();
         updateB2BFileSummary();
-        openProformaAfterRegistration();
+        setB2BOrderButtonVisible(true);
         return;
       }
     } catch (error) {
@@ -2335,7 +2345,7 @@ document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => 
 
     if (status) status.textContent = t("b2bServerMissing");
     openB2BMailDraft(form, files);
-    setTimeout(openProformaAfterRegistration, 900);
+    setB2BOrderButtonVisible(true);
     return;
   }
 
@@ -2346,7 +2356,7 @@ document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => 
   if (!session?.user) {
     if (status) status.textContent = t("b2bCheckEmail");
     openB2BMailDraft(form, files);
-    setTimeout(openProformaAfterRegistration, 900);
+    setB2BOrderButtonVisible(false);
     return;
   }
   try {
@@ -2356,7 +2366,7 @@ document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => 
     if (status) status.textContent = t("b2bRegisteredOpenProforma");
     event.currentTarget.reset();
     updateB2BFileSummary();
-    openProformaAfterRegistration();
+    setB2BOrderButtonVisible(true);
   } catch (error) {
     if (status) status.textContent = error.message || t("formError");
   }
