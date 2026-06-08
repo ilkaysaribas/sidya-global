@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 160" role="img" aria-label="Food products">
+  <rect width="360" height="160" rx="18" fill="#f3f4f4"/>
+  <rect x="58" y="52" width="76" height="92" rx="12" fill="#c94734"/>
+  <rect x="72" y="34" width="48" height="24" rx="6" fill="#8f2e24"/>
+  <rect x="70" y="82" width="52" height="28" rx="8" fill="#fff2d0"/>
+  <circle cx="196" cy="94" r="42" fill="#f0b735"/>
+  <path d="M174 78c14-20 48-18 58 4-18-2-34 4-50 20z" fill="#6f8f45"/>
+  <rect x="254" y="58" width="52" height="86" rx="10" fill="#d9dde0"/>
+  <path d="M254 86h52v30h-52z" fill="#7aa35b"/>
+</svg>

@@ -1,12 +1,12 @@
-const CACHE_NAME = "sidya-global-v52";
+const CACHE_NAME = "sidya-global-v53";
 
 const SHELL_ASSETS = [
   "./",
   "./index.html",
   "./offline.html",
-  "./styles.css?v=20260608-9",
+  "./styles.css?v=20260608-10",
   "./catalog-products.generated.js?v=20260608-1",
-  "./script.js?v=20260608-15",
+  "./script.js?v=20260608-16",
   "./manifest.webmanifest",
   "./assets/app-icon.svg",
   "./assets/app-icon-192.png",
@@ -20,6 +20,14 @@ const SHELL_ASSETS = [
   "./assets/icon-telegram.svg",
   "./assets/transport-truck.svg",
   "./assets/transport-container.svg",
+  "./assets/category-home.svg",
+  "./assets/category-cleaning.svg",
+  "./assets/category-food.svg",
+  "./assets/category-industrial.svg",
+  "./assets/category-medical.svg",
+  "./assets/category-cosmetics.svg",
+  "./assets/category-automotive.svg",
+  "./assets/category-hardware.svg",
   "./assets/abc-logo.jpg",
   "./assets/unilever-logo.svg",
   "./assets/pg-logo.svg",

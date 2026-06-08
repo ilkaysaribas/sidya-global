@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 160" role="img" aria-label="Automotive products">
+  <rect width="360" height="160" rx="18" fill="#f3f4f4"/>
+  <path d="M62 98l28-38h126l34 38v34H62z" fill="#737b80"/>
+  <path d="M110 70h82l22 28H88z" fill="#dfe7ea"/>
+  <circle cx="104" cy="132" r="20" fill="#202224"/>
+  <circle cx="216" cy="132" r="20" fill="#202224"/>
+  <circle cx="104" cy="132" r="8" fill="#aeb5b8"/>
+  <circle cx="216" cy="132" r="8" fill="#aeb5b8"/>
+  <path d="M284 50l18 18-52 52-18-18z" fill="#ffc857"/>
+  <path d="M296 42l26 26" stroke="#2f3131" stroke-width="8" stroke-linecap="round"/>
+</svg>

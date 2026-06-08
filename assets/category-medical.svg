@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 160" role="img" aria-label="Medical products">
+  <rect width="360" height="160" rx="18" fill="#f3f4f4"/>
+  <rect x="58" y="48" width="104" height="96" rx="16" fill="#ffffff"/>
+  <path d="M96 70h28v24h24v28h-24v24H96v-24H72V94h24z" fill="#2f7f8f"/>
+  <rect x="204" y="46" width="44" height="100" rx="14" fill="#dce5e8"/>
+  <rect x="214" y="28" width="24" height="26" rx="5" fill="#8aa3ac"/>
+  <rect x="268" y="70" width="60" height="20" rx="10" fill="#b8c4c8"/>
+  <rect x="286" y="66" width="18" height="28" rx="4" fill="#2f3131" opacity=".24"/>
+  <path d="M260 112h72" stroke="#2f3131" stroke-width="8" stroke-linecap="round" opacity=".35"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 160" role="img" aria-label="Cosmetics and personal care">
+  <rect width="360" height="160" rx="18" fill="#f3f4f4"/>
+  <rect x="68" y="46" width="58" height="100" rx="18" fill="#d8c1cc"/>
+  <rect x="82" y="28" width="30" height="28" rx="6" fill="#8d6577"/>
+  <rect x="158" y="56" width="48" height="90" rx="14" fill="#e8e0d2"/>
+  <rect x="168" y="36" width="28" height="24" rx="5" fill="#b9a076"/>
+  <rect x="244" y="42" width="70" height="104" rx="16" fill="#cfd6d8"/>
+  <path d="M258 78h42M258 102h34" stroke="#6a7174" stroke-width="9" stroke-linecap="round"/>
+</svg>

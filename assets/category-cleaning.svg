@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 160" role="img" aria-label="Cleaning products">
+  <rect width="360" height="160" rx="18" fill="#f3f4f4"/>
+  <rect x="62" y="48" width="62" height="98" rx="15" fill="#2f6f8f"/>
+  <rect x="78" y="32" width="30" height="22" rx="5" fill="#1f4c66"/>
+  <rect x="75" y="78" width="48" height="34" rx="8" fill="#e7f2f6"/>
+  <rect x="156" y="42" width="56" height="104" rx="18" fill="#d9dde0"/>
+  <rect x="172" y="24" width="24" height="28" rx="5" fill="#f08a24"/>
+  <path d="M168 82h36v36h-36z" fill="#2f3131" opacity=".18"/>
+  <path d="M248 46c28 12 46 40 42 76-34 12-64 2-84-22 0-26 18-48 42-54z" fill="#ffc857"/>
+  <circle cx="270" cy="62" r="8" fill="#fff" opacity=".7"/>
+</svg>

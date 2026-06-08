@@ -1120,14 +1120,14 @@ catalogOrderSeeds.forEach((product) => {
 
 const proformaOrder = new Map();
 const productCategoryImages = {
-  "home-products": "assets/garipler-yapi-market-logo.svg",
-  "cleaning-products": "assets/catalog-products/abc-010.webp",
-  "food-products": "assets/oncu-salca-logo.svg",
-  "industrial-products": "assets/demet-temizlik-logo.svg",
-  "medical-products": "assets/medcare-logo.svg",
-  "cosmetics-products": "assets/nivea-logo.svg",
-  "automotive-products": "assets/sidya-global-hero-clean.jpeg",
-  "hardware-products": "assets/garipler-yapi-market-logo.svg",
+  "home-products": "assets/category-home.svg",
+  "cleaning-products": "assets/category-cleaning.svg",
+  "food-products": "assets/category-food.svg",
+  "industrial-products": "assets/category-industrial.svg",
+  "medical-products": "assets/category-medical.svg",
+  "cosmetics-products": "assets/category-cosmetics.svg",
+  "automotive-products": "assets/category-automotive.svg",
+  "hardware-products": "assets/category-hardware.svg",
 };
 const categoryFallbackLogistics = {
   "home-products": { unitsPerCarton: 1, cartonsPerPallet: 36, kgPerCarton: 8, m3PerCarton: 0.05 },
