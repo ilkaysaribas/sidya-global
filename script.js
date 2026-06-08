@@ -1431,13 +1431,6 @@ const renderProducts = () => {
         : "";
       const tradeMarkup = trade
         ? `<div class="trade-details">
-            <dl>
-              <div><dt>${t("tradeMoq")}</dt><dd>${trade.moq}</dd></div>
-              <div><dt>${t("tradeDelivery")}</dt><dd>${trade.delivery}</dd></div>
-              <div><dt>${t("tradeLeadTime")}</dt><dd>${trade.leadTime}</dd></div>
-              <div><dt>${t("tradeMarkets")}</dt><dd>${trade.markets}</dd></div>
-              <div><dt>${t("tradeCertificates")}</dt><dd>${trade.certificates}</dd></div>
-            </dl>
             <a class="product-quote-button" href="#catalog-proforma" data-category-id="${product.id}" data-product-option="${trade.optionValue}" data-product-title="${product.title}">${t("tradeQuoteCta")}</a>
           </div>`
         : "";
