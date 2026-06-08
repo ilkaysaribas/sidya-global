@@ -9,6 +9,7 @@ create table if not exists public.b2b_onboarding_requests (
   company text not null,
   contact text not null,
   email text not null,
+  username text,
   country text not null,
   tax_number text not null,
   incoterm text not null,
@@ -17,6 +18,9 @@ create table if not exists public.b2b_onboarding_requests (
   status text not null default 'new',
   created_at timestamptz not null default now()
 );
+
+alter table public.b2b_onboarding_requests
+add column if not exists username text;
 
 alter table public.b2b_onboarding_requests enable row level security;
 

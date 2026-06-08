@@ -20,6 +20,10 @@ This creates:
 - private `b2b-documents` storage bucket
 - row-level security policies so buyers only see/upload their own files
 
+Buyer registration data is stored in `b2b_onboarding_requests`. Uploaded documents are stored in the private `b2b-documents` bucket.
+
+Do not store or email plain-text passwords. If Supabase Auth is configured, buyer passwords are handled by Supabase Auth securely. The website only sends the chosen username with the onboarding request.
+
 ## 2. Configure Site
 
 Open `backend-config.js` and fill:

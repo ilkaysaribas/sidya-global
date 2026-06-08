@@ -101,6 +101,8 @@ const content = {
     b2bCompany: "Company legal name",
     b2bContact: "Authorized contact",
     b2bEmail: "Business email",
+    b2bUsername: "Username",
+    b2bPassword: "Password",
     b2bCountry: "Destination country",
     b2bTax: "Tax / registration number",
     b2bIncoterm: "Preferred Incoterm",
@@ -129,6 +131,7 @@ const content = {
     b2bUploadLoginRequired: "Sign in before uploading documents.",
     b2bUploadStarted: "Uploading documents...",
     b2bUploadDone: "B2B request saved. Documents uploaded.",
+    b2bRegisteredOpenProforma: "Registration received. Proforma order screen is opening.",
     b2bBackendFallback: "Opening email draft.",
     b2bServerSubmit: "Sending B2B request with documents...",
     b2bServerMissing: "Document email service is not active yet. The email draft will open; attach the selected files manually.",
@@ -347,6 +350,8 @@ const content = {
     b2bCompany: "Firma resmi unvanı",
     b2bContact: "Yetkili kişi",
     b2bEmail: "Kurumsal e-posta",
+    b2bUsername: "Kullanıcı adı",
+    b2bPassword: "Şifre",
     b2bCountry: "Varış ülkesi",
     b2bTax: "Vergi / kayıt numarası",
     b2bIncoterm: "Tercih edilen Incoterm",
@@ -375,6 +380,7 @@ const content = {
     b2bUploadLoginRequired: "Evrak yüklemek için önce giriş yapın.",
     b2bUploadStarted: "Evraklar yükleniyor...",
     b2bUploadDone: "B2B talebi kaydedildi. Evraklar yüklendi.",
+    b2bRegisteredOpenProforma: "Kayıt alındı. Proforma sipariş ekranı açılıyor.",
     b2bBackendFallback: "Mail taslağı açılıyor.",
     b2bServerSubmit: "B2B talebi evraklarla gönderiliyor...",
     b2bServerMissing: "Evrak mail servisi henüz aktif değil. Mail taslağı açılacak; seçilen dosyaları maile manuel ekleyin.",
@@ -1729,9 +1735,12 @@ const openB2BMailDraft = (form, files) => {
     `Company: ${form.get("company")}`,
     `Authorized contact: ${form.get("contact")}`,
     `Email: ${form.get("email")}`,
+    `Username: ${form.get("username") || "-"}`,
     `Destination country: ${form.get("country")}`,
     `Tax / registration number: ${form.get("tax")}`,
     `Incoterm: ${form.get("incoterm")}`,
+    "",
+    "Password: Created by buyer and not included in this email for security.",
     "",
     "Selected documents:",
     ...(files.length ? files.map((file, index) => `${index + 1}. ${file.name}`) : ["No file selected"]),
@@ -1831,6 +1840,7 @@ const saveB2BRequest = async (client, userId, form, documentPaths) => {
     email: String(form.get("email") || ""),
     country: String(form.get("country") || ""),
     tax_number: String(form.get("tax") || ""),
+    username: String(form.get("username") || ""),
     incoterm: String(form.get("incoterm") || ""),
     notes: String(form.get("notes") || ""),
     document_paths: documentPaths,
@@ -1870,6 +1880,14 @@ const closeB2BModal = () => {
   document.body.classList.remove("is-modal-open");
 };
 
+const openProformaAfterRegistration = () => {
+  closeB2BModal();
+  document.querySelector("#proforma")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const panel = document.querySelector("#proformaProductPanel");
+  if (panel?.hasAttribute("hidden")) panel.removeAttribute("hidden");
+  setTimeout(() => document.querySelector("#proformaSearch")?.focus(), 250);
+};
+
 document.querySelector("#openB2BRegistration")?.addEventListener("click", openB2BModal);
 document.querySelectorAll("[data-close-b2b]").forEach((button) => {
   button.addEventListener("click", closeB2BModal);
@@ -1906,9 +1924,10 @@ document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => 
     if (status) status.textContent = t("b2bServerSubmit");
     const result = await submitB2BServerRequest(event.currentTarget);
     if (result.ok) {
-      if (status) status.textContent = t("b2bUploadDone");
+      if (status) status.textContent = t("b2bRegisteredOpenProforma");
       event.currentTarget.reset();
       updateB2BFileSummary();
+      openProformaAfterRegistration();
       return;
     }
   } catch (error) {
@@ -1918,6 +1937,7 @@ document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => 
   if (!client) {
     if (status) status.textContent = t("b2bServerMissing");
     openB2BMailDraft(form, files);
+    setTimeout(openProformaAfterRegistration, 900);
     return;
   }
 
@@ -1925,15 +1945,17 @@ document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => 
   if (!session?.user) {
     if (status) status.textContent = t("b2bServerMissing");
     openB2BMailDraft(form, files);
+    setTimeout(openProformaAfterRegistration, 900);
     return;
   }
   try {
     if (status) status.textContent = t("b2bUploadStarted");
     const paths = await uploadB2BDocuments(client, session.user.id, files);
     await saveB2BRequest(client, session.user.id, form, paths);
-    if (status) status.textContent = t("b2bUploadDone");
+    if (status) status.textContent = t("b2bRegisteredOpenProforma");
     event.currentTarget.reset();
     updateB2BFileSummary();
+    openProformaAfterRegistration();
   } catch (error) {
     if (status) status.textContent = error.message || t("formError");
   }
