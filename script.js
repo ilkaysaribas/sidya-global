@@ -142,6 +142,7 @@ const content = {
     b2bAuthLoginFailed: "Login failed. Check the email/password or account activation status.",
     b2bAuthSignupStarted: "Creating buyer account...",
     b2bAuthSignupDone: "Buyer account created.",
+    b2bAuthTimeout: "Account service did not respond. Please try again in a moment.",
     b2bAuthSelectFiles: "Select the company/import documents to attach.",
     b2bSignedIn: "Signed in",
     b2bSignedOut: "Signed out",
@@ -410,6 +411,7 @@ const content = {
     b2bAuthLoginFailed: "Giriş başarısız. E-posta/şifreyi veya hesap aktivasyon durumunu kontrol edin.",
     b2bAuthSignupStarted: "Alıcı hesabı oluşturuluyor...",
     b2bAuthSignupDone: "Alıcı hesabı oluşturuldu.",
+    b2bAuthTimeout: "Hesap servisi cevap vermedi. Lütfen biraz sonra tekrar deneyin.",
     b2bAuthSelectFiles: "Eklenecek firma/ithalat evraklarını seçin.",
     b2bSignedIn: "Giriş yapıldı",
     b2bSignedOut: "Çıkış yapıldı",
@@ -2100,6 +2102,14 @@ const setB2BOrderButtonVisible = (isVisible) => {
   if (button) button.hidden = !isVisible;
 };
 
+const withTimeout = (promise, message, timeoutMs = 15000) => {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(message)), timeoutMs);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+};
+
 const refreshB2BSession = async () => {
   const client = getSupabaseClient();
   if (!client) {
@@ -2185,7 +2195,7 @@ const signInB2BCustomer = async () => {
   }
   try {
     setB2BAuthStatus(t("b2bAuthLoginStarted"));
-    const { error } = await client.auth.signInWithPassword({ email, password });
+    const { error } = await withTimeout(client.auth.signInWithPassword({ email, password }), t("b2bAuthTimeout"));
     if (error) throw error;
     setB2BAuthStatus(t("b2bAuthLoginDone"));
     setB2BOrderButtonVisible(true);
@@ -2206,18 +2216,21 @@ const createB2BCustomerAccount = async (client, form) => {
   const password = String(form.get("password") || "");
   if (!email || !password) throw new Error(t("b2bAuthLoginRequired"));
   setB2BAuthStatus(t("b2bAuthSignupStarted"));
-  const { data, error } = await client.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        company: String(form.get("company") || ""),
-        contact: String(form.get("contact") || ""),
-        username: String(form.get("username") || ""),
-        country: String(form.get("country") || ""),
+  const { data, error } = await withTimeout(
+    client.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          company: String(form.get("company") || ""),
+          contact: String(form.get("contact") || ""),
+          username: String(form.get("username") || ""),
+          country: String(form.get("country") || ""),
+        },
       },
-    },
-  });
+    }),
+    t("b2bAuthTimeout"),
+  );
   if (error) throw error;
   if (data.session?.user) {
     setB2BAuthStatus(t("b2bAuthSignupDone"));
@@ -2342,17 +2355,17 @@ document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => 
     return;
   }
 
-  let session = await refreshB2BSession();
-  if (!session?.user) {
-    session = await createB2BCustomerAccount(client, form);
-  }
-  if (!session?.user) {
-    if (status) status.textContent = t("b2bCheckEmail");
-    openB2BMailDraft(form, files);
-    setB2BOrderButtonVisible(false);
-    return;
-  }
   try {
+    let session = await refreshB2BSession();
+    if (!session?.user) {
+      session = await createB2BCustomerAccount(client, form);
+    }
+    if (!session?.user) {
+      if (status) status.textContent = t("b2bCheckEmail");
+      openB2BMailDraft(form, files);
+      setB2BOrderButtonVisible(false);
+      return;
+    }
     if (status) status.textContent = t("b2bUploadStarted");
     const paths = await uploadB2BDocuments(client, session.user.id, files);
     await saveB2BRequest(client, session.user.id, form, paths);
