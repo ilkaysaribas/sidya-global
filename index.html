@@ -421,7 +421,7 @@
           <form class="b2b-form" id="b2bForm">
             <div class="b2b-form-header">
               <h3 data-i18n="b2bRegisterTitle">Buyer registration</h3>
-              <p data-i18n="b2bRegisterCopy">This prepares a B2B onboarding draft. Uploaded files must be attached from the buyer's email client until backend storage is connected.</p>
+              <p data-i18n="b2bRegisterCopy">Fill the buyer details, attach company/import documents and send the B2B onboarding request directly.</p>
             </div>
             <label>
               <span data-i18n="b2bCompany">Company legal name</span>
@@ -468,21 +468,17 @@
           <div class="b2b-panel">
             <div class="b2b-auth-card">
               <h3 data-i18n="b2bAuthTitle">Customer account</h3>
-              <p data-i18n="b2bAuthCopy">Create an account or sign in to upload documents to the secure B2B file area.</p>
+              <p data-i18n="b2bAuthCopy">Enter the buyer email, move it to the form and attach documents before sending.</p>
               <label>
                 <span data-i18n="b2bAuthEmail">Account email</span>
                 <input id="b2bAuthEmail" type="email" autocomplete="email" />
               </label>
-              <label>
-                <span data-i18n="b2bAuthPassword">Password</span>
-                <input id="b2bAuthPassword" type="password" autocomplete="current-password" />
-              </label>
               <div class="b2b-auth-actions">
-                <button type="button" id="b2bSignUp" data-i18n="b2bSignUp">Register</button>
-                <button type="button" id="b2bSignIn" data-i18n="b2bSignIn">Sign in</button>
-                <button type="button" id="b2bSignOut" data-i18n="b2bSignOut">Sign out</button>
+                <button type="button" id="b2bSignUp" data-i18n="b2bSignUp">Use this email</button>
+                <button type="button" id="b2bSignIn" data-i18n="b2bSignIn">Go to form</button>
+                <button type="button" id="b2bSignOut" data-i18n="b2bSignOut">Select files</button>
               </div>
-              <p class="form-status" id="b2bAuthStatus" role="status" data-i18n="b2bAuthNotReady">Backend is not configured yet.</p>
+              <p class="form-status" id="b2bAuthStatus" role="status" data-i18n="b2bAuthNotReady">Enter an email and complete the B2B request form.</p>
             </div>
             <h3 data-i18n="b2bChecklistTitle">Core export document checklist</h3>
             <div class="b2b-checklist">
@@ -669,6 +665,6 @@
       }
     </script>
     <script src="catalog-products.generated.js?v=20260601-5"></script>
-    <script src="script.js?v=20260608-4"></script>
+    <script src="script.js?v=20260608-5"></script>
   </body>
 </html>
