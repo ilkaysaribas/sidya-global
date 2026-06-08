@@ -25,16 +25,14 @@ Vercel panelinde Sidya Global projesine gir:
 Aşağıdaki değişkenleri ekle:
 
 ```txt
-SIDYA_SUPABASE_URL=https://jhjforyykkxklfarjtjl.supabase.co
 NEXT_PUBLIC_SUPABASE_URL=https://jhjforyykkxklfarjtjl.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_obANQZIOM1xpMIBsJPZcoA__6TGFYBc
-SIDYA_SUPABASE_STORAGE_BUCKET=b2b-documents
 ```
 
 Gerçek kayıt oluşturmak için ayrıca Supabase `service_role key` gerekir:
 
 ```txt
-SIDYA_SUPABASE_SERVICE_ROLE_KEY=Supabase panelindeki service_role key
+SUPABASE_SERVICE_ROLE_KEY=Supabase panelindeki service_role key
 ```
 
 Önemli:
@@ -51,7 +49,7 @@ Supabase panelinde:
 2. `API`
 3. `Project API keys`
 4. `service_role` anahtarını kopyala.
-5. Vercel'e `SIDYA_SUPABASE_SERVICE_ROLE_KEY` olarak ekle.
+5. Vercel'e `SUPABASE_SERVICE_ROLE_KEY` olarak ekle.
 
 Sonra Vercel'de yeniden deploy et.
 

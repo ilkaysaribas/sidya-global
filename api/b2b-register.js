@@ -49,14 +49,25 @@ const parseMultipart = (buffer, contentType) => {
 };
 
 const requireEnv = () => {
-  const supabaseUrl = process.env.SIDYA_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceRoleKey = process.env.SIDYA_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!supabaseUrl || !serviceRoleKey) {
-    const error = new Error("Supabase admin service is not configured. Add SIDYA_SUPABASE_URL and SIDYA_SUPABASE_SERVICE_ROLE_KEY in Vercel Environment Variables.");
+  const requiredEnv = {
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  };
+  const missingEnv = Object.entries(requiredEnv)
+    .filter(([, value]) => !value)
+    .map(([name]) => name);
+
+  if (missingEnv.length) {
+    console.error(`Missing B2B registration environment variables: ${missingEnv.join(", ")}`);
+    const error = new Error("B2B registration backend is missing required environment variables.");
     error.statusCode = 501;
     throw error;
   }
-  return { supabaseUrl: supabaseUrl.replace(/\/$/, ""), serviceRoleKey };
+
+  return {
+    supabaseUrl: requiredEnv.NEXT_PUBLIC_SUPABASE_URL.replace(/\/$/, ""),
+    serviceRoleKey: requiredEnv.SUPABASE_SERVICE_ROLE_KEY,
+  };
 };
 
 const supabaseFetch = async ({ path, method = "GET", body, headers = {}, supabaseUrl, serviceRoleKey }) => {
@@ -146,7 +157,7 @@ const createUser = async ({ fields, supabaseUrl, serviceRoleKey }) => {
 };
 
 const uploadFiles = async ({ files, userId, supabaseUrl, serviceRoleKey }) => {
-  const bucket = process.env.SIDYA_SUPABASE_STORAGE_BUCKET || "b2b-documents";
+  const bucket = process.env.SUPABASE_STORAGE_BUCKET || "b2b-documents";
   const uploadedPaths = [];
 
   for (const file of files) {
