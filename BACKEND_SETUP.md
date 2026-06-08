@@ -1,83 +1,70 @@
-# Sidya Global Backend/Auth/Storage Setup
+# Sidya Global B2B Giriş Sistemi
 
-This project uses Supabase for the B2B customer portal:
+Bu bölüm müşteri kayıt/giriş sistemini aktif etmek içindir.
 
-- Auth: buyer registration and login
-- Storage: private B2B document uploads
-- Database: onboarding request records
+Kısa açıklama:
 
-The site also includes `/api/b2b-request`, a Vercel serverless mail fallback for sending B2B request forms with uploaded documents.
+- Supabase, müşterilerin e-posta/şifre ile giriş yapacağı veritabanı ve hesap sistemidir.
+- SQL, Supabase içinde tablo ve dosya alanlarını oluşturan kurulum komutudur.
+- Bu kodlar GitHub/Vercel tarafında hazırdır; canlı girişin çalışması için Supabase hesabı bağlanmalıdır.
 
-## 1. Create Supabase Project
+## 1. Supabase Projesi Oluştur
 
-1. Go to Supabase and create a project.
-2. Open `SQL Editor`.
-3. Run `supabase/schema.sql`.
+1. https://supabase.com adresine gir.
+2. Yeni proje oluştur.
+3. Proje açılınca sol menüden `SQL Editor` bölümüne gir.
+4. Bu projedeki [supabase/schema.sql](/C:/Users/ilkaysaribas/Documents/İhracat%20Sitesi/supabase/schema.sql) dosyasının içeriğini kopyala.
+5. Supabase `SQL Editor` ekranına yapıştır ve `Run` butonuna bas.
 
-This creates:
+Bu işlem şunları oluşturur:
 
-- `b2b_onboarding_requests`
-- private `b2b-documents` storage bucket
-- row-level security policies so buyers only see/upload their own files
+- Müşteri kayıt tablosu
+- Evrak yükleme alanı
+- Müşterinin sadece kendi evraklarını görebileceği güvenlik kuralları
 
-Buyer registration data is stored in `b2b_onboarding_requests`. Uploaded documents are stored in the private `b2b-documents` bucket.
+## 2. Supabase Bilgilerini Al
 
-Do not store or email plain-text passwords. If Supabase Auth is configured, buyer passwords are handled by Supabase Auth securely. The website only sends the chosen username with the onboarding request.
+Supabase projesinde:
 
-## 2. Configure Site
-
-For local file preview, `backend-config.js` can stay empty.
-
-For the live Vercel site, add these Environment Variables in Vercel:
+1. Sol menüden `Project Settings` aç.
+2. `API` bölümüne gir.
+3. Şu iki bilgiyi al:
 
 ```txt
-SIDYA_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
-SIDYA_SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY
+Project URL
+anon public key
+```
+
+Önemli:
+
+- `anon public key` kullanılacak.
+- `service_role key` kullanılmayacak.
+
+## 3. Vercel'e Bağla
+
+Vercel panelinde Sidya Global projesine gir:
+
+1. `Settings`
+2. `Environment Variables`
+3. Aşağıdaki 3 değişkeni ekle:
+
+```txt
+SIDYA_SUPABASE_URL=Supabase Project URL
+SIDYA_SUPABASE_ANON_KEY=Supabase anon public key
 SIDYA_SUPABASE_STORAGE_BUCKET=b2b-documents
 ```
 
-The live site reads these values from `/api/backend-config.js`, so Supabase keys do not need to be committed into GitHub.
+Sonra Vercel'de projeyi yeniden deploy et.
 
-If you still want a local-only preview with Supabase, open `backend-config.js` and fill:
+## 4. Aktif Olduğunu Kontrol Et
 
-```js
-window.SIDYA_BACKEND = {
-  supabaseUrl: "https://YOUR_PROJECT.supabase.co",
-  supabaseAnonKey: "YOUR_PUBLIC_ANON_KEY",
-  storageBucket: "b2b-documents",
-};
-```
+Canlı sitede:
 
-The anon key is public by design. Do not put the Supabase service role key in this website or in frontend JavaScript.
+1. `B2B Portal Giriş` ekranını aç.
+2. Alıcı kayıt formundan bir müşteri oluştur.
+3. Aynı e-posta ve şifreyle giriş yap.
+4. Giriş başarılı olursa proforma sipariş ekranı açılır.
 
-## 3. Deploy
+## Not
 
-Commit and push after filling `backend-config.js`.
-
-For production, keep the storage bucket private. Buyers must sign in before uploading files.
-
-## 4. Mail Upload Fallback
-
-To receive B2B form documents by email without Supabase storage, add these Vercel environment variables:
-
-```txt
-RESEND_API_KEY=your_resend_api_key
-B2B_TO_EMAIL=info@sidyaglobal.com
-B2B_FROM_EMAIL=Sidya Global <onboarding@sidyaglobal.com>
-```
-
-`B2B_FROM_EMAIL` must be a verified sender/domain in Resend.
-
-## 5. Current Behavior
-
-If Supabase config is empty:
-
-- the customer account panel shows email/upload mode
-- the form tries `/api/b2b-request` first
-- if Resend is not configured, the form falls back to an email draft
-- browser mail drafts cannot attach files automatically, so the buyer must attach them manually in that fallback
-
-If Supabase config is filled and the buyer is signed in:
-
-- selected files upload to `b2b-documents/{user_id}/...`
-- onboarding request is inserted into `b2b_onboarding_requests`
+Benim kod tarafında yaptığım hazırlık tamamdır. Supabase paneli senin hesabında olduğu için SQL çalıştırma ve Vercel'e Supabase anahtarlarını girme adımları dış panelden yapılmalıdır.
