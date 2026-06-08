@@ -30,7 +30,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260608-8" />
+    <link rel="stylesheet" href="styles.css?v=20260608-9" />
   </head>
   <body>
     <header class="site-header">
@@ -228,6 +228,7 @@
             <p class="section-kicker" data-i18n="proformaKicker">Proforma platform</p>
             <h2 id="proforma-order-title" data-i18n="proformaOrderTitle">Create a proforma order</h2>
             <p data-i18n="proformaOrderCopy">Open the product selector, search by brand or product name, enter carton quantity and add items to the proforma total.</p>
+            <button class="proforma-back-button" type="button" id="proformaBackToCategory" hidden data-i18n="proformaBackToCategory">Back to category products</button>
           </div>
 
         <div class="proforma-order-layout">
@@ -242,7 +243,7 @@
             </div>
           </div>
 
-          <aside class="proforma-order-summary">
+          <aside class="proforma-order-summary" id="proformaOrderSummary">
             <h3 data-i18n="proformaSummaryTitle">Proforma total</h3>
             <div class="proforma-lines" id="proformaOrderLines"></div>
             <p class="proforma-empty" id="proformaEmpty" data-i18n="proformaEmpty">No product added yet.</p>
@@ -726,6 +727,6 @@
       }
     </script>
     <script src="catalog-products.generated.js?v=20260601-5"></script>
-    <script src="script.js?v=20260608-13"></script>
+    <script src="script.js?v=20260608-14"></script>
   </body>
 </html>

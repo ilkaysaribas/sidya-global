@@ -90,6 +90,7 @@ const content = {
     proformaMailCta: "Send by Mail",
     proformaWhatsappCta: "Send by message",
     proformaQuoteEmpty: "Please add at least one product to the proforma list.",
+    proformaBackToCategory: "Back to category products",
     catalogProformaKicker: "Category proforma",
     catalogProformaTitle: "Create proforma without registration",
     catalogProformaCopy: "Select products from this category, enter carton quantity and add them to your proforma total.",
@@ -356,6 +357,7 @@ const content = {
     proformaMailCta: "Mail ile gönder",
     proformaWhatsappCta: "Mesaj ile gönder",
     proformaQuoteEmpty: "Lütfen proforma listesine en az bir ürün ekleyin.",
+    proformaBackToCategory: "Kategori ürünlerine geri dön",
     catalogProformaKicker: "Kategori proforması",
     catalogProformaTitle: "Kayıt olmadan proforma oluştur",
     catalogProformaCopy: "Bu kategorideki ürünleri seçin, koli adedini girin ve proforma toplamına ekleyin.",
@@ -1025,7 +1027,108 @@ const productCatalog = [];
 
 productCatalog.push(...(window.SIDYA_CATALOG_PRODUCTS || []).filter((product) => product.brand !== "PM Catalog"));
 
+const catalogOrderSeeds = [
+  {
+    id: "catalog-medcare-2025",
+    brand: "Medcare",
+    names: { en: "Medcare 2025 Medical Product Catalog", tr: "Medcare 2025 Medikal Ürün Kataloğu" },
+    liter: "Medical catalog",
+    category: "medical-products",
+    logo: "assets/medcare-logo.svg",
+    unitsPerCarton: 24,
+    cartonsPerPallet: 80,
+    kgPerCarton: 5,
+    m3PerCarton: 0.04,
+  },
+  {
+    id: "catalog-sebamed-2024",
+    brand: "Sebamed",
+    names: { en: "Sebamed Personal Care Catalog", tr: "Sebamed Kişisel Bakım Kataloğu" },
+    liter: "Personal care catalog",
+    category: "cosmetics-products",
+    logo: "assets/sebamed-logo.svg",
+    unitsPerCarton: 24,
+    cartonsPerPallet: 72,
+    kgPerCarton: 6,
+    m3PerCarton: 0.032,
+  },
+  {
+    id: "catalog-omron-healthcare",
+    brand: "Omron Healthcare",
+    names: { en: "Omron Healthcare Product Request", tr: "Omron Healthcare Ürün Talebi" },
+    liter: "Healthcare catalog",
+    category: "medical-products",
+    logo: "assets/omron-logo.svg",
+    unitsPerCarton: 12,
+    cartonsPerPallet: 60,
+    kgPerCarton: 4,
+    m3PerCarton: 0.035,
+  },
+  {
+    id: "catalog-hanymish",
+    brand: "Hanymish",
+    names: { en: "Hanymish Baby Care Product Request", tr: "Hanymish Bebek Bakım Ürün Talebi" },
+    liter: "Baby care catalog",
+    category: "medical-products",
+    logo: "assets/hanymish-logo.svg",
+    unitsPerCarton: 24,
+    cartonsPerPallet: 72,
+    kgPerCarton: 5,
+    m3PerCarton: 0.04,
+  },
+  {
+    id: "catalog-ikihan-medikal",
+    brand: "İkihan Medikal",
+    names: { en: "İkihan Medikal Product Request", tr: "İkihan Medikal Ürün Talebi" },
+    liter: "Medical catalog",
+    category: "medical-products",
+    logo: "assets/ikihan-medikal-logo.svg",
+    unitsPerCarton: 12,
+    cartonsPerPallet: 60,
+    kgPerCarton: 6,
+    m3PerCarton: 0.045,
+  },
+  {
+    id: "catalog-vileda",
+    brand: "Vileda",
+    names: { en: "Vileda Cleaning Product Request", tr: "Vileda Temizlik Ürün Talebi" },
+    liter: "Cleaning catalog",
+    category: "cleaning-products",
+    logo: "assets/vileda-logo.svg",
+    unitsPerCarton: 12,
+    cartonsPerPallet: 60,
+    kgPerCarton: 7,
+    m3PerCarton: 0.05,
+  },
+  {
+    id: "catalog-selpak",
+    brand: "Eczacıbaşı / Selpak",
+    names: { en: "Selpak Paper Product Request", tr: "Selpak Kağıt Ürünleri Talebi" },
+    liter: "Paper products",
+    category: "cleaning-products",
+    logo: "assets/selpak-logo.svg",
+    unitsPerCarton: 12,
+    cartonsPerPallet: 45,
+    kgPerCarton: 4,
+    m3PerCarton: 0.08,
+  },
+];
+
+catalogOrderSeeds.forEach((product) => {
+  if (!productCatalog.some((item) => item.id === product.id)) productCatalog.push(product);
+});
+
 const proformaOrder = new Map();
+const productCategoryImages = {
+  "home-products": "assets/garipler-yapi-market-logo.svg",
+  "cleaning-products": "assets/catalog-products/abc-010.webp",
+  "food-products": "assets/oncu-salca-logo.svg",
+  "industrial-products": "assets/demet-temizlik-logo.svg",
+  "medical-products": "assets/medcare-logo.svg",
+  "cosmetics-products": "assets/nivea-logo.svg",
+  "automotive-products": "assets/sidya-global-hero-clean.jpeg",
+  "hardware-products": "assets/garipler-yapi-market-logo.svg",
+};
 const categoryFallbackLogistics = {
   "home-products": { unitsPerCarton: 1, cartonsPerPallet: 36, kgPerCarton: 8, m3PerCarton: 0.05 },
   "cleaning-products": { unitsPerCarton: 12, cartonsPerPallet: 60, kgPerCarton: 12, m3PerCarton: 0.035 },
@@ -1037,6 +1140,8 @@ const categoryFallbackLogistics = {
   "hardware-products": { unitsPerCarton: 1, cartonsPerPallet: 48, kgPerCarton: 18, m3PerCarton: 0.035 },
 };
 let activeCatalogProformaCategory = null;
+let returnCatalogProformaCategory = null;
+let returnCatalogProformaTitle = "";
 const brandLogoMap = {
   ABC: "assets/abc-logo.jpg",
   Evyap: "assets/evyap-logo.svg",
@@ -1334,7 +1439,7 @@ const renderProducts = () => {
             <a class="product-quote-button" href="#catalog-proforma" data-category-id="${product.id}" data-product-option="${trade.optionValue}" data-product-title="${product.title}">${t("tradeQuoteCta")}</a>
           </div>`
         : "";
-      return `<article class="product-card" id="${product.id}"><div><span class="product-icon" aria-hidden="true">${product.icon}</span><h3>${product.title}</h3><p>${product.copy}</p></div><div class="product-meta">${product.meta
+      return `<article class="product-card" id="${product.id}"><div><div class="product-card-media"><img src="${productCategoryImages[product.id] || "assets/app-icon.svg"}" alt="" loading="lazy" /><span class="product-icon" aria-hidden="true">${product.icon}</span></div><h3>${product.title}</h3><p>${product.copy}</p></div><div class="product-meta">${product.meta
         .map((item) => `<span>${item}</span>`)
         .join("")}</div>${relatedMarkup}${tradeMarkup}</article>`;
     })
@@ -2127,21 +2232,31 @@ const closeB2BModal = () => {
   document.body.classList.remove("is-modal-open");
 };
 
-const openMainProformaPanel = () => {
+const openMainProformaPanel = (options = {}) => {
   const proformaScreen = document.querySelector("#proforma");
   if (proformaScreen) {
     proformaScreen.hidden = false;
+    proformaScreen.classList.toggle("is-summary-focus", Boolean(options.focusSummary));
     document.body.classList.add("is-modal-open");
   }
+  const backButton = document.querySelector("#proformaBackToCategory");
+  if (backButton) backButton.hidden = !returnCatalogProformaCategory;
   const panel = document.querySelector("#proformaProductPanel");
   if (panel?.hasAttribute("hidden")) panel.removeAttribute("hidden");
   renderProformaProducts();
-  setTimeout(() => document.querySelector("#proformaSearch")?.focus(), 250);
+  setTimeout(() => {
+    if (options.focusSummary) {
+      document.querySelector("#proformaOrderSummary")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    document.querySelector("#proformaSearch")?.focus();
+  }, 250);
 };
 
 const closeMainProformaPanel = () => {
   const proformaScreen = document.querySelector("#proforma");
   if (proformaScreen) proformaScreen.hidden = true;
+  proformaScreen?.classList.remove("is-summary-focus");
   document.body.classList.remove("is-modal-open");
 };
 
@@ -2253,8 +2368,17 @@ document.querySelector("#catalogProformaList")?.addEventListener("click", (event
   if (status) status.textContent = t("catalogProformaAdded");
 });
 document.querySelector("#catalogProformaSummary")?.addEventListener("click", () => {
+  returnCatalogProformaCategory = activeCatalogProformaCategory;
+  returnCatalogProformaTitle = document.querySelector("#catalog-proforma-title")?.textContent || "";
   closeCatalogProformaModal();
-  openMainProformaPanel();
+  openMainProformaPanel({ focusSummary: true });
+});
+
+document.querySelector("#proformaBackToCategory")?.addEventListener("click", () => {
+  const categoryId = returnCatalogProformaCategory;
+  const title = returnCatalogProformaTitle;
+  closeMainProformaPanel();
+  if (categoryId) openCatalogProformaModal(categoryId, title || getCategoryTitle(categoryId));
 });
 
 document.querySelector("#openProformaProducts")?.addEventListener("click", () => {
