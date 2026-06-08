@@ -9,7 +9,7 @@ const content = {
     navMarkets: "Markets",
     navProforma: "Create Proforma",
     navCustoms: "Customs",
-    navB2B: "B2B Portal",
+    navB2B: "B2B Portal Login",
     headerCta: "Get Quote",
     installAppCta: "App",
     installPanelTitle: "Sidya Global app",
@@ -123,18 +123,22 @@ const content = {
     b2bNotes: "Products, market notes and customs requirements",
     b2bSubmit: "Create B2B onboarding draft",
     b2bReady: "B2B onboarding draft is ready. Opening your mail app.",
-    b2bAuthTitle: "B2B request center",
-    b2bAuthCopy: "Enter the buyer email, move it to the form and attach documents before sending.",
+    b2bAuthTitle: "B2B customer login",
+    b2bAuthCopy: "Registered buyers can sign in with email and password to open the proforma order screen.",
     b2bAuthEmail: "Account email",
     b2bAuthPassword: "Password",
-    b2bSignUp: "Use this email",
-    b2bSignIn: "Go to form",
-    b2bSignOut: "Select files",
-    b2bAuthNotReady: "Enter an email and complete the B2B request form.",
-    b2bAuthEmailMode: "Enter an email and complete the B2B request form.",
+    b2bSignUp: "Register",
+    b2bSignIn: "Sign in",
+    b2bSignOut: "Sign out",
+    b2bAuthNotReady: "Customer login requires backend activation.",
+    b2bAuthEmailMode: "Customer login requires Supabase backend activation. New buyers can still complete the registration form below.",
     b2bAuthEmailCopied: "Email added to the B2B form.",
     b2bAuthEmailRequired: "Enter an email first.",
     b2bAuthFormReady: "Complete the B2B form and send the request.",
+    b2bAuthLoginRequired: "Enter email and password.",
+    b2bAuthLoginStarted: "Signing in...",
+    b2bAuthLoginDone: "Signed in. Proforma screen is opening.",
+    b2bAuthLoginFailed: "Login failed. Check the email/password or backend settings.",
     b2bAuthSelectFiles: "Select the company/import documents to attach.",
     b2bSignedIn: "Signed in",
     b2bSignedOut: "Signed out",
@@ -269,7 +273,7 @@ const content = {
     navMarkets: "Pazarlar",
     navProforma: "Proforma Oluştur",
     navCustoms: "Gümrük",
-    navB2B: "B2B Portal",
+    navB2B: "B2B Portal Giriş",
     headerCta: "Teklif Al",
     installAppCta: "Uygulama",
     installPanelTitle: "Sidya Global uygulaması",
@@ -383,18 +387,22 @@ const content = {
     b2bNotes: "Ürün, pazar notu ve gümrük gereklilikleri",
     b2bSubmit: "B2B kayıt taslağı oluştur",
     b2bReady: "B2B kayıt taslağı hazır. Mail uygulamanız açılıyor.",
-    b2bAuthTitle: "B2B talep merkezi",
-    b2bAuthCopy: "Alıcı e-postasını girin, forma aktarın ve evrakları ekleyerek talebi gönderin.",
+    b2bAuthTitle: "B2B müşteri girişi",
+    b2bAuthCopy: "Kayıtlı müşteriler e-posta ve şifre ile giriş yaparak proforma sipariş ekranını açabilir.",
     b2bAuthEmail: "Hesap e-postası",
     b2bAuthPassword: "Şifre",
-    b2bSignUp: "E-postayı kullan",
-    b2bSignIn: "Forma git",
-    b2bSignOut: "Evrak seç",
-    b2bAuthNotReady: "E-postayı girip B2B talep formunu tamamlayın.",
-    b2bAuthEmailMode: "E-postayı girip B2B talep formunu tamamlayın.",
+    b2bSignUp: "Kayıt ol",
+    b2bSignIn: "Giriş yap",
+    b2bSignOut: "Çıkış yap",
+    b2bAuthNotReady: "Müşteri girişi için backend aktivasyonu gerekir.",
+    b2bAuthEmailMode: "Müşteri girişi için Supabase backend aktivasyonu gerekir. Yeni alıcılar aşağıdaki kayıt formunu yine doldurabilir.",
     b2bAuthEmailCopied: "E-posta B2B formuna aktarıldı.",
     b2bAuthEmailRequired: "Önce e-posta girin.",
     b2bAuthFormReady: "B2B formunu tamamlayıp talebi gönderin.",
+    b2bAuthLoginRequired: "E-posta ve şifre girin.",
+    b2bAuthLoginStarted: "Giriş yapılıyor...",
+    b2bAuthLoginDone: "Giriş yapıldı. Proforma ekranı açılıyor.",
+    b2bAuthLoginFailed: "Giriş başarısız. E-posta/şifreyi veya backend ayarlarını kontrol edin.",
     b2bAuthSelectFiles: "Eklenecek firma/ithalat evraklarını seçin.",
     b2bSignedIn: "Giriş yapıldı",
     b2bSignedOut: "Çıkış yapıldı",
@@ -2016,6 +2024,35 @@ const copyB2BEmailToForm = () => {
   setB2BAuthStatus(email ? t("b2bAuthEmailCopied") : t("b2bAuthEmailRequired"));
 };
 
+const signInB2BCustomer = async () => {
+  const client = getSupabaseClient();
+  const { email, password } = getB2BAuthValues();
+  if (!email || !password) {
+    setB2BAuthStatus(t("b2bAuthLoginRequired"));
+    return;
+  }
+  if (!client) {
+    setB2BAuthStatus(t("b2bAuthEmailMode"));
+    return;
+  }
+  try {
+    setB2BAuthStatus(t("b2bAuthLoginStarted"));
+    const { error } = await client.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    setB2BAuthStatus(t("b2bAuthLoginDone"));
+    closeB2BModal();
+    openMainProformaPanel();
+  } catch (error) {
+    setB2BAuthStatus(error.message || t("b2bAuthLoginFailed"));
+  }
+};
+
+const signOutB2BCustomer = async () => {
+  const client = getSupabaseClient();
+  if (client) await client.auth.signOut();
+  await refreshB2BSession();
+};
+
 const b2bModal = document.querySelector("#b2bRegistrationModal");
 const openB2BModal = () => {
   if (!b2bModal) return;
@@ -2054,6 +2091,10 @@ const openProformaAfterRegistration = () => {
 };
 
 document.querySelector("#openB2BRegistration")?.addEventListener("click", openB2BModal);
+document.querySelector("#openB2BPortal")?.addEventListener("click", (event) => {
+  event.preventDefault();
+  openB2BModal();
+});
 document.querySelector("#openGuestProforma")?.addEventListener("click", openMainProformaPanel);
 document.querySelectorAll('a[href="#proforma"]').forEach((link) => {
   link.addEventListener("click", (event) => {
@@ -2078,13 +2119,11 @@ document.querySelector("#b2bSignUp")?.addEventListener("click", () => {
 });
 
 document.querySelector("#b2bSignIn")?.addEventListener("click", () => {
-  focusB2BForm();
-  setB2BAuthStatus(t("b2bAuthFormReady"));
+  signInB2BCustomer();
 });
 
 document.querySelector("#b2bSignOut")?.addEventListener("click", () => {
-  document.querySelector("#b2bDocuments")?.click();
-  setB2BAuthStatus(t("b2bAuthSelectFiles"));
+  signOutB2BCustomer();
 });
 
 document.querySelector("#b2bDocuments")?.addEventListener("change", updateB2BFileSummary);

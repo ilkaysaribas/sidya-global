@@ -1850,6 +1850,59 @@ h2 {
   line-height: 1.5;
 }
 
+.b2b-auth-card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+  gap: 14px;
+  align-items: start;
+  margin-bottom: 14px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f4f5f5;
+}
+
+.b2b-auth-card h3 {
+  margin: 0;
+  color: #151515;
+  font-size: 1.05rem;
+}
+
+.b2b-auth-card p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.b2b-auth-fields {
+  display: grid;
+  gap: 10px;
+}
+
+.b2b-auth-fields label {
+  display: grid;
+  gap: 6px;
+  color: #151515;
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.b2b-auth-fields input {
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 10px;
+  font: inherit;
+  background: #fff;
+}
+
+.b2b-auth-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .b2b-modal-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
@@ -2592,6 +2645,7 @@ h2 {
 
   .proforma-order-layout,
   .b2b-layout,
+  .b2b-auth-card,
   .b2b-modal-grid,
   .catalog-proforma-tools,
   .customs-dashboard,

@@ -30,7 +30,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260608-7" />
+    <link rel="stylesheet" href="styles.css?v=20260608-8" />
   </head>
   <body>
     <header class="site-header">
@@ -101,7 +101,7 @@
         <a href="#markets" data-i18n="navMarkets">Markets</a>
         <a href="#proforma" data-i18n="navProforma">Proforma</a>
         <a href="#customs" data-i18n="navCustoms">Customs</a>
-        <a href="#b2b" data-i18n="navB2B">B2B Portal</a>
+        <a href="#b2b-login" id="openB2BPortal" data-i18n="navB2B">B2B Portal Login</a>
       </nav>
 
       <div class="header-actions">
@@ -463,6 +463,29 @@
             <p data-i18n="b2bRegisterCopy">Fill the buyer details, attach company/import documents and send the B2B onboarding request directly.</p>
           </div>
 
+          <div class="b2b-auth-card" id="b2b-login">
+            <div>
+              <h3 data-i18n="b2bAuthTitle">B2B customer login</h3>
+              <p data-i18n="b2bAuthCopy">Registered buyers can sign in with email and password to open the proforma order screen.</p>
+            </div>
+            <div class="b2b-auth-fields">
+              <label>
+                <span data-i18n="b2bAuthEmail">Account email</span>
+                <input id="b2bAuthEmail" type="email" autocomplete="email" />
+              </label>
+              <label>
+                <span data-i18n="b2bAuthPassword">Password</span>
+                <input id="b2bAuthPassword" type="password" autocomplete="current-password" />
+              </label>
+              <div class="b2b-auth-actions">
+                <button class="form-submit" type="button" id="b2bSignIn" data-i18n="b2bSignIn">Sign in</button>
+                <button class="proforma-quote-link" type="button" id="b2bSignUp" data-i18n="b2bSignUp">Register</button>
+                <button class="proforma-quote-link" type="button" id="b2bSignOut" data-i18n="b2bSignOut">Sign out</button>
+              </div>
+              <p class="form-status" id="b2bAuthStatus" role="status"></p>
+            </div>
+          </div>
+
           <div class="b2b-modal-grid">
             <form class="b2b-form" id="b2bForm">
               <label>
@@ -702,6 +725,6 @@
       }
     </script>
     <script src="catalog-products.generated.js?v=20260601-5"></script>
-    <script src="script.js?v=20260608-10"></script>
+    <script src="script.js?v=20260608-11"></script>
   </body>
 </html>
