@@ -1224,6 +1224,26 @@ const getCategoryTitle = (categoryId) =>
   t("catalogProformaTitle");
 
 const getCategoryProducts = (categoryId) => productCatalog.filter((product) => product.category === categoryId);
+const normalizeCatalogName = (value) =>
+  String(value || "")
+    .toLocaleLowerCase("tr-TR")
+    .normalize("NFKD")
+    .replace(/[^\w]+/g, "");
+
+const partnerBrandAliases = {
+  "ABC Deterjan": ["ABC"],
+  "Eczacıbaşı / Selpak": ["Eczacıbaşı", "Selpak"],
+  "Reckitt Benckiser Home Group": ["Reckitt"],
+  "Omron Healthcare": ["Omron"],
+};
+
+const hasCatalogProductForCompany = (company) => {
+  const companyKeys = [company.name, ...(partnerBrandAliases[company.name] || [])].map(normalizeCatalogName);
+  return productCatalog.some((product) => {
+    const brandKey = normalizeCatalogName(product.brand);
+    return companyKeys.some((key) => key && (brandKey === key || brandKey.includes(key) || key.includes(brandKey)));
+  });
+};
 
 const createPartnerProductId = (categoryId, companyName) =>
   `partner-${categoryId}-${String(companyName || "company")
@@ -1261,6 +1281,16 @@ const getCatalogModalItems = (categoryId) => {
   const partners = (productPartners[categoryId] || []).map((company) => ({ type: "partner", company, product: ensurePartnerProduct(categoryId, company) }));
   return [...realProducts, ...partners];
 };
+
+const seedMissingPartnerProducts = () => {
+  Object.entries(productPartners).forEach(([categoryId, companies]) => {
+    companies.forEach((company) => {
+      if (!hasCatalogProductForCompany(company)) ensurePartnerProduct(categoryId, company);
+    });
+  });
+};
+
+seedMissingPartnerProducts();
 
 const addProformaLineWithQuantity = (productId, quantity) => {
   const product = productCatalog.find((item) => item.id === productId);
