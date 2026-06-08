@@ -1,11 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 160" role="img" aria-label="Home and living products">
-  <rect width="360" height="160" rx="18" fill="#f3f4f4"/>
-  <path d="M48 92l60-48 60 48v48H48z" fill="#d8dbdc"/>
-  <path d="M72 82v-28h38v28" fill="#bfc4c6"/>
-  <rect x="84" y="104" width="28" height="36" rx="3" fill="#6f7679"/>
-  <rect x="128" y="108" width="36" height="24" rx="4" fill="#9aa1a4"/>
-  <rect x="202" y="50" width="86" height="90" rx="10" fill="#d0d3d4"/>
-  <rect x="216" y="68" width="58" height="12" rx="6" fill="#72797c"/>
-  <rect x="216" y="92" width="58" height="12" rx="6" fill="#a0a6a8"/>
-  <rect x="216" y="116" width="40" height="12" rx="6" fill="#a0a6a8"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 180" role="img" aria-label="Home and living product group">
+  <rect width="360" height="180" rx="18" fill="#f8f8f6"/>
+  <ellipse cx="180" cy="154" rx="126" ry="14" fill="#d9d7d0"/>
+  <rect x="43" y="86" width="74" height="64" rx="13" fill="#c6a46a"/>
+  <path d="M57 86v-9c0-9 7-16 16-16h14c9 0 16 7 16 16v9" fill="none" stroke="#8f7448" stroke-width="8"/>
+  <rect x="132" y="67" width="53" height="83" rx="9" fill="#e9e2d4"/>
+  <rect x="143" y="54" width="31" height="18" rx="5" fill="#7a837d"/>
+  <rect x="145" y="91" width="27" height="31" rx="6" fill="#c9b38a"/>
+  <path d="M213 71h64v67c0 7-6 12-12 12h-40c-7 0-12-6-12-12z" fill="#9fb5bd"/>
+  <path d="M222 71c2-19 44-19 47 0" fill="none" stroke="#596d74" stroke-width="8"/>
+  <rect x="291" y="93" width="30" height="57" rx="8" fill="#5d6b62"/>
+  <path d="M291 106h30" stroke="#e4e7e1" stroke-width="5"/>
 </svg>

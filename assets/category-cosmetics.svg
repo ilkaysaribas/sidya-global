@@ -1,9 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 160" role="img" aria-label="Cosmetics and personal care">
-  <rect width="360" height="160" rx="18" fill="#f3f4f4"/>
-  <rect x="68" y="46" width="58" height="100" rx="18" fill="#d8c1cc"/>
-  <rect x="82" y="28" width="30" height="28" rx="6" fill="#8d6577"/>
-  <rect x="158" y="56" width="48" height="90" rx="14" fill="#e8e0d2"/>
-  <rect x="168" y="36" width="28" height="24" rx="5" fill="#b9a076"/>
-  <rect x="244" y="42" width="70" height="104" rx="16" fill="#cfd6d8"/>
-  <path d="M258 78h42M258 102h34" stroke="#6a7174" stroke-width="9" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 180" role="img" aria-label="Personal care product group">
+  <rect width="360" height="180" rx="18" fill="#f8f5f6"/>
+  <ellipse cx="180" cy="154" rx="124" ry="14" fill="#ded4d8"/>
+  <rect x="53" y="62" width="39" height="88" rx="12" fill="#f1b5c5"/>
+  <rect x="61" y="44" width="23" height="23" rx="5" fill="#8f5f70"/>
+  <rect x="59" y="93" width="27" height="31" rx="7" fill="#fff1f5"/>
+  <rect x="112" y="76" width="46" height="74" rx="11" fill="#d98d70"/>
+  <rect x="121" y="57" width="28" height="23" rx="5" fill="#8b4e3f"/>
+  <rect x="122" y="101" width="25" height="25" rx="6" fill="#ffe9df"/>
+  <rect x="179" y="47" width="43" height="103" rx="13" fill="#e7d9c9"/>
+  <rect x="190" y="30" width="21" height="21" rx="5" fill="#a9825b"/>
+  <rect x="187" y="86" width="27" height="34" rx="7" fill="#fff8ef"/>
+  <rect x="244" y="65" width="56" height="85" rx="15" fill="#9ec0d5"/>
+  <rect x="258" y="45" width="28" height="25" rx="6" fill="#5f8197"/>
+  <rect x="255" y="96" width="34" height="30" rx="7" fill="#eef7fb"/>
 </svg>

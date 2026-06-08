@@ -1,9 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 160" role="img" aria-label="Industrial supplies">
-  <rect width="360" height="160" rx="18" fill="#f3f4f4"/>
-  <rect x="48" y="72" width="96" height="72" rx="8" fill="#8b9296"/>
-  <path d="M64 72V50h22v22M104 72V42h22v30" stroke="#61676a" stroke-width="10" fill="none"/>
-  <rect x="176" y="46" width="110" height="98" rx="10" fill="#d7dadb"/>
-  <path d="M192 70h78M192 94h78M192 118h58" stroke="#5d6467" stroke-width="10" stroke-linecap="round"/>
-  <circle cx="306" cy="60" r="18" fill="#ffc857"/>
-  <path d="M296 60h20M306 50v20" stroke="#2f3131" stroke-width="5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 180" role="img" aria-label="Industrial supply group">
+  <rect width="360" height="180" rx="18" fill="#f4f6f7"/>
+  <ellipse cx="184" cy="155" rx="130" ry="14" fill="#cfd7dd"/>
+  <rect x="42" y="80" width="64" height="70" rx="6" fill="#2f6fbd"/>
+  <path d="M42 95h64M58 80v70M90 80v70" stroke="#e7f0ff" stroke-width="5" opacity=".85"/>
+  <rect x="126" y="64" width="54" height="86" rx="8" fill="#243746"/>
+  <rect x="136" y="44" width="34" height="24" rx="4" fill="#9aa7af"/>
+  <rect x="136" y="92" width="34" height="30" rx="5" fill="#dbe2e7"/>
+  <rect x="197" y="73" width="78" height="77" rx="8" fill="#eeb22d"/>
+  <path d="M197 91h78M218 73v77M252 73v77" stroke="#8d6820" stroke-width="5" opacity=".45"/>
+  <rect x="289" y="58" width="30" height="92" rx="7" fill="#56616a"/>
+  <rect x="284" y="45" width="40" height="18" rx="4" fill="#2c343a"/>
+  <circle cx="304" cy="82" r="8" fill="#d7dde1"/>
+  <circle cx="304" cy="113" r="8" fill="#d7dde1"/>
 </svg>

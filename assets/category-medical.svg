@@ -1,10 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 160" role="img" aria-label="Medical products">
-  <rect width="360" height="160" rx="18" fill="#f3f4f4"/>
-  <rect x="58" y="48" width="104" height="96" rx="16" fill="#ffffff"/>
-  <path d="M96 70h28v24h24v28h-24v24H96v-24H72V94h24z" fill="#2f7f8f"/>
-  <rect x="204" y="46" width="44" height="100" rx="14" fill="#dce5e8"/>
-  <rect x="214" y="28" width="24" height="26" rx="5" fill="#8aa3ac"/>
-  <rect x="268" y="70" width="60" height="20" rx="10" fill="#b8c4c8"/>
-  <rect x="286" y="66" width="18" height="28" rx="4" fill="#2f3131" opacity=".24"/>
-  <path d="M260 112h72" stroke="#2f3131" stroke-width="8" stroke-linecap="round" opacity=".35"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 180" role="img" aria-label="Medical product group">
+  <rect width="360" height="180" rx="18" fill="#f5f8fa"/>
+  <ellipse cx="180" cy="154" rx="128" ry="14" fill="#d4dde3"/>
+  <rect x="48" y="72" width="78" height="78" rx="12" fill="#ffffff" stroke="#cbd6de" stroke-width="4"/>
+  <path d="M87 91v40M67 111h40" stroke="#3fa3c7" stroke-width="10" stroke-linecap="round"/>
+  <rect x="146" y="58" width="44" height="92" rx="11" fill="#b9dbe8"/>
+  <rect x="157" y="39" width="22" height="24" rx="5" fill="#658896"/>
+  <rect x="154" y="91" width="28" height="30" rx="6" fill="#f4fbfd"/>
+  <rect x="209" y="78" width="60" height="72" rx="9" fill="#eef2f5" stroke="#c5d0d8" stroke-width="3"/>
+  <rect x="222" y="95" width="34" height="8" rx="4" fill="#9cb3c0"/>
+  <rect x="222" y="113" width="28" height="8" rx="4" fill="#9cb3c0"/>
+  <rect x="288" y="63" width="28" height="87" rx="8" fill="#6aa9c5"/>
+  <rect x="283" y="51" width="38" height="15" rx="4" fill="#386f87"/>
 </svg>

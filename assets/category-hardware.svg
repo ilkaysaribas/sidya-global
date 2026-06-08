@@ -1,9 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 160" role="img" aria-label="Construction and hardware products">
-  <rect width="360" height="160" rx="18" fill="#f3f4f4"/>
-  <path d="M72 120l92-92 28 28-92 92z" fill="#8b9296"/>
-  <path d="M154 28l28-18 42 42-18 28z" fill="#565d60"/>
-  <rect x="218" y="52" width="32" height="100" rx="8" transform="rotate(-35 234 102)" fill="#ffc857"/>
-  <path d="M260 42l24 24M92 118l24 24" stroke="#2f3131" stroke-width="7" stroke-linecap="round"/>
-  <rect x="262" y="98" width="58" height="46" rx="8" fill="#cfd3d5"/>
-  <path d="M274 116h34" stroke="#6b7376" stroke-width="8" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 180" role="img" aria-label="Hardware product group">
+  <rect width="360" height="180" rx="18" fill="#f7f6f3"/>
+  <ellipse cx="180" cy="154" rx="130" ry="14" fill="#d8d2c6"/>
+  <rect x="44" y="79" width="70" height="71" rx="8" fill="#d7a645"/>
+  <path d="M44 96h70M64 79v71M94 79v71" stroke="#7f6228" stroke-width="5" opacity=".45"/>
+  <path d="M142 69h33l18 18-48 48-33-33z" fill="#60717a"/>
+  <rect x="129" y="102" width="68" height="23" rx="8" transform="rotate(-45 129 102)" fill="#9ca9ae"/>
+  <rect x="216" y="70" width="32" height="80" rx="8" fill="#3a4650"/>
+  <rect x="211" y="56" width="42" height="18" rx="4" fill="#909da3"/>
+  <path d="M276 70l32 32-48 48-32-32z" fill="#b55d34"/>
+  <path d="M259 87l32 32" stroke="#ffe0c8" stroke-width="7" stroke-linecap="round"/>
 </svg>
