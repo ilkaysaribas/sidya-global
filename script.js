@@ -2149,14 +2149,15 @@ const uploadB2BDocuments = async (client, userId, files) => {
 };
 
 const saveB2BRequest = async (client, userId, form, documentPaths) => {
+  const email = String(form.get("email") || "").trim();
   const payload = {
     user_id: userId,
     company: String(form.get("company") || ""),
     contact: String(form.get("contact") || ""),
-    email: String(form.get("email") || ""),
+    email,
     country: String(form.get("country") || ""),
     tax_number: String(form.get("tax") || ""),
-    username: String(form.get("username") || ""),
+    username: email.split("@")[0] || email,
     incoterm: String(form.get("incoterm") || ""),
     notes: String(form.get("notes") || ""),
     document_paths: documentPaths,
@@ -2213,8 +2214,10 @@ const signOutB2BCustomer = async () => {
 
 const createB2BCustomerAccount = async (client, form) => {
   const email = String(form.get("email") || "").trim();
-  const password = String(form.get("password") || "");
+  const password = getB2BAuthValues().password;
   if (!email || !password) throw new Error(t("b2bAuthLoginRequired"));
+  const authEmailInput = document.querySelector("#b2bAuthEmail");
+  if (authEmailInput && !authEmailInput.value.trim()) authEmailInput.value = email;
   setB2BAuthStatus(t("b2bAuthSignupStarted"));
   const { data, error } = await withTimeout(
     client.auth.signUp({
@@ -2224,7 +2227,7 @@ const createB2BCustomerAccount = async (client, form) => {
         data: {
           company: String(form.get("company") || ""),
           contact: String(form.get("contact") || ""),
-          username: String(form.get("username") || ""),
+          username: email.split("@")[0] || email,
           country: String(form.get("country") || ""),
         },
       },
