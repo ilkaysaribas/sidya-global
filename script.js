@@ -139,6 +139,8 @@ const content = {
     b2bAuthLoginStarted: "Signing in...",
     b2bAuthLoginDone: "Signed in. Proforma screen is opening.",
     b2bAuthLoginFailed: "Login failed. Check the email/password or backend settings.",
+    b2bAuthSignupStarted: "Creating buyer account...",
+    b2bAuthSignupDone: "Buyer account created.",
     b2bAuthSelectFiles: "Select the company/import documents to attach.",
     b2bSignedIn: "Signed in",
     b2bSignedOut: "Signed out",
@@ -403,6 +405,8 @@ const content = {
     b2bAuthLoginStarted: "Giriş yapılıyor...",
     b2bAuthLoginDone: "Giriş yapıldı. Proforma ekranı açılıyor.",
     b2bAuthLoginFailed: "Giriş başarısız. E-posta/şifreyi veya backend ayarlarını kontrol edin.",
+    b2bAuthSignupStarted: "Alıcı hesabı oluşturuluyor...",
+    b2bAuthSignupDone: "Alıcı hesabı oluşturuldu.",
     b2bAuthSelectFiles: "Eklenecek firma/ithalat evraklarını seçin.",
     b2bSignedIn: "Giriş yapıldı",
     b2bSignedOut: "Çıkış yapıldı",
@@ -2083,6 +2087,32 @@ const signOutB2BCustomer = async () => {
   await refreshB2BSession();
 };
 
+const createB2BCustomerAccount = async (client, form) => {
+  const email = String(form.get("email") || "").trim();
+  const password = String(form.get("password") || "");
+  if (!email || !password) throw new Error(t("b2bAuthLoginRequired"));
+  setB2BAuthStatus(t("b2bAuthSignupStarted"));
+  const { data, error } = await client.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        company: String(form.get("company") || ""),
+        contact: String(form.get("contact") || ""),
+        username: String(form.get("username") || ""),
+        country: String(form.get("country") || ""),
+      },
+    },
+  });
+  if (error) throw error;
+  if (data.session?.user) {
+    setB2BAuthStatus(t("b2bAuthSignupDone"));
+    return data.session;
+  }
+  setB2BAuthStatus(t("b2bCheckEmail"));
+  return null;
+};
+
 const b2bModal = document.querySelector("#b2bRegistrationModal");
 const openB2BModal = () => {
   if (!b2bModal) return;
@@ -2166,30 +2196,33 @@ document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => 
   const files = Array.from(document.querySelector("#b2bDocuments")?.files || []);
   const status = document.querySelector("#b2bStatus");
   const client = getSupabaseClient();
-  try {
-    if (status) status.textContent = t("b2bServerSubmit");
-    const result = await submitB2BServerRequest(event.currentTarget);
-    if (result.ok) {
-      if (status) status.textContent = t("b2bRegisteredOpenProforma");
-      event.currentTarget.reset();
-      updateB2BFileSummary();
-      openProformaAfterRegistration();
-      return;
-    }
-  } catch (error) {
-    if (status) status.textContent = error.message || t("b2bBackendFallback");
-  }
-
   if (!client) {
+    try {
+      if (status) status.textContent = t("b2bServerSubmit");
+      const result = await submitB2BServerRequest(event.currentTarget);
+      if (result.ok) {
+        if (status) status.textContent = t("b2bRegisteredOpenProforma");
+        event.currentTarget.reset();
+        updateB2BFileSummary();
+        openProformaAfterRegistration();
+        return;
+      }
+    } catch (error) {
+      if (status) status.textContent = error.message || t("b2bBackendFallback");
+    }
+
     if (status) status.textContent = t("b2bServerMissing");
     openB2BMailDraft(form, files);
     setTimeout(openProformaAfterRegistration, 900);
     return;
   }
 
-  const session = await refreshB2BSession();
+  let session = await refreshB2BSession();
   if (!session?.user) {
-    if (status) status.textContent = t("b2bServerMissing");
+    session = await createB2BCustomerAccount(client, form);
+  }
+  if (!session?.user) {
+    if (status) status.textContent = t("b2bCheckEmail");
     openB2BMailDraft(form, files);
     setTimeout(openProformaAfterRegistration, 900);
     return;

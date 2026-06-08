@@ -26,7 +26,19 @@ Do not store or email plain-text passwords. If Supabase Auth is configured, buye
 
 ## 2. Configure Site
 
-Open `backend-config.js` and fill:
+For local file preview, `backend-config.js` can stay empty.
+
+For the live Vercel site, add these Environment Variables in Vercel:
+
+```txt
+SIDYA_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+SIDYA_SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY
+SIDYA_SUPABASE_STORAGE_BUCKET=b2b-documents
+```
+
+The live site reads these values from `/api/backend-config.js`, so Supabase keys do not need to be committed into GitHub.
+
+If you still want a local-only preview with Supabase, open `backend-config.js` and fill:
 
 ```js
 window.SIDYA_BACKEND = {
@@ -36,7 +48,7 @@ window.SIDYA_BACKEND = {
 };
 ```
 
-The anon key is public by design. Do not put the Supabase service role key in this website.
+The anon key is public by design. Do not put the Supabase service role key in this website or in frontend JavaScript.
 
 ## 3. Deploy
 
