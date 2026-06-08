@@ -30,7 +30,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260608-6" />
+    <link rel="stylesheet" href="styles.css?v=20260608-7" />
   </head>
   <body>
     <header class="site-header">
@@ -220,12 +220,15 @@
         <div class="product-grid" id="productGrid"></div>
       </section>
 
-      <section class="section proforma-order-section" id="proforma" aria-labelledby="proforma-order-title">
-        <div class="section-heading">
-          <p class="section-kicker" data-i18n="proformaKicker">Proforma platform</p>
-          <h2 id="proforma-order-title" data-i18n="proformaOrderTitle">Create a proforma order</h2>
-          <p data-i18n="proformaOrderCopy">Open the product selector, search by brand or product name, enter carton quantity and add items to the proforma total.</p>
-        </div>
+      <section class="section proforma-order-section proforma-screen-modal" id="proforma" aria-labelledby="proforma-order-title" hidden>
+        <div class="b2b-modal-backdrop" data-close-proforma-screen></div>
+        <div class="proforma-screen-dialog">
+          <button class="b2b-modal-close" type="button" data-close-proforma-screen aria-label="Close">&times;</button>
+          <div class="section-heading">
+            <p class="section-kicker" data-i18n="proformaKicker">Proforma platform</p>
+            <h2 id="proforma-order-title" data-i18n="proformaOrderTitle">Create a proforma order</h2>
+            <p data-i18n="proformaOrderCopy">Open the product selector, search by brand or product name, enter carton quantity and add items to the proforma total.</p>
+          </div>
 
         <div class="proforma-order-layout">
           <div class="proforma-picker">
@@ -299,6 +302,7 @@
               <strong id="containerFillText">0% full</strong>
             </div>
           </article>
+        </div>
         </div>
       </section>
 
@@ -419,10 +423,10 @@
 
         <div class="b2b-entry-card">
           <div>
-            <h3 data-i18n="b2bEntryTitle">Register as a buyer</h3>
-            <p data-i18n="b2bEntryCopy">Open the secure buyer registration screen to enter company details, tax information and upload required documents.</p>
+            <h3 data-i18n="guestProformaTitle">Create proforma without registration</h3>
+            <p data-i18n="guestProformaCopy">Open the proforma order screen directly, select products and calculate carton, pallet, kg and m3 totals.</p>
           </div>
-          <button class="b2b-register-button" type="button" id="openB2BRegistration" data-i18n="b2bRegisterCta">Buyer Register</button>
+          <button class="b2b-register-button" type="button" id="openGuestProforma" data-i18n="guestProformaCta">Create Proforma Order</button>
         </div>
 
         <div class="export-roadmap b2b-roadmap-compact" aria-label="Export compliance roadmap">
@@ -698,6 +702,6 @@
       }
     </script>
     <script src="catalog-products.generated.js?v=20260601-5"></script>
-    <script src="script.js?v=20260608-9"></script>
+    <script src="script.js?v=20260608-10"></script>
   </body>
 </html>

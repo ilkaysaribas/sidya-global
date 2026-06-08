@@ -1246,6 +1246,36 @@ h2 {
   background: #f5f5f5;
 }
 
+.proforma-screen-modal[hidden] {
+  display: none;
+}
+
+.proforma-screen-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  overflow: auto;
+  background: transparent;
+}
+
+.proforma-screen-dialog {
+  position: relative;
+  z-index: 1;
+  width: min(1180px, 100%);
+  max-height: min(90vh, 900px);
+  overflow: auto;
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #f7f8f8;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+}
+
 .proforma-order-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(290px, 0.8fr);

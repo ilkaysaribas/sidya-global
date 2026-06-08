@@ -104,6 +104,9 @@ const content = {
     b2bEntryTitle: "Register as a buyer",
     b2bEntryCopy: "Open the buyer registration screen to enter company details, tax information and upload required documents.",
     b2bRegisterCta: "Buyer Register",
+    guestProformaTitle: "Create proforma without registration",
+    guestProformaCopy: "Open the proforma order screen directly, select products and calculate carton, pallet, kg and m3 totals.",
+    guestProformaCta: "Create Proforma Order",
     b2bRegisterTitle: "Buyer registration",
     b2bRegisterCopy: "Fill the buyer details, attach company/import documents and send the B2B onboarding request directly.",
     b2bCompany: "Company legal name",
@@ -361,6 +364,9 @@ const content = {
     b2bEntryTitle: "Alıcı olarak kayıt ol",
     b2bEntryCopy: "Firma bilgileri, vergi bilgileri ve gerekli evrakları girmek için alıcı kayıt ekranını açın.",
     b2bRegisterCta: "Alıcı Kayıt Ol",
+    guestProformaTitle: "Kayıt olmadan proforma sipariş oluştur",
+    guestProformaCopy: "Proforma sipariş ekranını doğrudan açın, ürün seçin ve koli, palet, kg ve m3 toplamlarını hesaplayın.",
+    guestProformaCta: "Kayıt Olmadan Proforma Sipariş Oluştur",
     b2bRegisterTitle: "Alıcı kayıt",
     b2bRegisterCopy: "Alıcı bilgilerini doldurun, firma/ithalat evraklarını ekleyin ve B2B kayıt talebini doğrudan gönderin.",
     b2bCompany: "Firma resmi unvanı",
@@ -2025,10 +2031,21 @@ const closeB2BModal = () => {
 };
 
 const openMainProformaPanel = () => {
-  document.querySelector("#proforma")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const proformaScreen = document.querySelector("#proforma");
+  if (proformaScreen) {
+    proformaScreen.hidden = false;
+    document.body.classList.add("is-modal-open");
+  }
   const panel = document.querySelector("#proformaProductPanel");
   if (panel?.hasAttribute("hidden")) panel.removeAttribute("hidden");
+  renderProformaProducts();
   setTimeout(() => document.querySelector("#proformaSearch")?.focus(), 250);
+};
+
+const closeMainProformaPanel = () => {
+  const proformaScreen = document.querySelector("#proforma");
+  if (proformaScreen) proformaScreen.hidden = true;
+  document.body.classList.remove("is-modal-open");
 };
 
 const openProformaAfterRegistration = () => {
@@ -2037,12 +2054,23 @@ const openProformaAfterRegistration = () => {
 };
 
 document.querySelector("#openB2BRegistration")?.addEventListener("click", openB2BModal);
+document.querySelector("#openGuestProforma")?.addEventListener("click", openMainProformaPanel);
+document.querySelectorAll('a[href="#proforma"]').forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    openMainProformaPanel();
+  });
+});
+document.querySelectorAll("[data-close-proforma-screen]").forEach((button) => {
+  button.addEventListener("click", closeMainProformaPanel);
+});
 document.querySelectorAll("[data-close-b2b]").forEach((button) => {
   button.addEventListener("click", closeB2BModal);
 });
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && b2bModal && !b2bModal.hidden) closeB2BModal();
   if (event.key === "Escape" && catalogProformaModal && !catalogProformaModal.hidden) closeCatalogProformaModal();
+  if (event.key === "Escape" && !document.querySelector("#proforma")?.hidden) closeMainProformaPanel();
 });
 
 document.querySelector("#b2bSignUp")?.addEventListener("click", () => {
