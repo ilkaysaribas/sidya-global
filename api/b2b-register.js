@@ -70,6 +70,16 @@ const requireEnv = () => {
   };
 };
 
+const getEnvStatus = () => {
+  const envNames = ["NEXT_PUBLIC_SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"];
+  const missing = envNames.filter((name) => !process.env[name]);
+  return {
+    ok: missing.length === 0,
+    required: envNames,
+    missing,
+  };
+};
+
 const supabaseFetch = async ({ path, method = "GET", body, headers = {}, supabaseUrl, serviceRoleKey }) => {
   const response = await fetch(`${supabaseUrl}${path}`, {
     method,
@@ -206,8 +216,15 @@ const saveRequest = async ({ fields, userId, documentPaths, supabaseUrl, service
 };
 
 module.exports = async (req, res) => {
+  if (req.method === "GET") {
+    const status = getEnvStatus();
+    if (!status.ok) console.error(`Missing B2B registration environment variables: ${status.missing.join(", ")}`);
+    res.status(status.ok ? 200 : 501).json(status);
+    return;
+  }
+
   if (req.method !== "POST") {
-    res.setHeader("Allow", "POST");
+    res.setHeader("Allow", "GET, POST");
     res.status(405).json({ error: "Method not allowed" });
     return;
   }

@@ -2076,7 +2076,11 @@ const submitB2BRegistration = async (formElement) => {
     method: "POST",
     body: formData,
   });
-  if (response.status === 501) return { ok: false, configured: false };
+  if (response.status === 501) {
+    const payload = await response.json().catch(() => ({}));
+    const missing = Array.isArray(payload.missing) && payload.missing.length ? ` (${payload.missing.join(", ")})` : "";
+    throw new Error(`${t("b2bServerMissing")}${missing}`);
+  }
   if (!response.ok) {
     const payload = await response.json().catch(() => ({}));
     throw new Error(payload.error || "B2B request could not be sent.");
