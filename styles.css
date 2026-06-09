@@ -795,6 +795,38 @@ h2 {
   transition: transform 780ms ease, filter 780ms ease;
 }
 
+.product-card-home-products .product-card-media img {
+  object-position: 16% 24%;
+}
+
+.product-card-cleaning-products .product-card-media img {
+  object-position: 50% 24%;
+}
+
+.product-card-food-products .product-card-media img {
+  object-position: 84% 24%;
+}
+
+.product-card-industrial-products .product-card-media img {
+  object-position: 12% 78%;
+}
+
+.product-card-medical-products .product-card-media img {
+  object-position: 34% 78%;
+}
+
+.product-card-hardware-products .product-card-media img {
+  object-position: 50% 78%;
+}
+
+.product-card-automotive-products .product-card-media img {
+  object-position: 66% 78%;
+}
+
+.product-card-cosmetics-products .product-card-media img {
+  object-position: 86% 78%;
+}
+
 .product-card:hover .product-card-media img,
 .product-card:focus-within .product-card-media img {
   filter: saturate(1.05) contrast(1.04);
@@ -997,17 +1029,21 @@ h2 {
   overflow: hidden;
   border-radius: 8px;
   background:
-    radial-gradient(circle at 28% 28%, rgba(255, 255, 255, 0.24), transparent 18%),
-    linear-gradient(135deg, #d9dedf 0%, #f7f7f5 42%, #bfc8cb 100%);
+    linear-gradient(145deg, transparent 57%, rgba(69, 86, 93, 0.26) 58% 62%, transparent 63%),
+    linear-gradient(28deg, transparent 35%, rgba(69, 86, 93, 0.18) 36% 39%, transparent 40%),
+    linear-gradient(135deg, #d9dedf 0%, #f7f7f5 46%, #c7d0d2 100%);
   border: 1px solid var(--line);
 }
 
 .port-map::before {
   content: "";
   position: absolute;
-  inset: 28px 20px;
-  border: 2px dashed rgba(47, 52, 55, 0.2);
-  border-radius: 48% 52% 46% 54%;
+  left: 18px;
+  right: 28px;
+  top: 84px;
+  height: 54px;
+  clip-path: polygon(0 50%, 12% 26%, 24% 44%, 38% 22%, 54% 42%, 66% 18%, 82% 48%, 100% 36%, 92% 72%, 72% 66%, 58% 82%, 40% 64%, 26% 80%, 12% 60%);
+  background: rgba(47, 52, 55, 0.22);
 }
 
 .port-pin {
@@ -1057,6 +1093,20 @@ h2 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
+}
+
+.port-link-grid a {
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 58px;
+  border-radius: 8px;
+  gap: 3px;
+}
+
+.port-link-grid a span,
+.port-link-grid a small {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.68rem;
 }
 
 .fuel-form {
@@ -1131,6 +1181,124 @@ h2 {
   color: var(--muted);
   font-size: 0.78rem;
   font-weight: 780;
+}
+
+.country-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.official-source-link {
+  width: max-content;
+  max-width: 100%;
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 9px;
+  border-radius: 999px;
+  color: #fff;
+  background: #2f3437;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.logistics-updated {
+  display: inline-flex;
+  width: max-content;
+  max-width: 100%;
+  min-height: 28px;
+  align-items: center;
+  margin-top: 10px;
+  padding: 0 10px;
+  border-radius: 999px;
+  color: #202426;
+  background: #ffe08a;
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+
+.target-market-details {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.target-market-card {
+  position: relative;
+  min-height: 150px;
+  overflow: hidden;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.target-market-card h3 {
+  margin: 0 0 7px;
+  color: var(--navy);
+  font-size: 1rem;
+}
+
+.target-market-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.48;
+  font-size: 0.82rem;
+}
+
+.target-market-hover {
+  position: absolute;
+  inset: auto 0 0;
+  display: grid;
+  gap: 8px;
+  max-height: 78%;
+  overflow: auto;
+  padding: 12px;
+  color: #fff;
+  background: rgba(47, 52, 55, 0.96);
+  transform: translateY(calc(100% - 36px));
+  transition: transform 260ms ease;
+}
+
+.target-market-card:hover .target-market-hover,
+.target-market-card:focus-within .target-market-hover {
+  transform: translateY(0);
+}
+
+.target-market-hover strong {
+  font-size: 0.78rem;
+}
+
+.target-market-hover ul {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding-left: 16px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.74rem;
+}
+
+.target-category-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.target-category-links a {
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 999px;
+  color: #202426;
+  background: #f1f2f2;
+  font-size: 0.66rem;
+  font-weight: 900;
 }
 
 .risk-meter {
@@ -3373,7 +3541,8 @@ h2 {
   .b2b-layout,
   .transport-grid,
   .border-gate-grid,
-  .logistics-grid {
+  .logistics-grid,
+  .target-market-details {
     grid-template-columns: 1fr;
   }
 

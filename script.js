@@ -1129,14 +1129,14 @@ catalogOrderSeeds.forEach((product) => {
 
 const proformaOrder = new Map();
 const productCategoryImages = {
-  "home-products": "assets/category-home.svg",
-  "cleaning-products": "assets/category-cleaning.svg",
-  "food-products": "assets/category-food.svg",
-  "industrial-products": "assets/category-industrial.svg",
-  "medical-products": "assets/category-medical.svg",
-  "cosmetics-products": "assets/category-cosmetics.svg",
-  "automotive-products": "assets/category-automotive.svg",
-  "hardware-products": "assets/category-hardware.svg",
+  "home-products": "assets/category-showcase.png",
+  "cleaning-products": "assets/category-showcase.png",
+  "food-products": "assets/category-showcase.png",
+  "industrial-products": "assets/category-showcase.png",
+  "medical-products": "assets/category-showcase.png",
+  "cosmetics-products": "assets/category-showcase.png",
+  "automotive-products": "assets/category-showcase.png",
+  "hardware-products": "assets/category-showcase.png",
 };
 
 const supplierSearchItems = [
@@ -1150,15 +1150,6 @@ const supplierSearchItems = [
     categoryId: "cleaning-products",
   },
   {
-    brand: "Nilco",
-    category: "Temizlik Ürünleri",
-    keywords: ["çamaşır deterjanı", "deterjan", "temizlik", "nilco", "yüzey temizleyici"],
-    moq: "1 palet ve üzeri",
-    loading: "Paletli hızlı sevkiyat",
-    contact: "#contact",
-    categoryId: "cleaning-products",
-  },
-  {
     brand: "Evyap",
     category: "Temizlik ve Kişisel Bakım",
     keywords: ["çamaşır deterjanı", "sabun", "şampuan", "kişisel bakım", "evyap"],
@@ -1168,12 +1159,30 @@ const supplierSearchItems = [
     categoryId: "cleaning-products",
   },
   {
-    brand: "Hayat Kimya",
-    category: "Temizlik ve Hijyen",
-    keywords: ["çamaşır deterjanı", "deterjan", "kağıt ürünleri", "hijyen", "hayat kimya"],
-    moq: "1 palet ve üzeri",
-    loading: "Palet, parsiyel ve konteyner planlama",
-    contact: "#contact",
+    brand: "Nivea",
+    category: "Kozmetik ve Kişisel Bakım",
+    keywords: ["güneş kremi", "gunes kremi", "sun cream", "sunscreen", "cilt bakımı", "kozmetik", "nivea", "krem"],
+    moq: "Ürün bazlı teklif",
+    loading: "Koli ve palet bazlı yükleme",
+    contact: "#catalog-proforma",
+    categoryId: "cosmetics-products",
+  },
+  {
+    brand: "Sebamed",
+    category: "Kozmetik ve Kişisel Bakım",
+    keywords: ["güneş kremi", "gunes kremi", "sun cream", "sunscreen", "sebamed", "kişisel bakım", "kozmetik", "bebek bakım"],
+    moq: "Ürün bazlı teklif",
+    loading: "Koli ve palet bazlı yükleme",
+    contact: "#catalog-proforma",
+    categoryId: "cosmetics-products",
+  },
+  {
+    brand: "Reckitt",
+    category: "Temizlik ve Ev Bakım",
+    keywords: ["temizlik", "bulaşık", "yüzey temizleyici", "reckitt", "hijyen"],
+    moq: "Ürün bazlı teklif",
+    loading: "Koli ve palet bazlı yükleme",
+    contact: "#catalog-proforma",
     categoryId: "cleaning-products",
   },
   {
@@ -1206,19 +1215,30 @@ const supplierSearchItems = [
 ];
 
 const borderGateData = [
-  { flag: "🇬🇪", name: "Gürcistan / Sarp", vehicles: 64, wait: "1 sa 35 dk", density: "yellow", trend: [28, 36, 41, 52, 64, 58, 61], camera: "https://www.google.com/search?q=Sarp+s%C4%B1n%C4%B1r+kap%C4%B1s%C4%B1+canl%C4%B1+kamera" },
-  { flag: "🇦🇿", name: "Azerbaycan", vehicles: 38, wait: "55 dk", density: "green", trend: [34, 39, 35, 31, 38, 36, 37], camera: "https://www.google.com/search?q=Azerbaycan+s%C4%B1n%C4%B1r+kap%C4%B1s%C4%B1+canl%C4%B1+kamera" },
-  { flag: "🇮🇷", name: "İran / Gürbulak", vehicles: 82, wait: "2 sa 10 dk", density: "red", trend: [56, 62, 68, 75, 82, 79, 84], camera: "https://www.google.com/search?q=G%C3%BCrbulak+s%C4%B1n%C4%B1r+kap%C4%B1s%C4%B1+canl%C4%B1+kamera" },
-  { flag: "🇮🇶", name: "Irak / Habur", vehicles: 71, wait: "1 sa 50 dk", density: "yellow", trend: [48, 52, 57, 63, 71, 66, 69], camera: "https://www.google.com/search?q=Habur+s%C4%B1n%C4%B1r+kap%C4%B1s%C4%B1+canl%C4%B1+kamera" },
-  { flag: "🇺🇦", name: "Ukrayna", vehicles: 29, wait: "40 dk", density: "green", trend: [25, 24, 28, 31, 29, 27, 26], camera: "https://www.google.com/search?q=Ukrayna+s%C4%B1n%C4%B1r+kap%C4%B1s%C4%B1+canl%C4%B1+kamera" },
-  { flag: "🇰🇿", name: "Kazakistan", vehicles: 44, wait: "1 sa 05 dk", density: "green", trend: [37, 42, 45, 48, 44, 41, 43], camera: "https://www.google.com/search?q=Kazakistan+s%C4%B1n%C4%B1r+kap%C4%B1s%C4%B1+canl%C4%B1+kamera" },
+  { flag: "🇬🇪", country: "Gürcistan", name: "Sarp / Sarpi", sourceId: "ge-rs-tirpark", fee: "TIR park ve gümrük işlemleri resmi kaynakta doğrulanır", wait: "Resmi TIR Park kaynağı", density: "green", trend: [32, 36, 41, 38, 44, 39, 42], camera: "https://www.rs.ge/TirPark-en" },
+  { flag: "🇬🇪", country: "Gürcistan", name: "Kazbegi", sourceId: "ge-rs-tirpark", fee: "Resmi TIR Park sistemi", wait: "Resmi TIR Park kaynağı", density: "green", trend: [22, 24, 28, 30, 29, 27, 31], camera: "https://www.rs.ge/TirPark-en" },
+  { flag: "🇬🇪", country: "Gürcistan", name: "Red Bridge", sourceId: "ge-rs-tirpark", fee: "Resmi TIR Park sistemi", wait: "Resmi TIR Park kaynağı", density: "yellow", trend: [44, 42, 48, 51, 50, 46, 49], camera: "https://www.rs.ge/TirPark-en" },
+  { flag: "🇬🇪", country: "Gürcistan", name: "Sadakhlo Motorway", sourceId: "ge-rs-tirpark", fee: "Resmi TIR Park sistemi", wait: "Resmi TIR Park kaynağı", density: "green", trend: [18, 20, 21, 25, 23, 24, 22], camera: "https://www.rs.ge/TirPark-en" },
+  { flag: "🇬🇪", country: "Gürcistan", name: "Lagodekhi / Guguti / Vale", sourceId: "ge-rs-tirpark", fee: "Resmi TIR Park sistemi", wait: "Resmi TIR Park kaynağı", density: "green", trend: [12, 14, 15, 16, 18, 17, 16], camera: "https://www.rs.ge/TirPark-en" },
+  { flag: "🇬🇪", country: "Gürcistan", name: "Ninotsminda / Kartsakhi", sourceId: "ge-rs-tirpark", fee: "Resmi TIR Park sistemi", wait: "Resmi TIR Park kaynağı", density: "green", trend: [9, 11, 12, 11, 14, 13, 12], camera: "https://www.rs.ge/TirPark-en" },
+  { flag: "🇦🇿", country: "Azerbaycan", name: "Azerbaycan canlı sıra", sourceId: "az-customs-live", fee: "Resmi e-customs kaynağında doğrulanır", wait: "Azerbaycan Customs Live Queue", density: "yellow", trend: [28, 35, 39, 36, 41, 38, 40], camera: "https://e.customs.gov.az/for-individuals/live-queue" },
+  { flag: "🇮🇷", country: "İran", name: "Gürbulak / Bazargan", sourceId: "tr-tirtakip", fee: "Gümrük ve yol ücretleri taşıyıcı rotasına göre doğrulanır", wait: "Türkiye TIR Takip", density: "yellow", trend: [45, 52, 58, 60, 55, 57, 61], camera: "https://www.tirtakip.com/" },
+  { flag: "🇮🇶", country: "Irak", name: "Habur / İbrahim Halil", sourceId: "tr-tirtakip", fee: "Gümrük ve yol ücretleri taşıyıcı rotasına göre doğrulanır", wait: "Türkiye TIR Takip", density: "yellow", trend: [48, 52, 57, 63, 71, 66, 69], camera: "https://www.tirtakip.com/" },
+  { flag: "🇺🇦", country: "Ukrayna", name: "Ukrayna transit kontrol", sourceId: "tr-tirtakip", fee: "Transit rota ve resmi sınır ücretleri doğrulanır", wait: "Canlı kaynak bağlantısı", density: "green", trend: [25, 24, 28, 31, 29, 27, 26], camera: "https://www.tirtakip.com/" },
+  { flag: "🇷🇺", country: "Rusya", name: "Rusya elektronik sıra", sourceId: "ru-equeue", fee: "Resmi elektronik sıra ve sınır geçiş kaynaklarında doğrulanır", wait: "Rosgranstroy e-queue", density: "green", trend: [24, 28, 31, 35, 33, 32, 34], camera: "https://equeue.rosgranstroy.gov.ru/" },
+  { flag: "🇰🇿", country: "Kazakistan", name: "Kazakistan gümrük kapıları", sourceId: "kz-customs", fee: "Kazakistan resmi gümrük kaynaklarında doğrulanır", wait: "State Revenue Committee", density: "green", trend: [37, 42, 45, 48, 44, 41, 43], camera: "https://kgd.gov.kz/en" },
+  { flag: "🇹🇷", country: "Türkiye", name: "Hopa / Arhavi Liman Sırası", sourceId: "tr-hopa-arhavi", fee: "Hopa TIR Park kaynak sayfasında doğrulanır", wait: "Arhavi liman gümrüklü sıra", density: "green", trend: [16, 18, 21, 20, 22, 19, 20], camera: "https://www.hopatirparki.com/tirparki/arhavilimansiragumruklu.asp" },
 ];
 
 const portTrackingData = [
-  { name: "Trabzon Limanı", href: "https://www.marinetraffic.com/en/ais/home/centerx:39.75/centery:41.00/zoom:12" },
-  { name: "Samsun Limanı", href: "https://www.marinetraffic.com/en/ais/home/centerx:36.34/centery:41.29/zoom:12" },
-  { name: "Mersin Limanı", href: "https://www.marinetraffic.com/en/ais/home/centerx:34.64/centery:36.80/zoom:12" },
-  { name: "Ambarlı Limanı", href: "https://www.marinetraffic.com/en/ais/home/centerx:28.68/centery:40.96/zoom:12" },
+  { country: "Türkiye", name: "Trabzon Limanı", fee: "Konteyner/liman ücretleri resmi liman tarifesinde doğrulanır", href: "https://www.marinetraffic.com/en/ais/home/centerx:39.75/centery:41.00/zoom:12" },
+  { country: "Türkiye", name: "Samsun Limanı", fee: "Konteyner/liman ücretleri resmi liman tarifesinde doğrulanır", href: "https://www.marinetraffic.com/en/ais/home/centerx:36.34/centery:41.29/zoom:12" },
+  { country: "Türkiye", name: "Mersin Limanı", fee: "Konteyner/liman ücretleri resmi liman tarifesinde doğrulanır", href: "https://www.marinetraffic.com/en/ais/home/centerx:34.64/centery:36.80/zoom:12" },
+  { country: "Türkiye", name: "Ambarlı Limanı", fee: "Konteyner/liman ücretleri resmi terminal tarifesinde doğrulanır", href: "https://www.marinetraffic.com/en/ais/home/centerx:28.68/centery:40.96/zoom:12" },
+  { country: "Gürcistan", name: "Poti Limanı", fee: "Terminal tarifesi resmi operatör sayfasında doğrulanır", href: "https://www.marinetraffic.com/en/ais/home/centerx:41.65/centery:42.16/zoom:12" },
+  { country: "Gürcistan", name: "Batum Limanı", fee: "Terminal tarifesi resmi operatör sayfasında doğrulanır", href: "https://www.marinetraffic.com/en/ais/home/centerx:41.65/centery:41.65/zoom:12" },
+  { country: "Azerbaycan", name: "Bakü / Alat Limanı", fee: "Liman tarifesi resmi operatör sayfasında doğrulanır", href: "https://www.marinetraffic.com/en/ais/home/centerx:49.46/centery:39.97/zoom:10" },
+  { country: "Kazakistan", name: "Aktau Limanı", fee: "Liman tarifesi resmi operatör sayfasında doğrulanır", href: "https://www.marinetraffic.com/en/ais/home/centerx:51.25/centery:43.65/zoom:11" },
 ];
 
 const airCargoData = [
@@ -1232,16 +1252,73 @@ const countryGuideData = [
   {
     flag: "🇬🇪",
     country: "Gürcistan",
-    duties: ["Deterjan: %0", "Yiyecek: %12", "Kozmetik: %18"],
+    source: "Georgia Revenue Service",
+    tariffUrl: "https://www.rs.ge/CommodityCodes-en",
+    summary: "Kafkasya ve Karadeniz hattında Sarp/Sarpi, Poti ve Batum limanlarıyla hızlı karayolu-denizyolu erişimi sağlar.",
+    duties: ["Vergi oranları HS/GTIP koduna göre değişir", "Kategori bazlı tahmin yerine resmi Commodity Codes ekranından doğrulayın"],
     risks: { "Ödeme": 35, "Gümrük": 42, "Siyasi": 30, "Döviz": 46 },
   },
   {
     flag: "🇦🇿",
     country: "Azerbaycan",
-    duties: ["Deterjan: %15", "KDV: %18", "Kozmetik: ürün bazlı"],
+    source: "Azerbaijan State Customs Committee",
+    tariffUrl: "https://e.customs.gov.az/",
+    summary: "Bakü/Alat limanı ve Gürcistan transit hattı ile Kafkasya ve Hazar bağlantısı güçlüdür.",
+    duties: ["Vergi oranları HS/GTIP koduna göre değişir", "Canlı sıra ve gümrük işlemleri e.customs.gov.az üzerinden kontrol edilir"],
     risks: { "Ödeme": 45, "Gümrük": 54, "Siyasi": 38, "Döviz": 50 },
   },
+  {
+    flag: "🇷🇺",
+    country: "Rusya",
+    source: "EAEU / Russia official customs sources",
+    tariffUrl: "https://eec.eaeunion.org/",
+    summary: "Rusya pazarında EAEU teknik düzenleme, etiket ve ödeme riski ürün bazında ayrıca kontrol edilmelidir.",
+    duties: ["EAEU tarife ve teknik düzenleme ürün GTIP koduyla doğrulanır", "Elektronik sıra için Rosgranstroy e-queue kaynağı kullanılır"],
+    risks: { "Ödeme": 68, "Gümrük": 70, "Siyasi": 78, "Döviz": 76 },
+  },
+  {
+    flag: "🇰🇿",
+    country: "Kazakistan",
+    source: "Kazakhstan State Revenue Committee",
+    tariffUrl: "https://kgd.gov.kz/en",
+    summary: "Orta Asya hattında Hazar geçişi, Aktau limanı ve EAEU kuralları öne çıkar.",
+    duties: ["EAEU tarife kodu ve ithalat belgesi resmi kaynakta doğrulanır", "Transit belge ve rota planı sevkiyat öncesi netleştirilir"],
+    risks: { "Ödeme": 48, "Gümrük": 58, "Siyasi": 42, "Döviz": 62 },
+  },
 ];
+
+const targetMarketTradeData = [
+  ...countryGuideData,
+  {
+    flag: "🇮🇷",
+    country: "İran",
+    source: "Türkiye TIR Takip / official customs checks",
+    tariffUrl: "https://www.tirtakip.com/",
+    summary: "Gürbulak-Bazargan hattı İran ve Orta Asya bağlantıları için kritik karayolu kapısıdır.",
+    duties: ["Ürün GTIP kodu, ithalat lisansı ve ülke kısıtları sevkiyat öncesi kontrol edilir"],
+    risks: { "Ödeme": 74, "Gümrük": 72, "Siyasi": 82, "Döviz": 80 },
+  },
+  {
+    flag: "🇮🇶",
+    country: "Irak",
+    source: "Türkiye TIR Takip / official customs checks",
+    tariffUrl: "https://www.tirtakip.com/",
+    summary: "Habur-İbrahim Halil hattı Irak pazarı için ana karayolu geçişlerinden biridir.",
+    duties: ["GTIP, uygunluk belgesi ve alıcı ithalat kaydı ürün bazında doğrulanır"],
+    risks: { "Ödeme": 58, "Gümrük": 65, "Siyasi": 70, "Döviz": 62 },
+  },
+  {
+    flag: "🇺🇦",
+    country: "Ukrayna",
+    source: "Official customs / transit checks",
+    tariffUrl: "https://customs.gov.ua/en/",
+    summary: "Karadeniz ve Avrupa transit bağlantılarıyla çalışır; rota ve ödeme riski güncel koşullara göre izlenmelidir.",
+    duties: ["Ukrayna gümrük ve transit kuralları ürün GTIP koduyla kontrol edilir"],
+    risks: { "Ödeme": 62, "Gümrük": 60, "Siyasi": 78, "Döviz": 66 },
+  },
+];
+
+let logisticsSourceStatus = new Map();
 const categoryFallbackLogistics = {
   "home-products": { unitsPerCarton: 1, cartonsPerPallet: 36, kgPerCarton: 8, m3PerCarton: 0.05 },
   "cleaning-products": { unitsPerCarton: 12, cartonsPerPallet: 60, kgPerCarton: 12, m3PerCarton: 0.035 },
@@ -1545,7 +1622,7 @@ const renderProducts = () => {
             <a class="product-quote-button" href="#catalog-proforma" data-category-id="${product.id}" data-product-option="${trade.optionValue}" data-product-title="${product.title}">${t("tradeQuoteCta")}</a>
           </div>`
         : "";
-      return `<article class="product-card" id="${product.id}"><div><div class="product-card-media"><img src="${productCategoryImages[product.id] || "assets/app-icon.svg"}" alt="" loading="lazy" /><span class="product-icon" aria-hidden="true">${product.icon}</span></div><h3>${product.title}</h3><p>${product.copy}</p></div><div class="product-meta">${product.meta
+      return `<article class="product-card product-card-${product.id}" id="${product.id}"><div><div class="product-card-media"><img src="${productCategoryImages[product.id] || "assets/app-icon.svg"}" alt="" loading="lazy" /><span class="product-icon" aria-hidden="true">${product.icon}</span></div><h3>${product.title}</h3><p>${product.copy}</p></div><div class="product-meta">${product.meta
         .map((item) => `<span>${item}</span>`)
         .join("")}</div>${relatedMarkup}${tradeMarkup}</article>`;
     })
@@ -1554,12 +1631,32 @@ const renderProducts = () => {
 
 const renderMarkets = () => {
   const marketList = document.querySelector("#marketList");
+  const marketDetails = document.querySelector("#targetMarketDetails");
   if (!marketList) return;
   const names = marketNames[currentLang] || marketNames.en;
   const links = marketLinks[currentLang] || marketLinks.en;
   marketList.innerHTML = names
     .map((name, index) => `<a href="${links[index] || links[0]}" target="_blank" rel="noopener">${name}</a>`)
     .join("");
+  if (marketDetails) {
+    const categories = products.tr.map((product) => product.title);
+    marketDetails.innerHTML = targetMarketTradeData
+      .map(
+        (market) => `<article class="target-market-card">
+          <h3>${market.flag} ${market.country}</h3>
+          <p>${market.summary}</p>
+          <div class="target-market-hover">
+            <strong>Lojistik ve ticaret durumu</strong>
+            <ul>${market.duties.map((duty) => `<li>${duty}</li>`).join("")}</ul>
+            <div class="target-category-links">
+              ${categories.map((category) => `<a href="${market.tariffUrl}" target="_blank" rel="noopener">${category}</a>`).join("")}
+            </div>
+            <a class="official-source-link" href="${market.tariffUrl}" target="_blank" rel="noopener">${market.source}</a>
+          </div>
+        </article>`,
+      )
+      .join("");
+  }
 };
 
 const normalizeSupplierSearch = (value) =>
@@ -1623,24 +1720,30 @@ const renderLogisticsCenter = () => {
   if (gateGrid) {
     gateGrid.innerHTML = borderGateData
       .map(
-        (gate) => `<article class="border-gate-card">
+        (gate) => {
+          const source = logisticsSourceStatus.get(gate.sourceId);
+          const sourceText = source ? (source.ok ? `Canlı kaynak erişiliyor (${source.status})` : `Kaynak kontrol edilemedi (${source.status || "hata"})`) : "Canlı kaynak kontrol ediliyor";
+          return `<article class="border-gate-card">
           <h3 class="gate-title"><span>${gate.flag}</span>${gate.name}</h3>
           <strong class="density-pill density-${gate.density}">${gate.density === "red" ? "Yoğun" : gate.density === "yellow" ? "Orta" : "Rahat"}</strong>
           <div class="gate-stats">
-            <span>Bekleyen araç sayısı <strong>${gate.vehicles}</strong></span>
-            <span>Bekleme süresi <strong>${gate.wait}</strong></span>
+            <span>Ülke <strong>${gate.country}</strong></span>
+            <span>Kaynak durumu <strong>${sourceText}</strong></span>
+            <span>Bekleme/sıra verisi <strong>${gate.wait}</strong></span>
+            <span>Geçiş/park ücreti <strong>${gate.fee}</strong></span>
             <span>Son 24 saat değişim grafiği</span>
           </div>
           <div class="gate-chart" aria-label="Son 24 saat değişim grafiği">${renderGateChart(gate.trend)}</div>
-          <a class="gate-link" href="${gate.camera}" target="_blank" rel="noopener">Canlı kamera bağlantısı</a>
-        </article>`,
+          <a class="gate-link" href="${gate.camera}" target="_blank" rel="noopener">Resmi canlı kaynak</a>
+        </article>`;
+        },
       )
       .join("");
   }
 
   if (portGrid) {
     portGrid.innerHTML = portTrackingData
-      .map((port) => `<a href="${port.href}" target="_blank" rel="noopener">${port.name}</a>`)
+      .map((port) => `<a href="${port.href}" target="_blank" rel="noopener"><span>${port.country}</span>${port.name}<small>${port.fee}</small></a>`)
       .join("");
   }
 
@@ -1655,7 +1758,9 @@ const renderLogisticsCenter = () => {
       .map(
         (country) => `<article class="country-card">
           <h4>${country.flag} ${country.country}</h4>
+          <p>${country.summary}</p>
           <ul>${country.duties.map((duty) => `<li>${duty}</li>`).join("")}</ul>
+          <a class="official-source-link" href="${country.tariffUrl}" target="_blank" rel="noopener">${country.source}</a>
           <div class="risk-meter">${Object.entries(country.risks)
             .map(([label, value]) => `<span>${label}<i style="--risk:${value}%"></i></span>`)
             .join("")}</div>
@@ -1663,6 +1768,21 @@ const renderLogisticsCenter = () => {
       )
       .join("");
   }
+};
+
+const fetchLogisticsStatus = async () => {
+  const updatedNode = document.querySelector("#logisticsUpdated");
+  try {
+    const response = await fetch("/api/logistics-status", { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    logisticsSourceStatus = new Map((data.sources || []).map((source) => [source.id, source]));
+    const updatedAt = data.updatedAt ? new Date(data.updatedAt).toLocaleString("tr-TR") : "";
+    if (updatedNode) updatedNode.textContent = `Canlı kaynak son kontrol: ${updatedAt}`;
+  } catch (error) {
+    if (updatedNode) updatedNode.textContent = "Canlı kaynak kontrolü yapılamadı; resmi bağlantılar kullanılabilir.";
+  }
+  renderLogisticsCenter();
 };
 
 const calculateFuelCost = () => {
@@ -2669,4 +2789,5 @@ document.querySelector("#mailProforma")?.addEventListener("click", sendProformaM
 translatePage();
 setupTracking();
 refreshB2BSession();
+fetchLogisticsStatus();
 loadExchangeRates();
