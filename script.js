@@ -1129,14 +1129,14 @@ catalogOrderSeeds.forEach((product) => {
 
 const proformaOrder = new Map();
 const productCategoryImages = {
-  "home-products": "assets/category-showcase.png",
-  "cleaning-products": "assets/category-showcase.png",
-  "food-products": "assets/category-showcase.png",
-  "industrial-products": "assets/category-showcase.png",
-  "medical-products": "assets/category-showcase.png",
-  "cosmetics-products": "assets/category-showcase.png",
-  "automotive-products": "assets/category-showcase.png",
-  "hardware-products": "assets/category-showcase.png",
+  "home-products": "assets/category-home-crop.png",
+  "cleaning-products": "assets/category-cleaning-crop.png",
+  "food-products": "assets/category-food-crop.png",
+  "industrial-products": "assets/category-industrial-crop.png",
+  "medical-products": "assets/category-medical-crop.png",
+  "cosmetics-products": "assets/category-cosmetics-crop.png",
+  "automotive-products": "assets/category-automotive-crop.png",
+  "hardware-products": "assets/category-hardware-crop.png",
 };
 
 const supplierSearchItems = [
@@ -1284,37 +1284,6 @@ const countryGuideData = [
     summary: "Orta Asya hattında Hazar geçişi, Aktau limanı ve EAEU kuralları öne çıkar.",
     duties: ["EAEU tarife kodu ve ithalat belgesi resmi kaynakta doğrulanır", "Transit belge ve rota planı sevkiyat öncesi netleştirilir"],
     risks: { "Ödeme": 48, "Gümrük": 58, "Siyasi": 42, "Döviz": 62 },
-  },
-];
-
-const targetMarketTradeData = [
-  ...countryGuideData,
-  {
-    flag: "🇮🇷",
-    country: "İran",
-    source: "Türkiye TIR Takip / official customs checks",
-    tariffUrl: "https://www.tirtakip.com/",
-    summary: "Gürbulak-Bazargan hattı İran ve Orta Asya bağlantıları için kritik karayolu kapısıdır.",
-    duties: ["Ürün GTIP kodu, ithalat lisansı ve ülke kısıtları sevkiyat öncesi kontrol edilir"],
-    risks: { "Ödeme": 74, "Gümrük": 72, "Siyasi": 82, "Döviz": 80 },
-  },
-  {
-    flag: "🇮🇶",
-    country: "Irak",
-    source: "Türkiye TIR Takip / official customs checks",
-    tariffUrl: "https://www.tirtakip.com/",
-    summary: "Habur-İbrahim Halil hattı Irak pazarı için ana karayolu geçişlerinden biridir.",
-    duties: ["GTIP, uygunluk belgesi ve alıcı ithalat kaydı ürün bazında doğrulanır"],
-    risks: { "Ödeme": 58, "Gümrük": 65, "Siyasi": 70, "Döviz": 62 },
-  },
-  {
-    flag: "🇺🇦",
-    country: "Ukrayna",
-    source: "Official customs / transit checks",
-    tariffUrl: "https://customs.gov.ua/en/",
-    summary: "Karadeniz ve Avrupa transit bağlantılarıyla çalışır; rota ve ödeme riski güncel koşullara göre izlenmelidir.",
-    duties: ["Ukrayna gümrük ve transit kuralları ürün GTIP koduyla kontrol edilir"],
-    risks: { "Ödeme": 62, "Gümrük": 60, "Siyasi": 78, "Döviz": 66 },
   },
 ];
 
@@ -1631,32 +1600,12 @@ const renderProducts = () => {
 
 const renderMarkets = () => {
   const marketList = document.querySelector("#marketList");
-  const marketDetails = document.querySelector("#targetMarketDetails");
   if (!marketList) return;
   const names = marketNames[currentLang] || marketNames.en;
   const links = marketLinks[currentLang] || marketLinks.en;
   marketList.innerHTML = names
     .map((name, index) => `<a href="${links[index] || links[0]}" target="_blank" rel="noopener">${name}</a>`)
     .join("");
-  if (marketDetails) {
-    const categories = products.tr.map((product) => product.title);
-    marketDetails.innerHTML = targetMarketTradeData
-      .map(
-        (market) => `<article class="target-market-card">
-          <h3>${market.flag} ${market.country}</h3>
-          <p>${market.summary}</p>
-          <div class="target-market-hover">
-            <strong>Lojistik ve ticaret durumu</strong>
-            <ul>${market.duties.map((duty) => `<li>${duty}</li>`).join("")}</ul>
-            <div class="target-category-links">
-              ${categories.map((category) => `<a href="${market.tariffUrl}" target="_blank" rel="noopener">${category}</a>`).join("")}
-            </div>
-            <a class="official-source-link" href="${market.tariffUrl}" target="_blank" rel="noopener">${market.source}</a>
-          </div>
-        </article>`,
-      )
-      .join("");
-  }
 };
 
 const normalizeSupplierSearch = (value) =>
