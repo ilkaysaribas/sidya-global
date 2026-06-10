@@ -1,12 +1,13 @@
 const SOURCES = [
   { id: "tr-tirtakip", label: "Türkiye TIR Takip", url: "https://www.tirtakip.com/" },
+  { id: "tr-hopa-arhavi", label: "Hopa TIR Parkı Arhavi Liman Sıra", url: "https://www.hopatirparki.com/tirparki/arhavilimansiragumruklu.asp" },
   { id: "ge-rs-tirpark", label: "Georgia Revenue Service TIR Park", url: "https://www.rs.ge/TirPark-en" },
-  { id: "tr-hopa-arhavi", label: "Hopa TIR Park Arhavi Liman", url: "https://www.hopatirparki.com/tirparki/arhavilimansiragumruklu.asp" },
   { id: "az-customs-live", label: "Azerbaijan Customs Live Queue", url: "https://e.customs.gov.az/for-individuals/live-queue" },
-  { id: "ru-equeue", label: "Russia Electronic Queue", url: "https://equeue.rosgranstroy.gov.ru/" },
-  { id: "kz-customs", label: "Kazakhstan State Revenue Committee", url: "https://kgd.gov.kz/en" },
+  { id: "ru-rosgranstroy-equeue", label: "Russia Rosgranstroy Electronic Queue", url: "https://equeue.rosgranstroy.gov.ru/" },
+  { id: "kz-egov-border", label: "Kazakhstan eGov Border / Customs Services", url: "https://egov.kz/cms/en/categories/customs" },
+  { id: "kz-kgd", label: "Kazakhstan State Revenue Committee", url: "https://kgd.gov.kz/en" },
   { id: "ge-tariff", label: "Georgia Commodity Codes", url: "https://www.rs.ge/CommodityCodes-en" },
-  { id: "az-tariff", label: "Azerbaijan Customs Tariff", url: "https://e.customs.gov.az/" },
+  { id: "az-customs", label: "Azerbaijan State Customs Committee", url: "https://e.customs.gov.az/" },
 ];
 
 const checkSource = async (source) => {

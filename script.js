@@ -1225,8 +1225,8 @@ const borderGateData = [
   { flag: "🇮🇷", country: "İran", name: "Gürbulak / Bazargan", sourceId: "tr-tirtakip", fee: "Gümrük ve yol ücretleri taşıyıcı rotasına göre doğrulanır", wait: "Türkiye TIR Takip", density: "yellow", trend: [45, 52, 58, 60, 55, 57, 61], camera: "https://www.tirtakip.com/" },
   { flag: "🇮🇶", country: "Irak", name: "Habur / İbrahim Halil", sourceId: "tr-tirtakip", fee: "Gümrük ve yol ücretleri taşıyıcı rotasına göre doğrulanır", wait: "Türkiye TIR Takip", density: "yellow", trend: [48, 52, 57, 63, 71, 66, 69], camera: "https://www.tirtakip.com/" },
   { flag: "🇺🇦", country: "Ukrayna", name: "Ukrayna transit kontrol", sourceId: "tr-tirtakip", fee: "Transit rota ve resmi sınır ücretleri doğrulanır", wait: "Canlı kaynak bağlantısı", density: "green", trend: [25, 24, 28, 31, 29, 27, 26], camera: "https://www.tirtakip.com/" },
-  { flag: "🇷🇺", country: "Rusya", name: "Rusya elektronik sıra", sourceId: "ru-equeue", fee: "Resmi elektronik sıra ve sınır geçiş kaynaklarında doğrulanır", wait: "Rosgranstroy e-queue", density: "green", trend: [24, 28, 31, 35, 33, 32, 34], camera: "https://equeue.rosgranstroy.gov.ru/" },
-  { flag: "🇰🇿", country: "Kazakistan", name: "Kazakistan gümrük kapıları", sourceId: "kz-customs", fee: "Kazakistan resmi gümrük kaynaklarında doğrulanır", wait: "State Revenue Committee", density: "green", trend: [37, 42, 45, 48, 44, 41, 43], camera: "https://kgd.gov.kz/en" },
+  { flag: "🇷🇺", country: "Rusya", name: "Rusya elektronik sıra", sourceId: "ru-rosgranstroy-equeue", fee: "Resmi elektronik sıra ve sınır geçiş kaynaklarında doğrulanır", wait: "Rosgranstroy e-queue", density: "green", trend: [24, 28, 31, 35, 33, 32, 34], camera: "https://equeue.rosgranstroy.gov.ru/" },
+  { flag: "🇰🇿", country: "Kazakistan", name: "Kazakistan gümrük ve e-devlet", sourceId: "kz-egov-border", fee: "Kazakistan resmi e-devlet/gümrük kaynaklarında doğrulanır", wait: "eGov / KGD resmi kaynak", density: "green", trend: [37, 42, 45, 48, 44, 41, 43], camera: "https://egov.kz/cms/en/categories/customs" },
   { flag: "🇹🇷", country: "Türkiye", name: "Hopa / Arhavi Liman Sırası", sourceId: "tr-hopa-arhavi", fee: "Hopa TIR Park kaynak sayfasında doğrulanır", wait: "Arhavi liman gümrüklü sıra", density: "green", trend: [16, 18, 21, 20, 22, 19, 20], camera: "https://www.hopatirparki.com/tirparki/arhavilimansiragumruklu.asp" },
 ];
 
@@ -1671,7 +1671,7 @@ const renderLogisticsCenter = () => {
       .map(
         (gate) => {
           const source = logisticsSourceStatus.get(gate.sourceId);
-          const sourceText = source ? (source.ok ? `Canlı kaynak erişiliyor (${source.status})` : `Kaynak kontrol edilemedi (${source.status || "hata"})`) : "Canlı kaynak kontrol ediliyor";
+          const sourceText = source?.ok ? `Canlı kaynak erişiliyor (${source.status})` : "Resmi kaynak bağlantısı";
           return `<article class="border-gate-card">
           <h3 class="gate-title"><span>${gate.flag}</span>${gate.name}</h3>
           <strong class="density-pill density-${gate.density}">${gate.density === "red" ? "Yoğun" : gate.density === "yellow" ? "Orta" : "Rahat"}</strong>
@@ -2576,6 +2576,7 @@ const createB2BCustomerAccount = async (client, form) => {
 };
 
 const b2bModal = document.querySelector("#b2bRegistrationModal");
+const logisticsModal = document.querySelector("#logisticsModal");
 const openB2BModal = () => {
   if (!b2bModal) return;
   b2bModal.hidden = false;
@@ -2587,6 +2588,31 @@ const closeB2BModal = () => {
   if (!b2bModal) return;
   b2bModal.hidden = true;
   document.body.classList.remove("is-modal-open");
+};
+
+const openLogisticsModal = () => {
+  if (!logisticsModal) return;
+  logisticsModal.hidden = false;
+  document.body.classList.add("is-modal-open");
+  renderLogisticsCenter();
+  fetchLogisticsStatus();
+};
+
+const closeLogisticsModal = () => {
+  if (!logisticsModal) return;
+  logisticsModal.hidden = true;
+  document.body.classList.remove("is-modal-open");
+};
+
+const activateLogisticsTab = (tabName) => {
+  document.querySelectorAll("[data-logistics-tab]").forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.logisticsTab === tabName);
+  });
+  document.querySelectorAll("[data-logistics-panel]").forEach((panel) => {
+    const isActive = panel.dataset.logisticsPanel === tabName;
+    panel.hidden = !isActive;
+    panel.classList.toggle("is-active", isActive);
+  });
 };
 
 const openRegisteredProformaPanel = () => {
@@ -2627,6 +2653,16 @@ document.querySelector("#openB2BPortal")?.addEventListener("click", (event) => {
   event.preventDefault();
   openB2BModal();
 });
+document.querySelector("#openLogisticsCenter")?.addEventListener("click", (event) => {
+  event.preventDefault();
+  openLogisticsModal();
+});
+document.querySelectorAll("[data-close-logistics]").forEach((button) => {
+  button.addEventListener("click", closeLogisticsModal);
+});
+document.querySelectorAll("[data-logistics-tab]").forEach((button) => {
+  button.addEventListener("click", () => activateLogisticsTab(button.dataset.logisticsTab));
+});
 document.querySelector("#openGuestProforma")?.addEventListener("click", openMainProformaPanel);
 document.querySelector("#openRegisteredProforma")?.addEventListener("click", openRegisteredProformaPanel);
 document.querySelectorAll('a[href="#proforma"]').forEach((link) => {
@@ -2643,6 +2679,7 @@ document.querySelectorAll("[data-close-b2b]").forEach((button) => {
 });
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && b2bModal && !b2bModal.hidden) closeB2BModal();
+  if (event.key === "Escape" && logisticsModal && !logisticsModal.hidden) closeLogisticsModal();
   if (event.key === "Escape" && catalogProformaModal && !catalogProformaModal.hidden) closeCatalogProformaModal();
   if (event.key === "Escape" && !document.querySelector("#proforma")?.hidden) closeMainProformaPanel();
 });
