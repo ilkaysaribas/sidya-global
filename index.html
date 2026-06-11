@@ -30,7 +30,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260611-1" />
+    <link rel="stylesheet" href="styles.css?v=20260611-2" />
     <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
   </head>
   <body>
@@ -280,10 +280,6 @@
               <span data-i18n="proformaTotalWeight">Estimated gross weight</span>
               <strong id="proformaTotalWeight">0 kg</strong>
             </div>
-            <div class="proforma-total-row">
-              <span data-i18n="proformaTotalVolume">Estimated volume</span>
-              <strong id="proformaTotalVolume">0 m3</strong>
-            </div>
             <div class="proforma-actions">
               <button class="proforma-quote-link" type="button" id="downloadProformaExcel" data-i18n="proformaExcelCta">Download Excel</button>
               <button class="proforma-quote-link" type="button" id="mailProforma" data-i18n="proformaMailCta">Send by Mail</button>
@@ -303,7 +299,7 @@
               </div>
             </div>
             <h3 data-i18n="truckTitle">Standard TIR</h3>
-            <p data-i18n="truckCapacity">Approx. 90 m3 and 24,000 kg payload capacity.</p>
+            <p data-i18n="truckCapacity">Approx. 24,000 kg payload capacity.</p>
             <div class="load-meter" aria-live="polite">
               <strong id="truckFillText">0% full</strong>
             </div>
@@ -319,7 +315,7 @@
               </div>
             </div>
             <h3 data-i18n="containerTitle">40 HC Container</h3>
-            <p data-i18n="containerCapacity">Approx. 76 m3 and 26,500 kg payload capacity.</p>
+            <p data-i18n="containerCapacity">Approx. 26,500 kg payload capacity.</p>
             <div class="load-meter" aria-live="polite">
               <strong id="containerFillText">0% full</strong>
             </div>
@@ -342,7 +338,7 @@
           <article>
             <span>02</span>
             <h3 data-i18n="stepTwoTitle">Proforma setup</h3>
-            <p data-i18n="stepTwoCopy">Pallet count, gross weight and volume are calculated clearly.</p>
+            <p data-i18n="stepTwoCopy">Pallet count and gross weight are calculated clearly.</p>
           </article>
           <article>
             <span>03</span>
@@ -446,7 +442,7 @@
         <div class="b2b-entry-card">
           <div>
             <h3 data-i18n="guestProformaTitle">Create proforma without registration</h3>
-            <p data-i18n="guestProformaCopy">Open the proforma order screen directly, select products and calculate carton, pallet, kg and m3 totals.</p>
+            <p data-i18n="guestProformaCopy">Open the proforma order screen directly, select products and calculate carton, pallet and kg totals.</p>
           </div>
           <button class="b2b-register-button" type="button" id="openGuestProforma" data-i18n="guestProformaCta">Create Proforma Order</button>
         </div>
@@ -465,7 +461,7 @@
           <article>
             <span>03</span>
             <h3 data-i18n="b2bStepThree">Proforma and payment approval</h3>
-            <p data-i18n="b2bStepThreeCopy">Incoterm, currency, payment term, pallet plan, loading volume and delivery responsibility are confirmed.</p>
+            <p data-i18n="b2bStepThreeCopy">Incoterm, currency, payment term, pallet plan, loading weight and delivery responsibility are confirmed.</p>
           </article>
           <article>
             <span>04</span>
@@ -560,7 +556,7 @@
               <h3 data-i18n="b2bChecklistTitle">Core export document checklist</h3>
               <div class="b2b-checklist">
                 <article><span>01</span><strong data-i18n="b2bDocBuyer">Buyer company registry, tax certificate and authorized signatory</strong></article>
-                <article><span>02</span><strong data-i18n="b2bDocProduct">Product list, HS code, quantity, pallet, weight and m3 confirmation</strong></article>
+                <article><span>02</span><strong data-i18n="b2bDocProduct">Product list, HS code, quantity, pallet and weight confirmation</strong></article>
                 <article><span>03</span><strong data-i18n="b2bDocCommercial">Proforma invoice, sales confirmation and payment term</strong></article>
                 <article><span>04</span><strong data-i18n="b2bDocShipment">Commercial invoice, packing list and transport document</strong></article>
                 <article><span>05</span><strong data-i18n="b2bDocOrigin">Certificate of origin, A.TR, EUR.1 or market-specific origin document</strong></article>
@@ -792,7 +788,7 @@
         "sameAs": ["https://www.instagram.com/sidyaglobal/"]
       }
     </script>
-    <script src="catalog-products.generated.js?v=20260608-2"></script>
-    <script src="script.js?v=20260611-1"></script>
+    <script src="catalog-products.generated.js?v=20260611-1"></script>
+    <script src="script.js?v=20260611-2"></script>
   </body>
 </html>

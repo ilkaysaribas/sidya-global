@@ -67,7 +67,7 @@ const content = {
     stepOneTitle: "Inquiry review",
     stepOneCopy: "Product, quantity, market and delivery needs are clarified.",
     stepTwoTitle: "Proforma setup",
-    stepTwoCopy: "Pallet count, gross weight and volume are calculated clearly.",
+    stepTwoCopy: "Pallet count and gross weight are calculated clearly.",
     stepThreeTitle: "Supply follow-up",
     stepThreeCopy: "Supplier, stock, packaging and loading details are coordinated.",
     stepFourTitle: "Logistics delivery",
@@ -78,7 +78,7 @@ const content = {
       "Sidya Global prepares offers for buyers across Europe, the Caucasus, the Black Sea region, Central Asia and the Middle East.",
     proformaKicker: "Proforma platform",
     proformaTitle: "Purchase proforma and loading calculator",
-    proformaCopy: "Select a product line, enter pallet quantity and see total pallet, weight and volume values instantly.",
+    proformaCopy: "Select a product line, enter pallet quantity and see total pallet and weight values instantly.",
     proformaBuyer: "Buyer company",
     proformaProduct: "Product line",
     proformaPallets: "Pallet quantity",
@@ -96,8 +96,6 @@ const content = {
     proformaTotalCartons: "Total cartons",
     proformaTotalPallets: "Estimated pallets",
     proformaTotalWeight: "Estimated gross weight",
-    proformaTotalVolume: "Estimated volume",
-    proformaM3PerCarton: "m3 / carton",
     proformaExcelCta: "Download Excel",
     proformaMailCta: "Send by Mail",
     proformaWhatsappCta: "Send by message",
@@ -118,7 +116,7 @@ const content = {
     b2bEntryCopy: "Open the buyer registration screen to enter company details, tax information and upload required documents.",
     b2bRegisterCta: "Buyer Register",
     guestProformaTitle: "Create proforma without registration",
-    guestProformaCopy: "Open the proforma order screen directly, select products and calculate carton, pallet, kg and m3 totals.",
+    guestProformaCopy: "Open the proforma order screen directly, select products and calculate carton, pallet and kg totals.",
     guestProformaCta: "Create Proforma Order",
     b2bRegisterTitle: "Buyer registration",
     b2bRegisterCopy: "Sign in if you already have an account, or create a new buyer account from the registration form below.",
@@ -171,7 +169,7 @@ const content = {
     b2bServerMissing: "B2B registration backend is not active yet. Check Vercel environment variables.",
     b2bChecklistTitle: "Core export document checklist",
     b2bDocBuyer: "Buyer company registry, tax certificate and authorized signatory",
-    b2bDocProduct: "Product list, HS code, quantity, pallet, weight and m3 confirmation",
+    b2bDocProduct: "Product list, HS code, quantity, pallet and weight confirmation",
     b2bDocCommercial: "Proforma invoice, sales confirmation and payment term",
     b2bDocShipment: "Commercial invoice, packing list and transport document",
     b2bDocOrigin: "Certificate of origin, A.TR, EUR.1 or market-specific origin document",
@@ -181,7 +179,7 @@ const content = {
     b2bStepTwo: "Product and HS code review",
     b2bStepTwoCopy: "Products are matched with HS codes, certificates, restrictions and country-specific import requirements.",
     b2bStepThree: "Proforma and payment approval",
-    b2bStepThreeCopy: "Incoterm, currency, payment term, pallet plan, loading volume and delivery responsibility are confirmed.",
+    b2bStepThreeCopy: "Incoterm, currency, payment term, pallet plan, loading weight and delivery responsibility are confirmed.",
     b2bStepFour: "Customs and origin file",
     b2bStepFourCopy: "Invoice, packing list, transport document, origin certificate and required conformity documents are prepared in sequence.",
     customsKicker: "Customs platform",
@@ -216,32 +214,32 @@ const content = {
     containerFillLabel: "Container load",
     cartKicker: "Cart",
     cartTitle: "Create a product cart and review shipment tonnage",
-    cartCopy: "Add products from the product cards above. The cart calculates pallet count, total gross weight and total m3 automatically.",
+    cartCopy: "Add products from the product cards above. The cart calculates pallet count and total gross weight automatically.",
     cartEmpty: "Your cart is empty. Add products from the catalog above.",
     cartSummaryTitle: "Shipment summary",
     cartTotalPallets: "Total pallets",
     cartTotalWeight: "Total gross weight",
-    cartTotalVolume: "Total volume",
+    cartTotalVolume: "Total weight",
     cartQuote: "Request Quote",
     productDetail: "Product Detail",
     addToCart: "Add to Cart",
     unitWeight: "Weight",
-    unitVolume: "Volume",
+    unitVolume: "Unit info",
     perPallet: "per pallet",
     palletCount: "Pallet",
     palletFactor: "Pallet factor",
     singleWeight: "Weight / pallet",
-    singleVolume: "m3 / pallet",
+    singleVolume: "Pallet info",
     totalWeight: "Total weight",
-    totalVolume: "Total volume",
+    totalVolume: "Total weight",
     tableItem: "Item",
     tablePallet: "Pallets",
     tableWeight: "Gross kg",
-    tableVolume: "Volume m3",
+    tableVolume: "Info",
     truckTitle: "Standard TIR",
-    truckCapacity: "Approx. 90 m3 and 24,000 kg payload capacity.",
+    truckCapacity: "Approx. 24,000 kg payload capacity.",
     containerTitle: "40 HC Container",
-    containerCapacity: "Approx. 76 m3 and 26,500 kg payload capacity.",
+    containerCapacity: "Approx. 26,500 kg payload capacity.",
     contactKicker: "Quote and meeting",
     contactTitle: "Send your buying request quickly.",
     contactCopy: "The form prepares an email draft for your request. You can also reach us directly through Telegram or email.",
@@ -350,7 +348,7 @@ const content = {
     stepOneTitle: "Talep analizi",
     stepOneCopy: "Ürün, miktar, pazar ve teslim ihtiyacı netleştirilir.",
     stepTwoTitle: "Proforma hazırlığı",
-    stepTwoCopy: "Palet adedi, brüt ağırlık ve hacim açık şekilde hesaplanır.",
+    stepTwoCopy: "Palet adedi ve brüt ağırlık açık şekilde hesaplanır.",
     stepThreeTitle: "Tedarik takibi",
     stepThreeCopy: "Tedarikçi, stok, ambalaj ve yükleme detayları koordine edilir.",
     stepFourTitle: "Lojistik teslim",
@@ -361,7 +359,7 @@ const content = {
       "Sidya Global; Avrupa, Kafkasya, Karadeniz bölgesi, Orta Asya ve Orta Doğu alıcıları için teklif hazırlar.",
     proformaKicker: "Proforma platformu",
     proformaTitle: "Satın alma proforması ve yükleme hesaplayıcı",
-    proformaCopy: "Ürün grubunu seçin, palet adedini girin; toplam palet, ağırlık ve hacmi anında görün.",
+    proformaCopy: "Ürün grubunu seçin, palet adedini girin; toplam palet ve ağırlığı anında görün.",
     proformaBuyer: "Alıcı firma",
     proformaProduct: "Ürün grubu",
     proformaPallets: "Palet adedi",
@@ -379,8 +377,6 @@ const content = {
     proformaTotalCartons: "Toplam koli",
     proformaTotalPallets: "Tahmini palet",
     proformaTotalWeight: "Tahmini brüt ağırlık",
-    proformaTotalVolume: "Tahmini hacim",
-    proformaM3PerCarton: "Koli m3",
     proformaExcelCta: "Excel indir",
     proformaMailCta: "Mail ile gönder",
     proformaWhatsappCta: "Mesaj ile gönder",
@@ -401,7 +397,7 @@ const content = {
     b2bEntryCopy: "Firma bilgileri, vergi bilgileri ve gerekli evrakları girmek için alıcı kayıt ekranını açın.",
     b2bRegisterCta: "Alıcı Kayıt Ol",
     guestProformaTitle: "Kayıt olmadan proforma sipariş oluştur",
-    guestProformaCopy: "Proforma sipariş ekranını doğrudan açın, ürün seçin ve koli, palet, kg ve m3 toplamlarını hesaplayın.",
+    guestProformaCopy: "Proforma sipariş ekranını doğrudan açın, ürün seçin ve koli, palet ve kg toplamlarını hesaplayın.",
     guestProformaCta: "Kayıt Olmadan Proforma Sipariş Oluştur",
     b2bRegisterTitle: "Alıcı kayıt",
     b2bRegisterCopy: "Hesabınız varsa giriş yapın; yeni alıcı hesabı için aşağıdaki kayıt formunu doldurun.",
@@ -454,7 +450,7 @@ const content = {
     b2bServerMissing: "B2B kayıt backend'i aktif değil. Vercel ortam değişkenlerini kontrol edin.",
     b2bChecklistTitle: "Temel ihracat evrak kontrol listesi",
     b2bDocBuyer: "Alıcı firma sicil kaydı, vergi belgesi ve imza/yetki belgesi",
-    b2bDocProduct: "Ürün listesi, GTIP/HS kodu, miktar, palet, ağırlık ve m3 teyidi",
+    b2bDocProduct: "Ürün listesi, GTIP/HS kodu, miktar, palet ve ağırlık teyidi",
     b2bDocCommercial: "Proforma fatura, satış teyidi ve ödeme şartı",
     b2bDocShipment: "Ticari fatura, çeki listesi ve taşıma belgesi",
     b2bDocOrigin: "Menşe şahadetnamesi, A.TR, EUR.1 veya pazara özel menşe evrakı",
@@ -464,7 +460,7 @@ const content = {
     b2bStepTwo: "Ürün ve GTIP kontrolü",
     b2bStepTwoCopy: "Ürünler GTIP/HS kodu, sertifika, kısıtlama ve ülkeye özel ithalat şartlarıyla eşleştirilir.",
     b2bStepThree: "Proforma ve ödeme onayı",
-    b2bStepThreeCopy: "Incoterm, para birimi, ödeme şartı, palet planı, yükleme hacmi ve teslim sorumluluğu netleştirilir.",
+    b2bStepThreeCopy: "Incoterm, para birimi, ödeme şartı, palet planı, yükleme ağırlığı ve teslim sorumluluğu netleştirilir.",
     b2bStepFour: "Gümrük ve menşe dosyası",
     b2bStepFourCopy: "Fatura, çeki listesi, taşıma belgesi, menşe evrakı ve gerekli uygunluk belgeleri sırayla hazırlanır.",
     customsKicker: "Gümrük platformu",
@@ -499,32 +495,32 @@ const content = {
     containerFillLabel: "Konteyner dolumu",
     cartKicker: "Sepet",
     cartTitle: "Ürün sepeti oluşturun ve sevkiyat tonajını görün",
-    cartCopy: "Ürün kartlarından sepete ekleyin. Sepet palet adedini, toplam brüt ağırlığı ve toplam m3 değerini otomatik hesaplar.",
+    cartCopy: "Ürün kartlarından sepete ekleyin. Sepet palet adedini ve toplam brüt ağırlığı otomatik hesaplar.",
     cartEmpty: "Sepetiniz boş. Yukarıdaki katalogdan ürün ekleyin.",
     cartSummaryTitle: "Sevkiyat özeti",
     cartTotalPallets: "Toplam palet",
     cartTotalWeight: "Toplam brüt ağırlık",
-    cartTotalVolume: "Toplam hacim",
+    cartTotalVolume: "Toplam ağırlık",
     cartQuote: "Teklif İste",
     productDetail: "Ürün Detayı",
     addToCart: "Sepete Ekle",
     unitWeight: "Ağırlık",
-    unitVolume: "Hacim",
+    unitVolume: "Birim bilgisi",
     perPallet: "palet başı",
     palletCount: "Palet",
     palletFactor: "Palet katsayısı",
     singleWeight: "Palet başı ağırlık",
-    singleVolume: "Palet başı m3",
+    singleVolume: "Palet bilgisi",
     totalWeight: "Toplam ağırlık",
-    totalVolume: "Toplam hacim",
+    totalVolume: "Toplam ağırlık",
     tableItem: "Kalem",
     tablePallet: "Palet",
     tableWeight: "Brüt kg",
-    tableVolume: "Hacim m3",
+    tableVolume: "Bilgi",
     truckTitle: "Standart TIR",
-    truckCapacity: "Yaklaşık 90 m3 ve 24.000 kg taşıma kapasitesi.",
+    truckCapacity: "Yaklaşık 24.000 kg taşıma kapasitesi.",
     containerTitle: "40 HC Konteyner",
-    containerCapacity: "Yaklaşık 76 m3 ve 26.500 kg taşıma kapasitesi.",
+    containerCapacity: "Yaklaşık 26.500 kg taşıma kapasitesi.",
     contactKicker: "Teklif ve görüşme",
     contactTitle: "Satın alma talebinizi hızlıca gönderin.",
     contactCopy: "Form talebiniz için e-posta taslağı hazırlar. Telegram veya e-posta ile de doğrudan ulaşabilirsiniz.",
@@ -677,30 +673,30 @@ Object.assign(content.az, {
   stepOneTitle: "Sorğunun yoxlanması",
   stepOneCopy: "Məhsul, miqdar, bazar və çatdırılma ehtiyacı dəqiqləşdirilir.",
   stepTwoTitle: "Proforma hazırlığı",
-  stepTwoCopy: "Palet sayı, brüt çəki və həcm aydın şəkildə hesablanır.",
+  stepTwoCopy: "Palet sayı və brüt çəki aydın şəkildə hesablanır.",
   stepThreeTitle: "Təchizat izləməsi",
   stepThreeCopy: "Təchizatçı, stok, qablaşdırma və yükləmə detalları koordinasiya edilir.",
   stepFourTitle: "Logistika çatdırılması",
   stepFourCopy: "TIR, konteyner, sənəd və göndəriş planı birlikdə idarə olunur.",
   proformaKicker: "Proforma platforması",
   proformaTitle: "Satınalma proforması və yükləmə kalkulyatoru",
-  proformaCopy: "Məhsul qrupunu seçin, palet sayını daxil edin və ümumi çəki ilə həcmi görün.",
+  proformaCopy: "Məhsul qrupunu seçin, palet sayını daxil edin və ümumi çəkini görün.",
   proformaBuyer: "Alıcı şirkət",
   proformaProduct: "Məhsul qrupu",
   proformaPallets: "Palet sayı",
   palletFactor: "Palet əmsalı",
   singleWeight: "Palet başına çəki",
-  singleVolume: "Palet başına m3",
+  singleVolume: "Palet məlumatı",
   totalWeight: "Ümumi çəki",
-  totalVolume: "Ümumi həcm",
+  totalVolume: "Ümumi çəki",
   tableItem: "Maddə",
   tablePallet: "Palet",
   tableWeight: "Brüt kg",
-  tableVolume: "Həcm m3",
+  tableVolume: "Məlumat",
   truckTitle: "Standart TIR",
-  truckCapacity: "Təxminən 90 m3 və 24.000 kg yük tutumu.",
+  truckCapacity: "Təxminən 24.000 kg yük tutumu.",
   containerTitle: "40 HC Konteyner",
-  containerCapacity: "Təxminən 76 m3 və 26.500 kg yük tutumu.",
+  containerCapacity: "Təxminən 26.500 kg yük tutumu.",
   contactKicker: "Təklif və görüş",
   contactTitle: "Satınalma sorğunuzu tez göndərin.",
   contactCopy: "Forma sorğunuz üçün e-poçt layihəsi hazırlayır. Telegram və ya e-poçtla da əlaqə saxlaya bilərsiniz.",
@@ -770,30 +766,30 @@ Object.assign(content.ka, {
   stepOneTitle: "მოთხოვნის განხილვა",
   stepOneCopy: "პროდუქტი, რაოდენობა, ბაზარი და მიწოდების საჭიროება ზუსტდება.",
   stepTwoTitle: "პროფორმის მომზადება",
-  stepTwoCopy: "პალეტების რაოდენობა, ბრუტო წონა და მოცულობა მკაფიოდ ითვლება.",
+  stepTwoCopy: "პალეტების რაოდენობა და ბრუტო წონა მკაფიოდ ითვლება.",
   stepThreeTitle: "მიწოდების კონტროლი",
   stepThreeCopy: "მომწოდებელი, მარაგი, შეფუთვა და დატვირთვა კოორდინირდება.",
   stepFourTitle: "ლოგისტიკური მიწოდება",
   stepFourCopy: "სატვირთო, კონტეინერი, დოკუმენტები და გადაზიდვა ერთად იგეგმება.",
   proformaKicker: "პროფორმის პლატფორმა",
   proformaTitle: "შესყიდვის პროფორმა და დატვირთვის კალკულატორი",
-  proformaCopy: "აირჩიეთ პროდუქტის ჯგუფი, შეიყვანეთ პალეტები და ნახეთ მთლიანი წონა და მოცულობა.",
+  proformaCopy: "აირჩიეთ პროდუქტის ჯგუფი, შეიყვანეთ პალეტები და ნახეთ მთლიანი წონა.",
   proformaBuyer: "მყიდველი კომპანია",
   proformaProduct: "პროდუქტის ჯგუფი",
   proformaPallets: "პალეტების რაოდენობა",
   palletFactor: "პალეტის კოეფიციენტი",
   singleWeight: "წონა / პალეტი",
-  singleVolume: "მ3 / პალეტი",
+  singleVolume: "პალეტის ინფორმაცია",
   totalWeight: "სრული წონა",
-  totalVolume: "სრული მოცულობა",
+  totalVolume: "სრული წონა",
   tableItem: "პოზიცია",
   tablePallet: "პალეტები",
   tableWeight: "ბრუტო კგ",
-  tableVolume: "მოცულობა მ3",
+  tableVolume: "ინფორმაცია",
   truckTitle: "სტანდარტული TIR",
-  truckCapacity: "დაახლოებით 90 მ3 და 24,000 კგ ტვირთამწეობა.",
+  truckCapacity: "დაახლოებით 24,000 კგ ტვირთამწეობა.",
   containerTitle: "40 HC კონტეინერი",
-  containerCapacity: "დაახლოებით 76 მ3 და 26,500 კგ ტვირთამწეობა.",
+  containerCapacity: "დაახლოებით 26,500 კგ ტვირთამწეობა.",
   contactKicker: "შეთავაზება და შეხვედრა",
   contactTitle: "გაგზავნეთ შესყიდვის მოთხოვნა სწრაფად.",
   contactCopy: "ფორმა ამზადებს ელფოსტის პროექტს. დაგვიკავშირდით Telegram-ით ან ელფოსტით.",
@@ -860,30 +856,30 @@ Object.assign(content.ru, {
   stepOneTitle: "Анализ запроса",
   stepOneCopy: "Уточняются товар, количество, рынок и условия поставки.",
   stepTwoTitle: "Подготовка проформы",
-  stepTwoCopy: "Количество паллет, вес брутто и объем рассчитываются понятно.",
+  stepTwoCopy: "Количество паллет и вес брутто рассчитываются понятно.",
   stepThreeTitle: "Контроль поставки",
   stepThreeCopy: "Поставщик, склад, упаковка и погрузка координируются.",
   stepFourTitle: "Логистика",
   stepFourCopy: "Фура, контейнер, документы и план отгрузки управляются вместе.",
   proformaKicker: "Платформа проформы",
   proformaTitle: "Проформа закупки и калькулятор загрузки",
-  proformaCopy: "Выберите группу товара, укажите паллеты и увидьте общий вес и объем.",
+  proformaCopy: "Выберите группу товара, укажите паллеты и увидьте общий вес.",
   proformaBuyer: "Компания покупателя",
   proformaProduct: "Группа товара",
   proformaPallets: "Количество паллет",
   palletFactor: "Коэффициент паллеты",
   singleWeight: "Вес / паллета",
-  singleVolume: "м3 / паллета",
+  singleVolume: "Данные паллеты",
   totalWeight: "Общий вес",
-  totalVolume: "Общий объем",
+  totalVolume: "Общий вес",
   tableItem: "Позиция",
   tablePallet: "Паллеты",
   tableWeight: "Брутто кг",
-  tableVolume: "Объем м3",
+  tableVolume: "Информация",
   truckTitle: "Стандартная фура",
-  truckCapacity: "Около 90 м3 и 24 000 кг грузоподъемности.",
+  truckCapacity: "Около 24 000 кг грузоподъемности.",
   containerTitle: "Контейнер 40 HC",
-  containerCapacity: "Около 76 м3 и 26 500 кг грузоподъемности.",
+  containerCapacity: "Около 26 500 кг грузоподъемности.",
   contactKicker: "Предложение и встреча",
   contactTitle: "Быстро отправьте запрос на закупку.",
   contactCopy: "Форма подготовит черновик письма. Также можно связаться через Telegram или email.",
@@ -1085,11 +1081,11 @@ const productTradeDetails = {
 };
 
 const proformaItems = [
-  { id: "detergent", name: "Detergent products", palletFactor: 1, kgPerPallet: 720, m3PerPallet: 1.65 },
-  { id: "home", name: "Home & living products", palletFactor: 1, kgPerPallet: 420, m3PerPallet: 1.8 },
-  { id: "industrial", name: "Industrial supplies", palletFactor: 1, kgPerPallet: 650, m3PerPallet: 1.55 },
-  { id: "food", name: "Food products", palletFactor: 1, kgPerPallet: 780, m3PerPallet: 1.45 },
-  { id: "medical", name: "Medical products", palletFactor: 1, kgPerPallet: 360, m3PerPallet: 1.7 },
+  { id: "detergent", name: "Detergent products", palletFactor: 1, kgPerPallet: 720 },
+  { id: "home", name: "Home & living products", palletFactor: 1, kgPerPallet: 420 },
+  { id: "industrial", name: "Industrial supplies", palletFactor: 1, kgPerPallet: 650 },
+  { id: "food", name: "Food products", palletFactor: 1, kgPerPallet: 780 },
+  { id: "medical", name: "Medical products", palletFactor: 1, kgPerPallet: 360 },
 ];
 
 const productCatalog = [];
@@ -1107,7 +1103,6 @@ const catalogOrderSeeds = [
     unitsPerCarton: 24,
     cartonsPerPallet: 80,
     kgPerCarton: 5,
-    m3PerCarton: 0.04,
   },
   {
     id: "catalog-sebamed-2024",
@@ -1119,7 +1114,6 @@ const catalogOrderSeeds = [
     unitsPerCarton: 24,
     cartonsPerPallet: 72,
     kgPerCarton: 6,
-    m3PerCarton: 0.032,
   },
   {
     id: "catalog-omron-healthcare",
@@ -1131,7 +1125,6 @@ const catalogOrderSeeds = [
     unitsPerCarton: 12,
     cartonsPerPallet: 60,
     kgPerCarton: 4,
-    m3PerCarton: 0.035,
   },
   {
     id: "catalog-hanymish",
@@ -1143,7 +1136,6 @@ const catalogOrderSeeds = [
     unitsPerCarton: 24,
     cartonsPerPallet: 72,
     kgPerCarton: 5,
-    m3PerCarton: 0.04,
   },
   {
     id: "catalog-ikihan-medikal",
@@ -1155,7 +1147,6 @@ const catalogOrderSeeds = [
     unitsPerCarton: 12,
     cartonsPerPallet: 60,
     kgPerCarton: 6,
-    m3PerCarton: 0.045,
   },
   {
     id: "catalog-vileda",
@@ -1167,7 +1158,6 @@ const catalogOrderSeeds = [
     unitsPerCarton: 12,
     cartonsPerPallet: 60,
     kgPerCarton: 7,
-    m3PerCarton: 0.05,
   },
   {
     id: "catalog-selpak",
@@ -1179,7 +1169,6 @@ const catalogOrderSeeds = [
     unitsPerCarton: 12,
     cartonsPerPallet: 45,
     kgPerCarton: 4,
-    m3PerCarton: 0.08,
   },
 ];
 
@@ -1436,14 +1425,14 @@ const countryGuideData = [
 
 let logisticsSourceStatus = new Map();
 const categoryFallbackLogistics = {
-  "home-products": { unitsPerCarton: 1, cartonsPerPallet: 36, kgPerCarton: 8, m3PerCarton: 0.05 },
-  "cleaning-products": { unitsPerCarton: 12, cartonsPerPallet: 60, kgPerCarton: 12, m3PerCarton: 0.035 },
-  "food-products": { unitsPerCarton: 12, cartonsPerPallet: 72, kgPerCarton: 10, m3PerCarton: 0.03 },
-  "industrial-products": { unitsPerCarton: 1, cartonsPerPallet: 40, kgPerCarton: 14, m3PerCarton: 0.045 },
-  "medical-products": { unitsPerCarton: 24, cartonsPerPallet: 80, kgPerCarton: 5, m3PerCarton: 0.04 },
-  "cosmetics-products": { unitsPerCarton: 24, cartonsPerPallet: 72, kgPerCarton: 6, m3PerCarton: 0.032 },
-  "automotive-products": { unitsPerCarton: 1, cartonsPerPallet: 36, kgPerCarton: 15, m3PerCarton: 0.04 },
-  "hardware-products": { unitsPerCarton: 1, cartonsPerPallet: 48, kgPerCarton: 18, m3PerCarton: 0.035 },
+  "home-products": { unitsPerCarton: 1, cartonsPerPallet: 36, kgPerCarton: 8 },
+  "cleaning-products": { unitsPerCarton: 12, cartonsPerPallet: 60, kgPerCarton: 12 },
+  "food-products": { unitsPerCarton: 12, cartonsPerPallet: 72, kgPerCarton: 10 },
+  "industrial-products": { unitsPerCarton: 1, cartonsPerPallet: 40, kgPerCarton: 14 },
+  "medical-products": { unitsPerCarton: 24, cartonsPerPallet: 80, kgPerCarton: 5 },
+  "cosmetics-products": { unitsPerCarton: 24, cartonsPerPallet: 72, kgPerCarton: 6 },
+  "automotive-products": { unitsPerCarton: 1, cartonsPerPallet: 36, kgPerCarton: 15 },
+  "hardware-products": { unitsPerCarton: 1, cartonsPerPallet: 48, kgPerCarton: 18 },
 };
 let activeCatalogProformaCategory = null;
 let returnCatalogProformaCategory = null;
@@ -1452,10 +1441,41 @@ const brandLogoMap = {
   ABC: "assets/abc-logo.jpg",
   Evyap: "assets/evyap-logo.svg",
   "Johnson & Johnson": "assets/johnson-logo.svg",
+  "Johnson's": "assets/johnson-logo.svg",
+  Aveeno: "assets/johnson-logo.svg",
+  "Ben-Gay": "assets/johnson-logo.svg",
+  Carefree: "assets/johnson-logo.svg",
+  Listerine: "assets/johnson-logo.svg",
+  Neutrogena: "assets/johnson-logo.svg",
+  Nicorette: "assets/johnson-logo.svg",
+  "O.B.": "assets/johnson-logo.svg",
+  OGX: "assets/johnson-logo.svg",
+  Unisom: "assets/johnson-logo.svg",
+  Visine: "assets/johnson-logo.svg",
+  "Zarbee's": "assets/johnson-logo.svg",
   Nivea: "assets/nivea-logo.svg",
   "PM Catalog": "assets/evyap-logo.svg",
   Reckitt: "assets/reckitt-logo.svg",
+  "Air Wick": "assets/reckitt-logo.svg",
+  Calgon: "assets/reckitt-logo.svg",
+  "Cillit Bang": "assets/reckitt-logo.svg",
+  Durex: "assets/reckitt-logo.svg",
+  Finish: "assets/reckitt-logo.svg",
+  Lysol: "assets/reckitt-logo.svg",
+  Marc: "assets/reckitt-logo.svg",
+  "Mr Muscle": "assets/reckitt-logo.svg",
+  Vanish: "assets/reckitt-logo.svg",
+  Veet: "assets/reckitt-logo.svg",
   "SC Johnson": "assets/scjohnson-logo.svg",
+  Glade: "assets/scjohnson-logo.svg",
+  "OFF!": "assets/scjohnson-logo.svg",
+  Raid: "assets/scjohnson-logo.svg",
+  Heinz: "assets/heinz-logo.svg",
+  Medcare: "assets/medcare-logo.svg",
+  Sebamed: "assets/sebamed-logo.svg",
+  "Sebamed / Mass": "assets/sebamed-logo.svg",
+  "Omron Healthcare": "assets/omron-logo.svg",
+  Hanymish: "assets/hanymish-logo.svg",
 };
 
 const marketNames = {
@@ -1523,8 +1543,8 @@ const businessEmail = "info@sidyaglobal.com";
 const businessWhatsAppNumber = "905534546118";
 let currentLang = "en";
 let deferredInstallPrompt = null;
-const truckCapacity = { volume: 90, weight: 24000 };
-const containerCapacity = { volume: 76, weight: 26500 };
+const truckCapacity = { weight: 24000 };
+const containerCapacity = { weight: 26500 };
 
 const t = (key) => content[currentLang][key] || content.en[key] || key;
 
@@ -1539,7 +1559,7 @@ const customsText = {
       ["Shipment archive", "Close the file with transport document, export declaration, delivery proof and payment record."],
     ],
     baseDocs: ["Proforma invoice", "Commercial invoice", "Packing list", "HS code / GTIP list", "Buyer company registry", "Payment and Incoterm confirmation"],
-    baseActions: ["Verify buyer and destination country", "Confirm unit, carton, pallet, kg and m3 data", "Align invoice and packing list values", "Send customs broker the final document pack"],
+    baseActions: ["Verify buyer and destination country", "Confirm unit, carton, pallet and kg data", "Align invoice and packing list values", "Send customs broker the final document pack"],
     baseRisks: ["HS code mismatch can delay declaration", "Invoice, packing list and transport document values must match", "Country-specific certificates should be checked before loading"],
     markets: {
       eu: { docs: ["A.TR or EUR.1 review", "CE / conformity documents when required"], actions: ["Check EU product rules and origin preference"], risks: ["EU market may require strict conformity and labeling controls"] },
@@ -1575,7 +1595,7 @@ const customsText = {
       ["Sevkiyat arşivi", "Taşıma belgesi, ihracat beyannamesi, teslim kanıtı ve ödeme kaydıyla dosya kapatılır."],
     ],
     baseDocs: ["Proforma fatura", "Ticari fatura", "Çeki listesi", "GTIP / HS kod listesi", "Alıcı firma sicil evrakı", "Ödeme ve Incoterm teyidi"],
-    baseActions: ["Alıcıyı ve varış ülkesini doğrula", "Koli, palet, kg ve m3 verilerini kesinleştir", "Fatura ve çeki listesi değerlerini eşleştir", "Son evrak paketini gümrük müşavirine gönder"],
+    baseActions: ["Alıcıyı ve varış ülkesini doğrula", "Koli, palet ve kg verilerini kesinleştir", "Fatura ve çeki listesi değerlerini eşleştir", "Son evrak paketini gümrük müşavirine gönder"],
     baseRisks: ["GTIP uyumsuzluğu beyannameyi geciktirebilir", "Fatura, çeki listesi ve taşıma belgesi değerleri aynı olmalıdır", "Ülkeye özel sertifikalar yükleme öncesi kontrol edilmelidir"],
     markets: {
       eu: { docs: ["A.TR veya EUR.1 kontrolü", "Gerekiyorsa CE / uygunluk evrakları"], actions: ["AB ürün kuralları ve menşe avantajını kontrol et"], risks: ["AB pazarı sıkı uygunluk ve etiket kontrolü isteyebilir"] },
@@ -1604,8 +1624,17 @@ const customsText = {
 };
 
 const getProductName = (product) => product.names[currentLang] || product.names.en;
-const formatWeight = (value) => `${value.toLocaleString("en-US")} kg`;
-const formatVolume = (value) => `${value.toFixed(2)} m3`;
+const isPositiveNumber = (value) => Number.isFinite(Number(value)) && Number(value) > 0;
+const getPositiveNumber = (value) => (isPositiveNumber(value) ? Number(value) : null);
+const formatNumberValue = (value, digits = 0) => {
+  const number = getPositiveNumber(value);
+  if (number === null) return "-";
+  return digits ? number.toFixed(digits) : number.toLocaleString("en-US");
+};
+const formatWeight = (value) =>
+  value === null || value === undefined || value === "" || !Number.isFinite(Number(value))
+    ? "-"
+    : `${Number(value).toLocaleString("en-US")} kg`;
 const formatTryRate = (value) =>
   new Intl.NumberFormat("tr-TR", {
     minimumFractionDigits: 2,
@@ -1623,10 +1652,15 @@ const localizedExchangeViews = {
   ka: { code: "GEL", usdLabel: "Dolar/Lari", eurLabel: "Euro/Lari" },
   ru: { code: "RUB", usdLabel: "Dolar/Ruble", eurLabel: "Euro/Ruble" },
 };
-const getCartonsPerPallet = (product) => product.cartonsPerPallet || 60;
-const getUnitsPerCarton = (product) => product.unitsPerCarton || 12;
-const getKgPerCarton = (product) => product.kgPerCarton || product.kgPerPallet / getCartonsPerPallet(product);
-const getM3PerCarton = (product) => product.m3PerCarton || product.m3PerPallet / getCartonsPerPallet(product);
+const getCartonsPerPallet = (product) => getPositiveNumber(product.cartonsPerPallet);
+const getUnitsPerCarton = (product) => getPositiveNumber(product.unitsPerCarton);
+const getKgPerCarton = (product) => {
+  const kgPerCarton = getPositiveNumber(product.kgPerCarton);
+  if (kgPerCarton !== null) return kgPerCarton;
+  const kgPerPallet = getPositiveNumber(product.kgPerPallet);
+  const cartonsPerPallet = getCartonsPerPallet(product);
+  return kgPerPallet !== null && cartonsPerPallet !== null ? kgPerPallet / cartonsPerPallet : null;
+};
 const getBrandLogo = (product) => brandLogoMap[product.brand] || product.logo || "assets/app-icon.svg";
 const getProformaEntries = () =>
   [...proformaOrder.entries()]
@@ -1685,7 +1719,6 @@ const ensurePartnerProduct = (categoryId, company) => {
     unitsPerCarton: fallback.unitsPerCarton,
     cartonsPerPallet: fallback.cartonsPerPallet,
     kgPerCarton: fallback.kgPerCarton,
-    m3PerCarton: fallback.m3PerCarton,
   };
   productCatalog.push(partnerProduct);
   return partnerProduct;
@@ -2095,9 +2128,9 @@ const renderProformaProducts = () => {
   const list = document.querySelector("#proformaProductList");
   const search = document.querySelector("#proformaSearch");
   if (!list) return;
-  const query = (search?.value || "").trim().toLocaleLowerCase("tr-TR");
+  const query = normalizeCatalogName(search?.value || "");
   const filteredProducts = productCatalog.filter((product) => {
-    const haystack = `${product.brand} ${getProductName(product)} ${product.liter}`.toLocaleLowerCase("tr-TR");
+    const haystack = normalizeCatalogName(`${product.brand} ${getProductName(product)} ${product.liter} ${product.barcode || ""} ${product.sourceCategory || ""}`);
     return !query || haystack.includes(query);
   });
   list.innerHTML = filteredProducts
@@ -2113,10 +2146,9 @@ const renderProformaProducts = () => {
           <span>${product.brand} · ${product.liter}</span>
         </div>
         <dl>
-          <div><dt>${t("proformaUnitsPerCarton")}</dt><dd>${unitsPerCarton}</dd></div>
-          <div><dt>${t("proformaCartonsPerPallet")}</dt><dd>${cartonsPerPallet}</dd></div>
-          <div><dt>${t("proformaKgPerCarton")}</dt><dd>${kgPerCarton.toFixed(2)}</dd></div>
-          <div><dt>${t("proformaM3PerCarton")}</dt><dd>${getM3PerCarton(product).toFixed(3)}</dd></div>
+          <div><dt>${t("proformaUnitsPerCarton")}</dt><dd>${formatNumberValue(unitsPerCarton)}</dd></div>
+          <div><dt>${t("proformaCartonsPerPallet")}</dt><dd>${formatNumberValue(cartonsPerPallet)}</dd></div>
+          <div><dt>${t("proformaKgPerCarton")}</dt><dd>${formatNumberValue(kgPerCarton, 2)}</dd></div>
         </dl>
         <label>
           <span>${t("proformaCartonQty")}</span>
@@ -2132,9 +2164,9 @@ const renderCatalogProformaProducts = () => {
   const list = document.querySelector("#catalogProformaList");
   const search = document.querySelector("#catalogProformaSearch");
   if (!list || !activeCatalogProformaCategory) return;
-  const query = (search?.value || "").trim().toLocaleLowerCase("tr-TR");
+  const query = normalizeCatalogName(search?.value || "");
   const items = getCatalogModalItems(activeCatalogProformaCategory).filter(({ product, company }) => {
-    const haystack = `${product.brand} ${getProductName(product)} ${product.liter} ${company?.name || ""}`.toLocaleLowerCase("tr-TR");
+    const haystack = normalizeCatalogName(`${product.brand} ${getProductName(product)} ${product.liter} ${product.barcode || ""} ${product.sourceCategory || ""} ${company?.name || ""}`);
     return !query || haystack.includes(query);
   });
 
@@ -2164,10 +2196,9 @@ const renderCatalogProformaProducts = () => {
           ${catalogLinks ? `<div class="catalog-proforma-links">${catalogLinks}</div>` : ""}
         </div>
         <dl>
-          <div><dt>${t("proformaUnitsPerCarton")}</dt><dd>${unitsPerCarton}</dd></div>
-          <div><dt>${t("proformaCartonsPerPallet")}</dt><dd>${cartonsPerPallet}</dd></div>
-          <div><dt>${t("proformaKgPerCarton")}</dt><dd>${kgPerCarton.toFixed(2)}</dd></div>
-          <div><dt>${t("proformaM3PerCarton")}</dt><dd>${getM3PerCarton(product).toFixed(3)}</dd></div>
+          <div><dt>${t("proformaUnitsPerCarton")}</dt><dd>${formatNumberValue(unitsPerCarton)}</dd></div>
+          <div><dt>${t("proformaCartonsPerPallet")}</dt><dd>${formatNumberValue(cartonsPerPallet)}</dd></div>
+          <div><dt>${t("proformaKgPerCarton")}</dt><dd>${formatNumberValue(kgPerCarton, 2)}</dd></div>
         </dl>
         <label>
           <span>${t("proformaCartonQty")}</span>
@@ -2219,7 +2250,7 @@ const updateProformaQuantity = (productId, delta) => {
   renderProformaOrder();
 };
 
-const renderLoadStack = (selector, entries, capacityVolume, percent) => {
+const renderLoadStack = (selector, entries, capacityWeight, percent) => {
   const stack = document.querySelector(selector);
   if (!stack) return;
   const maxBoxes = 42;
@@ -2228,10 +2259,11 @@ const renderLoadStack = (selector, entries, capacityVolume, percent) => {
     stack.innerHTML = "";
     return;
   }
-  const sorted = [...entries].sort((a, b) => getKgPerCarton(b.product) / getM3PerCarton(b.product) - getKgPerCarton(a.product) / getM3PerCarton(a.product));
+  const sorted = [...entries].sort((a, b) => (getKgPerCarton(b.product) || 0) - (getKgPerCarton(a.product) || 0));
   const boxes = sorted.flatMap((entry) => {
-    const volume = entry.cartons * getM3PerCarton(entry.product);
-    const share = Math.max(1, Math.round((volume / capacityVolume) * maxBoxes));
+    const weight = entry.cartons * (getKgPerCarton(entry.product) || 0);
+    if (!weight) return [];
+    const share = Math.max(1, Math.round((weight / capacityWeight) * maxBoxes));
     return Array.from({ length: share }, () => getProductName(entry.product));
   });
   const visibleBoxes = boxes.slice(0, activeBoxes);
@@ -2239,23 +2271,22 @@ const renderLoadStack = (selector, entries, capacityVolume, percent) => {
   stack.innerHTML = visibleBoxes.map((title) => `<span class="load-box" title="${title}"></span>`).join("");
 };
 
-const updateLoadMeter = (prefix, capacity, entries, totalWeight, totalVolume) => {
+const updateLoadMeter = (prefix, capacity, entries, totalWeight) => {
   const fill = document.querySelector(`#${prefix}FillBar`);
   const text = document.querySelector(`#${prefix}FillText`);
-  const volumeRatio = totalVolume / capacity.volume;
   const weightRatio = totalWeight / capacity.weight;
-  const percent = Math.min(100, Math.round(Math.max(volumeRatio, weightRatio) * 100));
+  const percent = Math.min(100, Math.round(weightRatio * 100));
   if (fill) fill.style.height = `${percent}%`;
   if (text) {
     const label = prefix === "truck" ? t("truckFillLabel") : t("containerFillLabel");
-    text.textContent = `${label}: ${percent}% · ${formatVolume(totalVolume)} / ${capacity.volume} m3 · ${formatWeight(totalWeight)} / ${capacity.weight.toLocaleString("en-US")} kg`;
+    text.textContent = `${label}: ${percent}% · ${formatWeight(totalWeight)} / ${capacity.weight.toLocaleString("en-US")} kg`;
   }
-  renderLoadStack(`#${prefix}LoadStack`, entries, capacity.volume, percent);
+  renderLoadStack(`#${prefix}LoadStack`, entries, capacity.weight, percent);
 };
 
-const renderLoadMeters = (entries, totalWeight, totalVolume) => {
-  updateLoadMeter("truck", truckCapacity, entries, totalWeight, totalVolume);
-  updateLoadMeter("container", containerCapacity, entries, totalWeight, totalVolume);
+const renderLoadMeters = (entries, totalWeight) => {
+  updateLoadMeter("truck", truckCapacity, entries, totalWeight);
+  updateLoadMeter("container", containerCapacity, entries, totalWeight);
 };
 
 const renderProformaOrder = () => {
@@ -2267,14 +2298,20 @@ const renderProformaOrder = () => {
   empty.hidden = entries.length > 0;
   lines.innerHTML = entries
     .map(({ product, cartons }, index) => {
-      const pallets = cartons / getCartonsPerPallet(product);
-      const weight = cartons * getKgPerCarton(product);
-      const volume = cartons * getM3PerCarton(product);
+      const cartonsPerPallet = getCartonsPerPallet(product);
+      const kgPerCarton = getKgPerCarton(product);
+      const pallets = cartonsPerPallet === null ? null : cartons / cartonsPerPallet;
+      const weight = kgPerCarton === null ? null : cartons * kgPerCarton;
+      const lineMeta = [
+        `${cartons.toLocaleString("en-US")} ${t("proformaCartonQty")}`,
+        pallets === null ? null : `${pallets.toFixed(2)} PLT`,
+        weight === null ? null : formatWeight(weight),
+      ].filter(Boolean);
       return `<article class="proforma-line">
         <span class="proforma-line-index">${index + 1}</span>
         <div>
           <strong>${getProductName(product)}</strong>
-          <span>${cartons.toLocaleString("en-US")} ${t("proformaCartonQty")} · ${pallets.toFixed(2)} PLT · ${formatWeight(weight)} · ${formatVolume(volume)}</span>
+          <span>${lineMeta.join(" · ")}</span>
         </div>
         <div class="proforma-line-actions">
           <button type="button" class="proforma-qty-button" data-product-id="${product.id}" data-delta="-1" aria-label="Decrease">−</button>
@@ -2287,14 +2324,18 @@ const renderProformaOrder = () => {
     .join("");
 
   const totalCartons = entries.reduce((sum, entry) => sum + entry.cartons, 0);
-  const totalPallets = entries.reduce((sum, entry) => sum + entry.cartons / getCartonsPerPallet(entry.product), 0);
-  const totalWeight = entries.reduce((sum, entry) => sum + entry.cartons * getKgPerCarton(entry.product), 0);
-  const totalVolume = entries.reduce((sum, entry) => sum + entry.cartons * getM3PerCarton(entry.product), 0);
+  const totalPallets = entries.reduce((sum, entry) => {
+    const cartonsPerPallet = getCartonsPerPallet(entry.product);
+    return cartonsPerPallet === null ? sum : sum + entry.cartons / cartonsPerPallet;
+  }, 0);
+  const totalWeight = entries.reduce((sum, entry) => {
+    const kgPerCarton = getKgPerCarton(entry.product);
+    return kgPerCarton === null ? sum : sum + entry.cartons * kgPerCarton;
+  }, 0);
   document.querySelector("#proformaTotalCartons").textContent = totalCartons.toLocaleString("en-US");
-  document.querySelector("#proformaTotalPallets").textContent = totalPallets.toFixed(2);
+  document.querySelector("#proformaTotalPallets").textContent = totalPallets ? totalPallets.toFixed(2) : "-";
   document.querySelector("#proformaTotalWeight").textContent = formatWeight(totalWeight);
-  document.querySelector("#proformaTotalVolume").textContent = formatVolume(totalVolume);
-  renderLoadMeters(entries, totalWeight, totalVolume);
+  renderLoadMeters(entries, totalWeight);
 };
 
 const buildProformaRows = () =>
@@ -2302,20 +2343,19 @@ const buildProformaRows = () =>
     const cartonsPerPallet = getCartonsPerPallet(product);
     const unitsPerCarton = getUnitsPerCarton(product);
     const kgPerCarton = getKgPerCarton(product);
-    const m3PerCarton = getM3PerCarton(product);
     return {
       no: index + 1,
       brand: product.brand,
       product: getProductName(product),
       volume: product.liter,
+      barcode: product.barcode || "",
+      sourceCategory: product.sourceCategory || "",
       cartons,
       unitsPerCarton,
       cartonsPerPallet,
-      pallets: cartons / cartonsPerPallet,
+      pallets: cartonsPerPallet === null ? null : cartons / cartonsPerPallet,
       kgPerCarton,
-      totalWeight: cartons * kgPerCarton,
-      m3PerCarton,
-      totalVolume: cartons * m3PerCarton,
+      totalWeight: kgPerCarton === null ? null : cartons * kgPerCarton,
     };
   });
 
@@ -2326,9 +2366,22 @@ const downloadProformaCsv = () => {
     alert(t("proformaQuoteEmpty"));
     return false;
   }
-  const headers = ["No", "Brand", "Product", "Volume", "Cartons", "Units/Carton", "Cartons/Pallet", "Pallets", "Kg/Carton", "Total Kg", "m3/Carton", "Total m3"];
+  const headers = ["No", "Brand", "Product", "Barcode", "Category", "Unit / Gramaj", "Cartons", "Units/Carton", "Cartons/Pallet", "Pallets", "Kg/Carton", "Total Kg"];
   const csvRows = rows.map((row) =>
-    [row.no, row.brand, row.product, row.volume, row.cartons, row.unitsPerCarton, row.cartonsPerPallet, row.pallets.toFixed(2), row.kgPerCarton.toFixed(2), row.totalWeight.toFixed(2), row.m3PerCarton.toFixed(3), row.totalVolume.toFixed(3)]
+    [
+      row.no,
+      row.brand,
+      row.product,
+      row.barcode,
+      row.sourceCategory,
+      row.volume,
+      row.cartons,
+      row.unitsPerCarton ?? "",
+      row.cartonsPerPallet ?? "",
+      row.pallets === null ? "" : row.pallets.toFixed(2),
+      row.kgPerCarton === null ? "" : row.kgPerCarton.toFixed(2),
+      row.totalWeight === null ? "" : row.totalWeight.toFixed(2),
+    ]
       .map(toCsvCell)
       .join(";"),
   );
@@ -2344,10 +2397,11 @@ const downloadProformaCsv = () => {
 const buildProformaMessage = () => {
   const rows = buildProformaRows();
   const totalCartons = rows.reduce((sum, row) => sum + row.cartons, 0);
-  const totalWeight = rows.reduce((sum, row) => sum + row.totalWeight, 0);
-  const totalVolume = rows.reduce((sum, row) => sum + row.totalVolume, 0);
-  const lines = rows.map((row) => `${row.no}. ${row.brand} / ${row.product}: ${row.cartons} koli, ${row.pallets.toFixed(2)} PLT, ${formatWeight(row.totalWeight)}, ${formatVolume(row.totalVolume)}`);
-  return [`Sidya Global proforma request`, "", ...lines, "", `Total cartons: ${totalCartons}`, `Total weight: ${formatWeight(totalWeight)}`, `Total volume: ${formatVolume(totalVolume)}`].join("\n");
+  const totalWeight = rows.reduce((sum, row) => sum + (row.totalWeight || 0), 0);
+  const lines = rows.map((row) =>
+    `${row.no}. ${row.brand} / ${row.product}: ${row.cartons} koli${row.pallets === null ? "" : `, ${row.pallets.toFixed(2)} PLT`}${row.totalWeight === null ? "" : `, ${formatWeight(row.totalWeight)}`}`,
+  );
+  return [`Sidya Global proforma request`, "", ...lines, "", `Total cartons: ${totalCartons}`, `Total weight: ${formatWeight(totalWeight)}`].join("\n");
 };
 
 const sendProformaMail = () => {
