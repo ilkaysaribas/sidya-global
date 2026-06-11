@@ -30,7 +30,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260609-4" />
+    <link rel="stylesheet" href="styles.css?v=20260611-1" />
     <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
   </head>
   <body>
@@ -218,16 +218,16 @@
       <section class="section supplier-search-section" id="turkiye-product-search" aria-labelledby="supplier-search-title">
         <div class="section-heading supplier-search-heading">
           <div>
-            <p class="section-kicker">B2B Tedarik Arama</p>
-            <h2 id="supplier-search-title">Türkiye'den Ürün Bul</h2>
+            <p class="section-kicker" data-i18n="supplierSearchKicker">B2B Supply Search</p>
+            <h2 id="supplier-search-title" data-i18n="supplierSearchTitle">Find Products from Türkiye</h2>
           </div>
-          <p>Ürün adını yazın; uygun kategori, marka, minimum sipariş ve yükleme bilgileri tek ekranda listelensin.</p>
+          <p data-i18n="supplierSearchCopy">Type a product name to see matching categories, brands, minimum order and loading notes.</p>
         </div>
         <form class="supplier-search-box" id="supplierSearchForm">
-          <label for="supplierSearchInput">Alıcı ürün araması</label>
+          <label for="supplierSearchInput" data-i18n="supplierSearchLabel">Buyer product search</label>
           <div class="supplier-search-control">
-            <input id="supplierSearchInput" type="search" placeholder="Örn. Çamaşır deterjanı, medikal maske, salça" autocomplete="off" />
-            <button type="submit" aria-label="Türkiye'den ürün bul">⌕</button>
+            <input id="supplierSearchInput" type="search" placeholder="Start searching products" autocomplete="off" />
+            <button type="submit" aria-label="Find products from Türkiye">⌕</button>
           </div>
         </form>
         <div class="supplier-results" id="supplierSearchResults" aria-live="polite"></div>
@@ -793,6 +793,6 @@
       }
     </script>
     <script src="catalog-products.generated.js?v=20260608-2"></script>
-    <script src="script.js?v=20260609-6"></script>
+    <script src="script.js?v=20260611-1"></script>
   </body>
 </html>

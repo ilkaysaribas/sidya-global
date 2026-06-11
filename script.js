@@ -45,6 +45,18 @@ const content = {
     trustFour: "Multilingual catalog support",
     productsKicker: "Catalog",
     productsTitle: "Featured product groups",
+    supplierSearchKicker: "B2B Supply Search",
+    supplierSearchTitle: "Find Products from Türkiye",
+    supplierSearchCopy: "Type a product name to see matching categories, brands, minimum order and loading notes.",
+    supplierSearchLabel: "Buyer product search",
+    supplierSearchPlaceholder: "Start searching products, brands or categories",
+    supplierNoResultsTitle: "No matching supplier found",
+    supplierNoResultsCopy: "Try another product name or send a custom request from the quote form.",
+    supplierContactForm: "Contact",
+    supplierMoqLabel: "Minimum order",
+    supplierLoadingLabel: "Loading",
+    supplierCategoryCta: "Product group",
+    supplierContactCta: "Contact",
     partnersKicker: "Collaborations",
     partnersTitle: "Our strategic partners",
     partnerSiteCta: "Website",
@@ -316,6 +328,18 @@ const content = {
     trustFour: "Çok dilli katalog desteği",
     productsKicker: "Katalog",
     productsTitle: "Öne çıkan ürün grupları",
+    supplierSearchKicker: "B2B Tedarik Arama",
+    supplierSearchTitle: "Türkiye'den Ürün Bul",
+    supplierSearchCopy: "Ürün adını yazın; uygun kategori, marka, minimum sipariş ve yükleme bilgileri tek ekranda listelensin.",
+    supplierSearchLabel: "Alıcı ürün araması",
+    supplierSearchPlaceholder: "Ürün, marka veya kategori aramaya başlayın",
+    supplierNoResultsTitle: "Uygun tedarikçi bulunamadı",
+    supplierNoResultsCopy: "Farklı bir ürün adı deneyin veya teklif formundan özel talep gönderin.",
+    supplierContactForm: "İletişime geç",
+    supplierMoqLabel: "Minimum Sipariş",
+    supplierLoadingLabel: "Yüklemeler",
+    supplierCategoryCta: "Ürün grubu",
+    supplierContactCta: "İletişim",
     partnersKicker: "İş birlikleri",
     partnersTitle: "Stratejik ortaklarımız",
     partnerSiteCta: "Web Sitesi",
@@ -636,6 +660,18 @@ Object.assign(content.az, {
   partnerSiteCta: "Veb sayt",
   sampleCatalogCta: "Kataloqu aç",
   relatedCompanies: "Əlaqəli firmalar",
+  supplierSearchKicker: "B2B təchizat axtarışı",
+  supplierSearchTitle: "Türkiyədən məhsul tapın",
+  supplierSearchCopy: "Məhsul adını yazın; uyğun kateqoriya, marka, minimum sifariş və yükləmə məlumatları göstərilsin.",
+  supplierSearchLabel: "Alıcı məhsul axtarışı",
+  supplierSearchPlaceholder: "Məhsul, marka və ya kateqoriya axtarın",
+  supplierNoResultsTitle: "Uyğun təchizatçı tapılmadı",
+  supplierNoResultsCopy: "Başqa məhsul adı sınayın və ya təklif formasından xüsusi sorğu göndərin.",
+  supplierContactForm: "Əlaqə",
+  supplierMoqLabel: "Minimum sifariş",
+  supplierLoadingLabel: "Yükləmə",
+  supplierCategoryCta: "Məhsul qrupu",
+  supplierContactCta: "Əlaqə",
   processKicker: "İxrac prosesi",
   processTitle: "Sorğudan göndərişə qədər nəzarətli proses",
   stepOneTitle: "Sorğunun yoxlanması",
@@ -717,6 +753,18 @@ Object.assign(content.ka, {
   partnerSiteCta: "ვებგვერდი",
   sampleCatalogCta: "კატალოგის გახსნა",
   relatedCompanies: "დაკავშირებული კომპანიები",
+  supplierSearchKicker: "B2B მომწოდებლის ძიება",
+  supplierSearchTitle: "იპოვეთ პროდუქტი თურქეთიდან",
+  supplierSearchCopy: "ჩაწერეთ პროდუქტის სახელი და ნახეთ შესაბამისი კატეგორია, ბრენდი, მინიმალური შეკვეთა და დატვირთვა.",
+  supplierSearchLabel: "მყიდველის პროდუქტის ძიება",
+  supplierSearchPlaceholder: "დაიწყეთ პროდუქტის, ბრენდის ან კატეგორიის ძიება",
+  supplierNoResultsTitle: "შესაბამისი მომწოდებელი ვერ მოიძებნა",
+  supplierNoResultsCopy: "სცადეთ სხვა პროდუქტის სახელი ან გაგზავნეთ სპეციალური მოთხოვნა.",
+  supplierContactForm: "კონტაქტი",
+  supplierMoqLabel: "მინიმალური შეკვეთა",
+  supplierLoadingLabel: "დატვირთვა",
+  supplierCategoryCta: "პროდუქტის ჯგუფი",
+  supplierContactCta: "კონტაქტი",
   processKicker: "ექსპორტის პროცესი",
   processTitle: "კონტროლირებადი გზა მოთხოვნიდან გადაზიდვამდე",
   stepOneTitle: "მოთხოვნის განხილვა",
@@ -795,6 +843,18 @@ Object.assign(content.ru, {
   partnerSiteCta: "Веб-сайт",
   sampleCatalogCta: "Открыть каталог",
   relatedCompanies: "Связанные компании",
+  supplierSearchKicker: "B2B поиск поставщиков",
+  supplierSearchTitle: "Найти товары из Турции",
+  supplierSearchCopy: "Введите название товара, чтобы увидеть категорию, бренд, минимальный заказ и условия загрузки.",
+  supplierSearchLabel: "Поиск товара для покупателя",
+  supplierSearchPlaceholder: "Начните искать товар, бренд или категорию",
+  supplierNoResultsTitle: "Подходящий поставщик не найден",
+  supplierNoResultsCopy: "Попробуйте другое название товара или отправьте специальный запрос.",
+  supplierContactForm: "Связаться",
+  supplierMoqLabel: "Минимальный заказ",
+  supplierLoadingLabel: "Загрузка",
+  supplierCategoryCta: "Группа товаров",
+  supplierContactCta: "Контакт",
   processKicker: "Экспортный процесс",
   processTitle: "Контролируемый путь от запроса до отгрузки",
   stepOneTitle: "Анализ запроса",
@@ -1143,7 +1203,7 @@ const supplierSearchItems = [
   {
     brand: "ABC Deterjan",
     category: "Temizlik Ürünleri",
-    keywords: ["çamaşır deterjanı", "deterjan", "temizlik", "abc", "sıvı deterjan", "toz deterjan"],
+    keywords: ["çamaşır deterjanı", "laundry detergent", "washing powder", "deterjan", "temizlik", "abc", "sıvı deterjan", "toz deterjan", "hijyen"],
     moq: "1 mixed pallet / ürün grubu",
     loading: "Koli, palet ve konteyner bazlı yükleme",
     contact: "#catalog-proforma",
@@ -1161,7 +1221,7 @@ const supplierSearchItems = [
   {
     brand: "Nivea",
     category: "Kozmetik ve Kişisel Bakım",
-    keywords: ["güneş kremi", "gunes kremi", "sun cream", "sunscreen", "cilt bakımı", "kozmetik", "nivea", "krem"],
+    keywords: ["güneş kremi", "gunes kremi", "sun cream", "sunscreen", "şampuan", "shampoo", "deodorant", "roll on", "vücut losyonu", "cilt bakımı", "kozmetik", "nivea", "krem"],
     moq: "Ürün bazlı teklif",
     loading: "Koli ve palet bazlı yükleme",
     contact: "#catalog-proforma",
@@ -1170,7 +1230,7 @@ const supplierSearchItems = [
   {
     brand: "Sebamed",
     category: "Kozmetik ve Kişisel Bakım",
-    keywords: ["güneş kremi", "gunes kremi", "sun cream", "sunscreen", "sebamed", "kişisel bakım", "kozmetik", "bebek bakım"],
+    keywords: ["güneş kremi", "gunes kremi", "sun cream", "sunscreen", "şampuan", "shampoo", "saç bakımı", "hair care", "kepek", "dermokozmetik", "sebamed", "kişisel bakım", "kozmetik", "bebek bakım"],
     moq: "Ürün bazlı teklif",
     loading: "Koli ve palet bazlı yükleme",
     contact: "#catalog-proforma",
@@ -1204,6 +1264,42 @@ const supplierSearchItems = [
     categoryId: "medical-products",
   },
   {
+    brand: "Johnson & Johnson",
+    category: "Medikal Ürünler",
+    keywords: ["johnson", "jnj", "medikal", "cerrahi", "surgical", "healthcare", "orthopedic", "ortopedi", "sağlık"],
+    moq: "Ürün bazlı teklif",
+    loading: "Koli ve kontrollü sevkiyat",
+    contact: "#catalog-proforma",
+    categoryId: "medical-products",
+  },
+  {
+    brand: "Hanymish",
+    category: "Medikal ve Bebek Ürünleri",
+    keywords: ["hanymish", "bebek", "baby", "biberon", "emzik", "pacifier", "baby bottle", "anne bebek", "sağlık"],
+    moq: "Ürün bazlı teklif",
+    loading: "Koli ve palet bazlı yükleme",
+    contact: "#catalog-proforma",
+    categoryId: "medical-products",
+  },
+  {
+    brand: "Medcare",
+    category: "Medikal Ürünler",
+    keywords: ["medcare", "medikal", "maske", "eldiven", "hasta bezi", "disposable", "hijyen", "sağlık"],
+    moq: "Ürün bazlı teklif",
+    loading: "Koli ve kontrollü sevkiyat",
+    contact: "#catalog-proforma",
+    categoryId: "medical-products",
+  },
+  {
+    brand: "SC Johnson",
+    category: "Temizlik ve Ev Bakım",
+    keywords: ["sc johnson", "raid", "glade", "mr muscle", "temizlik", "ev bakım", "böcek ilacı", "oda kokusu", "yüzey temizleyici"],
+    moq: "Ürün bazlı teklif",
+    loading: "Koli ve palet bazlı yükleme",
+    contact: "#catalog-proforma",
+    categoryId: "cleaning-products",
+  },
+  {
     brand: "Garipler Yapı Market",
     category: "Yapı Hırdavat",
     keywords: ["hırdavat", "matkap", "el aleti", "yapı", "garipler"],
@@ -1213,6 +1309,57 @@ const supplierSearchItems = [
     categoryId: "hardware-products",
   },
 ];
+
+const supplierCategorySearchDefaults = {
+  "home-products": {
+    category: "Ev ve Yaşam Ürünleri",
+    moq: "Kategori bazlı karma teklif",
+    loading: "Koli ve palet bazlı sevkiyat",
+    keywords: ["ev", "home", "yaşam", "kitchenware", "mutfak", "dekorasyon", "seramik", "household"],
+  },
+  "cleaning-products": {
+    category: "Temizlik Ürünleri",
+    moq: "1 mixed pallet / marka grubu",
+    loading: "Koli, palet ve konteyner bazlı yükleme",
+    keywords: ["temizlik", "cleaning", "deterjan", "detergent", "çamaşır", "laundry", "bulaşık", "dishwashing", "hijyen", "sabun", "soap"],
+  },
+  "food-products": {
+    category: "Gıda Ürünleri",
+    moq: "1 palet ve üzeri",
+    loading: "Koli ve palet bazlı yükleme",
+    keywords: ["gıda", "food", "sos", "sauce", "ketçap", "ketchup", "mayonez", "salça", "tomato paste", "konserve", "paketli gıda"],
+  },
+  "industrial-products": {
+    category: "Endüstriyel Sarf",
+    moq: "Ürün bazlı karma teklif",
+    loading: "Paletli ve koli bazlı sevkiyat",
+    keywords: ["endüstriyel", "industrial", "sarf", "consumable", "ambalaj", "packaging", "operasyon", "temizlik sarfı"],
+  },
+  "medical-products": {
+    category: "Medikal Ürünler",
+    moq: "Ürün bazlı teklif",
+    loading: "Koli ve kontrollü sevkiyat",
+    keywords: ["medikal", "medical", "sağlık", "health", "maske", "mask", "eldiven", "glove"],
+  },
+  "cosmetics-products": {
+    category: "Kozmetik ve Kişisel Bakım",
+    moq: "Ürün bazlı teklif",
+    loading: "Koli ve palet bazlı yükleme",
+    keywords: ["kozmetik", "cosmetics", "kişisel bakım", "personal care", "şampuan", "shampoo", "güneş kremi", "sunscreen", "sun cream", "cilt bakımı", "skin care", "saç bakımı", "hair care", "deodorant"],
+  },
+  "automotive-products": {
+    category: "Otomotiv",
+    moq: "Ürün bazlı karma teklif",
+    loading: "Koli ve palet bazlı sevkiyat",
+    keywords: ["otomotiv", "automotive", "yedek parça", "spare parts", "oto kimyasal", "car care", "aksesuar", "maintenance"],
+  },
+  "hardware-products": {
+    category: "Yapı Hırdavat",
+    moq: "Karma koli / palet",
+    loading: "Paletli ve koli bazlı sevkiyat",
+    keywords: ["hırdavat", "hardware", "yapı", "construction", "matkap", "drill", "el aleti", "hand tool", "tool", "vida", "fastener"],
+  },
+};
 
 const borderGateData = [
   { flag: "🇬🇪", country: "Gürcistan", name: "Sarp / Sarpi", sourceId: "ge-rs-tirpark", fee: "TIR park ve gümrük işlemleri resmi kaynakta doğrulanır", wait: "Resmi TIR Park kaynağı", density: "green", trend: [32, 36, 41, 38, 44, 39, 42], camera: "https://www.rs.ge/TirPark-en" },
@@ -1576,7 +1723,7 @@ const renderProducts = () => {
       const related = productPartners[product.id] || [];
       const trade = productTradeDetails[product.id];
       const relatedMarkup = related.length
-        ? `<div class="related-companies"><strong>${t("relatedCompanies")}</strong><div>${related
+        ? `<div class="related-companies"><strong tabindex="0">${t("relatedCompanies")}</strong><div>${related
             .map(
               (company) =>
                 `<span class="related-company"><a class="site-action" href="${company.site}" target="_blank" rel="noopener"><img src="${company.logo}" alt="" aria-hidden="true" /><span>${company.name}</span></a>${[
@@ -1615,16 +1762,84 @@ const normalizeSupplierSearch = (value) =>
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/ı/g, "i");
 
+const getLocalizedCategoryTitle = (categoryId, fallback = "") =>
+  (products[currentLang] || products.en).find((product) => product.id === categoryId)?.title || fallback;
+
+const getCategorySearchText = (categoryId) => {
+  const productTexts = Object.values(products)
+    .flat()
+    .filter((product) => product.id === categoryId)
+    .flatMap((product) => [product.title, product.copy, ...(product.meta || [])]);
+  const partnerTexts = (productPartners[categoryId] || []).flatMap((company) => [
+    company.name,
+    company.site,
+    company.catalog || "",
+    ...(company.catalogs || []).flatMap((catalog) => [catalog.label, catalog.href]),
+  ]);
+  const catalogTexts = productCatalog
+    .filter((product) => product.category === categoryId)
+    .flatMap((product) => [
+      product.brand,
+      product.liter,
+      product.category,
+      ...Object.values(product.names || {}),
+    ]);
+  const defaults = supplierCategorySearchDefaults[categoryId] || {};
+  return [...(defaults.keywords || []), defaults.category || "", ...productTexts, ...partnerTexts, ...catalogTexts].join(" ");
+};
+
+const getSupplierSearchItems = () => {
+  const items = [];
+  const seen = new Set();
+  const addItem = (item) => {
+    const defaults = supplierCategorySearchDefaults[item.categoryId] || {};
+    const key = normalizeSupplierSearch(item.brand);
+    if (seen.has(key)) return;
+    seen.add(key);
+    items.push({
+      ...item,
+      category: item.category || defaults.category || getLocalizedCategoryTitle(item.categoryId, ""),
+      moq: item.moq || defaults.moq || "Ürün bazlı teklif",
+      loading: item.loading || defaults.loading || "Koli ve palet bazlı sevkiyat",
+      contact: item.contact || "#catalog-proforma",
+      keywords: [...(defaults.keywords || []), ...(item.keywords || [])],
+    });
+  };
+
+  supplierSearchItems.forEach(addItem);
+  Object.entries(productPartners).forEach(([categoryId, companies]) => {
+    companies.forEach((company) => {
+      addItem({
+        brand: company.name,
+        categoryId,
+        keywords: [company.name, company.site, company.catalog || "", ...(company.catalogs || []).flatMap((catalog) => [catalog.label, catalog.href])],
+      });
+    });
+  });
+  return items;
+};
+
 const getSupplierResults = (query) => {
   const normalizedQuery = normalizeSupplierSearch(query);
-  if (!normalizedQuery) return supplierSearchItems.slice(0, 4);
-  return supplierSearchItems.filter((item) => {
-    const haystack = normalizeSupplierSearch([item.brand, item.category, ...item.keywords].join(" "));
-    return normalizedQuery
-      .split(/\s+/)
-      .filter(Boolean)
-      .every((word) => haystack.includes(word));
-  });
+  const items = getSupplierSearchItems();
+  if (!normalizedQuery) return items.slice(0, 6);
+  const words = normalizedQuery.split(/\s+/).filter(Boolean);
+  const scored = items
+    .map((item) => {
+      const brandText = normalizeSupplierSearch(item.brand);
+      const haystack = normalizeSupplierSearch([item.brand, item.category, ...(item.keywords || []), getCategorySearchText(item.categoryId)].join(" "));
+      const wordHits = words.filter((word) => haystack.includes(word)).length;
+      const fullPhrase = haystack.includes(normalizedQuery) ? 8 : 0;
+      const brandBoost = brandText.includes(normalizedQuery) ? 12 : 0;
+      const score = wordHits * 3 + fullPhrase + brandBoost;
+      return { item, score, wordHits };
+    })
+    .filter((entry) => entry.score > 0);
+  const exactMatches = scored.filter((entry) => entry.wordHits === words.length);
+  return (exactMatches.length ? exactMatches : scored)
+    .sort((a, b) => b.score - a.score || a.item.brand.localeCompare(b.item.brand, "tr"))
+    .slice(0, 12)
+    .map((entry) => entry.item);
 };
 
 const renderSupplierSearchResults = (query = "") => {
@@ -1632,7 +1847,7 @@ const renderSupplierSearchResults = (query = "") => {
   if (!resultsContainer) return;
   const results = getSupplierResults(query);
   if (!results.length) {
-    resultsContainer.innerHTML = `<article class="supplier-result-card"><h3>Uygun kayıt bulunamadı</h3><p>Farklı bir ürün adı deneyin veya teklif formundan özel talep gönderin.</p><div class="supplier-result-actions"><a href="#contact">İletişime geç</a></div></article>`;
+    resultsContainer.innerHTML = `<article class="supplier-result-card"><h3>${t("supplierNoResultsTitle")}</h3><p>${t("supplierNoResultsCopy")}</p><div class="supplier-result-actions"><a href="#contact">${t("supplierContactForm")}</a></div></article>`;
     return;
   }
   resultsContainer.innerHTML = results
@@ -1640,15 +1855,15 @@ const renderSupplierSearchResults = (query = "") => {
       (item) => `<article class="supplier-result-card">
         <div>
           <h3>${item.brand}</h3>
-          <p>${item.category}</p>
+          <p>${getLocalizedCategoryTitle(item.categoryId, item.category)}</p>
         </div>
         <div class="supplier-result-meta">
-          <span>Minimum Sipariş: ${item.moq}</span>
-          <span>Yüklemeler: ${item.loading}</span>
+          <span>${t("supplierMoqLabel")}: ${item.moq}</span>
+          <span>${t("supplierLoadingLabel")}: ${item.loading}</span>
         </div>
         <div class="supplier-result-actions">
-          <a href="#${item.categoryId}">Ürün grubu</a>
-          <a class="${item.contact === "#catalog-proforma" ? "product-quote-button" : ""}" href="${item.contact}" data-category-id="${item.categoryId}" data-product-title="${item.category}">İletişim</a>
+          <a href="#${item.categoryId}">${t("supplierCategoryCta")}</a>
+          <a class="${item.contact === "#catalog-proforma" ? "product-quote-button" : ""}" href="${item.contact}" data-category-id="${item.categoryId}" data-product-title="${getLocalizedCategoryTitle(item.categoryId, item.category)}">${t("supplierContactCta")}</a>
         </div>
       </article>`,
     )
@@ -2151,6 +2366,9 @@ const translatePage = () => {
     const key = node.dataset.i18n;
     if (t(key)) node.textContent = t(key);
   });
+  const supplierSearchInput = document.querySelector("#supplierSearchInput");
+  if (supplierSearchInput) supplierSearchInput.placeholder = t("supplierSearchPlaceholder");
+  document.querySelector("#supplierSearchForm button")?.setAttribute("aria-label", t("supplierSearchTitle"));
   renderProducts();
   renderMarkets();
   renderSupplierSearchResults(document.querySelector("#supplierSearchInput")?.value || "");

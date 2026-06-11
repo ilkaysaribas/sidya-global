@@ -61,6 +61,7 @@ const requireEnv = () => {
     console.error(`Missing B2B registration environment variables: ${missingEnv.join(", ")}`);
     const error = new Error("B2B registration backend is missing required environment variables.");
     error.statusCode = 501;
+    error.missing = missingEnv;
     throw error;
   }
 
@@ -243,6 +244,9 @@ module.exports = async (req, res) => {
     res.status(200).json({ ok: true, userId: user.id });
   } catch (error) {
     const message = String(error.message || "");
-    res.status(error.statusCode || 500).json({ error: message || "B2B kaydı oluşturulamadı." });
+    res.status(error.statusCode || 500).json({
+      error: message || "B2B kaydı oluşturulamadı.",
+      missing: Array.isArray(error.missing) ? error.missing : undefined,
+    });
   }
 };
