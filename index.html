@@ -8,11 +8,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Sidya Global" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <title>Sidya Global | Product Showcase and Export</title>
+    <title>Sidya Global | GTIP, Customs Documents and Export Product Showcase</title>
     <meta
       name="description"
-      content="Sidya Global helps international buyers source quality products from trusted Turkish suppliers."
+      content="Sidya Global helps buyers source Turkish products with GTIP / HS code guidance, customs document checklist, proforma preparation and export logistics support."
     />
+    <meta name="keywords" content="GTIP kodu, HS code, gümrük evrak listesi, ihracat gümrük belgeleri, Türkiye'den ürün bul, Sidya Global" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://sidyaglobal.com/" />
     <meta property="og:title" content="Sidya Global | Reliable Products from Türkiye" />
@@ -30,8 +31,40 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260612-1" />
+    <link rel="stylesheet" href="styles.css?v=20260612-2" />
     <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "GTIP kodu nedir?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "GTIP, Türkiye'de kullanılan 12 haneli Gümrük Tarife İstatistik Pozisyonu kodudur. İlk 6 hane uluslararası HS sistemine dayanır; nihai kod ürün içeriği, kullanım amacı, ambalaj ve resmi tarife kaynaklarıyla doğrulanmalıdır."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "İhracat için hangi gümrük evrakları gerekir?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Temel ihracat dosyasında proforma veya ticari fatura, çeki listesi, GTIP/HS kod listesi, menşe evrakı, taşıma belgesi ve gerekiyorsa ürün sertifikaları bulunur."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Deterjan, şampuan ve güneş kremi için GTIP nasıl bulunur?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Deterjanlar genellikle 3402, şampuanlar 3305, güneş kremi ve cilt bakım ürünleri 3304 HS/GTIP ailesinden değerlendirilir. Kesin 12 hane için ürün içeriği ve resmi TARA tarife araması kontrol edilmelidir."
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <header class="site-header">
@@ -360,6 +393,38 @@
           <p data-i18n="customsCopy">Plan the export file from buyer verification to customs declaration, shipment handover and archive closure.</p>
         </div>
 
+        <div class="customs-quick-grid">
+          <article class="customs-core-card">
+            <p class="section-kicker" data-i18n="customsCoreDocsKicker">Document checklist</p>
+            <h3 data-i18n="customsCoreDocsTitle">Required export customs documents</h3>
+            <p data-i18n="customsCoreDocsCopy">Keep the commercial, origin, product and transport files together before the declaration stage.</p>
+            <div class="customs-document-chips" aria-label="Required export document list">
+              <span data-i18n="customsDocCommercialInvoice">Commercial invoice / proforma</span>
+              <span data-i18n="customsDocPackingList">Packing list</span>
+              <span data-i18n="customsDocGtip">GTIP / HS code list</span>
+              <span data-i18n="customsDocOrigin">Certificate of origin, A.TR / EUR.1 when applicable</span>
+              <span data-i18n="customsDocTransport">CMR, bill of lading or airwaybill</span>
+              <span data-i18n="customsDocCertificates">Product certificates and conformity documents</span>
+            </div>
+          </article>
+
+          <article class="gtip-panel" id="gtip-guide">
+            <p class="section-kicker" data-i18n="gtipKicker">GTIP / HS code guide</p>
+            <h3 data-i18n="gtipTitle">Product-based preliminary GTIP study</h3>
+            <p data-i18n="gtipCopy">Search a product name to see the likely HS/GTIP family, required document notes and official verification step.</p>
+            <label class="gtip-search-label">
+              <span data-i18n="gtipSearchLabel">GTIP product search</span>
+              <input id="gtipSearchInput" type="search" autocomplete="off" placeholder="detergent, shampoo, sunscreen, ketchup..." />
+            </label>
+            <div class="gtip-result-grid" id="gtipResultGrid"></div>
+            <div class="gtip-seo-copy">
+              <h4 data-i18n="gtipSeoTitle">What is a GTIP code?</h4>
+              <p data-i18n="gtipSeoCopy">GTIP is Türkiye's 12-digit customs tariff statistical position code. The first 6 digits follow the international HS system; the final classification must be checked with product composition, use, packaging and official tariff sources.</p>
+              <a href="https://uygulama.gtb.gov.tr/Tara/" target="_blank" rel="noopener" data-i18n="gtipOfficialSource">Check official TARA tariff search</a>
+            </div>
+          </article>
+        </div>
+
         <div class="customs-dashboard">
           <form class="customs-planner" id="customsPlanner">
             <div class="customs-planner-header">
@@ -396,9 +461,14 @@
               <span data-i18n="customsProduct">Product risk group</span>
               <select id="customsProduct">
                 <option value="standard" data-i18n="customsProductStandard">Standard commercial goods</option>
+                <option value="cleaning" data-i18n="customsProductCleaning">Cleaning products</option>
                 <option value="food" data-i18n="customsProductFood">Food products</option>
+                <option value="homeware" data-i18n="customsProductHomeware">Home and living</option>
+                <option value="industrial" data-i18n="customsProductIndustrial">Industrial supplies</option>
                 <option value="cosmetics" data-i18n="customsProductCosmetics">Cosmetics / hygiene</option>
                 <option value="medical" data-i18n="customsProductMedical">Medical products</option>
+                <option value="automotive" data-i18n="customsProductAutomotive">Automotive</option>
+                <option value="hardware" data-i18n="customsProductHardware">Construction and hardware</option>
               </select>
             </label>
           </form>
@@ -789,6 +859,6 @@
       }
     </script>
     <script src="catalog-products.generated.js?v=20260611-1"></script>
-    <script src="script.js?v=20260612-1"></script>
+    <script src="script.js?v=20260612-2"></script>
   </body>
 </html>

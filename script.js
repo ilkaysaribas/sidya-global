@@ -199,9 +199,14 @@ const content = {
     customsIncoterm: "Incoterm",
     customsProduct: "Product risk group",
     customsProductStandard: "Standard commercial goods",
+    customsProductCleaning: "Cleaning products",
     customsProductFood: "Food products",
+    customsProductHomeware: "Home and living",
+    customsProductIndustrial: "Industrial supplies",
     customsProductCosmetics: "Cosmetics / hygiene",
     customsProductMedical: "Medical products",
+    customsProductAutomotive: "Automotive",
+    customsProductHardware: "Construction and hardware",
     customsStatusLabel: "File status",
     customsStatusReady: "Ready for document review",
     customsStatusReadyCopy: "Commercial documents, origin documents and shipment instructions should be checked before declaration.",
@@ -210,6 +215,27 @@ const content = {
     customsDocsTitle: "Required document pack",
     customsActionTitle: "Action checklist",
     customsRiskTitle: "Risk notes",
+    customsCoreDocsKicker: "Document checklist",
+    customsCoreDocsTitle: "Required export customs documents",
+    customsCoreDocsCopy: "Keep the commercial, origin, product and transport files together before the declaration stage.",
+    customsDocCommercialInvoice: "Commercial invoice / proforma",
+    customsDocPackingList: "Packing list",
+    customsDocGtip: "GTIP / HS code list",
+    customsDocOrigin: "Certificate of origin, A.TR / EUR.1 when applicable",
+    customsDocTransport: "CMR, bill of lading or airwaybill",
+    customsDocCertificates: "Product certificates and conformity documents",
+    gtipKicker: "GTIP / HS code guide",
+    gtipTitle: "Product-based preliminary GTIP study",
+    gtipCopy: "Search a product name to see the likely HS/GTIP family, required document notes and official verification step.",
+    gtipSearchLabel: "GTIP product search",
+    gtipSearchPlaceholder: "Search detergent, shampoo, sunscreen, ketchup...",
+    gtipNoResult: "No GTIP family found. Search with a broader product name or request manual classification.",
+    gtipCodeLabel: "Likely HS/GTIP family",
+    gtipDocsLabel: "Document notes",
+    gtipCautionLabel: "Classification note",
+    gtipOfficialSource: "Check official TARA tariff search",
+    gtipSeoTitle: "What is a GTIP code?",
+    gtipSeoCopy: "GTIP is Türkiye's 12-digit customs tariff statistical position code. The first 6 digits follow the international HS system; the final classification must be checked with product composition, use, packaging and official tariff sources.",
     truckFillLabel: "TIR load",
     containerFillLabel: "Container load",
     cartKicker: "Cart",
@@ -485,9 +511,14 @@ const content = {
     customsIncoterm: "Incoterm",
     customsProduct: "Ürün risk grubu",
     customsProductStandard: "Standart ticari ürün",
+    customsProductCleaning: "Temizlik ürünleri",
     customsProductFood: "Gıda ürünleri",
+    customsProductHomeware: "Ev ve yaşam",
+    customsProductIndustrial: "Endüstriyel sarf",
     customsProductCosmetics: "Kozmetik / hijyen",
     customsProductMedical: "Medikal ürünler",
+    customsProductAutomotive: "Otomotiv",
+    customsProductHardware: "Yapı hırdavat",
     customsStatusLabel: "Dosya durumu",
     customsStatusReady: "Evrak kontrolüne hazır",
     customsStatusReadyCopy: "Beyanname öncesi ticari evraklar, menşe evrakları ve sevkiyat talimatları kontrol edilmelidir.",
@@ -496,6 +527,27 @@ const content = {
     customsDocsTitle: "Gerekli evrak paketi",
     customsActionTitle: "Aksiyon kontrol listesi",
     customsRiskTitle: "Risk notları",
+    customsCoreDocsKicker: "Evrak kontrolü",
+    customsCoreDocsTitle: "Gerekli ihracat gümrük evrakları",
+    customsCoreDocsCopy: "Beyanname aşamasından önce ticari, menşe, ürün ve taşıma dosyalarını tek yerde hazırlayın.",
+    customsDocCommercialInvoice: "Ticari fatura / proforma",
+    customsDocPackingList: "Çeki listesi",
+    customsDocGtip: "GTIP / HS kod listesi",
+    customsDocOrigin: "Gerekiyorsa menşe şahadetnamesi, A.TR / EUR.1",
+    customsDocTransport: "CMR, konşimento veya havayolu taşıma senedi",
+    customsDocCertificates: "Ürün sertifikaları ve uygunluk belgeleri",
+    gtipKicker: "GTIP / HS kod rehberi",
+    gtipTitle: "Ürün bazlı ön GTIP çalışması",
+    gtipCopy: "Ürün adını arayın; muhtemel HS/GTIP ailesini, evrak notunu ve resmi doğrulama adımını görün.",
+    gtipSearchLabel: "GTIP ürün arama",
+    gtipSearchPlaceholder: "Deterjan, şampuan, güneş kremi, ketçap ara...",
+    gtipNoResult: "GTIP ailesi bulunamadı. Daha genel ürün adıyla arayın veya manuel sınıflandırma talep edin.",
+    gtipCodeLabel: "Muhtemel HS/GTIP ailesi",
+    gtipDocsLabel: "Evrak notu",
+    gtipCautionLabel: "Sınıflandırma notu",
+    gtipOfficialSource: "Resmi TARA tarife aramasını kontrol et",
+    gtipSeoTitle: "GTIP kodu nedir?",
+    gtipSeoCopy: "GTIP, Türkiye'de kullanılan 12 haneli Gümrük Tarife İstatistik Pozisyonu kodudur. İlk 6 hane uluslararası HS sistemine dayanır; nihai sınıflandırma ürün içeriği, kullanım amacı, ambalaj ve resmi tarife kaynaklarıyla doğrulanmalıdır.",
     truckFillLabel: "TIR dolumu",
     containerFillLabel: "Konteyner dolumu",
     cartKicker: "Sepet",
@@ -1213,6 +1265,107 @@ const productCategoryImages = {
   "hardware-products": "assets/category-hardware-crop.png",
 };
 
+const gtipEntries = [
+  {
+    code: "3402",
+    title: { en: "Detergents, surface active preparations and cleaning products", tr: "Deterjanlar, yüzey aktif müstahzarlar ve temizlik ürünleri" },
+    keywords: ["deterjan", "çamaşır deterjanı", "camasir deterjani", "bulaşık deterjanı", "temizlik", "yüzey temizleyici", "surface cleaner", "detergent", "laundry", "dishwashing", "abc", "nilco"],
+    docs: { en: "SDS/MSDS, label, composition, carton-pallet packing data and origin document may be requested.", tr: "SDS/MSDS, etiket, içerik, koli-palet ambalaj bilgisi ve menşe evrakı istenebilir." },
+    caution: { en: "Soap-based products may fall under 3401; verify composition before final declaration.", tr: "Sabun bazlı ürünler 3401 ailesine girebilir; beyan öncesi ürün içeriği doğrulanmalıdır." },
+  },
+  {
+    code: "3401",
+    title: { en: "Soap and organic surface-active products for washing", tr: "Sabun ve yıkamada kullanılan organik yüzey aktif ürünler" },
+    keywords: ["sabun", "soap", "katı sabun", "sıvı sabun", "liquid soap", "el sabunu", "hand wash"],
+    docs: { en: "Label, ingredients, unit weight and origin documents should be matched with the invoice.", tr: "Etiket, içerik, birim ağırlık ve menşe evrakı fatura ile eşleştirilmelidir." },
+    caution: { en: "Cosmetic soap and medicated soap can require additional classification checks.", tr: "Kozmetik sabun ve medikal iddialı sabunlarda ek sınıflandırma kontrolü gerekir." },
+  },
+  {
+    code: "3305",
+    title: { en: "Hair preparations, shampoo and hair care products", tr: "Saç müstahzarları, şampuan ve saç bakım ürünleri" },
+    keywords: ["şampuan", "sampuan", "shampoo", "saç kremi", "hair conditioner", "saç bakım", "hair care", "sebamed", "nivea"],
+    docs: { en: "Cosmetic notification, label, ingredient list, batch/expiry data and safety documents may be needed.", tr: "Kozmetik bildirim, etiket, içerik listesi, parti/son kullanım ve güvenlik belgeleri gerekebilir." },
+    caution: { en: "Anti-dandruff or therapeutic claims can change import requirements.", tr: "Kepek karşıtı veya tedavi iddialı ürünlerde ithalat gereklilikleri değişebilir." },
+  },
+  {
+    code: "3304",
+    title: { en: "Beauty, make-up, skin care and sunscreen preparations", tr: "Güzellik, makyaj, cilt bakımı ve güneş kremi ürünleri" },
+    keywords: ["güneş kremi", "gunes kremi", "sunscreen", "sun cream", "cilt bakım", "skin care", "krem", "losyon", "lotion", "kozmetik", "nivea", "sebamed"],
+    docs: { en: "Cosmetic product file, ingredients, label and market-specific registration may be required.", tr: "Kozmetik ürün dosyası, içerik, etiket ve pazara özel kayıt gerekebilir." },
+    caution: { en: "Medical or therapeutic claims should be reviewed separately.", tr: "Medikal veya tedavi iddiası varsa ayrıca değerlendirilmelidir." },
+  },
+  {
+    code: "3307",
+    title: { en: "Deodorants, room fragrances and perfumery/toilet preparations", tr: "Deodorant, oda kokusu ve kişisel kullanım müstahzarları" },
+    keywords: ["deodorant", "roll on", "oda kokusu", "room fragrance", "air freshener", "glade", "parfüm", "perfume"],
+    docs: { en: "Aerosol, flammable goods and fragrance composition data can be required for transport and customs.", tr: "Aerosol, yanıcı ürün ve esans içerik bilgisi taşıma ve gümrük için gerekebilir." },
+    caution: { en: "Aerosol and alcohol content can affect transport restrictions.", tr: "Aerosol ve alkol içeriği taşıma kısıtlarını etkileyebilir." },
+  },
+  {
+    code: "9619",
+    title: { en: "Diapers, sanitary towels and similar hygiene articles", tr: "Bebek bezi, hijyenik ped ve benzeri hijyen ürünleri" },
+    keywords: ["bebek bezi", "diaper", "hasta bezi", "hijyenik ped", "sanitary", "hanymish", "baby care"],
+    docs: { en: "Product specification, absorbency/size data, packaging list and market conformity documents may be requested.", tr: "Ürün teknik bilgisi, emicilik/beden verisi, ambalaj listesi ve pazara uygunluk belgeleri istenebilir." },
+    caution: { en: "Medical-use articles should be checked against medical device rules.", tr: "Medikal kullanım iddiası olan ürünler medikal cihaz kuralları açısından kontrol edilmelidir." },
+  },
+  {
+    code: "2103",
+    title: { en: "Sauces, mixed condiments, ketchup and mustard preparations", tr: "Soslar, çeşni karışımları, ketçap ve hardal müstahzarları" },
+    keywords: ["ketçap", "ketcap", "ketchup", "mayonez", "mayonnaise", "sos", "sauce", "hardal", "mustard", "heinz", "salça sos"],
+    docs: { en: "Ingredient list, nutrition table, shelf life, food certificate and origin documents should be prepared.", tr: "İçerik listesi, besin tablosu, raf ömrü, gıda sertifikası ve menşe evrakı hazırlanmalıdır." },
+    caution: { en: "Tomato paste and preserved vegetables may fall under different chapters.", tr: "Salça ve konserve sebze ürünleri farklı fasıllara girebilir." },
+  },
+  {
+    code: "1806",
+    title: { en: "Chocolate and other food preparations containing cocoa", tr: "Çikolata ve kakao içeren diğer gıda müstahzarları" },
+    keywords: ["çikolata", "cikolata", "chocolate", "kakao", "cocoa", "melwiss", "gofret", "wafer"],
+    docs: { en: "Food safety documents, ingredients, allergen data, shelf life and origin documents should be checked.", tr: "Gıda güvenliği belgeleri, içerik, alerjen bilgisi, raf ömrü ve menşe evrakı kontrol edilmelidir." },
+    caution: { en: "Wafer, biscuit or confectionery recipes can shift the exact heading.", tr: "Gofret, bisküvi veya şekerleme reçetesi nihai pozisyonu değiştirebilir." },
+  },
+  {
+    code: "1512 / 1517",
+    title: { en: "Vegetable oils and edible oil preparations", tr: "Bitkisel yağlar ve yemeklik yağ müstahzarları" },
+    keywords: ["ayçiçek yağı", "aycicek yagi", "sunflower oil", "zeytinyağı", "olive oil", "bitkisel yağ", "vegetable oil", "yudum", "yağ"],
+    docs: { en: "Food certificate, origin, analysis report, packaging and shelf-life data should be verified.", tr: "Gıda sertifikası, menşe, analiz raporu, ambalaj ve raf ömrü bilgisi doğrulanmalıdır." },
+    caution: { en: "Crude/refined state and blend type determine the final tariff line.", tr: "Ham/rafine durum ve karışım türü nihai tarife satırını belirler." },
+  },
+  {
+    code: "4818",
+    title: { en: "Paper tissue, towels, napkins and household sanitary paper articles", tr: "Kağıt mendil, havlu, peçete ve hijyenik kağıt ürünleri" },
+    keywords: ["selpak", "kağıt havlu", "kagit havlu", "peçete", "pecete", "mendil", "tissue", "paper towel", "toilet paper"],
+    docs: { en: "Unit count, ply, packaging and origin information should match the packing list.", tr: "Adet, kat sayısı, ambalaj ve menşe bilgisi çeki listesiyle uyumlu olmalıdır." },
+    caution: { en: "Raw paper rolls and finished consumer packs are classified differently.", tr: "Ham kağıt rulo ile nihai tüketici ambalajı farklı sınıflandırılır." },
+  },
+  {
+    code: "9018",
+    title: { en: "Medical, surgical and diagnostic instruments", tr: "Medikal, cerrahi ve teşhis amaçlı cihazlar" },
+    keywords: ["medikal", "medical", "tansiyon", "blood pressure", "omron", "cerrahi", "surgical", "diagnostic", "stethoscope", "ateş ölçer"],
+    docs: { en: "Medical device registration, CE/conformity, importer license and technical file may be required.", tr: "Medikal cihaz kaydı, CE/uygunluk, ithalatçı lisansı ve teknik dosya gerekebilir." },
+    caution: { en: "Device function and intended medical use decide the final heading.", tr: "Cihaz fonksiyonu ve amaçlanan tıbbi kullanım nihai pozisyonu belirler." },
+  },
+  {
+    code: "3924",
+    title: { en: "Plastic household and kitchen articles", tr: "Plastik ev ve mutfak eşyaları" },
+    keywords: ["plastik ev", "plastic household", "mutfak", "kitchen", "saklama kabı", "storage container", "macromax", "ev yaşam"],
+    docs: { en: "Material composition, food-contact status, unit count and packing information should be checked.", tr: "Malzeme içeriği, gıda temas durumu, adet ve ambalaj bilgisi kontrol edilmelidir." },
+    caution: { en: "Articles made of metal, textile or glass move to different chapters.", tr: "Metal, tekstil veya cam ürünler farklı fasıllara geçer." },
+  },
+  {
+    code: "8205 / 8467",
+    title: { en: "Hand tools and portable power tools", tr: "El aletleri ve taşınabilir elektrikli aletler" },
+    keywords: ["hırdavat", "hirdavat", "el aleti", "hand tool", "matkap", "drill", "power tool", "yapı", "hardware"],
+    docs: { en: "Technical specifications, voltage/power details, CE or conformity documents may be requested.", tr: "Teknik özellik, voltaj/güç bilgisi, CE veya uygunluk belgeleri istenebilir." },
+    caution: { en: "Manual tools and electric tools are in different tariff families.", tr: "Manuel el aletleri ile elektrikli aletler farklı tarife ailelerindedir." },
+  },
+  {
+    code: "8708",
+    title: { en: "Motor vehicle parts and accessories", tr: "Motorlu taşıt aksam, parça ve aksesuarları" },
+    keywords: ["otomotiv", "automotive", "yedek parça", "spare part", "oto aksesuar", "brake", "filter", "filtre", "car part"],
+    docs: { en: "Part number, vehicle compatibility, material, origin and conformity documents should be prepared.", tr: "Parça numarası, araç uyumu, malzeme, menşe ve uygunluk belgeleri hazırlanmalıdır." },
+    caution: { en: "Universal accessories and vehicle-specific parts can classify differently.", tr: "Genel aksesuarlar ile araca özel parçalar farklı sınıflandırılabilir." },
+  },
+];
+
 const supplierSearchItems = [
   {
     brand: "ABC Deterjan",
@@ -1617,9 +1770,14 @@ const customsText = {
     },
     products: {
       standard: { docs: ["Product photos or catalog page"], actions: ["Check ordinary commercial restrictions"], risks: ["Standard goods still need correct HS code and origin data"] },
+      cleaning: { docs: ["SDS/MSDS and label file", "Ingredient or composition summary"], actions: ["Confirm detergent/soap/cosmetic distinction and destination labeling"], risks: ["Cleaning goods may need safety data and chemical transport checks"] },
       food: { docs: ["Health certificate if required", "Shelf life and batch information"], actions: ["Confirm ingredients, labeling and destination food rules"], risks: ["Food products can require pre-approval, label control and sanitary checks"] },
+      homeware: { docs: ["Material composition", "Food-contact declaration if applicable"], actions: ["Confirm material type, unit count and packaging data"], risks: ["Kitchenware and decorative goods can move to different HS chapters by material"] },
+      industrial: { docs: ["Technical sheet or SDS if chemical", "Usage and material description"], actions: ["Confirm whether the item is consumable, chemical, tool or spare part"], risks: ["Industrial supplies can change classification by material and function"] },
       cosmetics: { docs: ["Product safety / MSDS file", "Ingredient and labeling information"], actions: ["Check cosmetics notification and importer obligations"], risks: ["Cosmetics and hygiene goods may face labeling and safety-document controls"] },
       medical: { docs: ["Medical product certificate", "Manufacturer authorization if required"], actions: ["Confirm medical device registration and importer license needs"], risks: ["Medical products can require strict registration before customs release"] },
+      automotive: { docs: ["Part number and vehicle compatibility", "Conformity or technical sheet"], actions: ["Separate vehicle-specific parts from universal accessories"], risks: ["Automotive parts may require technical conformity and origin checks"] },
+      hardware: { docs: ["Technical specifications", "CE/conformity documents if applicable"], actions: ["Separate manual tools, electric tools and building materials"], risks: ["Tool power source and material can change HS code family"] },
     },
   },
   tr: {
@@ -1653,9 +1811,14 @@ const customsText = {
     },
     products: {
       standard: { docs: ["Ürün fotoğrafı veya katalog sayfası"], actions: ["Standart ticari kısıtlamaları kontrol et"], risks: ["Standart ürünlerde de doğru GTIP ve menşe bilgisi gerekir"] },
+      cleaning: { docs: ["SDS/MSDS ve etiket dosyası", "İçerik veya kompozisyon özeti"], actions: ["Deterjan/sabun/kozmetik ayrımını ve varış ülkesi etiketini teyit et"], risks: ["Temizlik ürünlerinde güvenlik bilgi formu ve kimyasal taşıma kontrolü gerekebilir"] },
       food: { docs: ["Gerekiyorsa sağlık sertifikası", "Raf ömrü ve parti bilgisi"], actions: ["İçerik, etiket ve varış ülkesi gıda kurallarını teyit et"], risks: ["Gıda ürünleri ön izin, etiket kontrolü ve sağlık denetimi gerektirebilir"] },
+      homeware: { docs: ["Malzeme kompozisyonu", "Gerekiyorsa gıda temas beyanı"], actions: ["Malzeme türü, adet ve ambalaj verisini netleştir"], risks: ["Mutfak ve dekoratif ürünler malzemesine göre farklı fasıllara ayrılabilir"] },
+      industrial: { docs: ["Teknik doküman veya kimyasal ise SDS", "Kullanım amacı ve malzeme açıklaması"], actions: ["Ürün sarf, kimyasal, alet veya yedek parça mı ayrıştır"], risks: ["Endüstriyel sarf malzemeleri fonksiyon ve malzemeye göre GTIP değiştirebilir"] },
       cosmetics: { docs: ["Ürün güvenlik / MSDS dosyası", "İçerik ve etiket bilgisi"], actions: ["Kozmetik bildirim ve ithalatçı yükümlülüklerini kontrol et"], risks: ["Kozmetik ve hijyen ürünlerinde etiket ve güvenlik evrakı kontrolü olabilir"] },
       medical: { docs: ["Medikal ürün sertifikası", "Gerekiyorsa üretici yetki belgesi"], actions: ["Medikal cihaz kaydı ve ithalatçı lisansı ihtiyacını teyit et"], risks: ["Medikal ürünlerde gümrük çıkışı öncesi sıkı kayıt şartı olabilir"] },
+      automotive: { docs: ["Parça numarası ve araç uyumluluğu", "Uygunluk veya teknik doküman"], actions: ["Araca özel parçaları genel aksesuarlardan ayır"], risks: ["Otomotiv parçalarında teknik uygunluk ve menşe kontrolü gerekebilir"] },
+      hardware: { docs: ["Teknik özellikler", "Gerekiyorsa CE/uygunluk evrakı"], actions: ["Manuel alet, elektrikli alet ve yapı malzemesini ayrıştır"], risks: ["Aletin güç kaynağı ve malzemesi GTIP ailesini değiştirebilir"] },
     },
   },
 };
@@ -1832,6 +1995,52 @@ const normalizeSupplierSearch = (value) =>
     .normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/ı/g, "i");
+
+const getLocalizedText = (value) => {
+  if (!value || typeof value === "string") return value || "";
+  return value[currentLang] || value.tr || value.en || "";
+};
+
+const getGtipResults = (query = "") => {
+  const normalizedQuery = normalizeSupplierSearch(query);
+  if (!normalizedQuery) return gtipEntries.slice(0, 6);
+  const words = normalizedQuery.split(/\s+/).filter(Boolean);
+  return gtipEntries
+    .map((entry) => {
+      const haystack = normalizeSupplierSearch([entry.code, getLocalizedText(entry.title), ...(entry.keywords || [])].join(" "));
+      const wordHits = words.filter((word) => haystack.includes(word)).length;
+      const phraseBoost = haystack.includes(normalizedQuery) ? 8 : 0;
+      return { entry, score: wordHits * 3 + phraseBoost };
+    })
+    .filter((result) => result.score > 0)
+    .sort((a, b) => b.score - a.score || a.entry.code.localeCompare(b.entry.code))
+    .slice(0, 8)
+    .map((result) => result.entry);
+};
+
+const renderGtipGuide = () => {
+  const input = document.querySelector("#gtipSearchInput");
+  const grid = document.querySelector("#gtipResultGrid");
+  if (input) input.placeholder = t("gtipSearchPlaceholder");
+  if (!grid) return;
+  const results = getGtipResults(input?.value || "");
+  if (!results.length) {
+    grid.innerHTML = `<article class="gtip-result-card"><p>${t("gtipNoResult")}</p></article>`;
+    return;
+  }
+  grid.innerHTML = results
+    .map(
+      (entry) => `<article class="gtip-result-card">
+        <strong>${t("gtipCodeLabel")}: ${entry.code}</strong>
+        <h4>${getLocalizedText(entry.title)}</h4>
+        <dl>
+          <div><dt>${t("gtipDocsLabel")}</dt><dd>${getLocalizedText(entry.docs)}</dd></div>
+          <div><dt>${t("gtipCautionLabel")}</dt><dd>${getLocalizedText(entry.caution)}</dd></div>
+        </dl>
+      </article>`,
+    )
+    .join("");
+};
 
 const getLocalizedCategoryTitle = (categoryId, fallback = "") =>
   (products[currentLang] || products.en).find((product) => product.id === categoryId)?.title || fallback;
@@ -2449,7 +2658,16 @@ const sendProformaMail = () => {
   window.location.href = `mailto:${businessEmail}?subject=${subject}&body=${body}`;
 };
 
+const placeCustomsSectionNearTop = () => {
+  const customsSection = document.querySelector("#customs");
+  const processSection = document.querySelector("#process");
+  if (customsSection && processSection && processSection.previousElementSibling !== customsSection) {
+    processSection.before(customsSection);
+  }
+};
+
 const translatePage = () => {
+  placeCustomsSectionNearTop();
   document.documentElement.lang = currentLang;
   document.querySelectorAll(".lang-option").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.lang === currentLang);
@@ -2464,6 +2682,7 @@ const translatePage = () => {
   renderProducts();
   renderMarkets();
   renderSupplierSearchResults(document.querySelector("#supplierSearchInput")?.value || "");
+  renderGtipGuide();
   renderLogisticsCenter();
   calculateFuelCost();
   renderCustomsDesk();
@@ -2489,6 +2708,7 @@ supplierSearchForm?.addEventListener("submit", (event) => {
 supplierSearchInput?.addEventListener("input", () => {
   renderSupplierSearchResults(supplierSearchInput.value);
 });
+document.querySelector("#gtipSearchInput")?.addEventListener("input", renderGtipGuide);
 document.querySelector("#calculateFuel")?.addEventListener("click", calculateFuelCost);
 ["#fuelFrom", "#fuelTo", "#fuelLoad", "#fuelConsumption", "#fuelPrice"].forEach((selector) => {
   document.querySelector(selector)?.addEventListener("input", calculateFuelCost);
