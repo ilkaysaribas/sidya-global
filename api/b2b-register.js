@@ -1,4 +1,5 @@
 const MAX_BODY_SIZE = 12 * 1024 * 1024;
+const DEFAULT_SUPABASE_URL = "https://jhjforyykkxklfarjtjl.supabase.co";
 
 const collectBody = (req) =>
   new Promise((resolve, reject) => {
@@ -49,11 +50,10 @@ const parseMultipart = (buffer, contentType) => {
 };
 
 const readSupabaseServerEnv = () => {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || DEFAULT_SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   const missingEnv = [];
 
-  if (!supabaseUrl) missingEnv.push("NEXT_PUBLIC_SUPABASE_URL");
   if (!serviceRoleKey) missingEnv.push("SUPABASE_SERVICE_ROLE_KEY");
 
   return { supabaseUrl, serviceRoleKey, missingEnv };
@@ -78,7 +78,7 @@ const requireEnv = () => {
 
 const getEnvStatus = () => {
   const { missingEnv } = readSupabaseServerEnv();
-  const required = ["NEXT_PUBLIC_SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"];
+  const required = ["SUPABASE_SERVICE_ROLE_KEY"];
   return {
     ok: missingEnv.length === 0,
     required,
