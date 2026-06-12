@@ -265,6 +265,11 @@ const content = {
     tradeMarkets: "Export markets",
     tradeCertificates: "Certificates",
     tradeQuoteCta: "Request quote",
+    deliveryTermsLabel: "Delivery terms",
+    deliveryTermEXW: "Ex Works: the buyer collects from the seller's premises and handles main transport plus import costs unless agreed otherwise.",
+    deliveryTermFOB: "Free On Board: the seller loads the goods onto the vessel at the named port; the buyer handles sea freight and destination costs.",
+    deliveryTermCIF: "Cost, Insurance and Freight: the seller pays sea freight and minimum insurance to the destination port; import costs remain buyer-side.",
+    deliveryTermDAP: "Delivered at Place: the seller delivers to the named destination; import customs, duties and taxes remain buyer-side.",
     formMessage: "Inquiry details",
     formSubmit: "Create Quote Draft",
     formReady: "Email draft is ready. Opening your mail app.",
@@ -546,6 +551,11 @@ const content = {
     tradeMarkets: "İhracat yapılan ülkeler",
     tradeCertificates: "Sertifikalar",
     tradeQuoteCta: "Teklif iste",
+    deliveryTermsLabel: "Teslim şekilleri",
+    deliveryTermEXW: "Ex Works / Fabrika teslim: alıcı ürünü satıcının deposundan alır; ana taşıma ve ithalat masrafları alıcıdadır.",
+    deliveryTermFOB: "Free On Board / Gemide teslim: satıcı ürünü belirlenen limanda gemiye yükler; deniz navlunu ve varış masrafları alıcıdadır.",
+    deliveryTermCIF: "Cost, Insurance and Freight / Mal bedeli, sigorta ve navlun: satıcı varış limanına kadar navlun ve temel sigortayı karşılar.",
+    deliveryTermDAP: "Delivered at Place / Belirlenen yerde teslim: satıcı varış noktasına kadar taşır; ithalat gümrüğü, vergi ve harçlar alıcıdadır.",
     formMessage: "Talep detayı",
     formSubmit: "Teklif Taslağı Oluştur",
     formReady: "E-posta taslağı hazırlandı. Mail uygulamanız açılıyor.",
@@ -722,6 +732,11 @@ Object.assign(content.az, {
   tradeMarkets: "İxrac bazarları",
   tradeCertificates: "Sertifikatlar",
   tradeQuoteCta: "Təklif istə",
+  deliveryTermsLabel: "Çatdırılma şərtləri",
+  deliveryTermEXW: "Ex Works / Zavod təslimi: alıcı məhsulu satıcının anbarından götürür; əsas daşıma və idxal xərcləri alıcıya aiddir.",
+  deliveryTermFOB: "Free On Board / Gəmidə təslim: satıcı malı göstərilən limanda gəmiyə yükləyir; dəniz daşıması və təyinat xərcləri alıcıya aiddir.",
+  deliveryTermCIF: "Cost, Insurance and Freight: satıcı təyinat limanına qədər dəniz daşımasını və əsas sığortanı ödəyir; idxal xərcləri alıcıya aiddir.",
+  deliveryTermDAP: "Delivered at Place / Göstərilən yerdə təslim: satıcı malı təyinat yerinə çatdırır; idxal gömrüyü, rüsum və vergilər alıcıya aiddir.",
   formMessage: "Sorğu detalları",
   formSubmit: "Təklif layihəsi yarat",
   formReady: "E-poçt layihəsi hazırdır. Poçt tətbiqi açılır.",
@@ -815,6 +830,11 @@ Object.assign(content.ka, {
   tradeMarkets: "საექსპორტო ბაზრები",
   tradeCertificates: "სერტიფიკატები",
   tradeQuoteCta: "მოითხოვე შეთავაზება",
+  deliveryTermsLabel: "მიწოდების პირობები",
+  deliveryTermEXW: "Ex Works / ქარხნიდან მიწოდება: მყიდველი იღებს საქონელს გამყიდველის საწყობიდან; ძირითადი ტრანსპორტირება და იმპორტის ხარჯები მყიდველზეა.",
+  deliveryTermFOB: "Free On Board / გემზე მიწოდება: გამყიდველი ტვირთავს საქონელს მითითებულ პორტში გემზე; საზღვაო გადაზიდვა და დანიშნულების ხარჯები მყიდველზეა.",
+  deliveryTermCIF: "Cost, Insurance and Freight: გამყიდველი იხდის საზღვაო გადაზიდვას და საბაზისო დაზღვევას დანიშნულების პორტამდე; იმპორტის ხარჯები მყიდველზეა.",
+  deliveryTermDAP: "Delivered at Place / მითითებულ ადგილზე მიწოდება: გამყიდველი მიიტანს საქონელს დანიშნულ ადგილამდე; იმპორტის გაფორმება, გადასახადები და მოსაკრებლები მყიდველზეა.",
   formMessage: "მოთხოვნის დეტალები",
   formSubmit: "შეთავაზების პროექტი",
   introKicker: "ვინ ვართ",
@@ -905,6 +925,11 @@ Object.assign(content.ru, {
   tradeMarkets: "Экспортные рынки",
   tradeCertificates: "Сертификаты",
   tradeQuoteCta: "Запросить предложение",
+  deliveryTermsLabel: "Условия поставки",
+  deliveryTermEXW: "Ex Works / Франко-завод: покупатель забирает товар со склада продавца; основная перевозка и импортные расходы на стороне покупателя.",
+  deliveryTermFOB: "Free On Board / Поставка на борт: продавец грузит товар на судно в указанном порту; морской фрахт и расходы в пункте назначения оплачивает покупатель.",
+  deliveryTermCIF: "Cost, Insurance and Freight: продавец оплачивает морской фрахт и базовую страховку до порта назначения; импортные расходы остаются за покупателем.",
+  deliveryTermDAP: "Delivered at Place / Поставка в указанное место: продавец доставляет товар до пункта назначения; импортная таможня, пошлины и налоги на стороне покупателя.",
   formMessage: "Детали запроса",
   formSubmit: "Создать черновик",
   introKicker: "Кто мы",
@@ -1547,6 +1572,18 @@ const truckCapacity = { weight: 24000 };
 const containerCapacity = { weight: 26500 };
 
 const t = (key) => content[currentLang][key] || content.en[key] || key;
+const deliveryTermCodes = ["EXW", "FOB", "CIF", "DAP"];
+const renderDeliveryTerms = () => `
+  <div class="delivery-terms">
+    <span>${t("deliveryTermsLabel")}</span>
+    <div class="delivery-term-list">
+      ${deliveryTermCodes
+        .map(
+          (code) => `<span class="delivery-term" tabindex="0">${code}<span class="delivery-term-tooltip">${t(`deliveryTerm${code}`)}</span></span>`,
+        )
+        .join("")}
+    </div>
+  </div>`;
 
 const customsText = {
   en: {
@@ -1768,12 +1805,13 @@ const renderProducts = () => {
         : "";
       const tradeMarkup = trade
         ? `<div class="trade-details">
+            ${renderDeliveryTerms()}
             <a class="product-quote-button" href="#catalog-proforma" data-category-id="${product.id}" data-product-option="${trade.optionValue}" data-product-title="${product.title}">${t("tradeQuoteCta")}</a>
           </div>`
         : "";
       return `<article class="product-card product-card-${product.id}" id="${product.id}"><div><div class="product-card-media"><img src="${productCategoryImages[product.id] || "assets/app-icon.svg"}" alt="" loading="lazy" /><span class="product-icon" aria-hidden="true">${product.icon}</span></div><h3>${product.title}</h3><p>${product.copy}</p></div><div class="product-meta">${product.meta
         .map((item) => `<span>${item}</span>`)
-        .join("")}</div>${relatedMarkup}${tradeMarkup}</article>`;
+        .join("")}</div>${tradeMarkup}${relatedMarkup}</article>`;
     })
     .join("");
 };
@@ -2681,9 +2719,13 @@ const submitB2BRegistration = async (formElement) => {
 };
 
 const getBackendConfig = () => window.SIDYA_BACKEND || {};
+const getSupabasePublishableKey = () => {
+  const config = getBackendConfig();
+  return config.supabasePublishableKey || config.supabaseAnonKey || "";
+};
 const isBackendConfigured = () => {
   const config = getBackendConfig();
-  return Boolean(config.supabaseUrl && config.supabaseAnonKey && window.supabase?.createClient);
+  return Boolean(config.supabaseUrl && getSupabasePublishableKey() && window.supabase?.createClient);
 };
 let sidyaSupabase = null;
 
@@ -2691,7 +2733,7 @@ const getSupabaseClient = () => {
   if (!isBackendConfigured()) return null;
   if (!sidyaSupabase) {
     const config = getBackendConfig();
-    sidyaSupabase = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
+    sidyaSupabase = window.supabase.createClient(config.supabaseUrl, getSupabasePublishableKey());
   }
   return sidyaSupabase;
 };

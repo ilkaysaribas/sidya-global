@@ -48,14 +48,19 @@ const parseMultipart = (buffer, contentType) => {
   return { fields, files };
 };
 
+const readSupabaseServerEnv = () => {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  const missingEnv = [];
+
+  if (!supabaseUrl) missingEnv.push("NEXT_PUBLIC_SUPABASE_URL");
+  if (!serviceRoleKey) missingEnv.push("SUPABASE_SERVICE_ROLE_KEY");
+
+  return { supabaseUrl, serviceRoleKey, missingEnv };
+};
+
 const requireEnv = () => {
-  const requiredEnv = {
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-  };
-  const missingEnv = Object.entries(requiredEnv)
-    .filter(([, value]) => !value)
-    .map(([name]) => name);
+  const { supabaseUrl, serviceRoleKey, missingEnv } = readSupabaseServerEnv();
 
   if (missingEnv.length) {
     console.error(`Missing B2B registration environment variables: ${missingEnv.join(", ")}`);
@@ -66,18 +71,18 @@ const requireEnv = () => {
   }
 
   return {
-    supabaseUrl: requiredEnv.NEXT_PUBLIC_SUPABASE_URL.replace(/\/$/, ""),
-    serviceRoleKey: requiredEnv.SUPABASE_SERVICE_ROLE_KEY,
+    supabaseUrl: supabaseUrl.replace(/\/$/, ""),
+    serviceRoleKey,
   };
 };
 
 const getEnvStatus = () => {
-  const envNames = ["NEXT_PUBLIC_SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"];
-  const missing = envNames.filter((name) => !process.env[name]);
+  const { missingEnv } = readSupabaseServerEnv();
+  const required = ["NEXT_PUBLIC_SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"];
   return {
-    ok: missing.length === 0,
-    required: envNames,
-    missing,
+    ok: missingEnv.length === 0,
+    required,
+    missing: missingEnv,
   };
 };
 
