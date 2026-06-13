@@ -49,6 +49,13 @@ const parseMultipart = (buffer, contentType) => {
   return { fields, files };
 };
 
+const parseJsonBody = async (req) => {
+  if (req.body && typeof req.body === "object" && !Buffer.isBuffer(req.body)) return req.body;
+  if (typeof req.body === "string") return JSON.parse(req.body);
+  const body = await collectBody(req);
+  return JSON.parse(body.toString("utf8") || "{}");
+};
+
 const readSupabaseServerEnv = () => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || DEFAULT_SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
@@ -128,7 +135,6 @@ const createUser = async ({ fields, supabaseUrl, serviceRoleKey }) => {
   const metadata = {
     company: fields.company || "",
     contact: fields.contact || "",
-    country: fields.country || "",
   };
 
   try {
@@ -148,27 +154,9 @@ const createUser = async ({ fields, supabaseUrl, serviceRoleKey }) => {
   } catch (error) {
     const message = String(error.message || "");
     if (!message.includes("already") && !message.includes("registered")) throw error;
-
-    const list = await supabaseFetch({
-      supabaseUrl,
-      serviceRoleKey,
-      path: "/auth/v1/admin/users?page=1&per_page=1000",
-    });
-    const user = (list.users || []).find((item) => String(item.email || "").toLowerCase() === email.toLowerCase());
-    if (!user?.id) throw error;
-
-    return supabaseFetch({
-      supabaseUrl,
-      serviceRoleKey,
-      path: `/auth/v1/admin/users/${user.id}`,
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        password,
-        email_confirm: true,
-        user_metadata: metadata,
-      }),
-    });
+    const existingUserError = new Error("Bu e-posta ile bir hesap zaten mevcut. Lütfen mevcut şifrenizle giriş yapın.");
+    existingUserError.statusCode = 409;
+    throw existingUserError;
   }
 };
 
@@ -238,7 +226,18 @@ module.exports = async (req, res) => {
   try {
     const { supabaseUrl, serviceRoleKey } = requireEnv();
     const contentType = req.headers["content-type"] || "";
-    if (!contentType.includes("multipart/form-data")) throw new Error("Expected multipart/form-data.");
+    if (contentType.includes("application/json")) {
+      const fields = await parseJsonBody(req);
+      const user = await createUser({ fields, supabaseUrl, serviceRoleKey });
+      res.status(200).json({ ok: true, userId: user.id });
+      return;
+    }
+
+    if (!contentType.includes("multipart/form-data")) {
+      const invalidTypeError = new Error("Expected application/json or multipart/form-data.");
+      invalidTypeError.statusCode = 415;
+      throw invalidTypeError;
+    }
 
     const body = await collectBody(req);
     const { fields, files } = parseMultipart(body, contentType);
@@ -249,6 +248,7 @@ module.exports = async (req, res) => {
     res.status(200).json({ ok: true, userId: user.id });
   } catch (error) {
     const message = String(error.message || "");
+    console.error(`B2B registration failed: ${message || "Unknown error"}`);
     res.status(error.statusCode || 500).json({
       error: message || "B2B kaydı oluşturulamadı.",
       missing: Array.isArray(error.missing) ? error.missing : undefined,

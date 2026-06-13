@@ -168,6 +168,8 @@ const content = {
     b2bBackendFallback: "Opening email draft.",
     b2bServerSubmit: "Creating buyer account and saving documents...",
     b2bSaving: "Saving...",
+    b2bUploadingDocuments: "Uploading documents securely...",
+    b2bSavingRequest: "Saving company registration...",
     b2bServerMissing: "B2B registration backend is not active yet. Check Vercel environment variables.",
     b2bChecklistTitle: "Core export document checklist",
     b2bDocBuyer: "Buyer company registry, tax certificate and authorized signatory",
@@ -482,6 +484,8 @@ const content = {
     b2bBackendFallback: "Mail taslağı açılıyor.",
     b2bServerSubmit: "Alıcı hesabı oluşturuluyor ve evraklar kaydediliyor...",
     b2bSaving: "Kaydediliyor...",
+    b2bUploadingDocuments: "Evraklar güvenli alana yükleniyor...",
+    b2bSavingRequest: "Firma kaydı oluşturuluyor...",
     b2bServerMissing: "B2B kayıt backend'i aktif değil. Vercel ortam değişkenlerini kontrol edin.",
     b2bChecklistTitle: "Temel ihracat evrak kontrol listesi",
     b2bDocBuyer: "Alıcı firma sicil kaydı, vergi belgesi ve imza/yetki belgesi",
@@ -2983,10 +2987,16 @@ const submitB2BRegistration = async (formElement) => {
   if (window.location.protocol === "file:") return { ok: false, configured: false };
   const formData = new FormData(formElement);
   const { password } = getB2BAuthValues();
-  formData.set("password", password);
+  const payload = {
+    company: String(formData.get("company") || "").trim(),
+    contact: String(formData.get("contact") || "").trim(),
+    email: String(formData.get("email") || "").trim(),
+    password,
+  };
   const response = await fetch("/api/b2b-register", {
     method: "POST",
-    body: formData,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
   });
   if (response.status === 501) {
     const payload = await response.json().catch(() => ({}));
@@ -2997,7 +3007,8 @@ const submitB2BRegistration = async (formElement) => {
     const payload = await response.json().catch(() => ({}));
     throw new Error(payload.error || "B2B request could not be sent.");
   }
-  return { ok: true, configured: true };
+  const payloadResult = await response.json().catch(() => ({}));
+  return { ok: true, configured: true, userId: payloadResult.userId || "" };
 };
 
 const getBackendConfig = () => window.SIDYA_BACKEND || {};
@@ -3083,10 +3094,10 @@ const saveB2BRequest = async (client, userId, form, documentPaths) => {
     company: String(form.get("company") || ""),
     contact: String(form.get("contact") || ""),
     email,
-    country: String(form.get("country") || ""),
+    country: "",
     tax_number: String(form.get("tax") || ""),
     username: email.split("@")[0] || email,
-    incoterm: String(form.get("incoterm") || ""),
+    incoterm: "",
     notes: String(form.get("notes") || ""),
     document_paths: documentPaths,
   };
@@ -3333,13 +3344,39 @@ document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => 
       submitButton.disabled = true;
       submitButton.textContent = t("b2bSaving");
     }
-    if (status) status.textContent = t("b2bServerSubmit");
-    const result = await submitB2BRegistration(form);
-    if (!result.ok) throw new Error(t("b2bServerMissing"));
+    const client = getSupabaseClient();
+    if (!client) throw new Error(t("b2bServerMissing"));
+    const { email, password } = getB2BAuthValues();
+    let { data: signInData, error: signInError } = await withTimeout(
+      client.auth.signInWithPassword({ email: formEmail || email, password }),
+      t("b2bAuthTimeout"),
+    );
+    let result = { userId: "" };
+    if (signInError || !signInData.user?.id) {
+      if (status) status.textContent = t("b2bServerSubmit");
+      result = await submitB2BRegistration(form);
+      if (!result.ok) throw new Error(t("b2bServerMissing"));
+      ({ data: signInData, error: signInError } = await withTimeout(
+        client.auth.signInWithPassword({ email: formEmail || email, password }),
+        t("b2bAuthTimeout"),
+      ));
+      if (signInError) throw signInError;
+    }
+    const userId = signInData.user?.id || result.userId;
+    if (!userId) throw new Error(t("b2bAuthLoginFailed"));
+
+    const files = formData
+      .getAll("documents")
+      .filter((file) => file && typeof file.name === "string" && file.size > 0);
+    if (status && files.length) status.textContent = t("b2bUploadingDocuments");
+    const documentPaths = await uploadB2BDocuments(client, userId, files);
+    if (status) status.textContent = t("b2bSavingRequest");
+    await saveB2BRequest(client, userId, formData, documentPaths);
+
     if (status) status.textContent = t("b2bRegisteredOpenProforma");
     form?.reset();
     updateB2BFileSummary();
-    setB2BOrderButtonVisible(false);
+    setB2BOrderButtonVisible(true);
     setB2BRegistrationPanelVisible(false);
   } catch (error) {
     if (status) status.textContent = error.message || t("formError");
