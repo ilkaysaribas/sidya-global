@@ -3488,9 +3488,32 @@ h2 {
 
 .contact-section {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(340px, 1.1fr);
-  gap: clamp(22px, 5vw, 64px);
+  grid-template-columns: minmax(0, 0.82fr) minmax(360px, 1.18fr);
+  gap: clamp(20px, 3vw, 38px);
   align-items: start;
+  padding-top: clamp(22px, 2.6vw, 28px);
+  padding-bottom: clamp(22px, 2.6vw, 28px);
+}
+
+.contact-copy {
+  max-width: 520px;
+}
+
+.contact-copy .section-kicker {
+  margin-bottom: 6px;
+}
+
+.contact-copy h2 {
+  max-width: 520px;
+  font-size: clamp(1.16rem, 1.55vw, 1.52rem);
+  line-height: 1.12;
+}
+
+.contact-copy > p {
+  max-width: 520px;
+  margin-top: 8px;
+  font-size: 0.84rem;
+  line-height: 1.48;
 }
 
 .contact-points {
@@ -3525,40 +3548,47 @@ h2 {
 .direct-contact-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 12px;
+  gap: 7px;
+  margin-top: 10px;
 }
 
 .direct-contact-links a {
   display: inline-flex;
   align-items: center;
-  min-height: 40px;
-  padding: 0 14px;
+  min-height: 34px;
+  padding: 0 11px;
   border-radius: 8px;
   color: #fff;
   background: #4e5559;
+  font-size: 0.78rem;
   font-weight: 850;
+}
+
+.direct-contact-links .direct-whatsapp-link img {
+  width: 18px;
+  height: 18px;
 }
 
 .quote-form {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  padding: 24px;
+  gap: 9px 12px;
+  padding: 16px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fff;
-  box-shadow: var(--shadow);
+  box-shadow: 0 10px 24px rgba(24, 31, 35, 0.08);
 }
 
 .quote-form label,
 .quote-form label span {
   display: grid;
-  gap: 8px;
+  gap: 5px;
 }
 
 .quote-form label span {
   color: var(--navy);
+  font-size: 0.76rem;
   font-weight: 850;
 }
 
@@ -3568,13 +3598,22 @@ h2 {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 13px 14px;
+  min-height: 38px;
+  padding: 8px 10px;
   color: var(--ink);
   background: #fbfbf8;
+  font-size: 0.84rem;
 }
 
 .quote-form textarea {
+  min-height: 72px;
+  max-height: 120px;
   resize: vertical;
+}
+
+.quote-form .form-submit {
+  min-height: 38px;
+  font-size: 0.8rem;
 }
 
 .full-field,
@@ -3589,9 +3628,10 @@ h2 {
 }
 
 .form-status {
-  min-height: 24px;
+  min-height: 16px;
   margin: 0;
   color: var(--muted);
+  font-size: 0.76rem;
 }
 
 .site-footer {
@@ -4009,6 +4049,29 @@ h2 {
 
   .section-heading {
     display: block;
+  }
+
+  .contact-section {
+    gap: 14px;
+    padding-top: 26px;
+    padding-bottom: 26px;
+  }
+
+  .contact-copy {
+    max-width: none;
+  }
+
+  .contact-copy > p {
+    margin-top: 6px;
+  }
+
+  .quote-form {
+    gap: 8px;
+    padding: 13px;
+  }
+
+  .quote-form textarea {
+    min-height: 66px;
   }
 
   .product-grid,
