@@ -86,6 +86,7 @@ const content = {
     proformaOrderCopy: "Open the product selector, search by brand or product name, enter carton quantity and add items to the proforma total.",
     proformaOpenProducts: "Create Proforma Order",
     proformaSearchLabel: "Search product",
+    proformaNoSearchResults: "No catalog product matches this search.",
     proformaAddLine: "Add",
     proformaCartonQty: "Carton qty",
     proformaUnitsPerCarton: "Units / carton",
@@ -414,6 +415,7 @@ const content = {
     proformaOrderCopy: "Ürün seçiciyi açın, marka veya ürün adıyla arayın, koli miktarını girin ve kalemi proforma toplamına ekleyin.",
     proformaOpenProducts: "Proforma Sipariş Oluştur",
     proformaSearchLabel: "Ürün ara",
+    proformaNoSearchResults: "Bu aramayla eşleşen katalog ürünü bulunamadı.",
     proformaAddLine: "Ekle",
     proformaCartonQty: "Koli adedi",
     proformaUnitsPerCarton: "Koli içi",
@@ -1910,11 +1912,15 @@ const getCategoryTitle = (categoryId) =>
   t("catalogProformaTitle");
 
 const getCategoryProducts = (categoryId) => productCatalog.filter((product) => product.category === categoryId);
-const normalizeCatalogName = (value) =>
+const normalizeSearchText = (value) =>
   String(value || "")
     .toLocaleLowerCase("tr-TR")
     .normalize("NFKD")
-    .replace(/[^\w]+/g, "");
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ı/g, "i")
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .trim();
+const normalizeCatalogName = (value) => normalizeSearchText(value).replace(/\s+/g, "");
 
 const partnerBrandAliases = {
   "ABC Deterjan": ["ABC"],
@@ -2026,12 +2032,66 @@ const renderMarkets = () => {
     .join("");
 };
 
-const normalizeSupplierSearch = (value) =>
-  String(value || "")
-    .toLocaleLowerCase("tr-TR")
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/ı/g, "i");
+const normalizeSupplierSearch = normalizeSearchText;
+
+const productSearchSynonymGroups = [
+  ["sabun", "soap", "мыло", "საპონი"],
+  ["sivi sabun", "liquid soap", "hand wash", "el sabunu", "maye sabun", "жидкое мыло", "თხევადი საპონი"],
+  ["sampuan", "shampoo", "sac sampuani", "şampun", "шампунь", "შამპუნი"],
+  ["ketcap", "ketchup", "кетчуп", "კეტჩუპი"],
+  ["dis macunu", "toothpaste", "diş məcunu", "зубная паста", "კბილის პასტა"],
+  ["camasir deterjani", "laundry detergent", "washing detergent", "стиральный порошок", "სარეცხი საშუალება"],
+  ["bulasik deterjani", "dishwashing detergent", "dish soap", "средство для мытья посуды", "ჭურჭლის სარეცხი საშუალება"],
+  ["gunes kremi", "sunscreen", "sun cream", "spf", "солнцезащитный крем", "მზისგან დამცავი კრემი"],
+  ["domates salcasi", "tomato paste", "томатная паста", "ტომატის პასტა"],
+];
+
+const getProductSearchVariants = (query) => {
+  const normalizedQuery = normalizeSearchText(query);
+  if (!normalizedQuery) return [];
+  const variants = new Set([normalizedQuery]);
+
+  productSearchSynonymGroups.forEach((group) => {
+    const normalizedGroup = group.map(normalizeSearchText);
+    const belongsToGroup = normalizedGroup.includes(normalizedQuery);
+    if (belongsToGroup) normalizedGroup.forEach((alias) => variants.add(alias));
+  });
+
+  return [...variants];
+};
+
+const getProductSearchText = (product) =>
+  normalizeSearchText(
+    [
+      product.brand,
+      product.liter,
+      product.barcode,
+      product.description,
+      ...(product.keywords || []),
+      ...Object.values(product.names || {}),
+    ].join(" "),
+  );
+
+const searchWordsMatch = (haystackWords, searchWords) =>
+  searchWords.every((word) =>
+    haystackWords.some((candidate) => candidate === word || (word.length >= 4 && candidate.startsWith(word))),
+  );
+
+const productMatchesSearch = (product, query) => {
+  if (!normalizeSearchText(query)) return true;
+  if (String(product.id || "").startsWith("partner-")) return false;
+  const productWords = getProductSearchText(product).split(/\s+/).filter(Boolean);
+  const categoryWords = normalizeSearchText(product.sourceCategory).split(/\s+/).filter(Boolean);
+  return getProductSearchVariants(query).some((variant) => {
+    const variantWords = variant.split(/\s+/).filter(Boolean);
+    if (searchWordsMatch(productWords, variantWords)) return true;
+    if (variantWords.length < 2) return false;
+    const hasProductWord = variantWords.some((word) => searchWordsMatch(productWords, [word]));
+    return hasProductWord && searchWordsMatch([...productWords, ...categoryWords], variantWords);
+  });
+};
+
+const getMatchingCatalogProducts = (query) => productCatalog.filter((product) => productMatchesSearch(product, query));
 
 const getLocalizedText = (value) => {
   if (!value || typeof value === "string") return value || "";
@@ -2082,29 +2142,6 @@ const renderGtipGuide = () => {
 const getLocalizedCategoryTitle = (categoryId, fallback = "") =>
   (products[currentLang] || products.en).find((product) => product.id === categoryId)?.title || fallback;
 
-const getCategorySearchText = (categoryId) => {
-  const productTexts = Object.values(products)
-    .flat()
-    .filter((product) => product.id === categoryId)
-    .flatMap((product) => [product.title, product.copy, ...(product.meta || [])]);
-  const partnerTexts = (productPartners[categoryId] || []).flatMap((company) => [
-    company.name,
-    company.site,
-    company.catalog || "",
-    ...(company.catalogs || []).flatMap((catalog) => [catalog.label, catalog.href]),
-  ]);
-  const catalogTexts = productCatalog
-    .filter((product) => product.category === categoryId)
-    .flatMap((product) => [
-      product.brand,
-      product.liter,
-      product.category,
-      ...Object.values(product.names || {}),
-    ]);
-  const defaults = supplierCategorySearchDefaults[categoryId] || {};
-  return [...(defaults.keywords || []), defaults.category || "", ...productTexts, ...partnerTexts, ...catalogTexts].join(" ");
-};
-
 const getSupplierSearchItems = () => {
   const items = [];
   const seen = new Set();
@@ -2140,23 +2177,37 @@ const getSupplierResults = (query) => {
   const normalizedQuery = normalizeSupplierSearch(query);
   const items = getSupplierSearchItems();
   if (!normalizedQuery) return items.slice(0, 6);
-  const words = normalizedQuery.split(/\s+/).filter(Boolean);
-  const scored = items
-    .map((item) => {
-      const brandText = normalizeSupplierSearch(item.brand);
-      const haystack = normalizeSupplierSearch([item.brand, item.category, ...(item.keywords || []), getCategorySearchText(item.categoryId)].join(" "));
-      const wordHits = words.filter((word) => haystack.includes(word)).length;
-      const fullPhrase = haystack.includes(normalizedQuery) ? 8 : 0;
-      const brandBoost = brandText.includes(normalizedQuery) ? 12 : 0;
-      const score = wordHits * 3 + fullPhrase + brandBoost;
-      return { item, score, wordHits };
+  const metadataByBrand = new Map();
+  items.forEach((item) => {
+    [item.brand, ...(partnerBrandAliases[item.brand] || [])].forEach((brandName) => {
+      metadataByBrand.set(normalizeCatalogName(brandName), item);
+    });
+  });
+
+  const groupedProducts = new Map();
+  getMatchingCatalogProducts(query).forEach((product) => {
+    const brandKey = normalizeCatalogName(product.brand);
+    if (!groupedProducts.has(brandKey)) groupedProducts.set(brandKey, []);
+    groupedProducts.get(brandKey).push(product);
+  });
+
+  return [...groupedProducts.entries()]
+    .map(([brandKey, matchingProducts]) => {
+      const product = matchingProducts[0];
+      const metadata = metadataByBrand.get(brandKey) || {};
+      return {
+        ...metadata,
+        brand: product.brand,
+        categoryId: product.category,
+        category: getLocalizedCategoryTitle(product.category, metadata.category || ""),
+        moq: metadata.moq || "Ürün bazlı teklif",
+        loading: metadata.loading || "Koli ve palet bazlı sevkiyat",
+        contact: metadata.contact || "#catalog-proforma",
+        matchingProducts,
+      };
     })
-    .filter((entry) => entry.score > 0);
-  const exactMatches = scored.filter((entry) => entry.wordHits === words.length);
-  return (exactMatches.length ? exactMatches : scored)
-    .sort((a, b) => b.score - a.score || a.item.brand.localeCompare(b.item.brand, "tr"))
-    .slice(0, 12)
-    .map((entry) => entry.item);
+    .sort((a, b) => b.matchingProducts.length - a.matchingProducts.length || a.brand.localeCompare(b.brand, "tr"))
+    .slice(0, 12);
 };
 
 const renderSupplierSearchResults = (query = "") => {
@@ -2173,6 +2224,7 @@ const renderSupplierSearchResults = (query = "") => {
         <div>
           <h3>${item.brand}</h3>
           <p>${getLocalizedCategoryTitle(item.categoryId, item.category)}</p>
+          ${item.matchingProducts?.length ? `<p>${item.matchingProducts.slice(0, 3).map(getProductName).join(" · ")}</p>` : ""}
         </div>
         <div class="supplier-result-meta">
           <span>${t("supplierMoqLabel")}: ${item.moq}</span>
@@ -2412,11 +2464,12 @@ const renderProformaProducts = () => {
   const list = document.querySelector("#proformaProductList");
   const search = document.querySelector("#proformaSearch");
   if (!list) return;
-  const query = normalizeCatalogName(search?.value || "");
-  const filteredProducts = productCatalog.filter((product) => {
-    const haystack = normalizeCatalogName(`${product.brand} ${getProductName(product)} ${product.liter} ${product.barcode || ""} ${product.sourceCategory || ""}`);
-    return !query || haystack.includes(query);
-  });
+  const query = search?.value || "";
+  const filteredProducts = getMatchingCatalogProducts(query);
+  if (!filteredProducts.length) {
+    list.innerHTML = `<p class="proforma-empty">${t("proformaNoSearchResults")}</p>`;
+    return;
+  }
   list.innerHTML = filteredProducts
     .map((product, index) => {
       const cartonsPerPallet = getCartonsPerPallet(product);
@@ -2838,7 +2891,11 @@ const supplierSearchForm = document.querySelector("#supplierSearchForm");
 const supplierSearchInput = document.querySelector("#supplierSearchInput");
 supplierSearchForm?.addEventListener("submit", (event) => {
   event.preventDefault();
-  renderSupplierSearchResults(supplierSearchInput?.value || "");
+  const query = supplierSearchInput?.value.trim() || "";
+  renderSupplierSearchResults(query);
+  returnCatalogProformaCategory = null;
+  returnCatalogProformaTitle = "";
+  openMainProformaPanel({ searchQuery: query });
 });
 supplierSearchInput?.addEventListener("input", () => {
   renderSupplierSearchResults(supplierSearchInput.value);
@@ -3420,6 +3477,10 @@ const openMainProformaPanel = (options = {}) => {
   if (backButton) backButton.hidden = !returnCatalogProformaCategory;
   const panel = document.querySelector("#proformaProductPanel");
   if (panel?.hasAttribute("hidden")) panel.removeAttribute("hidden");
+  if (Object.prototype.hasOwnProperty.call(options, "searchQuery")) {
+    const search = document.querySelector("#proformaSearch");
+    if (search) search.value = options.searchQuery || "";
+  }
   renderProformaProducts();
   setTimeout(() => {
     if (options.focusSummary) {
