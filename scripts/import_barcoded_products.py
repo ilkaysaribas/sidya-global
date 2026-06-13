@@ -65,19 +65,22 @@ def category_for(brand, raw_category, name):
         "heinz",
         "fide",
         "lokman",
+        "yudum",
+        "oncu",
+        "melwiss",
+        "cocowiss",
         "recel",
         "ton baligi",
-        "sos",
         "ketcap",
         "mayonez",
-        "bal",
         "pekmez",
         "tahin",
-        "yaglar",
+        "zeytinyagi",
+        "aycicek yagi",
+        "bitkisel yag",
         "konserve",
         "gurme",
         "corba",
-        "surup",
         "porsiyonluk",
         "surulebilir",
         "helva",
@@ -110,6 +113,7 @@ def category_for(brand, raw_category, name):
         "temizlik sistemleri",
         "temizlik setleri",
         "temizlik eldiveni",
+        "pet bakim",
     ]
     cleaning_terms = [
         "abc",
@@ -139,15 +143,34 @@ def category_for(brand, raw_category, name):
         "yuzey temizleyici",
         "arap sabunu",
     ]
+    cosmetics_terms = [
+        "deodorant",
+        "roll-on",
+        "roll on",
+        "bebek yagi",
+        "jel yag",
+        "dus jeli",
+        "losyon",
+        "bakim kremi",
+        "balm",
+        "vucut bakim",
+        "sivilce",
+        "sac bakim",
+        "sampuan",
+        "kisisel bakim",
+        "sabun",
+    ]
 
-    if any(term in key for term in food_terms):
-        return "food-products"
     if any(term in key for term in medical_terms):
         return "medical-products"
     if any(term in key for term in home_terms):
         return "home-products"
     if any(term in key for term in cleaning_terms):
         return "cleaning-products"
+    if any(term in key for term in cosmetics_terms):
+        return "cosmetics-products"
+    if any(term in key for term in food_terms):
+        return "food-products"
     return "cosmetics-products"
 
 
