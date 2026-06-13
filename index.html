@@ -265,12 +265,22 @@
         <span data-i18n="trustFour">Multilingual catalog support</span>
       </section>
 
-      <section class="section products-section" id="products" aria-labelledby="products-title">
-        <div class="section-heading">
-          <p class="section-kicker" data-i18n="productsKicker">Catalog</p>
-          <h2 id="products-title" data-i18n="productsTitle">Featured product groups</h2>
+      <section class="section supplier-search-section" id="turkiye-product-search" aria-labelledby="supplier-search-title">
+        <div class="section-heading supplier-search-heading">
+          <div>
+            <p class="section-kicker" data-i18n="supplierSearchKicker">B2B Supply Search</p>
+            <h2 id="supplier-search-title" data-i18n="supplierSearchTitle">Find Products from Türkiye</h2>
+          </div>
+          <p data-i18n="supplierSearchCopy">Type a product name to see matching categories, brands, minimum order and loading notes.</p>
         </div>
-        <div class="product-grid" id="productGrid"></div>
+        <form class="supplier-search-box" id="supplierSearchForm">
+          <label for="supplierSearchInput" data-i18n="supplierSearchLabel">Buyer product search</label>
+          <div class="supplier-search-control">
+            <input id="supplierSearchInput" type="search" placeholder="Start searching products" autocomplete="off" />
+            <button type="submit" aria-label="Find products from Türkiye">⌕</button>
+          </div>
+        </form>
+        <div class="supplier-results" id="supplierSearchResults" aria-live="polite" hidden></div>
       </section>
 
       <section class="section b2b-section" id="b2b" aria-labelledby="b2b-title">
@@ -312,22 +322,12 @@
         </div>
       </section>
 
-      <section class="section supplier-search-section" id="turkiye-product-search" aria-labelledby="supplier-search-title">
-        <div class="section-heading supplier-search-heading">
-          <div>
-            <p class="section-kicker" data-i18n="supplierSearchKicker">B2B Supply Search</p>
-            <h2 id="supplier-search-title" data-i18n="supplierSearchTitle">Find Products from Türkiye</h2>
-          </div>
-          <p data-i18n="supplierSearchCopy">Type a product name to see matching categories, brands, minimum order and loading notes.</p>
+      <section class="section products-section" id="products" aria-labelledby="products-title">
+        <div class="section-heading">
+          <p class="section-kicker" data-i18n="productsKicker">Catalog</p>
+          <h2 id="products-title" data-i18n="productsTitle">Featured product groups</h2>
         </div>
-        <form class="supplier-search-box" id="supplierSearchForm">
-          <label for="supplierSearchInput" data-i18n="supplierSearchLabel">Buyer product search</label>
-          <div class="supplier-search-control">
-            <input id="supplierSearchInput" type="search" placeholder="Start searching products" autocomplete="off" />
-            <button type="submit" aria-label="Find products from Türkiye">⌕</button>
-          </div>
-        </form>
-        <div class="supplier-results" id="supplierSearchResults" aria-live="polite" hidden></div>
+        <div class="product-grid" id="productGrid"></div>
       </section>
 
       <section class="section proforma-order-section proforma-screen-modal" id="proforma" aria-labelledby="proforma-order-title" hidden>
