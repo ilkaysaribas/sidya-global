@@ -171,6 +171,18 @@ const content = {
     b2bUploadingDocuments: "Uploading documents securely...",
     b2bSavingRequest: "Saving company registration...",
     b2bServerMissing: "B2B registration backend is not active yet. Check Vercel environment variables.",
+    b2bRegistrationLoginReady: "Buyer account created. Sign in with your email and password.",
+    customerDashboardKicker: "Customer portal",
+    customerDashboardTitle: "Your Sidya Global account",
+    customerDashboardCopy: "Review your previous proforma orders or create a new order.",
+    customerHistoryKicker: "Order history",
+    customerHistoryTitle: "Previous orders",
+    customerHistoryEmpty: "No previous order has been recorded yet.",
+    customerNewOrder: "Create a new order",
+    customerOrderItems: "items",
+    customerOrderCartons: "cartons",
+    customerOrderPallets: "pallets",
+    customerOrderDownloaded: "Excel downloaded",
     b2bChecklistTitle: "Core export document checklist",
     b2bDocBuyer: "Buyer company registry, tax certificate and authorized signatory",
     b2bDocProduct: "Product list, HS code, quantity, pallet and weight confirmation",
@@ -487,6 +499,18 @@ const content = {
     b2bUploadingDocuments: "Evraklar güvenli alana yükleniyor...",
     b2bSavingRequest: "Firma kaydı oluşturuluyor...",
     b2bServerMissing: "B2B kayıt backend'i aktif değil. Vercel ortam değişkenlerini kontrol edin.",
+    b2bRegistrationLoginReady: "Alıcı hesabı oluşturuldu. E-posta ve şifrenizle giriş yapın.",
+    customerDashboardKicker: "Müşteri portalı",
+    customerDashboardTitle: "Sidya Global hesabınız",
+    customerDashboardCopy: "Önceki proforma siparişlerinizi inceleyin veya yeni sipariş oluşturun.",
+    customerHistoryKicker: "Sipariş geçmişi",
+    customerHistoryTitle: "Önceki siparişler",
+    customerHistoryEmpty: "Henüz kayıtlı bir sipariş bulunmuyor.",
+    customerNewOrder: "Yeni Sipariş Oluştur",
+    customerOrderItems: "ürün",
+    customerOrderCartons: "koli",
+    customerOrderPallets: "palet",
+    customerOrderDownloaded: "Excel indirildi",
     b2bChecklistTitle: "Temel ihracat evrak kontrol listesi",
     b2bDocBuyer: "Alıcı firma sicil kaydı, vergi belgesi ve imza/yetki belgesi",
     b2bDocProduct: "Ürün listesi, GTIP/HS kodu, miktar, palet ve ağırlık teyidi",
@@ -2609,7 +2633,7 @@ const buildProformaRows = () =>
       product: getProductName(product),
       volume: product.liter,
       barcode: product.barcode || "",
-      sourceCategory: product.sourceCategory || "",
+      sourceCategory: product.sourceCategory || getCategoryTitle(product.category),
       cartons,
       unitsPerCarton,
       cartonsPerPallet,
@@ -2619,38 +2643,83 @@ const buildProformaRows = () =>
     };
   });
 
-const toCsvCell = (value) => `"${String(value).replace(/"/g, '""')}"`;
-const downloadProformaCsv = () => {
+const downloadProformaExcel = () => {
   const rows = buildProformaRows();
   if (!rows.length) {
     alert(t("proformaQuoteEmpty"));
     return false;
   }
-  const headers = ["No", "Brand", "Product", "Barcode", "Category", "Unit / Gramaj", "Cartons", "Units/Carton", "Cartons/Pallet", "Pallets", "Kg/Carton", "Total Kg"];
-  const csvRows = rows.map((row) =>
-    [
-      row.no,
-      row.brand,
+
+  if (!window.XLSX?.utils) {
+    alert("Excel library could not be loaded. Please refresh the page and try again.");
+    return false;
+  }
+
+  const headers = [
+    "Barcode",
+    "Product Name",
+    "Category",
+    "Unit / Gramaj",
+    "Brand",
+    "Cartons",
+    "Units / Carton",
+    "Cartons / Pallet",
+    "Pallet Coefficient",
+    "Kg / Carton",
+    "Total Kg",
+  ];
+  const worksheetData = [
+    headers,
+    ...rows.map((row) => [
+      String(row.barcode || ""),
       row.product,
-      row.barcode,
       row.sourceCategory,
       row.volume,
+      row.brand,
       row.cartons,
-      row.unitsPerCarton ?? "",
-      row.cartonsPerPallet ?? "",
-      row.pallets === null ? "" : row.pallets.toFixed(2),
-      row.kgPerCarton === null ? "" : row.kgPerCarton.toFixed(2),
-      row.totalWeight === null ? "" : row.totalWeight.toFixed(2),
-    ]
-      .map(toCsvCell)
-      .join(";"),
-  );
-  const blob = new Blob(["\ufeff", headers.map(toCsvCell).join(";"), "\n", csvRows.join("\n")], { type: "text/csv;charset=utf-8" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "sidya-global-proforma.csv";
-  link.click();
-  URL.revokeObjectURL(link.href);
+      row.unitsPerCarton ?? null,
+      row.cartonsPerPallet ?? null,
+      row.pallets,
+      row.kgPerCarton,
+      row.totalWeight,
+    ]),
+  ];
+  const worksheet = window.XLSX.utils.aoa_to_sheet(worksheetData);
+  worksheet["!cols"] = [
+    { wch: 18 },
+    { wch: 42 },
+    { wch: 24 },
+    { wch: 18 },
+    { wch: 20 },
+    { wch: 11 },
+    { wch: 15 },
+    { wch: 17 },
+    { wch: 18 },
+    { wch: 14 },
+    { wch: 14 },
+  ];
+  worksheet["!autofilter"] = { ref: `A1:K${rows.length + 1}` };
+
+  for (let rowIndex = 2; rowIndex <= rows.length + 1; rowIndex += 1) {
+    const barcodeCell = worksheet[`A${rowIndex}`];
+    if (barcodeCell) {
+      barcodeCell.t = "s";
+      barcodeCell.z = "@";
+    }
+    ["F", "G", "H"].forEach((column) => {
+      const cell = worksheet[`${column}${rowIndex}`];
+      if (cell && typeof cell.v === "number") cell.z = "0";
+    });
+    ["I", "J", "K"].forEach((column) => {
+      const cell = worksheet[`${column}${rowIndex}`];
+      if (cell && typeof cell.v === "number") cell.z = "0.00";
+    });
+  }
+
+  const workbook = window.XLSX.utils.book_new();
+  window.XLSX.utils.book_append_sheet(workbook, worksheet, "Proforma Order");
+  window.XLSX.writeFile(workbook, `sidya-global-proforma-${new Date().toISOString().slice(0, 10)}.xlsx`);
+  void recordProformaOrderHistory(rows);
   return true;
 };
 
@@ -2665,9 +2734,9 @@ const buildProformaMessage = () => {
 };
 
 const sendProformaMail = () => {
-  if (!downloadProformaCsv()) return;
+  if (!downloadProformaExcel()) return;
   const subject = encodeURIComponent("Sidya Global proforma request");
-  const body = encodeURIComponent(`${buildProformaMessage()}\n\nExcel-compatible CSV file has been downloaded. Please attach it to this email if needed.`);
+  const body = encodeURIComponent(`${buildProformaMessage()}\n\nThe Excel file has been downloaded. Please attach it to this email if needed.`);
   window.location.href = `mailto:${businessEmail}?subject=${subject}&body=${body}`;
 };
 
@@ -2746,6 +2815,7 @@ const translatePage = () => {
   renderExchangeRates();
   renderProformaProducts();
   renderProformaOrder();
+  renderCustomerOrderHistory(activeB2BSession);
   document.documentElement.classList.remove("is-loading");
 };
 
@@ -3036,11 +3106,6 @@ const setB2BAuthStatus = (message) => {
   if (status) status.textContent = message;
 };
 
-const setB2BOrderButtonVisible = (isVisible) => {
-  const button = document.querySelector("#openRegisteredProforma");
-  if (button) button.hidden = !isVisible;
-};
-
 const withTimeout = (promise, message, timeoutMs = 15000) => {
   let timer;
   const timeout = new Promise((_, reject) => {
@@ -3049,17 +3114,141 @@ const withTimeout = (promise, message, timeoutMs = 15000) => {
   return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
 };
 
+let activeB2BSession = null;
+const customerHistoryStorageKey = (userId) => `sidya-order-history:${userId}`;
+const escapeDashboardText = (value) =>
+  String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
+const getLocalOrderHistory = (userId) => {
+  if (!userId) return [];
+  try {
+    const history = JSON.parse(localStorage.getItem(customerHistoryStorageKey(userId)) || "[]");
+    return Array.isArray(history) ? history : [];
+  } catch {
+    return [];
+  }
+};
+
+const getCustomerOrderHistory = (session = activeB2BSession) => {
+  const user = session?.user;
+  if (!user?.id) return [];
+  const remoteHistory = Array.isArray(user.user_metadata?.sidya_order_history)
+    ? user.user_metadata.sidya_order_history
+    : [];
+  const historyById = new Map();
+  [...remoteHistory, ...getLocalOrderHistory(user.id)].forEach((order) => {
+    if (order?.id) historyById.set(order.id, order);
+  });
+  return [...historyById.values()]
+    .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")))
+    .slice(0, 30);
+};
+
+const renderCustomerOrderHistory = (session = activeB2BSession) => {
+  const list = document.querySelector("#customerOrderHistory");
+  const empty = document.querySelector("#customerHistoryEmpty");
+  const count = document.querySelector("#customerHistoryCount");
+  const email = document.querySelector("#customerDashboardEmail");
+  if (!list || !empty || !count) return;
+
+  const history = getCustomerOrderHistory(session);
+  if (email) email.textContent = session?.user?.email || "";
+  count.textContent = String(history.length);
+  empty.hidden = history.length > 0;
+  list.innerHTML = history
+    .map((order) => {
+      const createdAt = order.createdAt
+        ? new Intl.DateTimeFormat(currentLang === "tr" ? "tr-TR" : "en-GB", {
+            dateStyle: "medium",
+            timeStyle: "short",
+          }).format(new Date(order.createdAt))
+        : "";
+      const products = Array.isArray(order.products) ? order.products.join(", ") : "";
+      return `<article class="customer-order-card">
+        <div>
+          <strong>${escapeDashboardText(order.id)}</strong>
+          <small>${escapeDashboardText(createdAt)} · ${t("customerOrderDownloaded")}</small>
+        </div>
+        <div>
+          <strong>${escapeDashboardText(order.itemCount)} ${t("customerOrderItems")}</strong>
+          <span>${escapeDashboardText(products)}</span>
+        </div>
+        <div class="customer-order-totals">
+          <strong>${escapeDashboardText(order.totalCartons)} ${t("customerOrderCartons")}</strong>
+          <span>${escapeDashboardText(Number(order.totalPallets || 0).toFixed(2))} ${t("customerOrderPallets")}</span>
+        </div>
+      </article>`;
+    })
+    .join("");
+};
+
+const recordProformaOrderHistory = async (rows) => {
+  try {
+    const client = getSupabaseClient();
+    if (!client || !rows.length) return;
+    const { data } = await client.auth.getSession();
+    const session = data.session;
+    if (!session?.user?.id) return;
+
+    const now = new Date();
+    const order = {
+      id: `SG-${now.toISOString().replace(/\D/g, "").slice(0, 17)}`,
+      createdAt: now.toISOString(),
+      itemCount: rows.length,
+      totalCartons: rows.reduce((sum, row) => sum + row.cartons, 0),
+      totalPallets: rows.reduce((sum, row) => sum + (row.pallets || 0), 0),
+      totalWeight: rows.reduce((sum, row) => sum + (row.totalWeight || 0), 0),
+      products: rows.slice(0, 8).map((row) => row.product),
+    };
+    const history = [order, ...getCustomerOrderHistory(session).filter((item) => item.id !== order.id)].slice(0, 30);
+    try {
+      localStorage.setItem(customerHistoryStorageKey(session.user.id), JSON.stringify(history));
+    } catch {
+      // Account metadata remains the cross-device source when local storage is unavailable.
+    }
+    activeB2BSession = {
+      ...session,
+      user: {
+        ...session.user,
+        user_metadata: {
+          ...(session.user.user_metadata || {}),
+          sidya_order_history: history,
+        },
+      },
+    };
+    renderCustomerOrderHistory(activeB2BSession);
+
+    const { data: updated, error } = await client.auth.updateUser({
+      data: {
+        ...(session.user.user_metadata || {}),
+        sidya_order_history: history,
+      },
+    });
+    if (!error && updated.user) {
+      activeB2BSession = { ...session, user: updated.user };
+      renderCustomerOrderHistory(activeB2BSession);
+    }
+  } catch (error) {
+    console.warn(`Order history could not be saved: ${error.message || "Unknown error"}`);
+  }
+};
+
 const refreshB2BSession = async () => {
   const client = getSupabaseClient();
   if (!client) {
     setB2BAuthStatus(t("b2bAuthEmailMode"));
-    setB2BOrderButtonVisible(false);
+    activeB2BSession = null;
     return null;
   }
   const { data } = await client.auth.getSession();
+  activeB2BSession = data.session;
   const email = data.session?.user?.email;
   setB2BAuthStatus(email ? `${t("b2bSignedIn")}: ${email}` : t("b2bSignedOut"));
-  setB2BOrderButtonVisible(Boolean(email));
+  renderCustomerOrderHistory(data.session);
   return data.session;
 };
 
@@ -3140,10 +3329,12 @@ const signInB2BCustomer = async () => {
   }
   try {
     setB2BAuthStatus(t("b2bAuthLoginStarted"));
-    const { error } = await withTimeout(client.auth.signInWithPassword({ email, password }), t("b2bAuthTimeout"));
+    const { data, error } = await withTimeout(client.auth.signInWithPassword({ email, password }), t("b2bAuthTimeout"));
     if (error) throw error;
     setB2BAuthStatus(t("b2bAuthLoginDone"));
-    setB2BOrderButtonVisible(true);
+    activeB2BSession = data.session;
+    closeB2BModal();
+    openCustomerDashboard(data.session);
   } catch (error) {
     setB2BAuthStatus(error.message || t("b2bAuthLoginFailed"));
   }
@@ -3152,42 +3343,12 @@ const signInB2BCustomer = async () => {
 const signOutB2BCustomer = async () => {
   const client = getSupabaseClient();
   if (client) await client.auth.signOut();
-  setB2BOrderButtonVisible(false);
+  activeB2BSession = null;
   await refreshB2BSession();
 };
 
-const createB2BCustomerAccount = async (client, form) => {
-  const email = String(form.get("email") || "").trim();
-  const password = getB2BAuthValues().password;
-  if (!email || !password) throw new Error(t("b2bAuthLoginRequired"));
-  const authEmailInput = document.querySelector("#b2bAuthEmail");
-  if (authEmailInput && !authEmailInput.value.trim()) authEmailInput.value = email;
-  setB2BAuthStatus(t("b2bAuthSignupStarted"));
-  const { data, error } = await withTimeout(
-    client.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          company: String(form.get("company") || ""),
-          contact: String(form.get("contact") || ""),
-          username: email.split("@")[0] || email,
-          country: String(form.get("country") || ""),
-        },
-      },
-    }),
-    t("b2bAuthTimeout"),
-  );
-  if (error) throw error;
-  if (data.session?.user) {
-    setB2BAuthStatus(t("b2bAuthSignupDone"));
-    return data.session;
-  }
-  setB2BAuthStatus(t("b2bCheckEmail"));
-  return null;
-};
-
 const b2bModal = document.querySelector("#b2bRegistrationModal");
+const customerDashboardModal = document.querySelector("#customerDashboardModal");
 const logisticsModal = document.querySelector("#logisticsModal");
 const openB2BModal = () => {
   if (!b2bModal) return;
@@ -3201,6 +3362,20 @@ const closeB2BModal = () => {
   if (!b2bModal) return;
   setB2BRegistrationPanelVisible(false);
   b2bModal.hidden = true;
+  document.body.classList.remove("is-modal-open");
+};
+
+const openCustomerDashboard = (session = activeB2BSession) => {
+  if (!customerDashboardModal || !session?.user) return;
+  activeB2BSession = session;
+  customerDashboardModal.hidden = false;
+  document.body.classList.add("is-modal-open");
+  renderCustomerOrderHistory(session);
+};
+
+const closeCustomerDashboard = () => {
+  if (!customerDashboardModal) return;
+  customerDashboardModal.hidden = true;
   document.body.classList.remove("is-modal-open");
 };
 
@@ -3229,8 +3404,8 @@ const activateLogisticsTab = (tabName) => {
   });
 };
 
-const openRegisteredProformaPanel = () => {
-  closeB2BModal();
+const openCustomerProformaPanel = () => {
+  closeCustomerDashboard();
   openMainProformaPanel();
 };
 
@@ -3263,8 +3438,13 @@ const closeMainProformaPanel = () => {
 };
 
 document.querySelector("#openB2BRegistration")?.addEventListener("click", openB2BModal);
-document.querySelector("#openB2BPortal")?.addEventListener("click", (event) => {
+document.querySelector("#openB2BPortal")?.addEventListener("click", async (event) => {
   event.preventDefault();
+  const session = await refreshB2BSession();
+  if (session?.user) {
+    openCustomerDashboard(session);
+    return;
+  }
   openB2BModal();
 });
 document.querySelector("#openLogisticsCenter")?.addEventListener("click", (event) => {
@@ -3291,7 +3471,7 @@ document.querySelectorAll("[data-logistics-tab]").forEach((button) => {
   button.addEventListener("click", () => activateLogisticsTab(button.dataset.logisticsTab));
 });
 document.querySelector("#openGuestProforma")?.addEventListener("click", openMainProformaPanel);
-document.querySelector("#openRegisteredProforma")?.addEventListener("click", openRegisteredProformaPanel);
+document.querySelector("#openCustomerProforma")?.addEventListener("click", openCustomerProformaPanel);
 document.querySelectorAll('a[href="#proforma"]').forEach((link) => {
   link.addEventListener("click", (event) => {
     event.preventDefault();
@@ -3304,8 +3484,12 @@ document.querySelectorAll("[data-close-proforma-screen]").forEach((button) => {
 document.querySelectorAll("[data-close-b2b]").forEach((button) => {
   button.addEventListener("click", closeB2BModal);
 });
+document.querySelectorAll("[data-close-customer-dashboard]").forEach((button) => {
+  button.addEventListener("click", closeCustomerDashboard);
+});
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && b2bModal && !b2bModal.hidden) closeB2BModal();
+  if (event.key === "Escape" && customerDashboardModal && !customerDashboardModal.hidden) closeCustomerDashboard();
   if (event.key === "Escape" && customsModal && !customsModal.hidden) closeCustomsModal();
   if (event.key === "Escape" && logisticsModal && !logisticsModal.hidden) closeLogisticsModal();
   if (event.key === "Escape" && catalogProformaModal && !catalogProformaModal.hidden) closeCatalogProformaModal();
@@ -3376,8 +3560,13 @@ document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => 
     if (status) status.textContent = t("b2bRegisteredOpenProforma");
     form?.reset();
     updateB2BFileSummary();
-    setB2BOrderButtonVisible(true);
     setB2BRegistrationPanelVisible(false);
+    await client.auth.signOut();
+    activeB2BSession = null;
+    const passwordInput = document.querySelector("#b2bAuthPassword");
+    if (passwordInput) passwordInput.value = "";
+    setB2BAuthStatus(t("b2bRegistrationLoginReady"));
+    setTimeout(() => document.querySelector("#b2bAuthPassword")?.focus(), 0);
   } catch (error) {
     if (status) status.textContent = error.message || t("formError");
   } finally {
@@ -3438,7 +3627,7 @@ document.querySelector("#proformaOrderLines")?.addEventListener("click", (event)
   proformaOrder.delete(removeButton.dataset.productId);
   renderProformaOrder();
 });
-document.querySelector("#downloadProformaExcel")?.addEventListener("click", downloadProformaCsv);
+document.querySelector("#downloadProformaExcel")?.addEventListener("click", downloadProformaExcel);
 document.querySelector("#mailProforma")?.addEventListener("click", sendProformaMail);
 translatePage();
 setupTracking();

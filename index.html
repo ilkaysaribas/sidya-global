@@ -31,7 +31,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260613-1" />
+    <link rel="stylesheet" href="styles.css?v=20260613-2" />
     <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
     <script type="application/ld+json">
       {
@@ -586,7 +586,6 @@
               <div class="b2b-auth-actions">
                 <button class="form-submit" type="button" id="b2bSignIn" data-i18n="b2bSignIn">Sign in</button>
                 <button class="proforma-quote-link" type="button" id="openB2BRegisterForm" data-i18n="b2bSignUp">Register</button>
-                <button class="form-submit b2b-order-button" type="button" id="openRegisteredProforma" data-i18n="b2bOpenOrderScreen" hidden>Open order screen</button>
               </div>
               <p class="form-status" id="b2bAuthStatus" role="status"></p>
             </div>
@@ -639,6 +638,35 @@
               </div>
             </aside>
           </div>
+        </div>
+      </div>
+
+      <div class="b2b-modal customer-dashboard-modal" id="customerDashboardModal" hidden>
+        <div class="b2b-modal-backdrop" data-close-customer-dashboard></div>
+        <div class="b2b-modal-dialog customer-dashboard-dialog" role="dialog" aria-modal="true" aria-labelledby="customer-dashboard-title">
+          <button class="b2b-modal-close" type="button" data-close-customer-dashboard aria-label="Close">&times;</button>
+          <div class="customer-dashboard-header">
+            <div>
+              <p class="section-kicker" data-i18n="customerDashboardKicker">Customer portal</p>
+              <h2 id="customer-dashboard-title" data-i18n="customerDashboardTitle">Your Sidya Global account</h2>
+              <p data-i18n="customerDashboardCopy">Review your previous proforma orders or create a new order.</p>
+            </div>
+            <span class="customer-dashboard-email" id="customerDashboardEmail"></span>
+          </div>
+
+          <section class="customer-history-panel" aria-labelledby="customer-history-title">
+            <div class="customer-history-heading">
+              <div>
+                <p class="section-kicker" data-i18n="customerHistoryKicker">Order history</p>
+                <h3 id="customer-history-title" data-i18n="customerHistoryTitle">Previous orders</h3>
+              </div>
+              <span id="customerHistoryCount">0</span>
+            </div>
+            <div class="customer-order-history" id="customerOrderHistory"></div>
+            <p class="customer-history-empty" id="customerHistoryEmpty" data-i18n="customerHistoryEmpty">No previous order has been recorded yet.</p>
+          </section>
+
+          <button class="customer-new-order-button" type="button" id="openCustomerProforma" data-i18n="customerNewOrder">Create a new order</button>
         </div>
       </div>
 
@@ -871,7 +899,8 @@
         "sameAs": ["https://www.instagram.com/sidyaglobal/"]
       }
     </script>
+    <script src="assets/xlsx.full.min.js"></script>
     <script src="catalog-products.generated.js?v=20260611-1"></script>
-    <script src="script.js?v=20260613-2"></script>
+    <script src="script.js?v=20260613-3"></script>
   </body>
 </html>

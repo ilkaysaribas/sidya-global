@@ -2687,6 +2687,104 @@ h2 {
   font-size: 1rem;
 }
 
+.customer-dashboard-dialog {
+  width: min(940px, 100%);
+  display: grid;
+  gap: 16px;
+}
+
+.customer-dashboard-header,
+.customer-history-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.customer-dashboard-header h2,
+.customer-history-heading h3 {
+  margin: 4px 0 0;
+  color: #151515;
+}
+
+.customer-dashboard-header > div > p:last-child {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.customer-dashboard-email,
+.customer-history-heading > span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: #151515;
+  background: #fff;
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.customer-history-panel {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.customer-order-history {
+  display: grid;
+  gap: 8px;
+  max-height: 380px;
+  overflow: auto;
+}
+
+.customer-order-card {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.7fr) minmax(0, 1.3fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f5f6f6;
+}
+
+.customer-order-card strong,
+.customer-order-card span {
+  display: block;
+}
+
+.customer-order-card small,
+.customer-order-card span {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.customer-order-totals {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.customer-history-empty {
+  margin: 0;
+  color: var(--muted);
+}
+
+.customer-new-order-button {
+  min-height: 48px;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  background: #202426;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
 .catalog-proforma-dialog {
   width: min(1160px, 100%);
 }
@@ -3887,6 +3985,25 @@ h2 {
 
   .proforma-line-actions {
     justify-content: start;
+  }
+
+  .customer-dashboard-header,
+  .customer-history-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .customer-dashboard-email,
+  .customer-history-heading > span {
+    align-self: flex-start;
+  }
+
+  .customer-order-card {
+    grid-template-columns: 1fr;
+  }
+
+  .customer-order-totals {
+    text-align: left;
   }
 
   .export-roadmap {
