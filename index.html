@@ -31,7 +31,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260612-2" />
+    <link rel="stylesheet" href="styles.css?v=20260613-1" />
     <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
     <script type="application/ld+json">
       {
@@ -80,6 +80,7 @@
             <div class="products-menu-column">
               <a class="category-shortcut" href="#home-products" data-i18n="navHome">Home & Living</a>
               <a class="firm-link" href="https://www.garipleryapimarket.com/">Garipler Yapı Market</a>
+              <a class="firm-link" href="assets/macromax-katalog-2025.pdf">Macromax</a>
             </div>
             <div class="products-menu-column">
               <a class="category-shortcut" href="#cleaning-products" data-i18n="navCleaning">Cleaning</a>
@@ -97,6 +98,11 @@
             <div class="products-menu-column">
               <a class="category-shortcut" href="#food-products" data-i18n="productOptionFood">Food Products</a>
               <a class="firm-link" href="https://www.oncusalca.com.tr/">Öncü Salça</a>
+              <a class="firm-link" href="https://www.heinz.com/tr-TR/products">Heinz</a>
+              <a class="firm-link" href="assets/lokman-katalog-2025.pdf">Lokman</a>
+              <a class="firm-link" href="assets/yudum-perakende-urun-katalog-2024.pdf">Yudum</a>
+              <a class="firm-link" href="assets/fide-katalog.pdf">Fide</a>
+              <a class="firm-link" href="assets/melwiss-chocolate-katalog.pdf">Melwiss Chocolate</a>
             </div>
             <div class="products-menu-column">
               <a class="category-shortcut" href="#industrial-products" data-i18n="navIndustrial">Industrial</a>
@@ -134,14 +140,25 @@
         <a href="#turkiye-product-search">Ürün Bul</a>
         <a href="#process" data-i18n="navProcess">Process</a>
         <a href="#markets" data-i18n="navMarkets">Markets</a>
+        <div class="nav-item has-dropdown customs-nav-item">
+          <a href="#customs" id="openCustomsCenter" data-i18n="navCustoms">Customs</a>
+          <div class="products-menu customs-menu" aria-label="Customs platform shortcuts">
+            <div class="products-menu-column">
+              <a class="category-shortcut" href="#customs" data-customs-open data-i18n="customsKicker">Customs platform</a>
+              <a class="firm-link" href="#customs" data-customs-open data-i18n="customsCoreDocsTitle">Required export customs documents</a>
+              <a class="firm-link" href="#customs" data-customs-open data-i18n="gtipTitle">Product-based preliminary GTIP study</a>
+              <a class="firm-link" href="#customs" data-customs-open data-i18n="customsPlannerTitle">Export route planner</a>
+            </div>
+          </div>
+        </div>
         <a href="#logistics-center" id="openLogisticsCenter">Lojistik</a>
         <a href="#proforma" data-i18n="navProforma">Proforma</a>
-        <a href="#customs" data-i18n="navCustoms">Customs</a>
         <a href="#b2b-login" id="openB2BPortal" data-i18n="navB2B">B2B Portal Login</a>
       </nav>
 
       <div class="header-actions">
         <div class="top-contact-links" aria-label="Direct contact">
+          <a href="https://wa.me/905514894481" target="_blank" rel="noopener">WhatsApp</a>
           <a href="mailto:info@sidyaglobal.com">Mail</a>
           <a href="https://t.me/sidyaglobal" target="_blank" rel="noopener">Telegram</a>
         </div>
@@ -553,8 +570,9 @@
 
           <div class="b2b-auth-card" id="b2b-login">
             <div>
-              <h3 data-i18n="b2bAuthTitle">B2B customer login</h3>
+              <h3 data-i18n="b2bAuthTitle">Sign in or register</h3>
               <p data-i18n="b2bAuthCopy">Registered buyers can sign in with email and password to open the proforma order screen.</p>
+              <small class="b2b-email-register-note" data-i18n="b2bEmailRegisterHint">You can create a buyer account with your email address.</small>
             </div>
             <div class="b2b-auth-fields">
               <label>
@@ -567,14 +585,14 @@
               </label>
               <div class="b2b-auth-actions">
                 <button class="form-submit" type="button" id="b2bSignIn" data-i18n="b2bSignIn">Sign in</button>
-                <button class="proforma-quote-link" type="button" id="b2bSignOut" data-i18n="b2bSignOut">Sign out</button>
+                <button class="proforma-quote-link" type="button" id="openB2BRegisterForm" data-i18n="b2bSignUp">Register</button>
                 <button class="form-submit b2b-order-button" type="button" id="openRegisteredProforma" data-i18n="b2bOpenOrderScreen" hidden>Open order screen</button>
               </div>
               <p class="form-status" id="b2bAuthStatus" role="status"></p>
             </div>
           </div>
 
-          <div class="b2b-modal-grid">
+          <div class="b2b-modal-grid" id="b2bRegistrationPanel" hidden>
             <form class="b2b-form" id="b2bForm">
               <div class="b2b-form-header">
                 <h3 data-i18n="b2bNewRegistrationTitle">New buyer registration</h3>
@@ -737,6 +755,10 @@
             The form prepares an email draft for your request. You can also reach us directly through Telegram or email.
           </p>
           <div class="direct-contact-links">
+            <a class="direct-whatsapp-link" href="https://wa.me/905514894481" target="_blank" rel="noopener">
+              <img src="assets/icon-whatsapp.svg" alt="" aria-hidden="true" />
+              <span data-i18n="whatsappCta">Contact and questions</span>
+            </a>
             <a href="mailto:info@sidyaglobal.com?subject=Sidya%20Global%20Quote%20Request" data-i18n="mailCta">Request quote by email</a>
             <a href="https://t.me/sidyaglobal" target="_blank" rel="noopener" data-i18n="telegramCta">Message on Telegram</a>
           </div>
@@ -814,6 +836,10 @@
           <img src="assets/icon-telegram.svg" alt="" aria-hidden="true" />
           <span>Telegram <small>@sidyaglobal</small></span>
         </a>
+        <a href="https://wa.me/905514894481" target="_blank" rel="noopener">
+          <img src="assets/icon-whatsapp.svg" alt="" aria-hidden="true" />
+          <span>WhatsApp <small>+90 551 489 44 81</small></span>
+        </a>
         <a href="https://www.instagram.com/sidyaglobal/" target="_blank" rel="noopener">
           <img src="assets/icon-instagram.svg" alt="" aria-hidden="true" />
           <span>Instagram <small>@sidyaglobal</small></span>
@@ -859,6 +885,6 @@
       }
     </script>
     <script src="catalog-products.generated.js?v=20260611-1"></script>
-    <script src="script.js?v=20260612-2"></script>
+    <script src="script.js?v=20260613-1"></script>
   </body>
 </html>

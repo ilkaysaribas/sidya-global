@@ -136,8 +136,9 @@ const content = {
     b2bNotes: "Products, market notes and customs requirements",
     b2bSubmit: "Create buyer account",
     b2bReady: "Buyer account was created and saved.",
-    b2bAuthTitle: "Registered customer login",
-    b2bAuthCopy: "Use this area only if your buyer account is already active.",
+    b2bAuthTitle: "Sign in or register",
+    b2bAuthCopy: "Use your email and password to sign in, or open the buyer registration form below.",
+    b2bEmailRegisterHint: "You can create a buyer account with your email address.",
     b2bAuthEmail: "Account email",
     b2bAuthPassword: "Password",
     b2bSignUp: "Register",
@@ -166,6 +167,7 @@ const content = {
     b2bOpenOrderScreen: "Open order screen",
     b2bBackendFallback: "Opening email draft.",
     b2bServerSubmit: "Creating buyer account and saving documents...",
+    b2bSaving: "Saving...",
     b2bServerMissing: "B2B registration backend is not active yet. Check Vercel environment variables.",
     b2bChecklistTitle: "Core export document checklist",
     b2bDocBuyer: "Buyer company registry, tax certificate and authorized signatory",
@@ -448,8 +450,9 @@ const content = {
     b2bNotes: "Ürün, pazar notu ve gümrük gereklilikleri",
     b2bSubmit: "Alıcı hesabı oluştur",
     b2bReady: "Alıcı hesabı oluşturuldu ve kayıt altına alındı.",
-    b2bAuthTitle: "Kayıtlı müşteri girişi",
-    b2bAuthCopy: "Bu alan sadece hesabı aktif olan kayıtlı müşteriler içindir.",
+    b2bAuthTitle: "Giriş Yap veya Üye Ol",
+    b2bAuthCopy: "E-posta ve şifre ile giriş yapın veya aşağıdan yeni alıcı kayıt formunu açın.",
+    b2bEmailRegisterHint: "E-posta adresiniz ile alıcı hesabı oluşturabilirsiniz.",
     b2bAuthEmail: "Hesap e-postası",
     b2bAuthPassword: "Şifre",
     b2bSignUp: "Kayıt ol",
@@ -478,6 +481,7 @@ const content = {
     b2bOpenOrderScreen: "Sipariş ekranını aç",
     b2bBackendFallback: "Mail taslağı açılıyor.",
     b2bServerSubmit: "Alıcı hesabı oluşturuluyor ve evraklar kaydediliyor...",
+    b2bSaving: "Kaydediliyor...",
     b2bServerMissing: "B2B kayıt backend'i aktif değil. Vercel ortam değişkenlerini kontrol edin.",
     b2bChecklistTitle: "Temel ihracat evrak kontrol listesi",
     b2bDocBuyer: "Alıcı firma sicil kaydı, vergi belgesi ve imza/yetki belgesi",
@@ -1049,6 +1053,7 @@ products.ru = [
 const productPartners = {
   "home-products": [
     { name: "Garipler Yapı Market", site: "https://www.garipleryapimarket.com/", logo: "assets/garipler-yapi-market-logo.svg" },
+    { name: "Macromax", site: "#home-products", catalog: "assets/macromax-katalog-2025.pdf", logo: "assets/category-home.svg" },
   ],
   "cleaning-products": [
     { name: "ABC Deterjan", site: "https://www.abcdeterjan.com.tr/", catalog: "assets/abc-deterjan-urunleri-katalog-2025.pdf", logo: "assets/abc-logo.jpg" },
@@ -1070,6 +1075,10 @@ const productPartners = {
   "food-products": [
     { name: "Öncü Salça", site: "https://www.oncusalca.com.tr/", logo: "assets/oncu-salca-logo.svg" },
     { name: "Heinz", site: "https://www.heinz.com/tr-TR/products", catalog: "assets/heinz-urun-listesi.pdf", logo: "assets/heinz-logo.svg" },
+    { name: "Lokman", site: "#food-products", catalog: "assets/lokman-katalog-2025.pdf", logo: "assets/category-food.svg" },
+    { name: "Yudum", site: "#food-products", catalog: "assets/yudum-perakende-urun-katalog-2024.pdf", logo: "assets/category-food.svg" },
+    { name: "Fide", site: "#food-products", catalog: "assets/fide-katalog.pdf", logo: "assets/category-food.svg" },
+    { name: "Melwiss Chocolate", site: "#food-products", catalog: "assets/melwiss-chocolate-katalog.pdf", logo: "assets/category-food.svg" },
   ],
   "industrial-products": [
     { name: "Demet Temizlik", site: "https://demettemizlik.com/", logo: "assets/demet-temizlik-logo.svg" },
@@ -1718,7 +1727,7 @@ const marketLinks = {
 };
 
 const businessEmail = "info@sidyaglobal.com";
-const businessWhatsAppNumber = "905534546118";
+const businessWhatsAppNumber = "905514894481";
 let currentLang = "en";
 let deferredInstallPrompt = null;
 const truckCapacity = { weight: 24000 };
@@ -2658,16 +2667,60 @@ const sendProformaMail = () => {
   window.location.href = `mailto:${businessEmail}?subject=${subject}&body=${body}`;
 };
 
-const placeCustomsSectionNearTop = () => {
+let customsModal = null;
+
+const setupCustomsModal = () => {
+  if (customsModal) return customsModal;
   const customsSection = document.querySelector("#customs");
-  const processSection = document.querySelector("#process");
-  if (customsSection && processSection && processSection.previousElementSibling !== customsSection) {
-    processSection.before(customsSection);
-  }
+  if (!customsSection) return null;
+
+  customsModal = document.createElement("div");
+  customsModal.className = "b2b-modal customs-modal";
+  customsModal.id = "customsModal";
+  customsModal.hidden = true;
+
+  const backdrop = document.createElement("div");
+  backdrop.className = "b2b-modal-backdrop";
+  backdrop.dataset.closeCustoms = "";
+
+  const dialog = document.createElement("div");
+  dialog.className = "b2b-modal-dialog customs-dialog";
+  dialog.setAttribute("role", "dialog");
+  dialog.setAttribute("aria-modal", "true");
+  dialog.setAttribute("aria-labelledby", "customs-title");
+
+  const closeButton = document.createElement("button");
+  closeButton.className = "b2b-modal-close";
+  closeButton.type = "button";
+  closeButton.dataset.closeCustoms = "";
+  closeButton.setAttribute("aria-label", "Close");
+  closeButton.innerHTML = "&times;";
+
+  customsSection.classList.add("customs-modal-section");
+  dialog.append(closeButton, customsSection);
+  customsModal.append(backdrop, dialog);
+  document.body.append(customsModal);
+  return customsModal;
+};
+
+const openCustomsModal = () => {
+  const modal = setupCustomsModal();
+  if (!modal) return;
+  modal.hidden = false;
+  document.body.classList.add("is-modal-open");
+  renderCustomsDesk();
+  setTimeout(() => document.querySelector("#gtipSearchInput")?.focus(), 0);
+};
+
+const closeCustomsModal = () => {
+  const modal = setupCustomsModal();
+  if (!modal) return;
+  modal.hidden = true;
+  document.body.classList.remove("is-modal-open");
 };
 
 const translatePage = () => {
-  placeCustomsSectionNearTop();
+  setupCustomsModal();
   document.documentElement.lang = currentLang;
   document.querySelectorAll(".lang-option").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.lang === currentLang);
@@ -2697,6 +2750,14 @@ document.querySelectorAll(".lang-option").forEach((button) => {
     currentLang = button.dataset.lang;
     translatePage();
   });
+});
+
+document.querySelectorAll(".firm-link").forEach((link) => {
+  const href = link.getAttribute("href") || "";
+  if (href && !href.startsWith("#")) {
+    link.target = "_blank";
+    link.rel = "noopener";
+  }
 });
 
 const supplierSearchForm = document.querySelector("#supplierSearchForm");
@@ -2848,7 +2909,8 @@ const openMailDraft = (form) => {
 
 document.querySelector("#quoteForm")?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const form = new FormData(event.currentTarget);
+  const formElement = event.currentTarget;
+  const form = new FormData(formElement);
   const status = document.querySelector("#formStatus");
   if (window.location.protocol === "file:") {
     status.textContent = t("formReady");
@@ -2859,7 +2921,7 @@ document.querySelector("#quoteForm")?.addEventListener("submit", async (event) =
     const response = await fetch("contact.php", { method: "POST", body: form });
     if (!response.ok) throw new Error("Mail endpoint failed");
     status.textContent = t("formSent");
-    event.currentTarget.reset();
+    formElement?.reset();
   } catch (error) {
     status.textContent = t("formError");
     openMailDraft(form);
@@ -3041,6 +3103,11 @@ const focusB2BForm = () => {
   document.querySelector("#b2bForm")?.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
+const setB2BRegistrationPanelVisible = (isVisible) => {
+  const panel = document.querySelector("#b2bRegistrationPanel");
+  if (panel) panel.hidden = !isVisible;
+};
+
 const copyB2BEmailToForm = () => {
   const { email } = getB2BAuthValues();
   const target = document.querySelector("#b2bForm [name='email']");
@@ -3113,13 +3180,15 @@ const b2bModal = document.querySelector("#b2bRegistrationModal");
 const logisticsModal = document.querySelector("#logisticsModal");
 const openB2BModal = () => {
   if (!b2bModal) return;
+  setB2BRegistrationPanelVisible(false);
   b2bModal.hidden = false;
   document.body.classList.add("is-modal-open");
-  setTimeout(() => document.querySelector("#b2bForm [name='company']")?.focus(), 0);
+  setTimeout(() => document.querySelector("#b2bAuthEmail")?.focus(), 0);
 };
 
 const closeB2BModal = () => {
   if (!b2bModal) return;
+  setB2BRegistrationPanelVisible(false);
   b2bModal.hidden = true;
   document.body.classList.remove("is-modal-open");
 };
@@ -3191,6 +3260,19 @@ document.querySelector("#openLogisticsCenter")?.addEventListener("click", (event
   event.preventDefault();
   openLogisticsModal();
 });
+document.querySelector("#openCustomsCenter")?.addEventListener("click", (event) => {
+  event.preventDefault();
+  openCustomsModal();
+});
+document.querySelectorAll("[data-customs-open]").forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    openCustomsModal();
+  });
+});
+document.addEventListener("click", (event) => {
+  if (event.target.closest("[data-close-customs]")) closeCustomsModal();
+});
 document.querySelectorAll("[data-close-logistics]").forEach((button) => {
   button.addEventListener("click", closeLogisticsModal);
 });
@@ -3213,6 +3295,7 @@ document.querySelectorAll("[data-close-b2b]").forEach((button) => {
 });
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && b2bModal && !b2bModal.hidden) closeB2BModal();
+  if (event.key === "Escape" && customsModal && !customsModal.hidden) closeCustomsModal();
   if (event.key === "Escape" && logisticsModal && !logisticsModal.hidden) closeLogisticsModal();
   if (event.key === "Escape" && catalogProformaModal && !catalogProformaModal.hidden) closeCatalogProformaModal();
   if (event.key === "Escape" && !document.querySelector("#proforma")?.hidden) closeMainProformaPanel();
@@ -3222,8 +3305,10 @@ document.querySelector("#b2bSignIn")?.addEventListener("click", () => {
   signInB2BCustomer();
 });
 
-document.querySelector("#b2bSignOut")?.addEventListener("click", () => {
-  signOutB2BCustomer();
+document.querySelector("#openB2BRegisterForm")?.addEventListener("click", () => {
+  setB2BRegistrationPanelVisible(true);
+  copyB2BEmailToForm();
+  setTimeout(() => document.querySelector("#b2bForm [name='company']")?.focus(), 250);
 });
 
 document.querySelector("#b2bDocuments")?.addEventListener("change", updateB2BFileSummary);
@@ -3232,25 +3317,37 @@ document.querySelectorAll("#customsPlanner select").forEach((select) => {
 });
 document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const form = new FormData(event.currentTarget);
+  const form = event.currentTarget;
+  const formData = new FormData(form);
   const status = document.querySelector("#b2bStatus");
+  const submitButton = form?.querySelector('button[type="submit"]');
   const authEmailInput = document.querySelector("#b2bAuthEmail");
-  const formEmail = String(form.get("email") || "").trim();
+  const formEmail = String(formData.get("email") || "").trim();
   if (authEmailInput && !authEmailInput.value.trim()) authEmailInput.value = formEmail;
   if (!getB2BAuthValues().password) {
     if (status) status.textContent = t("b2bAuthLoginRequired");
     return;
   }
   try {
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = t("b2bSaving");
+    }
     if (status) status.textContent = t("b2bServerSubmit");
-    const result = await submitB2BRegistration(event.currentTarget);
+    const result = await submitB2BRegistration(form);
     if (!result.ok) throw new Error(t("b2bServerMissing"));
     if (status) status.textContent = t("b2bRegisteredOpenProforma");
-    event.currentTarget.reset();
+    form?.reset();
     updateB2BFileSummary();
     setB2BOrderButtonVisible(false);
+    setB2BRegistrationPanelVisible(false);
   } catch (error) {
     if (status) status.textContent = error.message || t("formError");
+  } finally {
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = t("b2bSubmit");
+    }
   }
 });
 

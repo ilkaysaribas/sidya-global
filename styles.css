@@ -203,6 +203,13 @@ textarea {
   align-content: start;
 }
 
+.customs-nav-item .customs-menu {
+  left: auto;
+  right: 0;
+  grid-template-columns: minmax(260px, 1fr);
+  min-width: min(340px, calc(100vw - 32px));
+}
+
 .products-menu-column > .category-shortcut {
   padding: 8px 9px;
   border-radius: 8px;
@@ -264,6 +271,11 @@ textarea {
   border: 0;
   cursor: pointer;
   font-weight: 800;
+}
+
+.form-submit:disabled {
+  opacity: 0.62;
+  cursor: wait;
 }
 
 .lang-switch {
@@ -2632,6 +2644,33 @@ h2 {
   align-items: start;
 }
 
+.b2b-modal-grid[hidden] {
+  display: none;
+}
+
+.customs-dialog {
+  width: min(1240px, 100%);
+  max-height: min(92vh, 940px);
+  padding: 12px;
+}
+
+.customs-modal-section {
+  margin: 0;
+  padding: 20px;
+  border: 0;
+  background: #f5f5f5;
+}
+
+.customs-modal-section .section-heading {
+  padding-right: 42px;
+}
+
+.direct-whatsapp-link img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
 .b2b-modal-side {
   display: grid;
   gap: 10px;
@@ -2742,6 +2781,7 @@ h2 {
 .customs-core-card,
 .gtip-panel {
   display: grid;
+  align-content: start;
   gap: 12px;
   padding: 16px;
   border: 1px solid var(--line);
