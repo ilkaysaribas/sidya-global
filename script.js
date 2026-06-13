@@ -87,6 +87,12 @@ const content = {
     proformaOpenProducts: "Create Proforma Order",
     proformaSearchLabel: "Search product",
     proformaNoSearchResults: "No catalog product matches this search.",
+    proformaTransportTitle: "Select loading type",
+    proformaTransportTruck: "TIR",
+    proformaTransportContainer: "Container",
+    proformaContainerRouteTitle: "Container delivery route",
+    proformaContainerRoad: "By TIR / road",
+    proformaContainerSea: "By ship / sea",
     proformaAddLine: "Add",
     proformaCartonQty: "Carton qty",
     proformaUnitsPerCarton: "Units / carton",
@@ -99,7 +105,11 @@ const content = {
     proformaTotalWeight: "Estimated gross weight",
     proformaExcelCta: "Download Excel",
     proformaMailCta: "Send by Mail",
-    proformaWhatsappCta: "Send by message",
+    proformaWhatsappCta: "Send by WhatsApp",
+    proformaTelegramCta: "Send by Telegram",
+    proformaShareReady: "Choose the target application from the share panel. The Excel file is attached.",
+    proformaShareFallback: "The Excel file was downloaded. Your selected application is opening; attach the downloaded file if your browser cannot share files.",
+    proformaShareCancelled: "Sharing was cancelled.",
     proformaQuoteEmpty: "Please add at least one product to the proforma list.",
     proformaBackToCategory: "Back to category products",
     catalogProformaKicker: "Category proforma",
@@ -184,6 +194,12 @@ const content = {
     customerOrderCartons: "cartons",
     customerOrderPallets: "pallets",
     customerOrderDownloaded: "Excel downloaded",
+    customerOrderWeight: "gross weight",
+    customerOrderDetails: "View order details",
+    customerOrderRepeat: "Repeat order",
+    customerOrderRepeatUnavailable: "This older order does not contain enough line data to repeat.",
+    customerOrderDateTotal: "Proforma total",
+    customerSignOut: "Sign out",
     b2bChecklistTitle: "Core export document checklist",
     b2bDocBuyer: "Buyer company registry, tax certificate and authorized signatory",
     b2bDocProduct: "Product list, HS code, quantity, pallet and weight confirmation",
@@ -416,6 +432,12 @@ const content = {
     proformaOpenProducts: "Proforma Sipariş Oluştur",
     proformaSearchLabel: "Ürün ara",
     proformaNoSearchResults: "Bu aramayla eşleşen katalog ürünü bulunamadı.",
+    proformaTransportTitle: "Yükleme şeklini seçin",
+    proformaTransportTruck: "TIR",
+    proformaTransportContainer: "Konteyner",
+    proformaContainerRouteTitle: "Konteyner teslimat rotası",
+    proformaContainerRoad: "TIR / karayolu ile",
+    proformaContainerSea: "Gemi / denizyolu ile",
     proformaAddLine: "Ekle",
     proformaCartonQty: "Koli adedi",
     proformaUnitsPerCarton: "Koli içi",
@@ -428,7 +450,11 @@ const content = {
     proformaTotalWeight: "Tahmini brüt ağırlık",
     proformaExcelCta: "Excel indir",
     proformaMailCta: "Mail ile gönder",
-    proformaWhatsappCta: "Mesaj ile gönder",
+    proformaWhatsappCta: "WhatsApp ile gönder",
+    proformaTelegramCta: "Telegram ile gönder",
+    proformaShareReady: "Paylaşım ekranından hedef uygulamayı seçin. Excel dosyası eklendi.",
+    proformaShareFallback: "Excel dosyası indirildi. Seçtiğiniz uygulama açılıyor; tarayıcınız dosya paylaşamıyorsa indirilen dosyayı ekleyin.",
+    proformaShareCancelled: "Paylaşım iptal edildi.",
     proformaQuoteEmpty: "Lütfen proforma listesine en az bir ürün ekleyin.",
     proformaBackToCategory: "Kategori ürünlerine geri dön",
     catalogProformaKicker: "Kategori proforması",
@@ -513,6 +539,12 @@ const content = {
     customerOrderCartons: "koli",
     customerOrderPallets: "palet",
     customerOrderDownloaded: "Excel indirildi",
+    customerOrderWeight: "brüt ağırlık",
+    customerOrderDetails: "Sipariş detayını gör",
+    customerOrderRepeat: "Siparişi tekrarla",
+    customerOrderRepeatUnavailable: "Bu eski siparişte tekrar için yeterli satır bilgisi bulunmuyor.",
+    customerOrderDateTotal: "Proforma toplamı",
+    customerSignOut: "Çıkış yap",
     b2bChecklistTitle: "Temel ihracat evrak kontrol listesi",
     b2bDocBuyer: "Alıcı firma sicil kaydı, vergi belgesi ve imza/yetki belgesi",
     b2bDocProduct: "Ürün listesi, GTIP/HS kodu, miktar, palet ve ağırlık teyidi",
@@ -1027,6 +1059,66 @@ Object.assign(content.ru, {
   visionCopy: "Сделать товары из Турции сильными и предпочтительными брендами на региональных и мировых рынках.",
 });
 
+Object.assign(content.az, {
+  proformaTransportTitle: "Yükləmə növünü seçin",
+  proformaTransportTruck: "TIR",
+  proformaTransportContainer: "Konteyner",
+  proformaContainerRouteTitle: "Konteyner çatdırılma marşrutu",
+  proformaContainerRoad: "TIR / avtomobil yolu ilə",
+  proformaContainerSea: "Gəmi / dəniz yolu ilə",
+  proformaWhatsappCta: "WhatsApp ilə göndər",
+  proformaTelegramCta: "Telegram ilə göndər",
+  proformaShareReady: "Paylaşım ekranından tətbiqi seçin. Excel faylı əlavə edilib.",
+  proformaShareFallback: "Excel faylı endirildi. Seçilmiş tətbiq açılır; lazım olarsa endirilən faylı əlavə edin.",
+  proformaShareCancelled: "Paylaşım ləğv edildi.",
+  customerOrderWeight: "brüt çəki",
+  customerOrderDetails: "Sifariş detallarına bax",
+  customerOrderRepeat: "Sifarişi təkrarla",
+  customerOrderRepeatUnavailable: "Bu köhnə sifarişi təkrarlamaq üçün kifayət qədər sətir məlumatı yoxdur.",
+  customerOrderDateTotal: "Proforma cəmi",
+  customerSignOut: "Çıxış",
+});
+
+Object.assign(content.ka, {
+  proformaTransportTitle: "აირჩიეთ დატვირთვის ტიპი",
+  proformaTransportTruck: "TIR",
+  proformaTransportContainer: "კონტეინერი",
+  proformaContainerRouteTitle: "კონტეინერის მიწოდების მარშრუტი",
+  proformaContainerRoad: "TIR / სახმელეთო გზით",
+  proformaContainerSea: "გემით / ზღვით",
+  proformaWhatsappCta: "WhatsApp-ით გაგზავნა",
+  proformaTelegramCta: "Telegram-ით გაგზავნა",
+  proformaShareReady: "გაზიარების ფანჯრიდან აირჩიეთ აპლიკაცია. Excel ფაილი მიმაგრებულია.",
+  proformaShareFallback: "Excel ფაილი ჩამოიტვირთა. არჩეული აპლიკაცია იხსნება; საჭიროების შემთხვევაში მიამაგრეთ ფაილი.",
+  proformaShareCancelled: "გაზიარება გაუქმდა.",
+  customerOrderWeight: "ბრუტო წონა",
+  customerOrderDetails: "შეკვეთის დეტალების ნახვა",
+  customerOrderRepeat: "შეკვეთის გამეორება",
+  customerOrderRepeatUnavailable: "ამ ძველ შეკვეთაში გამეორებისთვის საკმარისი მონაცემი არ არის.",
+  customerOrderDateTotal: "პროფორმის ჯამი",
+  customerSignOut: "გასვლა",
+});
+
+Object.assign(content.ru, {
+  proformaTransportTitle: "Выберите тип загрузки",
+  proformaTransportTruck: "Фура",
+  proformaTransportContainer: "Контейнер",
+  proformaContainerRouteTitle: "Маршрут доставки контейнера",
+  proformaContainerRoad: "Фурой / автодорогой",
+  proformaContainerSea: "Судном / морем",
+  proformaWhatsappCta: "Отправить через WhatsApp",
+  proformaTelegramCta: "Отправить через Telegram",
+  proformaShareReady: "Выберите приложение в окне отправки. Файл Excel прикреплен.",
+  proformaShareFallback: "Файл Excel загружен. Открывается выбранное приложение; при необходимости прикрепите загруженный файл.",
+  proformaShareCancelled: "Отправка отменена.",
+  customerOrderWeight: "вес брутто",
+  customerOrderDetails: "Показать детали заказа",
+  customerOrderRepeat: "Повторить заказ",
+  customerOrderRepeatUnavailable: "В этом старом заказе недостаточно данных для повторения.",
+  customerOrderDateTotal: "Итого проформы",
+  customerSignOut: "Выйти",
+});
+
 const products = {
   en: [
     { id: "home-products", icon: "HM", title: "Home and Lifestyle", copy: "Ceramics, kitchenware, decorative products and curated home goods.", meta: ["Mixed Carton", "Catalog", "Samples"] },
@@ -1105,10 +1197,10 @@ const productPartners = {
   "food-products": [
     { name: "Öncü Salça", site: "https://www.oncusalca.com.tr/", logo: "assets/oncu-salca-logo.svg" },
     { name: "Heinz", site: "https://www.heinz.com/tr-TR/products", catalog: "assets/heinz-urun-listesi.pdf", logo: "assets/heinz-logo.svg" },
-    { name: "Lokman", site: "#food-products", catalog: "assets/lokman-katalog-2025.pdf", logo: "assets/category-food.svg" },
-    { name: "Yudum", site: "#food-products", catalog: "assets/yudum-perakende-urun-katalog-2024.pdf", logo: "assets/category-food.svg" },
-    { name: "Fide", site: "#food-products", catalog: "assets/fide-katalog.pdf", logo: "assets/category-food.svg" },
-    { name: "Melwiss Chocolate", site: "#food-products", catalog: "assets/melwiss-chocolate-katalog.pdf", logo: "assets/category-food.svg" },
+    { name: "Lokman", site: "https://www.lokmankahvalti.com/?lang=en", catalog: "assets/lokman-katalog-2025.pdf", logo: "assets/category-food.svg" },
+    { name: "Yudum", site: "https://yudumtoptan.com/?srsltid=AfmBOopx8QdW48_PkY5jc-LMnMEkkJz82cShivaHnkuP9v9oFQta4xK9", catalog: "assets/yudum-perakende-urun-katalog-2024.pdf", logo: "assets/category-food.svg" },
+    { name: "Fide", site: "https://fide.com.tr/", catalog: "assets/fide-katalog.pdf", logo: "assets/category-food.svg" },
+    { name: "Melwiss Chocolate", site: "https://cocowiss.com/", catalog: "assets/melwiss-chocolate-katalog.pdf", logo: "assets/category-food.svg" },
   ],
   "industrial-products": [
     { name: "Demet Temizlik", site: "https://demettemizlik.com/", logo: "assets/demet-temizlik-logo.svg" },
@@ -1762,20 +1854,10 @@ let currentLang = "en";
 let deferredInstallPrompt = null;
 const truckCapacity = { weight: 24000 };
 const containerCapacity = { weight: 26500 };
+let selectedProformaTransport = "truck";
+let selectedContainerRoute = "road";
 
 const t = (key) => content[currentLang][key] || content.en[key] || key;
-const deliveryTermCodes = ["EXW", "FOB", "CIF", "DAP"];
-const renderDeliveryTerms = () => `
-  <div class="delivery-terms">
-    <span>${t("deliveryTermsLabel")}</span>
-    <div class="delivery-term-list">
-      ${deliveryTermCodes
-        .map(
-          (code) => `<span class="delivery-term" tabindex="0">${code}<span class="delivery-term-tooltip">${t(`deliveryTerm${code}`)}</span></span>`,
-        )
-        .join("")}
-    </div>
-  </div>`;
 
 const customsText = {
   en: {
@@ -2011,7 +2093,6 @@ const renderProducts = () => {
         : "";
       const tradeMarkup = trade
         ? `<div class="trade-details">
-            ${renderDeliveryTerms()}
             <a class="product-quote-button" href="#catalog-proforma" data-category-id="${product.id}" data-product-option="${trade.optionValue}" data-product-title="${product.title}">${t("tradeQuoteCta")}</a>
           </div>`
         : "";
@@ -2213,6 +2294,12 @@ const getSupplierResults = (query) => {
 const renderSupplierSearchResults = (query = "") => {
   const resultsContainer = document.querySelector("#supplierSearchResults");
   if (!resultsContainer) return;
+  if (!normalizeSupplierSearch(query)) {
+    resultsContainer.innerHTML = "";
+    resultsContainer.hidden = true;
+    return;
+  }
+  resultsContainer.hidden = false;
   const results = getSupplierResults(query);
   if (!results.length) {
     resultsContainer.innerHTML = `<article class="supplier-result-card"><h3>${t("supplierNoResultsTitle")}</h3><p>${t("supplierNoResultsCopy")}</p><div class="supplier-result-actions"><a href="#contact">${t("supplierContactForm")}</a></div></article>`;
@@ -2622,8 +2709,22 @@ const updateLoadMeter = (prefix, capacity, entries, totalWeight) => {
 };
 
 const renderLoadMeters = (entries, totalWeight) => {
-  updateLoadMeter("truck", truckCapacity, entries, totalWeight);
-  updateLoadMeter("container", containerCapacity, entries, totalWeight);
+  const truckCard = document.querySelector("#truckTransportCard");
+  const containerCard = document.querySelector("#containerTransportCard");
+  const transportGrid = document.querySelector(".transport-grid");
+  const containerRoute = document.querySelector("#proformaContainerRoute");
+  const isContainer = selectedProformaTransport === "container";
+
+  if (truckCard) truckCard.hidden = isContainer;
+  if (containerCard) containerCard.hidden = !isContainer;
+  if (containerRoute) containerRoute.hidden = !isContainer;
+  transportGrid?.classList.toggle("is-single", true);
+
+  if (isContainer) {
+    updateLoadMeter("container", containerCapacity, entries, totalWeight);
+  } else {
+    updateLoadMeter("truck", truckCapacity, entries, totalWeight);
+  }
 };
 
 const renderProformaOrder = () => {
@@ -2682,6 +2783,7 @@ const buildProformaRows = () =>
     const kgPerCarton = getKgPerCarton(product);
     return {
       no: index + 1,
+      productId: product.id,
       brand: product.brand,
       product: getProductName(product),
       volume: product.liter,
@@ -2693,27 +2795,20 @@ const buildProformaRows = () =>
       pallets: cartonsPerPallet === null ? null : cartons / cartonsPerPallet,
       kgPerCarton,
       totalWeight: kgPerCarton === null ? null : cartons * kgPerCarton,
+      transport: selectedProformaTransport,
+      containerRoute: selectedProformaTransport === "container" ? selectedContainerRoute : "",
     };
   });
 
-const downloadProformaExcel = () => {
-  const rows = buildProformaRows();
-  if (!rows.length) {
-    alert(t("proformaQuoteEmpty"));
-    return false;
-  }
-
-  if (!window.XLSX?.utils) {
-    alert("Excel library could not be loaded. Please refresh the page and try again.");
-    return false;
-  }
-
+const createProformaWorkbook = (rows) => {
   const headers = [
     "Barcode",
     "Product Name",
     "Category",
     "Unit / Gramaj",
     "Brand",
+    "Loading Type",
+    "Container Route",
     "Cartons",
     "Units / Carton",
     "Cartons / Pallet",
@@ -2729,6 +2824,8 @@ const downloadProformaExcel = () => {
       row.sourceCategory,
       row.volume,
       row.brand,
+      row.transport === "container" ? "Container" : "TIR",
+      row.containerRoute === "sea" ? "Ship / Sea" : row.containerRoute === "road" ? "TIR / Road" : "",
       row.cartons,
       row.unitsPerCarton ?? null,
       row.cartonsPerPallet ?? null,
@@ -2744,6 +2841,8 @@ const downloadProformaExcel = () => {
     { wch: 24 },
     { wch: 18 },
     { wch: 20 },
+    { wch: 16 },
+    { wch: 18 },
     { wch: 11 },
     { wch: 15 },
     { wch: 17 },
@@ -2751,7 +2850,7 @@ const downloadProformaExcel = () => {
     { wch: 14 },
     { wch: 14 },
   ];
-  worksheet["!autofilter"] = { ref: `A1:K${rows.length + 1}` };
+  worksheet["!autofilter"] = { ref: `A1:M${rows.length + 1}` };
 
   for (let rowIndex = 2; rowIndex <= rows.length + 1; rowIndex += 1) {
     const barcodeCell = worksheet[`A${rowIndex}`];
@@ -2759,11 +2858,11 @@ const downloadProformaExcel = () => {
       barcodeCell.t = "s";
       barcodeCell.z = "@";
     }
-    ["F", "G", "H"].forEach((column) => {
+    ["H", "I", "J"].forEach((column) => {
       const cell = worksheet[`${column}${rowIndex}`];
       if (cell && typeof cell.v === "number") cell.z = "0";
     });
-    ["I", "J", "K"].forEach((column) => {
+    ["K", "L", "M"].forEach((column) => {
       const cell = worksheet[`${column}${rowIndex}`];
       if (cell && typeof cell.v === "number") cell.z = "0.00";
     });
@@ -2771,7 +2870,48 @@ const downloadProformaExcel = () => {
 
   const workbook = window.XLSX.utils.book_new();
   window.XLSX.utils.book_append_sheet(workbook, worksheet, "Proforma Order");
-  window.XLSX.writeFile(workbook, `sidya-global-proforma-${new Date().toISOString().slice(0, 10)}.xlsx`);
+  return workbook;
+};
+
+const getProformaFileName = () => `sidya-global-proforma-${new Date().toISOString().slice(0, 10)}.xlsx`;
+
+const createProformaExcelFile = (rows) => {
+  const workbook = createProformaWorkbook(rows);
+  const bytes = window.XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+  return new File([bytes], getProformaFileName(), {
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+};
+
+const prepareProformaExcel = () => {
+  const rows = buildProformaRows();
+  if (!rows.length) {
+    alert(t("proformaQuoteEmpty"));
+    return null;
+  }
+  if (!window.XLSX?.utils) {
+    alert("Excel library could not be loaded. Please refresh the page and try again.");
+    return null;
+  }
+  return { rows, file: createProformaExcelFile(rows) };
+};
+
+const saveProformaFile = (file) => {
+  const url = URL.createObjectURL(file);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = file.name;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+};
+
+const downloadProformaExcel = () => {
+  const prepared = prepareProformaExcel();
+  if (!prepared) return false;
+  saveProformaFile(prepared.file);
+  const { rows } = prepared;
   void recordProformaOrderHistory(rows);
   return true;
 };
@@ -2783,15 +2923,69 @@ const buildProformaMessage = () => {
   const lines = rows.map((row) =>
     `${row.no}. ${row.brand} / ${row.product}: ${row.cartons} koli${row.pallets === null ? "" : `, ${row.pallets.toFixed(2)} PLT`}${row.totalWeight === null ? "" : `, ${formatWeight(row.totalWeight)}`}`,
   );
-  return [`Sidya Global proforma request`, "", ...lines, "", `Total cartons: ${totalCartons}`, `Total weight: ${formatWeight(totalWeight)}`].join("\n");
+  const transport =
+    selectedProformaTransport === "container"
+      ? `Container / ${selectedContainerRoute === "sea" ? "Ship / Sea" : "TIR / Road"}`
+      : "TIR";
+  return [
+    `Sidya Global proforma request`,
+    `Loading: ${transport}`,
+    "",
+    ...lines,
+    "",
+    `Total cartons: ${totalCartons}`,
+    `Total weight: ${formatWeight(totalWeight)}`,
+  ].join("\n");
 };
 
-const sendProformaMail = () => {
-  if (!downloadProformaExcel()) return;
-  const subject = encodeURIComponent("Sidya Global proforma request");
-  const body = encodeURIComponent(`${buildProformaMessage()}\n\nThe Excel file has been downloaded. Please attach it to this email if needed.`);
-  window.location.href = `mailto:${businessEmail}?subject=${subject}&body=${body}`;
+const setProformaShareStatus = (message) => {
+  const status = document.querySelector("#proformaShareStatus");
+  if (status) status.textContent = message;
 };
+
+const openProformaShareFallback = (channel, message) => {
+  if (channel === "email") {
+    window.location.href = `mailto:${businessEmail}?subject=${encodeURIComponent("Sidya Global proforma request")}&body=${encodeURIComponent(message)}`;
+    return;
+  }
+  if (channel === "whatsapp") {
+    window.open(`https://wa.me/${businessWhatsAppNumber}?text=${encodeURIComponent(message)}`, "_blank", "noopener");
+    return;
+  }
+  window.open(`https://t.me/share/url?url=${encodeURIComponent("https://sidyaglobal.com/")}&text=${encodeURIComponent(message)}`, "_blank", "noopener");
+};
+
+const shareProforma = async (channel) => {
+  const prepared = prepareProformaExcel();
+  if (!prepared) return;
+  const message = buildProformaMessage();
+  const shareData = {
+    title: "Sidya Global proforma request",
+    text: message,
+    files: [prepared.file],
+  };
+
+  try {
+    if (navigator.share && (!navigator.canShare || navigator.canShare({ files: shareData.files }))) {
+      await navigator.share(shareData);
+      setProformaShareStatus(t("proformaShareReady"));
+      void recordProformaOrderHistory(prepared.rows);
+      return;
+    }
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      setProformaShareStatus(t("proformaShareCancelled"));
+      return;
+    }
+  }
+
+  saveProformaFile(prepared.file);
+  void recordProformaOrderHistory(prepared.rows);
+  setProformaShareStatus(t("proformaShareFallback"));
+  openProformaShareFallback(channel, `${message}\n\nExcel file: ${prepared.file.name}`);
+};
+
+const sendProformaMail = () => shareProforma("email");
 
 let customsModal = null;
 
@@ -3216,29 +3410,63 @@ const renderCustomerOrderHistory = (session = activeB2BSession) => {
   if (email) email.textContent = session?.user?.email || "";
   count.textContent = String(history.length);
   empty.hidden = history.length > 0;
-  list.innerHTML = history
-    .map((order) => {
-      const createdAt = order.createdAt
-        ? new Intl.DateTimeFormat(currentLang === "tr" ? "tr-TR" : "en-GB", {
-            dateStyle: "medium",
-            timeStyle: "short",
-          }).format(new Date(order.createdAt))
-        : "";
-      const products = Array.isArray(order.products) ? order.products.join(", ") : "";
-      return `<article class="customer-order-card">
-        <div>
-          <strong>${escapeDashboardText(order.id)}</strong>
-          <small>${escapeDashboardText(createdAt)} · ${t("customerOrderDownloaded")}</small>
-        </div>
-        <div>
-          <strong>${escapeDashboardText(order.itemCount)} ${t("customerOrderItems")}</strong>
-          <span>${escapeDashboardText(products)}</span>
-        </div>
-        <div class="customer-order-totals">
-          <strong>${escapeDashboardText(order.totalCartons)} ${t("customerOrderCartons")}</strong>
-          <span>${escapeDashboardText(Number(order.totalPallets || 0).toFixed(2))} ${t("customerOrderPallets")}</span>
-        </div>
-      </article>`;
+  const locale = currentLang === "tr" ? "tr-TR" : currentLang === "az" ? "az-AZ" : currentLang === "ru" ? "ru-RU" : "en-GB";
+  const dateGroups = new Map();
+  history.forEach((order) => {
+    const date = order.createdAt ? new Date(order.createdAt) : new Date();
+    const dateKey = Number.isNaN(date.getTime()) ? "unknown" : date.toISOString().slice(0, 10);
+    if (!dateGroups.has(dateKey)) dateGroups.set(dateKey, []);
+    dateGroups.get(dateKey).push(order);
+  });
+
+  list.innerHTML = [...dateGroups.entries()]
+    .map(([dateKey, orders]) => {
+      const groupDate =
+        dateKey === "unknown"
+          ? ""
+          : new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(new Date(`${dateKey}T12:00:00`));
+      const cards = orders
+        .map((order) => {
+          const createdAt = order.createdAt
+            ? new Intl.DateTimeFormat(locale, { timeStyle: "short" }).format(new Date(order.createdAt))
+            : "";
+          const items = Array.isArray(order.items) ? order.items : [];
+          const legacyProducts = Array.isArray(order.products) ? order.products : [];
+          const details = items.length
+            ? items
+                .map(
+                  (item, index) => `<li>
+                    <span>${index + 1}. ${escapeDashboardText(item.brand ? `${item.brand} / ` : "")}${escapeDashboardText(item.product || item.name || "")}</span>
+                    <strong>${escapeDashboardText(item.cartons || 0)} ${t("customerOrderCartons")}</strong>
+                  </li>`,
+                )
+                .join("")
+            : legacyProducts.map((product, index) => `<li><span>${index + 1}. ${escapeDashboardText(product)}</span></li>`).join("");
+          const transportLabel =
+            order.transport === "container"
+              ? `${t("proformaTransportContainer")} · ${order.containerRoute === "sea" ? t("proformaContainerSea") : t("proformaContainerRoad")}`
+              : t("proformaTransportTruck");
+          return `<article class="customer-order-card">
+            <div class="customer-order-summary">
+              <div>
+                <strong>${escapeDashboardText(order.id)}</strong>
+                <small>${escapeDashboardText(createdAt)} · ${escapeDashboardText(transportLabel)}</small>
+              </div>
+              <div class="customer-order-totals">
+                <span>${t("customerOrderDateTotal")}</span>
+                <strong>${escapeDashboardText(order.totalCartons)} ${t("customerOrderCartons")} · ${escapeDashboardText(Number(order.totalPallets || 0).toFixed(2))} ${t("customerOrderPallets")}</strong>
+                <small>${escapeDashboardText(formatWeight(order.totalWeight || 0))} ${t("customerOrderWeight")}</small>
+              </div>
+            </div>
+            <details class="customer-order-details">
+              <summary>${t("customerOrderDetails")} (${escapeDashboardText(order.itemCount || items.length || legacyProducts.length)} ${t("customerOrderItems")})</summary>
+              <ol>${details}</ol>
+            </details>
+            <button class="customer-repeat-order" type="button" data-order-id="${escapeDashboardText(order.id)}" ${items.length ? "" : "disabled"}>${t("customerOrderRepeat")}</button>
+          </article>`;
+        })
+        .join("");
+      return `<section class="customer-order-date-group"><h4>${escapeDashboardText(groupDate)}</h4>${cards}</section>`;
     })
     .join("");
 };
@@ -3259,9 +3487,18 @@ const recordProformaOrderHistory = async (rows) => {
       totalCartons: rows.reduce((sum, row) => sum + row.cartons, 0),
       totalPallets: rows.reduce((sum, row) => sum + (row.pallets || 0), 0),
       totalWeight: rows.reduce((sum, row) => sum + (row.totalWeight || 0), 0),
+      transport: selectedProformaTransport,
+      containerRoute: selectedProformaTransport === "container" ? selectedContainerRoute : "",
       products: rows.slice(0, 8).map((row) => row.product),
+      items: rows.slice(0, 200).map((row) => ({
+        productId: row.productId,
+        barcode: row.barcode,
+        brand: row.brand,
+        product: row.product,
+        cartons: row.cartons,
+      })),
     };
-    const history = [order, ...getCustomerOrderHistory(session).filter((item) => item.id !== order.id)].slice(0, 30);
+    const history = [order, ...getCustomerOrderHistory(session).filter((item) => item.id !== order.id)].slice(0, 12);
     try {
       localStorage.setItem(customerHistoryStorageKey(session.user.id), JSON.stringify(history));
     } catch {
@@ -3404,6 +3641,43 @@ const signOutB2BCustomer = async () => {
   await refreshB2BSession();
 };
 
+const setProformaTransport = (transport, route = selectedContainerRoute) => {
+  selectedProformaTransport = transport === "container" ? "container" : "truck";
+  selectedContainerRoute = route === "sea" ? "sea" : "road";
+  document.querySelectorAll('input[name="proformaTransport"]').forEach((input) => {
+    input.checked = input.value === selectedProformaTransport;
+  });
+  document.querySelectorAll('input[name="proformaContainerRoute"]').forEach((input) => {
+    input.checked = input.value === selectedContainerRoute;
+  });
+  renderProformaOrder();
+};
+
+const repeatCustomerOrder = (orderId) => {
+  const order = getCustomerOrderHistory(activeB2BSession).find((item) => item.id === orderId);
+  if (!order?.items?.length) {
+    alert(t("customerOrderRepeatUnavailable"));
+    return;
+  }
+
+  proformaOrder.clear();
+  order.items.forEach((item) => {
+    const product =
+      productCatalog.find((entry) => entry.id === item.productId) ||
+      productCatalog.find((entry) => item.barcode && entry.barcode === item.barcode) ||
+      productCatalog.find(
+        (entry) =>
+          normalizeCatalogName(entry.brand) === normalizeCatalogName(item.brand) &&
+          normalizeCatalogName(getProductName(entry)) === normalizeCatalogName(item.product),
+      );
+    if (product) proformaOrder.set(product.id, Math.max(Number(item.cartons) || 1, 1));
+  });
+
+  setProformaTransport(order.transport, order.containerRoute);
+  closeCustomerDashboard();
+  openMainProformaPanel({ focusSummary: true });
+};
+
 const b2bModal = document.querySelector("#b2bRegistrationModal");
 const customerDashboardModal = document.querySelector("#customerDashboardModal");
 const logisticsModal = document.querySelector("#logisticsModal");
@@ -3533,6 +3807,16 @@ document.querySelectorAll("[data-logistics-tab]").forEach((button) => {
 });
 document.querySelector("#openGuestProforma")?.addEventListener("click", openMainProformaPanel);
 document.querySelector("#openCustomerProforma")?.addEventListener("click", openCustomerProformaPanel);
+document.querySelector("#customerDashboardSignOut")?.addEventListener("click", async () => {
+  await signOutB2BCustomer();
+  closeCustomerDashboard();
+  openB2BModal();
+});
+document.querySelector("#customerOrderHistory")?.addEventListener("click", (event) => {
+  const button = event.target.closest(".customer-repeat-order");
+  if (!button || button.disabled) return;
+  repeatCustomerOrder(button.dataset.orderId);
+});
 document.querySelectorAll('a[href="#proforma"]').forEach((link) => {
   link.addEventListener("click", (event) => {
     event.preventDefault();
@@ -3672,6 +3956,12 @@ document.querySelector("#openProformaProducts")?.addEventListener("click", () =>
   }
 });
 document.querySelector("#proformaSearch")?.addEventListener("input", renderProformaProducts);
+document.querySelectorAll('input[name="proformaTransport"]').forEach((input) => {
+  input.addEventListener("change", () => setProformaTransport(input.value));
+});
+document.querySelectorAll('input[name="proformaContainerRoute"]').forEach((input) => {
+  input.addEventListener("change", () => setProformaTransport("container", input.value));
+});
 document.querySelector("#proformaProductList")?.addEventListener("click", (event) => {
   const button = event.target.closest(".proforma-add-button");
   if (!button) return;
@@ -3690,6 +3980,8 @@ document.querySelector("#proformaOrderLines")?.addEventListener("click", (event)
 });
 document.querySelector("#downloadProformaExcel")?.addEventListener("click", downloadProformaExcel);
 document.querySelector("#mailProforma")?.addEventListener("click", sendProformaMail);
+document.querySelector("#whatsappProforma")?.addEventListener("click", () => shareProforma("whatsapp"));
+document.querySelector("#telegramProforma")?.addEventListener("click", () => shareProforma("telegram"));
 translatePage();
 setupTracking();
 refreshB2BSession();

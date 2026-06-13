@@ -31,7 +31,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260613-2" />
+    <link rel="stylesheet" href="styles.css?v=20260613-3" />
     <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
     <script type="application/ld+json">
       {
@@ -99,10 +99,10 @@
               <a class="category-shortcut" href="#food-products" data-i18n="productOptionFood">Food Products</a>
               <a class="firm-link" href="https://www.oncusalca.com.tr/">Öncü Salça</a>
               <a class="firm-link" href="https://www.heinz.com/tr-TR/products">Heinz</a>
-              <a class="firm-link" href="assets/lokman-katalog-2025.pdf">Lokman</a>
-              <a class="firm-link" href="assets/yudum-perakende-urun-katalog-2024.pdf">Yudum</a>
-              <a class="firm-link" href="assets/fide-katalog.pdf">Fide</a>
-              <a class="firm-link" href="assets/melwiss-chocolate-katalog.pdf">Melwiss Chocolate</a>
+              <a class="firm-link" href="https://www.lokmankahvalti.com/?lang=en">Lokman</a>
+              <a class="firm-link" href="https://yudumtoptan.com/?srsltid=AfmBOopx8QdW48_PkY5jc-LMnMEkkJz82cShivaHnkuP9v9oFQta4xK9">Yudum</a>
+              <a class="firm-link" href="https://fide.com.tr/">Fide</a>
+              <a class="firm-link" href="https://cocowiss.com/">Melwiss / Cocowiss</a>
             </div>
             <div class="products-menu-column">
               <a class="category-shortcut" href="#industrial-products" data-i18n="navIndustrial">Industrial</a>
@@ -280,7 +280,7 @@
             <button type="submit" aria-label="Find products from Türkiye">⌕</button>
           </div>
         </form>
-        <div class="supplier-results" id="supplierSearchResults" aria-live="polite"></div>
+        <div class="supplier-results" id="supplierSearchResults" aria-live="polite" hidden></div>
       </section>
 
       <section class="section products-section" id="products" aria-labelledby="products-title">
@@ -302,8 +302,34 @@
             <button class="proforma-back-button" type="button" id="proformaBackToCategory" hidden data-i18n="proformaBackToCategory">Back to category products</button>
           </div>
 
-        <div class="proforma-order-layout">
+          <div class="proforma-order-layout">
           <div class="proforma-picker">
+            <fieldset class="proforma-transport-selector">
+              <legend data-i18n="proformaTransportTitle">Select loading type</legend>
+              <div class="proforma-segmented-control">
+                <label>
+                  <input type="radio" name="proformaTransport" value="truck" checked />
+                  <span data-i18n="proformaTransportTruck">TIR</span>
+                </label>
+                <label>
+                  <input type="radio" name="proformaTransport" value="container" />
+                  <span data-i18n="proformaTransportContainer">Container</span>
+                </label>
+              </div>
+              <div class="proforma-container-route" id="proformaContainerRoute" hidden>
+                <strong data-i18n="proformaContainerRouteTitle">Container delivery route</strong>
+                <div class="proforma-segmented-control">
+                  <label>
+                    <input type="radio" name="proformaContainerRoute" value="road" checked />
+                    <span data-i18n="proformaContainerRoad">By TIR / road</span>
+                  </label>
+                  <label>
+                    <input type="radio" name="proformaContainerRoute" value="sea" />
+                    <span data-i18n="proformaContainerSea">By ship / sea</span>
+                  </label>
+                </div>
+              </div>
+            </fieldset>
             <button class="proforma-open-button" type="button" id="openProformaProducts" data-i18n="proformaOpenProducts">Create Proforma Order</button>
             <div class="proforma-product-panel" id="proformaProductPanel" hidden>
               <label class="proforma-search-label">
@@ -333,12 +359,15 @@
             <div class="proforma-actions">
               <button class="proforma-quote-link" type="button" id="downloadProformaExcel" data-i18n="proformaExcelCta">Download Excel</button>
               <button class="proforma-quote-link" type="button" id="mailProforma" data-i18n="proformaMailCta">Send by Mail</button>
+              <button class="proforma-quote-link" type="button" id="whatsappProforma" data-i18n="proformaWhatsappCta">Send by WhatsApp</button>
+              <button class="proforma-quote-link" type="button" id="telegramProforma" data-i18n="proformaTelegramCta">Send by Telegram</button>
+              <p class="proforma-share-status" id="proformaShareStatus" role="status"></p>
             </div>
           </aside>
         </div>
 
         <div class="transport-grid">
-          <article class="transport-card">
+          <article class="transport-card" id="truckTransportCard">
             <div class="transport-visual transport-visual-truck">
               <div class="transport-frame">
                 <img src="assets/transport-truck.svg" alt="Standard TIR visual" />
@@ -354,7 +383,7 @@
               <strong id="truckFillText">0% full</strong>
             </div>
           </article>
-          <article class="transport-card">
+          <article class="transport-card" id="containerTransportCard" hidden>
             <div class="transport-visual transport-visual-container">
               <div class="transport-frame">
                 <img src="assets/transport-container.svg" alt="40 HC container visual" />
@@ -651,7 +680,10 @@
               <h2 id="customer-dashboard-title" data-i18n="customerDashboardTitle">Your Sidya Global account</h2>
               <p data-i18n="customerDashboardCopy">Review your previous proforma orders or create a new order.</p>
             </div>
-            <span class="customer-dashboard-email" id="customerDashboardEmail"></span>
+            <div class="customer-dashboard-account">
+              <span class="customer-dashboard-email" id="customerDashboardEmail"></span>
+              <button type="button" id="customerDashboardSignOut" data-i18n="customerSignOut">Sign out</button>
+            </div>
           </div>
 
           <section class="customer-history-panel" aria-labelledby="customer-history-title">
@@ -901,6 +933,6 @@
     </script>
     <script src="assets/xlsx.full.min.js"></script>
     <script src="catalog-products.generated.js?v=20260611-1"></script>
-    <script src="script.js?v=20260613-4"></script>
+    <script src="script.js?v=20260613-5"></script>
   </body>
 </html>

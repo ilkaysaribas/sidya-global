@@ -172,7 +172,7 @@ textarea {
 
 .products-menu {
   position: absolute;
-  top: calc(100% + 10px);
+  top: 100%;
   left: 0;
   z-index: 40;
   display: grid;
@@ -204,8 +204,8 @@ textarea {
 }
 
 .customs-nav-item .customs-menu {
-  left: auto;
-  right: 0;
+  left: 0;
+  right: auto;
   grid-template-columns: minmax(260px, 1fr);
   min-width: min(340px, calc(100vw - 32px));
 }
@@ -650,6 +650,11 @@ textarea {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
   margin-top: 14px;
+}
+
+.supplier-results[hidden],
+.supplier-results:empty {
+  display: none;
 }
 
 .supplier-result-card {
@@ -1407,71 +1412,6 @@ h2 {
   border-top: 1px solid var(--line);
   position: relative;
   z-index: 8;
-}
-
-.delivery-terms {
-  display: grid;
-  gap: 7px;
-  padding: 9px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #f7f8f8;
-}
-
-.delivery-terms > span {
-  color: #515a60;
-  font-size: 0.7rem;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-.delivery-term-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.delivery-term {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  min-height: 26px;
-  padding: 0 9px;
-  border-radius: 999px;
-  color: #1f2327;
-  background: #e9ecec;
-  font-size: 0.72rem;
-  font-weight: 900;
-  outline: none;
-  cursor: help;
-}
-
-.delivery-term-tooltip {
-  position: absolute;
-  left: 0;
-  top: calc(100% + 7px);
-  z-index: 50;
-  width: min(290px, 78vw);
-  padding: 9px 10px;
-  border: 1px solid rgba(31, 35, 39, 0.14);
-  border-radius: 8px;
-  color: #1f2327;
-  background: #fff;
-  box-shadow: 0 14px 32px rgba(21, 29, 32, 0.18);
-  font-size: 0.74rem;
-  font-weight: 760;
-  line-height: 1.35;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-5px);
-  transition: opacity 150ms ease, transform 150ms ease;
-}
-
-.delivery-term:hover .delivery-term-tooltip,
-.delivery-term:focus .delivery-term-tooltip {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
 }
 
 .trade-details dl {
@@ -2289,6 +2229,84 @@ h2 {
   gap: 8px;
 }
 
+.proforma-share-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 750;
+  line-height: 1.4;
+}
+
+.proforma-transport-selector {
+  display: grid;
+  gap: 9px;
+  margin: 0 0 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.proforma-transport-selector legend,
+.proforma-container-route > strong {
+  color: #25292c;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.proforma-segmented-control {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.proforma-segmented-control label {
+  position: relative;
+  cursor: pointer;
+}
+
+.proforma-segmented-control input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.proforma-segmented-control span {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: #34393d;
+  background: #f4f5f5;
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.proforma-segmented-control input:checked + span {
+  border-color: #24282b;
+  color: #fff;
+  background: #24282b;
+}
+
+.proforma-segmented-control input:focus-visible + span {
+  outline: 2px solid #c7a04e;
+  outline-offset: 2px;
+}
+
+.proforma-container-route {
+  display: grid;
+  gap: 7px;
+  padding-top: 4px;
+}
+
+.proforma-container-route[hidden] {
+  display: none;
+}
+
 .proforma-quote-link {
   min-height: 42px;
   display: inline-flex;
@@ -2726,6 +2744,33 @@ h2 {
   font-weight: 900;
 }
 
+.customer-dashboard-account {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.customer-dashboard-account button,
+.customer-repeat-order {
+  min-height: 32px;
+  padding: 0 11px;
+  border: 1px solid #303538;
+  border-radius: 7px;
+  color: #fff;
+  background: #303538;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.customer-repeat-order:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .customer-history-panel {
   display: grid;
   gap: 12px;
@@ -2742,15 +2787,37 @@ h2 {
   overflow: auto;
 }
 
+.customer-order-date-group {
+  display: grid;
+  gap: 8px;
+}
+
+.customer-order-date-group > h4 {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 7px 9px;
+  border-radius: 6px;
+  color: #25292c;
+  background: #e5e7e7;
+  font-size: 0.78rem;
+}
+
 .customer-order-card {
   display: grid;
-  grid-template-columns: minmax(140px, 0.7fr) minmax(0, 1.3fr) auto;
-  gap: 12px;
-  align-items: center;
+  gap: 10px;
   padding: 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #f5f6f6;
+}
+
+.customer-order-summary {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.75fr) minmax(220px, 1.25fr);
+  gap: 14px;
+  align-items: center;
 }
 
 .customer-order-card strong,
@@ -2766,7 +2833,41 @@ h2 {
 
 .customer-order-totals {
   text-align: right;
-  white-space: nowrap;
+}
+
+.customer-order-details {
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+
+.customer-order-details summary {
+  cursor: pointer;
+  color: #25292c;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.customer-order-details ol {
+  display: grid;
+  gap: 5px;
+  margin: 9px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.customer-order-details li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 8px;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.customer-repeat-order {
+  justify-self: end;
 }
 
 .customer-history-empty {
@@ -3262,6 +3363,19 @@ h2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
   margin-top: 14px;
+}
+
+.transport-grid.is-single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.transport-grid.is-single .transport-card {
+  width: min(100%, 760px);
+  justify-self: center;
+}
+
+.transport-card[hidden] {
+  display: none;
 }
 
 .transport-card {
@@ -3998,12 +4112,20 @@ h2 {
     align-self: flex-start;
   }
 
-  .customer-order-card {
+  .customer-order-summary {
     grid-template-columns: 1fr;
   }
 
   .customer-order-totals {
     text-align: left;
+  }
+
+  .customer-dashboard-account {
+    justify-content: flex-start;
+  }
+
+  .customer-repeat-order {
+    justify-self: stretch;
   }
 
   .export-roadmap {
