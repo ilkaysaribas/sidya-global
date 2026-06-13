@@ -265,6 +265,53 @@
         <span data-i18n="trustFour">Multilingual catalog support</span>
       </section>
 
+      <section class="section products-section" id="products" aria-labelledby="products-title">
+        <div class="section-heading">
+          <p class="section-kicker" data-i18n="productsKicker">Catalog</p>
+          <h2 id="products-title" data-i18n="productsTitle">Featured product groups</h2>
+        </div>
+        <div class="product-grid" id="productGrid"></div>
+      </section>
+
+      <section class="section b2b-section" id="b2b" aria-labelledby="b2b-title">
+        <div class="section-heading">
+          <p class="section-kicker" data-i18n="b2bKicker">B2B export portal</p>
+          <h2 id="b2b-title" data-i18n="b2bTitle">Buyer registration, document intake and export compliance flow.</h2>
+          <p data-i18n="b2bCopy">Register buyers, collect required documents and follow the export path from proforma to customs clearance.</p>
+        </div>
+
+        <div class="b2b-entry-card">
+          <div>
+            <h3 data-i18n="guestProformaTitle">Create proforma without registration</h3>
+            <p data-i18n="guestProformaCopy">Open the proforma order screen directly, select products and calculate carton, pallet and kg totals.</p>
+          </div>
+          <button class="b2b-register-button" type="button" id="openGuestProforma" data-i18n="guestProformaCta">Create Proforma Order</button>
+        </div>
+
+        <div class="export-roadmap b2b-roadmap-compact" aria-label="Export compliance roadmap">
+          <article>
+            <span>01</span>
+            <h3 data-i18n="b2bStepOne">Buyer verification</h3>
+            <p data-i18n="b2bStepOneCopy">Company identity, tax registration, authorization and destination market are checked before a standing customer file is opened.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3 data-i18n="b2bStepTwo">Product and HS code review</h3>
+            <p data-i18n="b2bStepTwoCopy">Products are matched with HS codes, certificates, restrictions and country-specific import requirements.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3 data-i18n="b2bStepThree">Proforma and payment approval</h3>
+            <p data-i18n="b2bStepThreeCopy">Incoterm, currency, payment term, pallet plan, loading weight and delivery responsibility are confirmed.</p>
+          </article>
+          <article>
+            <span>04</span>
+            <h3 data-i18n="b2bStepFour">Customs and origin file</h3>
+            <p data-i18n="b2bStepFourCopy">Invoice, packing list, transport document, origin certificate and required conformity documents are prepared in sequence.</p>
+          </article>
+        </div>
+      </section>
+
       <section class="section supplier-search-section" id="turkiye-product-search" aria-labelledby="supplier-search-title">
         <div class="section-heading supplier-search-heading">
           <div>
@@ -281,14 +328,6 @@
           </div>
         </form>
         <div class="supplier-results" id="supplierSearchResults" aria-live="polite" hidden></div>
-      </section>
-
-      <section class="section products-section" id="products" aria-labelledby="products-title">
-        <div class="section-heading">
-          <p class="section-kicker" data-i18n="productsKicker">Catalog</p>
-          <h2 id="products-title" data-i18n="productsTitle">Featured product groups</h2>
-        </div>
-        <div class="product-grid" id="productGrid"></div>
       </section>
 
       <section class="section proforma-order-section proforma-screen-modal" id="proforma" aria-labelledby="proforma-order-title" hidden>
@@ -400,35 +439,6 @@
             </div>
           </article>
         </div>
-        </div>
-      </section>
-
-      <section class="section process-section" id="process" aria-labelledby="process-title">
-        <div class="section-heading">
-          <p class="section-kicker" data-i18n="processKicker">Export flow</p>
-          <h2 id="process-title" data-i18n="processTitle">A controlled path from inquiry to shipment</h2>
-        </div>
-        <div class="process-list">
-          <article>
-            <span>01</span>
-            <h3 data-i18n="stepOneTitle">Inquiry review</h3>
-            <p data-i18n="stepOneCopy">Product, quantity, market and delivery needs are clarified.</p>
-          </article>
-          <article>
-            <span>02</span>
-            <h3 data-i18n="stepTwoTitle">Proforma setup</h3>
-            <p data-i18n="stepTwoCopy">Pallet count and gross weight are calculated clearly.</p>
-          </article>
-          <article>
-            <span>03</span>
-            <h3 data-i18n="stepThreeTitle">Supply follow-up</h3>
-            <p data-i18n="stepThreeCopy">Supplier, stock, packaging and loading details are coordinated.</p>
-          </article>
-          <article>
-            <span>04</span>
-            <h3 data-i18n="stepFourTitle">Logistics delivery</h3>
-            <p data-i18n="stepFourCopy">Truck, container, documentation and shipment planning move together.</p>
-          </article>
         </div>
       </section>
 
@@ -544,45 +554,6 @@
           <article class="customs-output">
             <h3 data-i18n="customsRiskTitle">Risk notes</h3>
             <ul id="customsRiskList"></ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="section b2b-section" id="b2b" aria-labelledby="b2b-title">
-        <div class="section-heading">
-          <p class="section-kicker" data-i18n="b2bKicker">B2B export portal</p>
-          <h2 id="b2b-title" data-i18n="b2bTitle">Buyer registration, document intake and export compliance flow.</h2>
-          <p data-i18n="b2bCopy">Register buyers, collect required documents and follow the export path from proforma to customs clearance.</p>
-        </div>
-
-        <div class="b2b-entry-card">
-          <div>
-            <h3 data-i18n="guestProformaTitle">Create proforma without registration</h3>
-            <p data-i18n="guestProformaCopy">Open the proforma order screen directly, select products and calculate carton, pallet and kg totals.</p>
-          </div>
-          <button class="b2b-register-button" type="button" id="openGuestProforma" data-i18n="guestProformaCta">Create Proforma Order</button>
-        </div>
-
-        <div class="export-roadmap b2b-roadmap-compact" aria-label="Export compliance roadmap">
-          <article>
-            <span>01</span>
-            <h3 data-i18n="b2bStepOne">Buyer verification</h3>
-            <p data-i18n="b2bStepOneCopy">Company identity, tax registration, authorization and destination market are checked before a standing customer file is opened.</p>
-          </article>
-          <article>
-            <span>02</span>
-            <h3 data-i18n="b2bStepTwo">Product and HS code review</h3>
-            <p data-i18n="b2bStepTwoCopy">Products are matched with HS codes, certificates, restrictions and country-specific import requirements.</p>
-          </article>
-          <article>
-            <span>03</span>
-            <h3 data-i18n="b2bStepThree">Proforma and payment approval</h3>
-            <p data-i18n="b2bStepThreeCopy">Incoterm, currency, payment term, pallet plan, loading weight and delivery responsibility are confirmed.</p>
-          </article>
-          <article>
-            <span>04</span>
-            <h3 data-i18n="b2bStepFour">Customs and origin file</h3>
-            <p data-i18n="b2bStepFourCopy">Invoice, packing list, transport document, origin certificate and required conformity documents are prepared in sequence.</p>
           </article>
         </div>
       </section>
