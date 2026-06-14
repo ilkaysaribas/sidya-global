@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,nofollow" />
     <title>Ticari Otomasyon</title>
-    <link rel="stylesheet" href="admin.css?v=20260614-2" />
+    <link rel="stylesheet" href="admin.css?v=20260614-3" />
   </head>
   <body>
     <div class="login-shell" id="loginShell">
@@ -45,6 +45,10 @@
           <div class="topbar-user"><span id="currentUser"></span><button id="refreshButton">Yenile</button></div>
         </header>
         <p class="global-status" id="globalStatus"></p>
+        <div class="schema-warning" id="schemaWarning" hidden>
+          <strong>Veritabanı güncellemesi gerekiyor</strong>
+          <span>Supabase SQL Editor'da güncel <code>supabase/schema.sql</code> dosyasını çalıştırın. Ardından bu sayfada Yenile'ye basın.</span>
+        </div>
 
         <section class="view active" data-view-panel="dashboard">
           <div class="metric-grid">
@@ -230,6 +234,6 @@
     <script src="/api/backend-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="catalog-products.generated.js?v=20260614-1"></script>
-    <script src="admin.js?v=20260614-2"></script>
+    <script src="admin.js?v=20260614-3"></script>
   </body>
 </html>

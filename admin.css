@@ -33,6 +33,9 @@ input:focus, select:focus, textarea:focus { outline: 3px solid rgba(37,161,142,.
 .login-card button, .primary { color: #fff; border: 0; background: var(--blue); }
 .login-card button { width: 100%; padding: 12px; border-radius: 9px; margin-top: 22px; font-weight: 750; }
 .status, .global-status { min-height: 20px; color: var(--danger); font-size: 13px; }
+.schema-warning { display: flex; flex-wrap: wrap; gap: 7px 14px; align-items: center; margin-bottom: 18px; padding: 14px 16px; border: 1px solid #f2b8b5; border-radius: 11px; color: #8f1d15; background: #fff1f0; font-size: 13px; }
+.schema-warning strong { font-size: 14px; }
+.schema-warning code { padding: 2px 5px; border-radius: 4px; background: rgba(180,35,24,.08); }
 
 .app-shell { min-height: 100vh; display: grid; grid-template-columns: 230px 1fr; }
 .sidebar { position: sticky; top: 0; height: 100vh; padding: 24px 16px; display: flex; flex-direction: column; color: #fff; background: var(--navy); }

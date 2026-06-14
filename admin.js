@@ -20,6 +20,7 @@ const state = {
   invoiceLines: [],
   selectedProducts: new Set(),
   productSort: "name-asc",
+  schemaReady: true,
   session: null,
 };
 
@@ -45,6 +46,22 @@ const setStatus = (message = "", error = false) => {
   target.style.color = error ? "#b42318" : "#087462";
 };
 
+const isSchemaError = (error) => {
+  const message = String(error?.message || "");
+  return error?.code === "PGRST204" ||
+    error?.code === "PGRST205" ||
+    /schema cache|could not find the table|could not find the .* column/i.test(message);
+};
+
+const friendlyError = (error) => {
+  if (isSchemaError(error)) {
+    state.schemaReady = false;
+    document.querySelector("#schemaWarning").hidden = false;
+    return "Supabase veritabanı henüz güncellenmemiş. Güncel schema.sql dosyasını SQL Editor'da çalıştırın.";
+  }
+  return error?.message || "İşlem tamamlanamadı.";
+};
+
 const requireClient = () => {
   if (!client) throw new Error("Supabase bağlantı ayarları bulunamadı.");
   return client;
@@ -59,6 +76,7 @@ const query = async (promise) => {
 const optionalQuery = async (promise, fallback = []) => {
   const { data, error } = await promise;
   if (error) {
+    if (isSchemaError(error)) state.schemaReady = false;
     console.warn(error.message || "Optional module is not available yet.");
     return fallback;
   }
@@ -70,6 +88,7 @@ const findBalance = (items, id, currency) =>
 
 const loadData = async () => {
   setStatus("Veriler güncelleniyor...");
+  state.schemaReady = true;
   const db = requireClient();
   const [
     customers, balances, suppliers, supplierBalances, products, invoices,
@@ -92,6 +111,7 @@ const loadData = async () => {
     customers, balances, suppliers, supplierBalances, products, invoices,
     invoiceItems, ledger, orders, movements, vat, settings: settings || {},
   });
+  document.querySelector("#schemaWarning").hidden = state.schemaReady;
   renderAll();
   setStatus("");
 };
@@ -424,6 +444,7 @@ const inferVatRate = (item) => {
 };
 
 const importCatalog = async () => {
+  if (!state.schemaReady) throw new Error("SCHEMA_UPDATE_REQUIRED");
   const catalog = await loadFreshCatalog();
   if (!catalog.length) throw new Error("Site kataloğu bulunamadı.");
   const rows = catalog.map((item) => ({
@@ -606,7 +627,13 @@ const safely = (handler) => async (event) => {
     await handler(event);
   } catch (error) {
     console.error(error);
-    setStatus(error.message || "İşlem tamamlanamadı.", true);
+    if (error.message === "SCHEMA_UPDATE_REQUIRED") {
+      state.schemaReady = false;
+      document.querySelector("#schemaWarning").hidden = false;
+      setStatus("Önce Supabase veritabanı güncellemesini tamamlayın.", true);
+      return;
+    }
+    setStatus(friendlyError(error), true);
   }
 };
 
