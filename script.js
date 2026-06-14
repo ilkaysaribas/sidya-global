@@ -1195,6 +1195,7 @@ const productPartners = {
     ] },
   ],
   "food-products": [
+    { name: "Unilever", site: "https://www.unilever.com.tr/", logo: "assets/unilever-logo.svg" },
     { name: "Öncü Salça", site: "https://www.oncusalca.com.tr/", logo: "assets/oncu-salca-logo.svg" },
     { name: "Heinz", site: "https://www.heinz.com/tr-TR/products", catalog: "assets/heinz-urun-listesi.pdf", logo: "assets/heinz-logo.svg" },
     { name: "Lokman", site: "https://www.lokmankahvalti.com/?lang=en", catalog: "assets/lokman-katalog-2025.pdf", logo: "assets/category-food.svg" },
@@ -1217,6 +1218,7 @@ const productPartners = {
     { name: "Medcare", site: "#medical-products", catalog: "assets/medcare-katalog-2025.pdf", logo: "assets/medcare-logo.svg" },
   ],
   "cosmetics-products": [
+    { name: "Unilever", site: "https://www.unilever.com.tr/", logo: "assets/unilever-logo.svg" },
     { name: "Sebamed", site: "https://www.sebamed.com.tr/", catalog: "assets/sebamed-katalog-2024.pdf", logo: "assets/sebamed-logo.svg" },
   ],
 };
@@ -1748,6 +1750,7 @@ let returnCatalogProformaCategory = null;
 let returnCatalogProformaTitle = "";
 const brandLogoMap = {
   ABC: "assets/abc-logo.jpg",
+  Unilever: "assets/unilever-logo.svg",
   Evyap: "assets/evyap-logo.svg",
   "Johnson & Johnson": "assets/johnson-logo.svg",
   "Johnson's": "assets/johnson-logo.svg",
