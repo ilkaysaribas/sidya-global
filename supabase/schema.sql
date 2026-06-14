@@ -568,6 +568,10 @@ alter column user_id drop not null;
 alter table public.customers alter column currency set default 'USD';
 alter table public.products alter column currency set default 'USD';
 
+alter table public.customers
+add column if not exists is_buyer boolean not null default true,
+add column if not exists is_seller boolean not null default true;
+
 update public.products
 set currency = 'USD'
 where currency = 'EUR'
@@ -615,6 +619,23 @@ create trigger suppliers_assign_code
 before insert or update on public.suppliers
 for each row execute function public.assign_supplier_code();
 
+insert into public.customers (
+  code, company, contact_name, email, phone, tax_number, tax_office,
+  address, currency, status, notes, is_buyer, is_seller
+)
+select
+  supplier.code, supplier.company, supplier.contact_name, supplier.email,
+  supplier.phone, supplier.tax_number, supplier.tax_office, supplier.address,
+  supplier.currency, supplier.status, supplier.notes, false, true
+from public.suppliers supplier
+where not exists (
+  select 1
+  from public.customers customer
+  where coalesce(nullif(customer.tax_number, ''), customer.email, customer.company) =
+        coalesce(nullif(supplier.tax_number, ''), supplier.email, supplier.company)
+)
+on conflict (code) do nothing;
+
 create table if not exists public.site_orders (
   id uuid primary key default gen_random_uuid(),
   order_no text not null unique,
@@ -658,6 +679,16 @@ add column if not exists discount_1 numeric(6,2) not null default 0,
 add column if not exists discount_2 numeric(6,2) not null default 0,
 add column if not exists discount_3 numeric(6,2) not null default 0,
 add column if not exists discount_total numeric(14,2) not null default 0;
+
+update public.invoices invoice
+set customer_id = customer.id,
+    supplier_id = null
+from public.suppliers supplier
+join public.customers customer
+  on lower(coalesce(nullif(customer.tax_number, ''), customer.email, customer.company)) =
+     lower(coalesce(nullif(supplier.tax_number, ''), supplier.email, supplier.company))
+where invoice.supplier_id = supplier.id
+  and invoice.customer_id is null;
 
 create table if not exists public.supplier_ledger (
   id uuid primary key default gen_random_uuid(),
@@ -776,8 +807,8 @@ begin
   if normalized_type = 'sale' and p_customer_id is null then
     raise exception 'Satis faturasi icin cari secilmelidir';
   end if;
-  if normalized_type = 'purchase' and p_supplier_id is null then
-    raise exception 'Alis faturasi icin tedarikci secilmelidir';
+  if normalized_type = 'purchase' and p_customer_id is null then
+    raise exception 'Alis faturasi icin cari secilmelidir';
   end if;
   if jsonb_typeof(p_items) <> 'array' or jsonb_array_length(p_items) = 0 then
     raise exception 'Faturada en az bir urun bulunmalidir';
@@ -794,7 +825,7 @@ begin
     invoice_discount_rate, notes, draft_data, created_by
   )
   values (
-    new_invoice_no, normalized_type, p_customer_id, p_supplier_id, p_source_order_id,
+    new_invoice_no, normalized_type, p_customer_id, null, p_source_order_id,
     coalesce(p_invoice_date, current_date), p_due_date, normalized_currency,
     coalesce(nullif(p_exchange_rate, 0), 1), normalized_scenario,
     greatest(coalesce(p_invoice_discount_rate, 0), 0), p_notes,
@@ -920,12 +951,12 @@ begin
       new_invoice_id, new_invoice_no, auth.uid()
     );
   else
-    insert into public.supplier_ledger (
-      supplier_id, transaction_date, transaction_type, credit, currency,
+    insert into public.customer_ledger (
+      customer_id, transaction_date, transaction_type, credit, currency,
       reference_type, reference_id, description, created_by
     )
     values (
-      p_supplier_id, coalesce(p_invoice_date, current_date), 'invoice',
+      p_customer_id, coalesce(p_invoice_date, current_date), 'invoice',
       invoice_grand_total, normalized_currency, 'invoice',
       new_invoice_id, new_invoice_no, auth.uid()
     );

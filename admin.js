@@ -7,8 +7,6 @@ const client = config.supabaseUrl && publishableKey && window.supabase
 const state = {
   customers: [],
   balances: [],
-  suppliers: [],
-  supplierBalances: [],
   products: [],
   invoices: [],
   invoiceItems: [],
@@ -91,13 +89,11 @@ const loadData = async () => {
   state.schemaReady = true;
   const db = requireClient();
   const [
-    customers, balances, suppliers, supplierBalances, products, invoices,
+    customers, balances, products, invoices,
     invoiceItems, ledger, orders, movements, vat, settings,
   ] = await Promise.all([
     query(db.from("customers").select("*").order("created_at", { ascending: false })),
     query(db.from("customer_balances").select("*")),
-    optionalQuery(db.from("suppliers").select("*").order("company")),
-    optionalQuery(db.from("supplier_balances").select("*")),
     query(db.from("products").select("*").order("name")),
     query(db.from("invoices").select("*").order("invoice_date", { ascending: false }).limit(500)),
     query(db.from("invoice_items").select("product_id,quantity,line_total,invoice_id,products(name),invoices(invoice_type,currency,exchange_rate)").limit(10000)),
@@ -108,7 +104,7 @@ const loadData = async () => {
     optionalQuery(db.from("app_settings").select("*").eq("id", "main").maybeSingle(), {}),
   ]);
   Object.assign(state, {
-    customers, balances, suppliers, supplierBalances, products, invoices,
+    customers, balances, products, invoices,
     invoiceItems, ledger, orders, movements, vat, settings: settings || {},
   });
   document.querySelector("#schemaWarning").hidden = state.schemaReady;
@@ -157,23 +153,11 @@ const renderCustomers = () => {
       String(value || "").toLocaleLowerCase("tr").includes(term)));
   document.querySelector("#customerRows").innerHTML = rows.length ? rows.map((item) => `
     <tr><td>${escapeHtml(item.code)}</td><td><strong>${escapeHtml(item.company)}</strong></td>
+    <td>${item.is_buyer && item.is_seller ? "Alıcı + Satıcı" : item.is_seller ? "Satıcı" : "Alıcı"}</td>
     <td>${escapeHtml(item.contact_name || "-")}</td><td>${escapeHtml(item.country || "-")}</td>
     <td>${escapeHtml(item.email || "-")}</td><td>${money(findBalance(state.balances, item.id, item.currency), item.currency)}</td>
     <td><div class="row-actions"><button data-customer-payment="${item.id}">Tahsilat</button><button data-customer-edit="${item.id}">Düzenle</button></div></td></tr>
-  `).join("") : '<tr><td colspan="7" class="empty">Müşteri kaydı bulunamadı.</td></tr>';
-};
-
-const renderSuppliers = () => {
-  const term = document.querySelector("#supplierSearch").value.trim().toLocaleLowerCase("tr");
-  const rows = state.suppliers.filter((item) =>
-    [item.code, item.company, item.contact_name, item.tax_number].some((value) =>
-      String(value || "").toLocaleLowerCase("tr").includes(term)));
-  document.querySelector("#supplierRows").innerHTML = rows.length ? rows.map((item) => `
-    <tr><td>${escapeHtml(item.code)}</td><td><strong>${escapeHtml(item.company)}</strong></td>
-    <td>${escapeHtml(item.contact_name || "-")}</td><td>${escapeHtml(item.tax_number || "-")}</td>
-    <td>${escapeHtml(item.currency)}</td><td>${money(findBalance(state.supplierBalances, item.id, item.currency), item.currency)}</td>
-    <td><button data-supplier-edit="${item.id}">Düzenle</button></td></tr>
-  `).join("") : '<tr><td colspan="7" class="empty">Tedarikçi kaydı bulunamadı.</td></tr>';
+  `).join("") : '<tr><td colspan="8" class="empty">Cari kaydı bulunamadı.</td></tr>';
 };
 
 const getSortedProducts = () => {
@@ -226,9 +210,7 @@ const renderOrders = () => {
 
 const renderInvoices = () => {
   document.querySelector("#invoiceRows").innerHTML = state.invoices.length ? state.invoices.map((item) => {
-    const party = item.invoice_type === "purchase"
-      ? state.suppliers.find((supplier) => supplier.id === item.supplier_id)?.company
-      : state.customers.find((customer) => customer.id === item.customer_id)?.company;
+    const party = state.customers.find((customer) => customer.id === item.customer_id)?.company;
     return `<tr><td><strong>${escapeHtml(item.invoice_no)}</strong></td>
       <td><span class="badge">${item.invoice_type === "purchase" ? "Alış" : "Satış"}</span></td>
       <td>${date(item.invoice_date)}</td><td>${escapeHtml(party || "-")}</td>
@@ -321,9 +303,10 @@ const renderTemplate = () => {
 };
 
 const renderInvoiceOptions = () => {
-  document.querySelector("#invoiceCustomer").innerHTML = '<option value="">Müşteri seçin</option>' + state.customers.map((item) =>
-    `<option value="${item.id}">${escapeHtml(item.code)} · ${escapeHtml(item.company)}</option>`).join("");
-  document.querySelector("#invoiceSupplier").innerHTML = '<option value="">Tedarikçi seçin</option>' + state.suppliers.map((item) =>
+  const invoiceType = document.querySelector("#invoiceForm").elements.invoice_type.value || "sale";
+  const eligibleCustomers = state.customers.filter((item) =>
+    invoiceType === "purchase" ? item.is_seller !== false : item.is_buyer !== false);
+  document.querySelector("#invoiceCustomer").innerHTML = '<option value="">Cari seçin</option>' + eligibleCustomers.map((item) =>
     `<option value="${item.id}">${escapeHtml(item.code)} · ${escapeHtml(item.company)}</option>`).join("");
   const productOptions = '<option value="">Ürün seçin</option>' + state.products.filter((item) => item.active).map((item) =>
     `<option value="${item.id}">${escapeHtml(item.name)} · stok ${number(item.stock_quantity)}</option>`).join("");
@@ -366,7 +349,6 @@ const renderInvoiceLines = () => {
 
 const renderAll = () => {
   renderCustomers();
-  renderSuppliers();
   renderProducts();
   renderOrders();
   renderInvoices();
@@ -384,7 +366,9 @@ const openEditForm = (dialogId, formId, data = {}) => {
   form.reset();
   Object.entries(data).forEach(([key, value]) => {
     const field = form.elements.namedItem(key);
-    if (field) field.value = value ?? "";
+    if (!field) return;
+    if (field.type === "checkbox") field.checked = value !== false;
+    else field.value = value ?? "";
   });
   document.querySelector(`#${dialogId}`).showModal();
 };
@@ -398,6 +382,22 @@ const saveEntity = async (event, table, dialogId, numericFields = []) => {
   const request = id ? client.from(table).update(values).eq("id", id) : client.from(table).insert(values);
   await query(request);
   document.querySelector(`#${dialogId}`).close();
+  await loadData();
+};
+
+const saveCustomer = async (event) => {
+  event.preventDefault();
+  const values = formObject(event.currentTarget);
+  const id = values.id;
+  delete values.id;
+  values.is_buyer = event.currentTarget.elements.is_buyer.checked;
+  values.is_seller = event.currentTarget.elements.is_seller.checked;
+  if (!values.is_buyer && !values.is_seller) {
+    throw new Error("Cari en az alıcı veya satıcı olarak işaretlenmelidir.");
+  }
+  const request = id ? client.from("customers").update(values).eq("id", id) : client.from("customers").insert(values);
+  await query(request);
+  document.querySelector("#customerDialog").close();
   await loadData();
 };
 
@@ -478,11 +478,9 @@ const setInvoiceMode = (type, order = null) => {
   form.elements.source_order_id.value = order?.id || "";
   const purchase = type === "purchase";
   document.querySelector("#invoiceKicker").textContent = purchase ? "ALIŞ FATURASI" : "SATIŞ FATURASI";
-  document.querySelector("#invoiceDialogTitle").textContent = purchase ? "Tedarikçi faturası ve stok girişi" : "Satış / ihracat faturası";
-  document.querySelector("#customerField").hidden = purchase;
-  document.querySelector("#supplierField").hidden = !purchase;
-  form.elements.customer_id.required = !purchase;
-  form.elements.supplier_id.required = purchase;
+  document.querySelector("#invoiceDialogTitle").textContent = purchase ? "Alış faturası ve stok girişi" : "Satış / ihracat faturası";
+  document.querySelector("#customerField").hidden = false;
+  form.elements.customer_id.required = true;
   form.elements.scenario.value = purchase ? "domestic" : "export";
   form.elements.currency.value = purchase ? "TRY" : "USD";
   document.querySelector("#saveInvoiceButton").textContent = purchase ? "Alış faturasını işle ve stoğa ekle" : "Satış faturasını kes ve stoktan düş";
@@ -545,8 +543,8 @@ const saveInvoice = async (event) => {
   const values = formObject(event.currentTarget);
   const result = await query(client.rpc("create_invoice_v2", {
     p_invoice_type: values.invoice_type,
-    p_customer_id: values.invoice_type === "sale" ? values.customer_id : null,
-    p_supplier_id: values.invoice_type === "purchase" ? values.supplier_id : null,
+    p_customer_id: values.customer_id,
+    p_supplier_id: null,
     p_source_order_id: values.source_order_id || null,
     p_invoice_date: values.invoice_date,
     p_due_date: values.due_date || null,
@@ -593,9 +591,7 @@ const saveTemplate = async (event) => {
 const printInvoice = async (invoiceId) => {
   const invoice = state.invoices.find((item) => item.id === invoiceId);
   const items = await query(client.from("invoice_items").select("*").eq("invoice_id", invoiceId));
-  const party = invoice.invoice_type === "purchase"
-    ? state.suppliers.find((item) => item.id === invoice.supplier_id)
-    : state.customers.find((item) => item.id === invoice.customer_id);
+  const party = state.customers.find((item) => item.id === invoice.customer_id);
   const settings = state.settings || {};
   const popup = window.open("", "_blank", "width=1000,height=800");
   const partyTitle = invoice.invoice_type === "purchase" ? "TEDARİKÇİ" : "ALICI / BUYER";
@@ -655,11 +651,9 @@ document.querySelector("#loginForm").addEventListener("submit", safely(async (ev
 document.querySelector("#signOutButton").addEventListener("click", safely(async () => { await client.auth.signOut(); showLogin(); }));
 document.querySelector("#refreshButton").addEventListener("click", safely(loadData));
 document.querySelector("#customerSearch").addEventListener("input", renderCustomers);
-document.querySelector("#supplierSearch").addEventListener("input", renderSuppliers);
 document.querySelector("#productSearch").addEventListener("input", renderProducts);
 document.querySelector("#productSort").addEventListener("change", (event) => { state.productSort = event.target.value; renderProducts(); });
-document.querySelector("#customerForm").addEventListener("submit", safely((event) => saveEntity(event, "customers", "customerDialog")));
-document.querySelector("#supplierForm").addEventListener("submit", safely((event) => saveEntity(event, "suppliers", "supplierDialog")));
+document.querySelector("#customerForm").addEventListener("submit", safely(saveCustomer));
 document.querySelector("#productForm").addEventListener("submit", safely((event) => saveEntity(event, "products", "productDialog", ["purchase_price", "sale_price", "minimum_stock", "units_per_carton", "kg_per_carton", "vat_rate"])));
 document.querySelector("#stockForm").addEventListener("submit", safely(adjustStock));
 document.querySelector("#paymentForm").addEventListener("submit", safely(recordPayment));
@@ -695,13 +689,25 @@ document.querySelector("#mainNav").addEventListener("click", (event) => {
   document.querySelector("#pageTitle").textContent = button.childNodes[0].textContent.trim();
 });
 
+document.addEventListener("click", (event) => {
+  const closeButton = event.target.closest("[data-close-dialog]");
+  if (!closeButton) return;
+  event.preventDefault();
+  event.stopPropagation();
+  closeButton.closest("dialog")?.close();
+}, true);
+
+document.querySelectorAll("dialog").forEach((dialog) => {
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+});
+
 document.addEventListener("click", safely(async (event) => {
   const opener = event.target.closest("[data-open-dialog]");
   if (opener) openEditForm(opener.dataset.openDialog, opener.dataset.openDialog.replace("Dialog", "Form"));
   const customerEdit = event.target.closest("[data-customer-edit]");
   if (customerEdit) openEditForm("customerDialog", "customerForm", state.customers.find((item) => item.id === customerEdit.dataset.customerEdit));
-  const supplierEdit = event.target.closest("[data-supplier-edit]");
-  if (supplierEdit) openEditForm("supplierDialog", "supplierForm", state.suppliers.find((item) => item.id === supplierEdit.dataset.supplierEdit));
   const productEdit = event.target.closest("[data-product-edit]");
   if (productEdit) openEditForm("productDialog", "productForm", state.products.find((item) => item.id === productEdit.dataset.productEdit));
   const payment = event.target.closest("[data-customer-payment]");
