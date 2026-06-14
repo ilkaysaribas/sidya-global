@@ -567,6 +567,7 @@ alter column user_id drop not null;
 
 alter table public.customers alter column currency set default 'USD';
 alter table public.products alter column currency set default 'USD';
+alter table public.products alter column unit set default 'adet';
 
 alter table public.customers
 add column if not exists is_buyer boolean not null default true,
@@ -678,7 +679,19 @@ alter table public.invoice_items
 add column if not exists discount_1 numeric(6,2) not null default 0,
 add column if not exists discount_2 numeric(6,2) not null default 0,
 add column if not exists discount_3 numeric(6,2) not null default 0,
-add column if not exists discount_total numeric(14,2) not null default 0;
+add column if not exists discount_total numeric(14,2) not null default 0,
+add column if not exists unit text not null default 'adet',
+add column if not exists stock_quantity numeric(14,3),
+add column if not exists units_per_carton numeric(14,3) not null default 1,
+add column if not exists barcode text,
+add column if not exists product_code text;
+
+update public.invoice_items
+set stock_quantity = quantity
+where stock_quantity is null;
+
+alter table public.invoice_items
+alter column stock_quantity set not null;
 
 update public.invoices invoice
 set customer_id = customer.id,
@@ -775,6 +788,9 @@ declare
   item jsonb;
   product_record public.products%rowtype;
   item_quantity numeric;
+  item_stock_quantity numeric;
+  item_units_per_carton numeric;
+  item_unit text;
   item_price numeric;
   item_tax_rate numeric;
   discount_1 numeric;
@@ -836,6 +852,12 @@ begin
   for item in select * from jsonb_array_elements(p_items)
   loop
     item_quantity := (item->>'quantity')::numeric;
+    item_units_per_carton := greatest(coalesce((item->>'units_per_carton')::numeric, 1), 1);
+    item_unit := case when lower(coalesce(item->>'unit', 'adet')) = 'koli' then 'koli' else 'adet' end;
+    item_stock_quantity := coalesce(
+      (item->>'stock_quantity')::numeric,
+      item_quantity * case when item_unit = 'koli' then item_units_per_carton else 1 end
+    );
     item_price := (item->>'unit_price')::numeric;
     discount_1 := greatest(coalesce((item->>'discount_1')::numeric, 0), 0);
     discount_2 := greatest(coalesce((item->>'discount_2')::numeric, 0), 0);
@@ -845,7 +867,7 @@ begin
       else greatest(coalesce((item->>'tax_rate')::numeric, 0), 0)
     end;
 
-    if item_quantity <= 0 or item_price < 0 then
+    if item_quantity <= 0 or item_stock_quantity <= 0 or item_price < 0 then
       raise exception 'Gecersiz fatura satiri';
     end if;
 
@@ -857,7 +879,7 @@ begin
     if product_record.id is null then
       raise exception 'Urun bulunamadi';
     end if;
-    if normalized_type = 'sale' and product_record.stock_quantity < item_quantity then
+    if normalized_type = 'sale' and product_record.stock_quantity < item_stock_quantity then
       raise exception '% icin stok yetersiz. Mevcut: %', product_record.name, product_record.stock_quantity;
     end if;
 
@@ -876,24 +898,28 @@ begin
     invoice_line_discount := invoice_line_discount + line_discount;
 
     insert into public.invoice_items (
-      invoice_id, product_id, description, quantity, unit_price, tax_rate,
+      invoice_id, product_id, description, quantity, unit, stock_quantity,
+      units_per_carton, barcode, product_code, unit_price, tax_rate,
       discount_1, discount_2, discount_3, discount_total,
       line_subtotal, line_tax, line_total
     )
     values (
       new_invoice_id, product_record.id,
       coalesce(nullif(item->>'description', ''), product_record.name),
-      item_quantity, item_price, item_tax_rate,
+      item_quantity, item_unit, item_stock_quantity, item_units_per_carton,
+      coalesce(nullif(item->>'barcode', ''), product_record.barcode),
+      coalesce(nullif(item->>'product_code', ''), product_record.sku),
+      item_price, item_tax_rate,
       discount_1, discount_2, discount_3, line_discount,
       discounted_line, item_tax, discounted_line + item_tax
     );
 
     if normalized_type = 'purchase' then
       update public.products
-      set stock_quantity = stock_quantity + item_quantity,
+      set stock_quantity = stock_quantity + item_stock_quantity,
           purchase_price = case
-            when normalized_currency = 'USD' then discounted_line / item_quantity
-            else (discounted_line / item_quantity) / coalesce(nullif(p_exchange_rate, 0), 1)
+            when normalized_currency = 'USD' then discounted_line / item_stock_quantity
+            else (discounted_line / item_stock_quantity) / coalesce(nullif(p_exchange_rate, 0), 1)
           end,
           vat_rate = item_tax_rate,
           updated_at = now()
@@ -904,12 +930,13 @@ begin
         reference_id, note, created_by
       )
       values (
-        product_record.id, 'purchase', item_quantity, item_price, 'invoice',
+        product_record.id, 'purchase', item_stock_quantity,
+        item_price / case when item_unit = 'koli' then item_units_per_carton else 1 end, 'invoice',
         new_invoice_id, new_invoice_no, auth.uid()
       );
     else
       update public.products
-      set stock_quantity = stock_quantity - item_quantity, updated_at = now()
+      set stock_quantity = stock_quantity - item_stock_quantity, updated_at = now()
       where id = product_record.id;
 
       insert into public.stock_movements (
@@ -917,7 +944,8 @@ begin
         reference_id, note, created_by
       )
       values (
-        product_record.id, 'sale', -item_quantity, item_price, 'invoice',
+        product_record.id, 'sale', -item_stock_quantity,
+        item_price / case when item_unit = 'koli' then item_units_per_carton else 1 end, 'invoice',
         new_invoice_id, new_invoice_no, auth.uid()
       );
     end if;

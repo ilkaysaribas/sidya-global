@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,nofollow" />
     <title>Ticari Otomasyon</title>
-    <link rel="stylesheet" href="admin.css?v=20260614-4" />
+    <link rel="stylesheet" href="admin.css?v=20260614-5" />
   </head>
   <body>
     <div class="login-shell" id="loginShell">
@@ -85,7 +85,7 @@
               <input class="search" id="productSearch" type="search" placeholder="Ürün, marka, barkod veya SKU ara" />
               <select id="productSort"><option value="name-asc">Ürün adı A-Z</option><option value="name-desc">Ürün adı Z-A</option><option value="sku-asc">SKU / Barkod A-Z</option><option value="sku-desc">SKU / Barkod Z-A</option><option value="brand-asc">Marka A-Z</option><option value="brand-desc">Marka Z-A</option><option value="purchase-asc">Alış fiyatı artan</option><option value="purchase-desc">Alış fiyatı azalan</option><option value="sale-asc">Satış fiyatı artan</option><option value="sale-desc">Satış fiyatı azalan</option><option value="stock-asc">Stok artan</option><option value="stock-desc">Stok azalan</option></select>
             </div>
-            <div class="table-wrap selectable-table"><table><thead><tr><th><input id="selectAllProducts" type="checkbox" aria-label="Tümünü seç" /></th><th data-product-sort="sku">SKU / Barkod</th><th data-product-sort="name">Ürün</th><th data-product-sort="brand">Marka</th><th data-product-sort="stock">Stok</th><th>Min.</th><th data-product-sort="purchase">Alış fiyatı</th><th data-product-sort="sale">Satış fiyatı</th><th>KDV</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div>
+            <div class="table-wrap selectable-table"><table><thead><tr><th><input id="selectAllProducts" type="checkbox" aria-label="Tümünü seç" /></th><th data-product-sort="sku">SKU / Barkod</th><th data-product-sort="name">Ürün</th><th data-product-sort="brand">Marka</th><th>Koli içi</th><th data-product-sort="stock">Stok adet</th><th>Stok koli</th><th>Min.</th><th data-product-sort="purchase">Alış / adet</th><th data-product-sort="sale">Satış / adet</th><th>KDV</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div>
           </div>
         </section>
 
@@ -170,13 +170,13 @@
 
     <dialog id="productDialog"><form method="dialog" class="dialog-form" id="productForm">
       <div class="dialog-heading"><h2>Stok kartı</h2><button type="button" data-close-dialog>×</button></div><input type="hidden" name="id" />
-      <div class="form-grid"><label>Ürün adı<input name="name" required /></label><label>Marka<input name="brand" /></label><label>SKU<input name="sku" /></label><label>Barkod<input name="barcode" /></label><label>Kategori<input name="category" /></label><label>Birim<select name="unit"><option>koli</option><option>adet</option><option>palet</option><option>kg</option></select></label><label>Alış fiyatı USD<input name="purchase_price" type="number" min="0" step="0.0001" value="0" /></label><label>Satış fiyatı USD<input name="sale_price" type="number" min="0" step="0.0001" value="0" /></label><label>KDV oranı %<input name="vat_rate" type="number" list="vatRates" min="0" max="100" step="0.01" value="20" /></label><label>Minimum stok<input name="minimum_stock" type="number" min="0" step="0.001" value="0" /></label><label>Koli içi adet<input name="units_per_carton" type="number" min="0" step="0.001" value="1" /></label><label>Koli kg<input name="kg_per_carton" type="number" min="0" step="0.001" value="0" /></label></div>
+      <div class="form-grid"><label>Ürün adı<input name="name" required /></label><label>Marka<input name="brand" /></label><label>SKU<input name="sku" /></label><label>Barkod<input name="barcode" /></label><label>Kategori<input name="category" /></label><label>Stok takip birimi<select name="unit"><option>adet</option></select></label><label>Adet alış fiyatı USD<input name="purchase_price" type="number" min="0" step="0.0001" value="0" /></label><label>Adet satış fiyatı USD<input name="sale_price" type="number" min="0" step="0.0001" value="0" /></label><label>KDV oranı %<input name="vat_rate" type="number" list="vatRates" min="0" max="100" step="0.01" value="20" /></label><label>Minimum stok (adet)<input name="minimum_stock" type="number" min="0" step="0.001" value="0" /></label><label>Koli içi adet<input name="units_per_carton" type="number" min="1" step="1" value="1" /></label><label>Koli kg<input name="kg_per_carton" type="number" min="0" step="0.001" value="0" /></label></div>
       <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit">Kaydet</button></div>
     </form></dialog>
 
     <dialog id="stockDialog"><form method="dialog" class="dialog-form narrow" id="stockForm">
       <div class="dialog-heading"><h2>Manuel stok düzeltmesi</h2><button type="button" data-close-dialog>×</button></div>
-      <label>Ürün<select name="product_id" id="stockProduct" required></select></label><label>Miktar <small>(giriş +, çıkış -)</small><input name="quantity" type="number" step="0.001" required /></label><label>Zorunlu açıklama<textarea name="note" required></textarea></label>
+      <label>Ürün<select name="product_id" id="stockProduct" required></select></label><label>Miktar (adet) <small>(giriş +, çıkış -)</small><input name="quantity" type="number" step="0.001" required /></label><label>Zorunlu açıklama<textarea name="note" required></textarea></label>
       <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit">Düzeltmeyi kaydet</button></div>
     </form></dialog>
 
@@ -198,17 +198,18 @@
         <label>Not<input name="notes" /></label>
         <label>Incoterm<input name="incoterm" placeholder="EXW, FCA, CIF..." /></label>
       </div>
-      <div class="invoice-add-line invoice-add-line-v2">
-        <select id="invoiceProduct"><option value="">Ürün seçin</option></select>
-        <input id="invoiceQuantity" type="number" min="0.001" step="0.001" value="1" placeholder="Miktar" />
-        <input id="invoicePrice" type="number" min="0" step="0.0001" placeholder="Birim fiyat" />
-        <input id="invoiceTax" type="number" list="vatRates" min="0" max="100" step="0.01" value="20" placeholder="KDV %" />
-        <input id="invoiceDiscount1" type="number" min="0" max="100" step="0.01" value="0" placeholder="İsk. 1 %" />
-        <input id="invoiceDiscount2" type="number" min="0" max="100" step="0.01" value="0" placeholder="İsk. 2 %" />
-        <input id="invoiceDiscount3" type="number" min="0" max="100" step="0.01" value="0" placeholder="İsk. 3 %" />
-        <button type="button" id="addInvoiceLine">Satır ekle</button>
+      <div class="invoice-product-picker">
+        <div class="picker-heading">
+          <div><p class="eyebrow">ÜRÜN SEÇİMİ</p><h3>Ürün ekle</h3></div>
+          <input id="invoiceProductSearch" type="search" placeholder="Barkod, ürün veya marka ara" />
+        </div>
+        <div class="table-wrap picker-table"><table>
+          <thead><tr><th>Barkod</th><th>Ürün</th><th>Stok</th><th>Miktar</th><th>Birim fiyat</th><th>Birim</th><th></th></tr></thead>
+          <tbody id="invoiceProductRows"></tbody>
+        </table></div>
       </div>
-      <div class="table-wrap"><table><thead><tr><th>Ürün</th><th>Stok</th><th>Miktar</th><th>Fiyat</th><th>İsk. 1/2/3</th><th>KDV</th><th>Toplam</th><th></th></tr></thead><tbody id="invoiceLineRows"></tbody></table></div>
+      <div class="invoice-lines-heading"><h3>Fatura satırları</h3><span>Koli seçilirse koli içi adet otomatik olarak stoğa işlenir.</span></div>
+      <div class="table-wrap invoice-lines-table"><table><thead><tr><th>#</th><th>Barkod</th><th>Ürün</th><th>Stok</th><th>Miktar</th><th>Birim</th><th>Birim fiyat</th><th>İsk. 1</th><th>İsk. 2</th><th>İsk. 3</th><th>KDV</th><th>Toplam</th><th></th></tr></thead><tbody id="invoiceLineRows"></tbody></table></div>
       <div class="invoice-summary"><span>Ara toplam <strong id="invoiceSubtotal">0</strong></span><span>İskonto <strong id="invoiceDiscountTotal">0</strong></span><span>KDV <strong id="invoiceTaxTotal">0</strong></span><span>Genel toplam <strong id="invoiceGrandTotal">0</strong></span></div>
       <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit" id="saveInvoiceButton">Faturayı kaydet</button></div>
     </form></dialog>
@@ -218,6 +219,6 @@
     <script src="/api/backend-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="catalog-products.generated.js?v=20260614-1"></script>
-    <script src="admin.js?v=20260614-4"></script>
+    <script src="admin.js?v=20260614-5"></script>
   </body>
 </html>
