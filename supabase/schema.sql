@@ -972,3 +972,5 @@ select
   end), 0)::numeric(14,2) as export_sales
 from public.invoices
 group by date_trunc('month', invoice_date);
+
+notify pgrst, 'reload schema';
