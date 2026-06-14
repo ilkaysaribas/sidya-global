@@ -183,15 +183,15 @@ const uploadFiles = async ({ files, userId, supabaseUrl, serviceRoleKey }) => {
   return uploadedPaths;
 };
 
-const saveRequest = async ({ fields, userId, documentPaths, supabaseUrl, serviceRoleKey }) => {
-  await supabaseFetch({
+const saveRequest = async ({ fields, userId = null, documentPaths, supabaseUrl, serviceRoleKey }) => {
+  const rows = await supabaseFetch({
     supabaseUrl,
     serviceRoleKey,
     path: "/rest/v1/b2b_onboarding_requests",
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Prefer: "return=minimal",
+      Prefer: "return=representation",
     },
     body: JSON.stringify({
       user_id: userId,
@@ -207,6 +207,7 @@ const saveRequest = async ({ fields, userId, documentPaths, supabaseUrl, service
       status: "new",
     }),
   });
+  return rows?.[0];
 };
 
 module.exports = async (req, res) => {
@@ -228,8 +229,8 @@ module.exports = async (req, res) => {
     const contentType = req.headers["content-type"] || "";
     if (contentType.includes("application/json")) {
       const fields = await parseJsonBody(req);
-      const user = await createUser({ fields, supabaseUrl, serviceRoleKey });
-      res.status(200).json({ ok: true, userId: user.id });
+      const request = await saveRequest({ fields, documentPaths: [], supabaseUrl, serviceRoleKey });
+      res.status(200).json({ ok: true, requestId: request?.id });
       return;
     }
 
@@ -241,11 +242,16 @@ module.exports = async (req, res) => {
 
     const body = await collectBody(req);
     const { fields, files } = parseMultipart(body, contentType);
-    const user = await createUser({ fields, supabaseUrl, serviceRoleKey });
-    const documentPaths = await uploadFiles({ files, userId: user.id, supabaseUrl, serviceRoleKey });
-    await saveRequest({ fields, userId: user.id, documentPaths, supabaseUrl, serviceRoleKey });
+    if (!fields.company || !fields.contact || !fields.email) {
+      const validationError = new Error("Firma, yetkili ve e-posta zorunludur.");
+      validationError.statusCode = 400;
+      throw validationError;
+    }
+    const uploadFolder = `registrations/${Date.now()}-${crypto.randomUUID()}`;
+    const documentPaths = await uploadFiles({ files, userId: uploadFolder, supabaseUrl, serviceRoleKey });
+    const request = await saveRequest({ fields, documentPaths, supabaseUrl, serviceRoleKey });
 
-    res.status(200).json({ ok: true, userId: user.id });
+    res.status(200).json({ ok: true, requestId: request?.id });
   } catch (error) {
     const message = String(error.message || "");
     console.error(`B2B registration failed: ${message || "Unknown error"}`);

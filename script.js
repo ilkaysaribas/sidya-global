@@ -132,7 +132,7 @@ const content = {
     b2bRegisterTitle: "Buyer registration",
     b2bRegisterCopy: "Sign in if you already have an account, or create a new buyer account from the registration form below.",
     b2bNewRegistrationTitle: "New buyer registration",
-    b2bPasswordHint: "Enter the account password in the login panel above, then complete this form.",
+    b2bPasswordHint: "Complete the company form. Buyer registration does not create a panel login account.",
     b2bCompany: "Company legal name",
     b2bContact: "Authorized contact",
     b2bEmail: "Business email",
@@ -148,8 +148,8 @@ const content = {
     b2bSubmit: "Create buyer account",
     b2bReady: "Buyer account was created and saved.",
     b2bAuthTitle: "Sign in or register",
-    b2bAuthCopy: "Use your email and password to sign in, or open the buyer registration form below.",
-    b2bEmailRegisterHint: "You can create a buyer account with your email address.",
+    b2bAuthCopy: "Buyer registration creates a customer record only. The operations panel uses one separate administrator account.",
+    b2bEmailRegisterHint: "New buyers are not created as system users.",
     b2bAuthEmail: "Account email",
     b2bAuthPassword: "Password",
     b2bSignUp: "Register",
@@ -477,7 +477,7 @@ const content = {
     b2bRegisterTitle: "Alıcı kayıt",
     b2bRegisterCopy: "Hesabınız varsa giriş yapın; yeni alıcı hesabı için aşağıdaki kayıt formunu doldurun.",
     b2bNewRegistrationTitle: "Yeni alıcı kaydı",
-    b2bPasswordHint: "Hesap şifresini üstteki giriş alanına yazın, sonra bu formu tamamlayın.",
+    b2bPasswordHint: "Firma formunu tamamlayın. Alıcı kaydı için panel kullanıcı hesabı oluşturulmaz.",
     b2bCompany: "Firma resmi unvanı",
     b2bContact: "Yetkili kişi",
     b2bEmail: "Kurumsal e-posta",
@@ -493,8 +493,8 @@ const content = {
     b2bSubmit: "Alıcı hesabı oluştur",
     b2bReady: "Alıcı hesabı oluşturuldu ve kayıt altına alındı.",
     b2bAuthTitle: "Giriş Yap veya Üye Ol",
-    b2bAuthCopy: "E-posta ve şifre ile giriş yapın veya aşağıdan yeni alıcı kayıt formunu açın.",
-    b2bEmailRegisterHint: "E-posta adresiniz ile alıcı hesabı oluşturabilirsiniz.",
+    b2bAuthCopy: "Alıcı kaydı yalnızca müşteri/cari kaydı oluşturur. Yönetim paneli ayrı tek yönetici hesabıyla kullanılır.",
+    b2bEmailRegisterHint: "Yeni alıcılar sistem kullanıcısı olarak oluşturulmaz.",
     b2bAuthEmail: "Hesap e-postası",
     b2bAuthPassword: "Şifre",
     b2bSignUp: "Kayıt ol",
@@ -3307,17 +3307,9 @@ const openB2BMailDraft = (form, files) => {
 const submitB2BRegistration = async (formElement) => {
   if (window.location.protocol === "file:") return { ok: false, configured: false };
   const formData = new FormData(formElement);
-  const { password } = getB2BAuthValues();
-  const payload = {
-    company: String(formData.get("company") || "").trim(),
-    contact: String(formData.get("contact") || "").trim(),
-    email: String(formData.get("email") || "").trim(),
-    password,
-  };
   const response = await fetch("/api/b2b-register", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+    body: formData,
   });
   if (response.status === 501) {
     const payload = await response.json().catch(() => ({}));
@@ -3329,7 +3321,7 @@ const submitB2BRegistration = async (formElement) => {
     throw new Error(payload.error || "B2B request could not be sent.");
   }
   const payloadResult = await response.json().catch(() => ({}));
-  return { ok: true, configured: true, userId: payloadResult.userId || "" };
+  return { ok: true, configured: true, requestId: payloadResult.requestId || "" };
 };
 
 const getBackendConfig = () => window.SIDYA_BACKEND || {};
@@ -3473,15 +3465,14 @@ const renderCustomerOrderHistory = (session = activeB2BSession) => {
 
 const recordProformaOrderHistory = async (rows) => {
   try {
-    const client = getSupabaseClient();
-    if (!client || !rows.length) return;
-    const { data } = await client.auth.getSession();
-    const session = data.session;
-    if (!session?.user?.id) return;
-
     const now = new Date();
+    const orderId = `SG-${now.toISOString().replace(/\D/g, "").slice(0, 17)}`;
+    const client = getSupabaseClient();
+    if (!rows.length) return;
+    const { data } = client ? await client.auth.getSession() : { data: { session: null } };
+    const session = data.session;
     const order = {
-      id: `SG-${now.toISOString().replace(/\D/g, "").slice(0, 17)}`,
+      id: orderId,
       createdAt: now.toISOString(),
       itemCount: rows.length,
       totalCartons: rows.reduce((sum, row) => sum + row.cartons, 0),
@@ -3498,6 +3489,34 @@ const recordProformaOrderHistory = async (rows) => {
         cartons: row.cartons,
       })),
     };
+
+    try {
+      const websiteOrderResponse = await fetch("/api/site-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderNo: order.id,
+          authUserId: session?.user?.id || null,
+          customerCompany: session?.user?.user_metadata?.company || "",
+          customerName: session?.user?.user_metadata?.contact || "",
+          customerEmail: session?.user?.email || "",
+          currency: "USD",
+          transport: order.transport,
+          containerRoute: order.containerRoute,
+          totalPallets: order.totalPallets,
+          totalWeight: order.totalWeight,
+          items: rows,
+        }),
+      });
+      if (!websiteOrderResponse.ok) {
+        const payload = await websiteOrderResponse.json().catch(() => ({}));
+        console.warn(payload.error || "Order could not be transferred to the operations panel.");
+      }
+    } catch (transferError) {
+      console.warn(`Order transfer is temporarily unavailable: ${transferError.message || "Unknown error"}`);
+    }
+
+    if (!session?.user?.id || !client) return;
     const history = [order, ...getCustomerOrderHistory(session).filter((item) => item.id !== order.id)].slice(0, 12);
     try {
       localStorage.setItem(customerHistoryStorageKey(session.user.id), JSON.stringify(history));
@@ -3858,60 +3877,21 @@ document.querySelectorAll("#customsPlanner select").forEach((select) => {
 document.querySelector("#b2bForm")?.addEventListener("submit", async (event) => {
   event.preventDefault();
   const form = event.currentTarget;
-  const formData = new FormData(form);
   const status = document.querySelector("#b2bStatus");
   const submitButton = form?.querySelector('button[type="submit"]');
-  const authEmailInput = document.querySelector("#b2bAuthEmail");
-  const formEmail = String(formData.get("email") || "").trim();
-  if (authEmailInput && !authEmailInput.value.trim()) authEmailInput.value = formEmail;
-  if (!getB2BAuthValues().password) {
-    if (status) status.textContent = t("b2bAuthLoginRequired");
-    return;
-  }
   try {
     if (submitButton) {
       submitButton.disabled = true;
       submitButton.textContent = t("b2bSaving");
     }
-    const client = getSupabaseClient();
-    if (!client) throw new Error(t("b2bServerMissing"));
-    const { email, password } = getB2BAuthValues();
-    let { data: signInData, error: signInError } = await withTimeout(
-      client.auth.signInWithPassword({ email: formEmail || email, password }),
-      t("b2bAuthTimeout"),
-    );
-    let result = { userId: "" };
-    if (signInError || !signInData.user?.id) {
-      if (status) status.textContent = t("b2bServerSubmit");
-      result = await submitB2BRegistration(form);
-      if (!result.ok) throw new Error(t("b2bServerMissing"));
-      ({ data: signInData, error: signInError } = await withTimeout(
-        client.auth.signInWithPassword({ email: formEmail || email, password }),
-        t("b2bAuthTimeout"),
-      ));
-      if (signInError) throw signInError;
-    }
-    const userId = signInData.user?.id || result.userId;
-    if (!userId) throw new Error(t("b2bAuthLoginFailed"));
-
-    const files = formData
-      .getAll("documents")
-      .filter((file) => file && typeof file.name === "string" && file.size > 0);
-    if (status && files.length) status.textContent = t("b2bUploadingDocuments");
-    const documentPaths = await uploadB2BDocuments(client, userId, files);
-    if (status) status.textContent = t("b2bSavingRequest");
-    await saveB2BRequest(client, userId, formData, documentPaths);
+    if (status) status.textContent = t("b2bServerSubmit");
+    const result = await submitB2BRegistration(form);
+    if (!result.ok) throw new Error(t("b2bServerMissing"));
 
     if (status) status.textContent = t("b2bRegisteredOpenProforma");
     form?.reset();
     updateB2BFileSummary();
     setB2BRegistrationPanelVisible(false);
-    await client.auth.signOut();
-    activeB2BSession = null;
-    const passwordInput = document.querySelector("#b2bAuthPassword");
-    if (passwordInput) passwordInput.value = "";
-    setB2BAuthStatus(t("b2bRegistrationLoginReady"));
-    setTimeout(() => document.querySelector("#b2bAuthPassword")?.focus(), 0);
   } catch (error) {
     if (status) status.textContent = error.message || t("formError");
   } finally {

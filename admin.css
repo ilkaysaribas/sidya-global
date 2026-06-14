@@ -90,11 +90,31 @@ dialog::backdrop { background: rgba(4,15,26,.65); backdrop-filter: blur(3px); }
 .invoice-head { grid-template-columns: repeat(3, 1fr); }
 .invoice-add-line { display: grid; grid-template-columns: minmax(220px,2fr) repeat(3,minmax(90px,.6fr)) auto; gap: 8px; padding: 18px 0 12px; }
 .invoice-total { display: flex; justify-content: flex-end; gap: 20px; padding: 20px 8px 0; font-size: 18px; }
+.nav-count { float: right; min-width: 22px; padding: 2px 6px; border-radius: 999px; color: #fff; background: var(--blue); text-align: center; font-size: 10px; }
+.helper { color: var(--muted); font-size: 13px; line-height: 1.55; }
+.table-tools { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+.table-tools select { width: 220px; }
+.selectable-table th[data-product-sort] { cursor: pointer; user-select: none; }
+.selectable-table th[data-product-sort]:hover { color: var(--blue); }
+.selected-row { background: #eefaf7; }
+.badge.new { background: #fff4df; color: #9a5b00; }
+.badge.converted { background: #e8f7f3; color: #087462; }
+.badge.cancelled { background: #feeceb; color: var(--danger); }
+.audit-log-panel { margin-top: 18px; }
+.settings-form { display: grid; gap: 14px; }
+.connection-card { display: flex; gap: 12px; align-items: flex-start; margin: 18px 0; padding: 16px; border: 1px solid #f2cf87; border-radius: 11px; background: #fff9eb; }
+.connection-card p { margin: 4px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+.status-dot { flex: 0 0 auto; width: 11px; height: 11px; margin-top: 4px; border-radius: 50%; background: #e09f21; box-shadow: 0 0 0 5px rgba(224,159,33,.15); }
+.invoice-add-line-v2 { grid-template-columns: minmax(220px, 2fr) repeat(6, minmax(78px, .55fr)) auto; }
+.invoice-summary { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 18px; padding-top: 20px; }
+.invoice-summary span { min-width: 145px; padding: 12px; border-radius: 9px; background: #f5f8fa; color: var(--muted); font-size: 12px; }
+.invoice-summary strong { display: block; margin-top: 5px; color: var(--navy); font-size: 17px; }
 
 @media (max-width: 1000px) {
   .metric-grid { grid-template-columns: repeat(2,1fr); }
   .dashboard-grid { grid-template-columns: 1fr; }
   .invoice-add-line { grid-template-columns: 1fr 1fr; }
+  .invoice-add-line-v2 { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 720px) {
   .app-shell { grid-template-columns: 1fr; }
@@ -108,4 +128,7 @@ dialog::backdrop { background: rgba(4,15,26,.65); backdrop-filter: blur(3px); }
   .form-grid, .invoice-head { grid-template-columns: 1fr; }
   .full { grid-column: auto; }
   .invoice-add-line { grid-template-columns: 1fr; }
+  .invoice-add-line-v2 { grid-template-columns: 1fr; }
+  .table-tools { flex-direction: column; }
+  .table-tools select { width: 100%; }
 }

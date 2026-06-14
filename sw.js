@@ -1,4 +1,4 @@
-const CACHE_NAME = "sidya-global-v82";
+const CACHE_NAME = "sidya-global-v83";
 
 const SHELL_ASSETS = [
   "./",
@@ -6,7 +6,7 @@ const SHELL_ASSETS = [
   "./offline.html",
   "./styles.css?v=20260613-4",
   "./catalog-products.generated.js?v=20260613-2",
-  "./script.js?v=20260613-5",
+  "./script.js?v=20260614-1",
   "./assets/xlsx.full.min.js",
   "./manifest.webmanifest",
   "./assets/app-icon.svg",
@@ -97,6 +97,25 @@ self.addEventListener("fetch", (event) => {
           return response;
         })
         .catch(() => caches.match(request).then((response) => response || caches.match("./offline.html"))),
+    );
+    return;
+  }
+
+  if (
+    url.pathname === "/catalog-products.generated.js" ||
+    url.pathname === "/admin.js" ||
+    url.pathname === "/admin.css"
+  ) {
+    event.respondWith(
+      fetch(request, { cache: "no-store" })
+        .then((response) => {
+          if (response && response.status === 200) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request)),
     );
     return;
   }
