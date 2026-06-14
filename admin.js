@@ -164,12 +164,14 @@ const getSortedProducts = () => {
   const term = document.querySelector("#productSearch").value.trim().toLocaleLowerCase("tr");
   const [field, direction] = state.productSort.split("-");
   const filtered = state.products.filter((item) =>
-    [item.sku, item.barcode, item.name, item.brand, item.category].some((value) =>
+    [item.sku, item.barcode, item.name, item.brand, item.grammage, item.category].some((value) =>
       String(value || "").toLocaleLowerCase("tr").includes(term)));
   const key = {
     name: (item) => item.name || "",
     sku: (item) => item.sku || item.barcode || "",
     brand: (item) => item.brand || "",
+
+ grammage: (item) => item.grammage || "",
     stock: (item) => Number(item.stock_quantity),
     purchase: (item) => Number(item.purchase_price),
     sale: (item) => Number(item.sale_price),
@@ -182,19 +184,38 @@ const getSortedProducts = () => {
   });
 };
 
+const formatStockCartons = (stockQuantity, unitsPerCarton) => {
+ const stock = Number(stockQuantity || 0);
+ const units = Number(unitsPerCarton || 0);
+ if (!(units > 0)) return "Koli bilgisi yok";
+ const fullCartons = Math.floor(stock / units);
+ const remainder = Math.round((stock - (fullCartons * units)) * 1000) / 1000;
+ return remainder > 0
+  ? `${number(fullCartons)} Koli + ${number(remainder)} Adet`
+  : `${number(fullCartons)} Koli`;
+};
+
 const renderProducts = () => {
-  const rows = getSortedProducts();
-  document.querySelector("#productRows").innerHTML = rows.length ? rows.map((item) => {
-    const low = Number(item.stock_quantity) <= Number(item.minimum_stock);
-    const units = cartonSize(item);
-    return `<tr class="${state.selectedProducts.has(item.id) ? "selected-row" : ""}">
-      <td><input type="checkbox" data-product-select="${item.id}" ${state.selectedProducts.has(item.id) ? "checked" : ""} /></td>
-      <td>${escapeHtml(item.sku || item.barcode || "-")}</td><td><strong>${escapeHtml(item.name)}</strong></td>
-      <td>${escapeHtml(item.brand || "-")}</td><td>${number(units)}</td>
-      <td class="${low ? "stock-low" : ""}">${number(item.stock_quantity)}</td><td>${number(Number(item.stock_quantity) / units)}</td>
-      <td>${number(item.minimum_stock)}</td><td>${money(item.purchase_price, "USD")}</td><td>${money(item.sale_price, "USD")}</td>
-      <td>%${number(item.vat_rate)}</td><td><button data-product-edit="${item.id}">Düzenle</button></td></tr>`;
-  }).join("") : '<tr><td colspan="12" class="empty">Stok kartı bulunamadı.</td></tr>';
+ const rows = getSortedProducts();
+ document.querySelector("#productRows").innerHTML = rows.length ? rows.map((item, index) => {
+  const low = Number(item.stock_quantity) <= Number(item.minimum_stock);
+  const units = Number(item.units_per_carton || 0);
+  return `<tr class="${state.selectedProducts.has(item.id) ? "selected-row" : ""}">
+  <td>${index + 1}</td>
+  <td><input type="checkbox" data-product-select="${item.id}" ${state.selectedProducts.has(item.id) ? "checked" : ""} /></td>
+  <td><strong>${escapeHtml(item.brand || "-")}</strong></td>
+  <td>${escapeHtml(item.barcode || item.sku || "-")}</td>
+  <td><strong>${escapeHtml(item.name)}</strong></td>
+  <td>${escapeHtml(item.grammage || "-")}</td>
+  <td>${units > 0 ? number(units) : "-"}</td>
+  <td class="${low ? "stock-low" : ""}">${number(item.stock_quantity)} Adet</td>
+  <td>${formatStockCartons(item.stock_quantity, units)}</td>
+  <td>${number(item.minimum_stock)}</td>
+  <td>${money(item.purchase_price, "USD")}</td>
+  <td>${money(item.sale_price, "USD")}</td>
+  <td>%${number(item.vat_rate)}</td>
+  <td><button data-product-edit="${item.id}">Düzenle</button></td></tr>`;
+ }).join("") : '<tr><td colspan="14" class="empty">Stok kartı bulunamadı.</td></tr>';
 };
 
 const renderOrders = () => {
@@ -498,6 +519,7 @@ const importCatalog = async () => {
     name: item.names?.tr || item.names?.en || item.name || item.id,
     brand: item.brand || null,
     category: item.sourceCategory || item.category || null,
+ grammage: item.liter || null,
     unit: "adet",
     units_per_carton: Number(item.unitsPerCarton || 1),
     kg_per_carton: Number(item.kgPerCarton || 0),
@@ -832,8 +854,21 @@ document.querySelector("#exportCustomersButton").addEventListener("click", () =>
   ...state.balances.map((item) => [item.code, item.company, item.currency || "USD", item.balance]),
 ]));
 document.querySelector("#exportStockButton").addEventListener("click", () => csvDownload("stok-listesi.csv", [
-  ["SKU", "Barkod", "Ürün", "Marka", "Koli içi", "Stok adet", "Stok koli", "Minimum stok", "Adet alış USD", "Adet satış USD", "KDV"],
-  ...state.products.map((item) => [item.sku, item.barcode, item.name, item.brand, cartonSize(item), item.stock_quantity, Number(item.stock_quantity) / cartonSize(item), item.minimum_stock, item.purchase_price, item.sale_price, item.vat_rate]),
+ ["Sıra No", "Marka", "Barkod", "Ürün İsmi", "Gramaj", "Koli İçi", "Stok Adet", "Stok Koli", "Minimum Stok", "Adet Alış USD", "Adet Satış USD", "KDV"],
+ ...state.products.map((item, index) => [
+  index + 1,
+  item.brand,
+  item.barcode || item.sku,
+  item.name,
+  item.grammage,
+  Number(item.units_per_carton || 0) || "",
+  item.stock_quantity,
+  formatStockCartons(item.stock_quantity, item.units_per_carton),
+  item.minimum_stock,
+  item.purchase_price,
+  item.sale_price,
+  item.vat_rate,
+ ]),
 ]));
 
 boot().catch((error) => {

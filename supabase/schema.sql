@@ -142,6 +142,8 @@ create table if not exists public.products (
   name text not null,
   brand text,
   category text,
+
+ grammage text,
   unit text not null default 'koli',
   units_per_carton numeric(14,3) not null default 1,
   kg_per_carton numeric(14,3) not null default 0,
@@ -581,6 +583,9 @@ where currency = 'EUR'
 
 alter table public.products
 add column if not exists vat_rate numeric(6,2) not null default 20;
+
+alter table public.products
+add column if not exists grammage text;
 
 create table if not exists public.suppliers (
   id uuid primary key default gen_random_uuid(),
