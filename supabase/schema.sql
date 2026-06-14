@@ -314,8 +314,8 @@ select
   request.tax_number,
   request.notes
 from public.b2b_onboarding_requests request
-on conflict (auth_user_id) do update set
-  onboarding_request_id = excluded.onboarding_request_id,
+on conflict (onboarding_request_id) do update set
+  auth_user_id = excluded.auth_user_id,
   company = excluded.company,
   contact_name = excluded.contact_name,
   email = excluded.email,
