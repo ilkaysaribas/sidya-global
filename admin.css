@@ -151,3 +151,62 @@ dialog::backdrop { background: rgba(4,15,26,.65); backdrop-filter: blur(3px); }
   .table-tools { flex-direction: column; }
   .table-tools select { width: 100%; }
 }
+
+/* Stok listesi: 100 satırlık sayfalama */
+.product-pagination {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 14px;
+ flex-wrap: wrap;
+ padding: 16px 4px 4px;
+}
+.pagination-summary {
+ font-size: 13px;
+ color: #667085;
+}
+.pagination-buttons {
+ display: flex;
+ align-items: center;
+ justify-content: flex-end;
+ flex-wrap: wrap;
+ gap: 6px;
+}
+.pagination-buttons button {
+ min-width: 36px;
+ min-height: 36px;
+ padding: 7px 11px;
+ border: 1px solid #d0d5dd;
+ border-radius: 8px;
+ background: #ffffff;
+ color: #344054;
+ cursor: pointer;
+ font: inherit;
+}
+.pagination-buttons button:hover:not(:disabled) {
+ border-color: #0f766e;
+ color: #0f766e;
+}
+.pagination-buttons button.active {
+ border-color: #0f766e;
+ background: #0f766e;
+ color: #ffffff;
+ font-weight: 700;
+}
+.pagination-buttons button:disabled {
+ opacity: 0.45;
+ cursor: not-allowed;
+}
+@media (max-width: 760px) {
+ .product-pagination {
+  align-items: stretch;
+ }
+ .pagination-summary,
+ .pagination-buttons {
+  width: 100%;
+ }
+ .pagination-buttons {
+  justify-content: flex-start;
+ }
+}
+

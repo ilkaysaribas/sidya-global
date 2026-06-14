@@ -17,7 +17,7 @@ const state = {
   settings: {},
   invoiceLines: [],
   selectedProducts: new Set(),
-  productSort: "name-asc",
+  productSort: "name-asc", productPage: 1, productPageSize: 100,
   schemaReady: true,
   session: null,
 };
@@ -81,6 +81,23 @@ const optionalQuery = async (promise, fallback = []) => {
   return data ?? fallback;
 };
 
+const loadAllProducts = async (db) => {
+ const pageSize = 1000;
+ const allProducts = [];
+ for (let from = 0; ; from += pageSize) {
+  const { data, error } = await db
+   .from("products")
+   .select("*")
+   .order("name", { ascending: true })
+   .range(from, from + pageSize - 1);
+  if (error) throw error;
+  const page = data || [];
+  allProducts.push(...page);
+  if (page.length < pageSize) break;
+ }
+ return allProducts;
+};
+
 const findBalance = (items, id, currency) =>
   items.find((item) => item.id === id && (item.currency || currency) === currency)?.balance || 0;
 
@@ -94,7 +111,7 @@ const loadData = async () => {
   ] = await Promise.all([
     query(db.from("customers").select("*").order("created_at", { ascending: false })),
     query(db.from("customer_balances").select("*")),
-    query(db.from("products").select("*").order("name")),
+    loadAllProducts(db),
     query(db.from("invoices").select("*").order("invoice_date", { ascending: false }).limit(500)),
     optionalQuery(db.from("invoice_items").select("product_id,quantity,stock_quantity,line_total,invoice_id,products(name),invoices(invoice_type,currency,exchange_rate)").limit(10000)),
     query(db.from("customer_ledger").select("*").order("transaction_date", { ascending: false }).limit(5000)),
@@ -195,13 +212,39 @@ const formatStockCartons = (stockQuantity, unitsPerCarton) => {
   : `${number(fullCartons)} Koli`;
 };
 
+const renderProductPagination = (totalRows, totalPages) => {
+ const target = document.querySelector("#productPagination");
+ if (!target) return;
+ if (!totalRows) {
+  target.innerHTML = "";
+  return;
+ }
+ const currentPage = state.productPage;
+ const pageButtons = Array.from({ length: totalPages }, (_, index) => {
+  const page = index + 1;
+  return `<button type="button" class="pagination-page${page === currentPage ? " active" : ""}" data-product-page="${page}" ${page === currentPage ? 'aria-current="page"' : ""}>${page}</button>`;
+ }).join("");
+ target.innerHTML = `
+  <div class="pagination-summary">Toplam ${number(totalRows)} ürün · Sayfa ${number(currentPage)} / ${number(totalPages)} · Sayfa başına 100 satır</div>
+  <div class="pagination-buttons">
+   <button type="button" data-product-page="${currentPage - 1}" ${currentPage <= 1 ? "disabled" : ""}>‹ Önceki</button>
+   ${pageButtons}
+   <button type="button" data-product-page="${currentPage + 1}" ${currentPage >= totalPages ? "disabled" : ""}>Sonraki ›</button>
+  </div>`;
+};
+
 const renderProducts = () => {
- const rows = getSortedProducts();
+ const filteredRows = getSortedProducts();
+ const pageSize = Number(state.productPageSize || 100);
+ const totalPages = Math.max(1, Math.ceil(filteredRows.length / pageSize));
+ state.productPage = Math.min(Math.max(Number(state.productPage || 1), 1), totalPages);
+ const startIndex = (state.productPage - 1) * pageSize;
+ const rows = filteredRows.slice(startIndex, startIndex + pageSize);
  document.querySelector("#productRows").innerHTML = rows.length ? rows.map((item, index) => {
   const low = Number(item.stock_quantity) <= Number(item.minimum_stock);
   const units = Number(item.units_per_carton || 0);
   return `<tr class="${state.selectedProducts.has(item.id) ? "selected-row" : ""}">
-  <td>${index + 1}</td>
+  <td>${startIndex + index + 1}</td>
   <td><input type="checkbox" data-product-select="${item.id}" ${state.selectedProducts.has(item.id) ? "checked" : ""} /></td>
   <td><strong>${escapeHtml(item.brand || "-")}</strong></td>
   <td>${escapeHtml(item.barcode || item.sku || "-")}</td>
@@ -216,6 +259,14 @@ const renderProducts = () => {
   <td>%${number(item.vat_rate)}</td>
   <td><button data-product-edit="${item.id}">Düzenle</button></td></tr>`;
  }).join("") : '<tr><td colspan="14" class="empty">Stok kartı bulunamadı.</td></tr>';
+
+ const selectAll = document.querySelector("#selectAllProducts");
+ if (selectAll) {
+  const selectedCount = rows.filter((item) => state.selectedProducts.has(item.id)).length;
+  selectAll.checked = rows.length > 0 && selectedCount === rows.length;
+  selectAll.indeterminate = selectedCount > 0 && selectedCount < rows.length;
+ }
+ renderProductPagination(filteredRows.length, totalPages);
 };
 
 const renderOrders = () => {
@@ -737,8 +788,8 @@ document.querySelector("#loginForm").addEventListener("submit", safely(async (ev
 document.querySelector("#signOutButton").addEventListener("click", safely(async () => { await client.auth.signOut(); showLogin(); }));
 document.querySelector("#refreshButton").addEventListener("click", safely(loadData));
 document.querySelector("#customerSearch").addEventListener("input", renderCustomers);
-document.querySelector("#productSearch").addEventListener("input", renderProducts);
-document.querySelector("#productSort").addEventListener("change", (event) => { state.productSort = event.target.value; renderProducts(); });
+document.querySelector("#productSearch").addEventListener("input", () => { state.productPage = 1; renderProducts(); });
+document.querySelector("#productSort").addEventListener("change", (event) => { state.productSort = event.target.value; state.productPage = 1; renderProducts(); });
 document.querySelector("#customerForm").addEventListener("submit", safely(saveCustomer));
 document.querySelector("#productForm").addEventListener("submit", safely((event) => saveEntity(event, "products", "productDialog", ["purchase_price", "sale_price", "minimum_stock", "units_per_carton", "kg_per_carton", "vat_rate"])));
 document.querySelector("#stockForm").addEventListener("submit", safely(adjustStock));
@@ -810,7 +861,14 @@ document.addEventListener("change", (event) => {
 });
 
 document.addEventListener("click", safely(async (event) => {
-  const opener = event.target.closest("[data-open-dialog]");
+  const productPageButton = event.target.closest("[data-product-page]");
+ if (productPageButton && !productPageButton.disabled) {
+  state.productPage = Number(productPageButton.dataset.productPage || 1);
+  renderProducts();
+  document.querySelector("#productRows")?.closest(".table-wrap")?.scrollIntoView({ block: "start" });
+  return;
+ }
+ const opener = event.target.closest("[data-open-dialog]");
   if (opener) openEditForm(opener.dataset.openDialog, opener.dataset.openDialog.replace("Dialog", "Form"));
   const customerEdit = event.target.closest("[data-customer-edit]");
   if (customerEdit) openEditForm("customerDialog", "customerForm", state.customers.find((item) => item.id === customerEdit.dataset.customerEdit));
@@ -832,7 +890,7 @@ document.addEventListener("click", safely(async (event) => {
     const field = sortHeader.dataset.productSort;
     state.productSort = state.productSort === `${field}-asc` ? `${field}-desc` : `${field}-asc`;
     document.querySelector("#productSort").value = state.productSort;
-    renderProducts();
+    state.productPage = 1; renderProducts();
   }
   const addProduct = event.target.closest("[data-add-invoice-product]");
   if (addProduct) addInvoiceLine(addProduct);

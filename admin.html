@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,nofollow" />
     <title>Ticari Otomasyon</title>
-    <link rel="stylesheet" href="admin.css?v=20260614-5" />
+    <link rel="stylesheet" href="admin.css?v=20260614-pagination-100" />
   </head>
   <body>
     <div class="login-shell" id="loginShell">
@@ -85,7 +85,7 @@
               <input class="search" id="productSearch" type="search" placeholder="Marka, barkod, ürün, gramaj veya SKU ara" />
               <select id="productSort"><option value="brand-asc">Marka A-Z</option><option value="brand-desc">Marka Z-A</option><option value="name-asc">Ürün adı A-Z</option><option value="name-desc">Ürün adı Z-A</option><option value="sku-asc">Barkod / SKU A-Z</option><option value="sku-desc">Barkod / SKU Z-A</option><option value="grammage-asc">Gramaj A-Z</option><option value="grammage-desc">Gramaj Z-A</option><option value="purchase-asc">Alış fiyatı artan</option><option value="purchase-desc">Alış fiyatı azalan</option><option value="sale-asc">Satış fiyatı artan</option><option value="sale-desc">Satış fiyatı azalan</option><option value="stock-asc">Stok artan</option><option value="stock-desc">Stok azalan</option></select>
             </div>
-            <div class="table-wrap selectable-table"><table><thead><tr><th>Sıra No</th><th><input id="selectAllProducts" type="checkbox" aria-label="Tümünü seç" /></th><th data-product-sort="brand">Marka</th><th data-product-sort="sku">Barkod</th><th data-product-sort="name">Ürün İsmi</th><th data-product-sort="grammage">Gramaj</th><th>Koli İçi</th><th data-product-sort="stock">Stok Adet</th><th>Stok Koli</th><th>Min.</th><th data-product-sort="purchase">Alış / adet</th><th data-product-sort="sale">Satış / adet</th><th>KDV</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div>
+            <div class="table-wrap selectable-table"><table><thead><tr><th>Sıra No</th><th><input id="selectAllProducts" type="checkbox" aria-label="Tümünü seç" /></th><th data-product-sort="brand">Marka</th><th data-product-sort="sku">Barkod</th><th data-product-sort="name">Ürün İsmi</th><th data-product-sort="grammage">Gramaj</th><th>Koli İçi</th><th data-product-sort="stock">Stok Adet</th><th>Stok Koli</th><th>Min.</th><th data-product-sort="purchase">Alış / adet</th><th data-product-sort="sale">Satış / adet</th><th>KDV</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div><div class="product-pagination" id="productPagination" aria-label="Stok listesi sayfaları"></div>
           </div>
         </section>
 
@@ -219,6 +219,6 @@
     <script src="/api/backend-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="catalog-products.generated.js?v=20260614-1"></script>
-    <script src="admin.js?v=20260614-6"></script>
+    <script src="admin.js?v=20260614-pagination-100"></script>
   </body>
 </html>
