@@ -235,3 +235,21 @@ dialog::backdrop { background: rgba(4,15,26,.65); backdrop-filter: blur(3px); }
  }
 }
 
+.selection-count { align-self: center; color: var(--muted); font-size: .86rem; white-space: nowrap; }
+button.danger { color: #b42318; border-color: #f0b4ae; background: #fff7f6; }
+button.danger:hover { background: #fee4e2; }
+.passive-label { display: block; color: #b54708; font-weight: 700; margin-top: .2rem; }
+.form-status { min-height: 1.3rem; margin: -.3rem 0 .4rem; color: #087462; font-weight: 700; }
+.form-status.error { color: #b42318; }
+.due-date-field { display: flex; align-items: center; gap: .45rem; }
+.due-date-field input { min-width: 0; flex: 1; }
+.due-date-field output { min-width: 5.5rem; padding: .7rem .55rem; border-radius: .55rem; background: #eef7fa; color: #075f78; text-align: center; font-weight: 800; }
+.picker-actions { display: flex; align-items: center; justify-content: flex-end; gap: .5rem; flex-wrap: wrap; }
+.picker-actions input { min-width: min(26rem, 100%); }
+.invoice-description { display: grid; gap: .45rem; margin-top: 1rem; font-weight: 700; }
+.invoice-description textarea { min-height: 5rem; }
+
+@media (max-width: 760px) {
+  .picker-actions { justify-content: stretch; }
+  .picker-actions > * { flex: 1 1 auto; }
+}

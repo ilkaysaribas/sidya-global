@@ -1,4 +1,4 @@
-const CACHE_NAME = "sidya-global-v84";
+const CACHE_NAME = "sidya-global-v85";
 
 const SHELL_ASSETS = [
   "./",
@@ -89,8 +89,11 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (request.mode === "navigate") {
+    const navigationRequest = url.pathname === "/admin.html"
+      ? new Request(request, { cache: "no-store" })
+      : request;
     event.respondWith(
-      fetch(request)
+      fetch(navigationRequest)
         .then((response) => {
           const copy = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));

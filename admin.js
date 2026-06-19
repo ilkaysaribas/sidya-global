@@ -17,13 +17,15 @@ const state = {
   settings: {},
   invoiceLines: [],
   selectedProducts: new Set(),
+  selectedCustomers: new Set(),
   productSort: "name-asc", productPage: 1, productPageSize: 100,
   schemaReady: true,
   session: null,
   activeInvoiceId: null,
 };
 
-const currencySymbols = { USD: "$", EUR: "€", TRY: "₺", GBP: "£" };
+const currencySymbols = { USD: "$", EUR: "€", RUB: "₽", TRY: "₺", GBP: "£" };
+const invoiceCurrencies = ["USD", "EUR", "RUB", "TRY", "GBP"];
 const money = (value, currency = "USD") => new Intl.NumberFormat("tr-TR", {
   style: "currency",
   currency: currency || "USD",
@@ -170,12 +172,17 @@ const renderCustomers = () => {
     [item.code, item.company, item.contact_name, item.email, item.tax_number].some((value) =>
       String(value || "").toLocaleLowerCase("tr").includes(term)));
   document.querySelector("#customerRows").innerHTML = rows.length ? rows.map((item) => `
-    <tr><td>${escapeHtml(item.code)}</td><td><strong>${escapeHtml(item.company)}</strong></td>
+    <tr class="${state.selectedCustomers.has(item.id) ? "selected-row" : ""}"><td><input type="checkbox" data-customer-select="${item.id}" ${state.selectedCustomers.has(item.id) ? "checked" : ""} /></td><td>${escapeHtml(item.code)}</td><td><strong>${escapeHtml(item.company)}</strong>${item.status === "passive" ? '<small class="passive-label">Pasif</small>' : ""}</td>
     <td>${item.is_buyer && item.is_seller ? "Alıcı + Satıcı" : item.is_seller ? "Satıcı" : "Alıcı"}</td>
     <td>${escapeHtml(item.contact_name || "-")}</td><td>${escapeHtml(item.country || "-")}</td>
     <td>${escapeHtml(item.email || "-")}</td><td>${money(findBalance(state.balances, item.id, item.currency), item.currency)}</td>
     <td><div class="row-actions"><button data-customer-payment="${item.id}">Tahsilat</button><button data-customer-edit="${item.id}">Düzenle</button></div></td></tr>
-  `).join("") : '<tr><td colspan="8" class="empty">Cari kaydı bulunamadı.</td></tr>';
+  `).join("") : '<tr><td colspan="9" class="empty">Cari kaydı bulunamadı.</td></tr>';
+  const selectedCount = rows.filter((item) => state.selectedCustomers.has(item.id)).length;
+  const selectAll = document.querySelector("#selectAllCustomers");
+  selectAll.checked = rows.length > 0 && selectedCount === rows.length;
+  selectAll.indeterminate = selectedCount > 0 && selectedCount < rows.length;
+  document.querySelector("#selectedCustomerCount").textContent = `${state.selectedCustomers.size} cari seçildi`;
 };
 
 const getSortedProducts = () => {
@@ -271,15 +278,16 @@ const renderProducts = () => {
 };
 
 const renderOrders = () => {
-  const newCount = state.orders.filter((item) => item.status === "new").length;
+  const visibleOrders = state.orders.filter((item) => item.status !== "cancelled");
+  const newCount = visibleOrders.filter((item) => item.status === "new").length;
   document.querySelector("#newOrderCount").textContent = newCount;
   document.querySelector("#metricOrders").textContent = number(newCount);
-  document.querySelector("#orderRows").innerHTML = state.orders.length ? state.orders.map((item) => `
+  document.querySelector("#orderRows").innerHTML = visibleOrders.length ? visibleOrders.map((item) => `
     <tr><td><strong>${escapeHtml(item.order_no)}</strong></td><td>${date(item.created_at)}</td>
     <td>${escapeHtml(item.customer_company || item.customer_email || "Misafir siparişi")}</td>
     <td>${Array.isArray(item.items) ? item.items.length : 0}</td><td>${number(item.total_cartons)}</td>
     <td><span class="badge ${item.status}">${({ new: "Yeni", reviewing: "İnceleniyor", converted: "Faturaya dönüştü", cancelled: "İptal" })[item.status] || item.status}</span></td>
-    <td><div class="row-actions"><button data-order-detail="${item.id}">Detay</button><button class="primary" data-order-convert="${item.id}" ${item.status === "converted" ? "disabled" : ""}>Faturaya aktar</button></div></td></tr>
+    <td><div class="row-actions"><button data-order-detail="${item.id}">Detay</button><button class="primary" data-order-convert="${item.id}" ${item.status === "converted" ? "disabled" : ""}>Faturaya aktar</button><button class="danger" data-order-delete="${item.id}">Sil</button></div></td></tr>
   `).join("") : '<tr><td colspan="7" class="empty">Henüz siteden sipariş gelmedi.</td></tr>';
 };
 
@@ -311,7 +319,7 @@ const openInvoiceDetail = async (invoiceId) => {
   document.querySelector("#invoiceDetailNumber").textContent = documentNumber;
   document.querySelector("#invoiceDetailDueDate").textContent = date(invoice.due_date);
   document.querySelector("#invoiceDetailCustomer").textContent = `${customer?.code || ""} ${customer?.company || "-"}`.trim();
-  document.querySelector("#invoiceDetailCurrency").textContent = `${invoice.currency} · Kur ${number(invoice.exchange_rate)}`;
+  document.querySelector("#invoiceDetailCurrency").textContent = invoice.currency;
   document.querySelector("#invoiceDetailScenario").textContent = invoice.scenario === "export" ? "İhracat / KDV %0" : "Türkiye / KDV'li";
   document.querySelector("#invoiceDetailStatus").textContent = invoice.status === "posted" ? "Kayıtlı" : invoice.status;
   document.querySelector("#invoiceDetailRows").innerHTML = items.length ? items.map((item, index) => `<tr><td>${index + 1}</td><td>${escapeHtml(item.barcode || item.products?.barcode || item.product_code || item.products?.sku || "-")}</td><td><strong>${escapeHtml(item.description)}</strong><small>${escapeHtml(item.products?.brand || "")}</small></td><td>${item.unit === "koli" ? "Koli" : "Adet"}</td><td>${number(item.quantity)}</td><td>${money(item.unit_price, invoice.currency)}</td><td>${money(item.line_subtotal, invoice.currency)}</td><td>%${number(item.tax_rate)} · ${money(item.line_tax, invoice.currency)}</td><td>%${number(item.discount_1)}</td><td>%${number(item.discount_2)}</td><td>%${number(item.discount_3)}</td><td>${escapeHtml(item.description)}</td></tr>`).join("") : '<tr><td colspan="12" class="empty">Fatura satırı bulunmuyor.</td></tr>';
@@ -407,14 +415,30 @@ const renderTemplate = () => {
 
 const renderInvoiceOptions = () => {
   const invoiceType = document.querySelector("#invoiceForm").elements.invoice_type.value || "sale";
+  const customerSelect = document.querySelector("#invoiceCustomer");
+  const selectedCustomer = customerSelect.value;
   const eligibleCustomers = state.customers.filter((item) =>
-    invoiceType === "purchase" ? item.is_seller !== false : item.is_buyer !== false);
-  document.querySelector("#invoiceCustomer").innerHTML = '<option value="">Cari seçin</option>' + eligibleCustomers.map((item) =>
+    item.status !== "passive" && (invoiceType === "purchase" ? item.is_seller !== false : item.is_buyer !== false));
+  customerSelect.innerHTML = '<option value="">Cari seçin</option>' + eligibleCustomers.map((item) =>
     `<option value="${item.id}">${escapeHtml(item.code)} · ${escapeHtml(item.company)}</option>`).join("");
+  if (eligibleCustomers.some((item) => item.id === selectedCustomer)) customerSelect.value = selectedCustomer;
   const productOptions = '<option value="">Ürün seçin</option>' + state.products.filter((item) => item.active).map((item) =>
     `<option value="${item.id}">${escapeHtml(item.name)} · stok ${number(item.stock_quantity)}</option>`).join("");
   document.querySelector("#stockProduct").innerHTML = productOptions;
   renderInvoiceProductPicker();
+};
+
+const refreshInvoiceProducts = async () => {
+  const button = document.querySelector("#refreshInvoiceProductsButton");
+  button.disabled = true;
+  try {
+    state.products = await loadAllProducts(client);
+    renderProducts();
+    renderInvoiceOptions();
+    document.querySelector("#invoiceFormStatus").textContent = `${state.products.length} ürün güncellendi.`;
+  } finally {
+    button.disabled = false;
+  }
 };
 
 const cartonSize = (product) => Math.max(Number(product?.units_per_carton || 1), 1);
@@ -429,9 +453,11 @@ const renderInvoiceProductPicker = () => {
   const target = document.querySelector("#invoiceProductRows");
   if (!target) return;
   const term = document.querySelector("#invoiceProductSearch")?.value.trim().toLocaleLowerCase("tr") || "";
-  const invoiceType = document.querySelector("#invoiceForm").elements.invoice_type.value || "sale";
+  const form = document.querySelector("#invoiceForm");
+  const invoiceType = form.elements.invoice_type.value || "sale";
+  const currency = form.elements.currency.value || "USD";
   const products = state.products.filter((item) => item.active && [item.barcode, item.sku, item.name, item.brand]
-    .some((value) => String(value || "").toLocaleLowerCase("tr").includes(term))).slice(0, 100);
+    .some((value) => String(value || "").toLocaleLowerCase("tr").includes(term)));
   target.innerHTML = products.length ? products.map((product) => {
     const units = cartonSize(product);
     const defaultUnit = units > 1 ? "koli" : "adet";
@@ -442,10 +468,21 @@ const renderInvoiceProductPicker = () => {
       <td>${number(stock)} ad.<small>${units > 1 ? `${number(stock / units)} koli` : ""}</small></td>
       <td><input data-picker-quantity type="number" min="0.001" step="0.001" value="1" aria-label="Miktar" /></td>
       <td><input data-picker-price type="number" min="0" step="0.0001" value="${productUnitPrice(product, invoiceType, defaultUnit)}" aria-label="Birim fiyat" /></td>
+      <td><select data-picker-currency aria-label="Para birimi">${invoiceCurrencies.map((item) => `<option ${item === currency ? "selected" : ""}>${item}</option>`).join("")}</select></td>
       <td><select data-picker-unit aria-label="Birim"><option value="adet" ${defaultUnit === "adet" ? "selected" : ""}>Adet</option><option value="koli" ${defaultUnit === "koli" ? "selected" : ""}>Koli</option></select></td>
       <td><button type="button" class="primary" data-add-invoice-product="${product.id}">Ekle</button></td>
     </tr>`;
-  }).join("") : '<tr><td colspan="7" class="empty">Ürün bulunamadı.</td></tr>';
+  }).join("") : '<tr><td colspan="8" class="empty">Ürün bulunamadı.</td></tr>';
+};
+
+const updateInvoiceTermDays = () => {
+  const form = document.querySelector("#invoiceForm");
+  const start = form.elements.invoice_date.value;
+  const end = form.elements.due_date.value;
+  const target = document.querySelector("#invoiceTermDays");
+  if (!start || !end) { target.textContent = "0 gün"; return; }
+  const days = Math.round((new Date(`${end}T12:00:00`) - new Date(`${start}T12:00:00`)) / 86400000);
+  target.textContent = days >= 0 ? `${days} gün` : "Geçersiz tarih";
 };
 
 const calculateLine = (line, scenario) => {
@@ -478,12 +515,13 @@ const renderInvoiceLines = () => {
       <td><input data-line-index="${index}" data-line-field="quantity" type="number" min="0.001" step="0.001" value="${line.quantity}" /></td>
       <td><select data-line-index="${index}" data-line-field="selected_unit"><option value="adet" ${line.selected_unit === "adet" ? "selected" : ""}>Adet</option><option value="koli" ${line.selected_unit === "koli" ? "selected" : ""}>Koli</option></select></td>
       <td><input data-line-index="${index}" data-line-field="unit_price" type="number" min="0" step="0.0001" value="${line.unit_price}" /></td>
+      <td><strong>${escapeHtml(currency)}</strong></td>
       <td><input data-line-index="${index}" data-line-field="discount_1" type="number" min="0" max="100" step="0.01" value="${line.discount_1}" /></td>
       <td><input data-line-index="${index}" data-line-field="discount_2" type="number" min="0" max="100" step="0.01" value="${line.discount_2}" /></td>
       <td><input data-line-index="${index}" data-line-field="discount_3" type="number" min="0" max="100" step="0.01" value="${line.discount_3}" /></td>
       <td><input data-line-index="${index}" data-line-field="tax_rate" type="number" list="vatRates" min="0" max="100" step="0.01" value="${line.tax_rate}" ${scenario === "export" ? "disabled" : ""} /></td>
-      <td><strong>${money(calc.total, currency)}</strong></td><td><button type="button" data-remove-line="${index}">Sil</button></td></tr>`;
-  }).join("") : '<tr><td colspan="13" class="empty">Yukarıdaki listeden ürün ekleyin.</td></tr>';
+      <td>${money(calc.tax, currency)}</td><td><strong>${money(calc.total, currency)}</strong></td><td><button type="button" data-remove-line="${index}">Sil</button></td></tr>`;
+  }).join("") : '<tr><td colspan="15" class="empty">Yukarıdaki listeden ürün ekleyin.</td></tr>';
   const bottomDiscount = subtotal * Math.min(Math.max(bottomRate, 0), 100) / 100;
   const adjustedTax = subtotal > 0 ? tax * ((subtotal - bottomDiscount) / subtotal) : 0;
   document.querySelector("#invoiceSubtotal").textContent = money(subtotal, currency);
@@ -620,7 +658,6 @@ const setInvoiceMode = (type, order = null) => {
   state.invoiceLines = [];
   form.elements.invoice_type.value = type;
   form.elements.invoice_date.value = today();
-  form.elements.exchange_rate.value = "1";
   form.elements.invoice_discount_rate.value = "0";
   form.elements.source_order_id.value = order?.id || "";
   const purchase = type === "purchase";
@@ -632,8 +669,7 @@ const setInvoiceMode = (type, order = null) => {
   form.elements.scenario.value = purchase || returnInvoice ? "domestic" : "export";
   form.elements.currency.value = purchase || returnInvoice ? "TRY" : "USD";
   document.querySelector("#saveInvoiceButton").textContent = purchase ? "Alış faturasını işle ve stoğa ekle" : returnInvoice ? "İade faturasını kaydet ve stoğa ekle" : "Satış faturasını kes ve stoktan düş";
-  const template = state.settings.invoice_template || {};
-  form.elements.incoterm.value = template.incoterm || "";
+  document.querySelector("#invoiceFormStatus").textContent = "";
   document.querySelector("#invoiceProductSearch").value = "";
   if (order) {
     const matchedCustomer = state.customers.find((item) =>
@@ -663,6 +699,7 @@ const setInvoiceMode = (type, order = null) => {
     if (matchedCustomer) form.elements.customer_id.value = matchedCustomer.id;
   }
   renderInvoiceLines();
+  updateInvoiceTermDays();
   const invoiceDialog = document.querySelector("#invoiceDialog");
   if (!invoiceDialog.open) invoiceDialog.showModal();
 };
@@ -674,6 +711,7 @@ const addInvoiceLine = (button) => {
   const row = button.closest("[data-picker-row]");
   const quantity = Number(row.querySelector("[data-picker-quantity]").value);
   const selectedUnit = row.querySelector("[data-picker-unit]").value;
+  form.elements.currency.value = row.querySelector("[data-picker-currency]").value;
   const unitPrice = Number(row.querySelector("[data-picker-price]").value);
   const unitsPerCarton = cartonSize(product);
   if (!(quantity > 0)) throw new Error("Miktar sıfırdan büyük olmalı.");
@@ -709,12 +747,11 @@ const saveInvoice = async (event) => {
     p_invoice_date: values.invoice_date,
     p_due_date: values.due_date || null,
     p_currency: values.currency,
-    p_exchange_rate: Number(values.exchange_rate),
+    p_exchange_rate: 1,
     p_scenario: values.scenario,
     p_invoice_discount_rate: Number(values.invoice_discount_rate || 0),
     p_notes: values.notes,
     p_draft_data: {
-      incoterm: values.incoterm,
       document_number: values.document_number,
       payment_note: state.settings.invoice_template?.payment_note || "",
     },
@@ -731,6 +768,55 @@ const saveInvoice = async (event) => {
   await loadData();
   setStatus(`${({ purchase: "Alış", sale: "Satış", return: "İade" })[values.invoice_type]} faturası kaydedildi; stok otomatik güncellendi.`);
   return result;
+};
+
+const updateSelectedCustomers = async (status) => {
+  const ids = [...state.selectedCustomers];
+  if (!ids.length) throw new Error("Önce en az bir cari seçin.");
+  await query(client.from("customers").update({ status, updated_at: new Date().toISOString() }).in("id", ids).select("id"));
+  state.selectedCustomers.clear();
+  await loadData();
+  setStatus(`${ids.length} cari ${status === "active" ? "aktif" : "pasif"} yapıldı.`);
+};
+
+const deleteSelectedCustomers = async () => {
+  const ids = [...state.selectedCustomers];
+  if (!ids.length) throw new Error("Önce en az bir cari seçin.");
+  if (!confirm(`${ids.length} cari kalıcı olarak silinsin mi? Hareketi olan cariler silinemez.`)) return;
+  try {
+    await query(client.from("customers").delete().in("id", ids).select("id"));
+  } catch (error) {
+    throw new Error(`Cari silinemedi. Faturası veya hesap hareketi olan cariyi pasife alın. ${error.message || ""}`.trim());
+  }
+  state.selectedCustomers.clear();
+  await loadData();
+  setStatus(`${ids.length} cari silindi.`);
+};
+
+const deleteIncomingOrder = async (orderId) => {
+  const order = state.orders.find((item) => item.id === orderId);
+  if (!order || !confirm(`${order.order_no} numaralı sipariş silinsin mi?`)) return;
+  await query(client.from("site_orders").update({ status: "cancelled", updated_at: new Date().toISOString() }).eq("id", orderId).select("id"));
+  await loadData();
+  setStatus(`${order.order_no} numaralı sipariş silindi.`);
+};
+
+const submitInvoice = async (event) => {
+  event.preventDefault();
+  const status = document.querySelector("#invoiceFormStatus");
+  const button = document.querySelector("#saveInvoiceButton");
+  status.classList.remove("error");
+  status.textContent = "Fatura kaydediliyor ve stok güncelleniyor...";
+  button.disabled = true;
+  try {
+    await saveInvoice(event);
+  } catch (error) {
+    status.classList.add("error");
+    status.textContent = friendlyError(error);
+    setStatus(friendlyError(error), true);
+  } finally {
+    button.disabled = false;
+  }
 };
 
 const saveTemplate = async (event) => {
@@ -771,11 +857,11 @@ const printInvoice = async (invoiceId) => {
     <p class="warning">Düzenlenebilir taslak belgedir. GİB'e gönderilmemiştir.</p>
     <header><div><h1>e-FATURA TASLAĞI</h1><p>${invoice.invoice_type === "purchase" ? "ALIŞ FATURASI" : invoice.invoice_type === "return" ? "İADE FATURASI" : invoice.scenario === "export" ? "COMMERCIAL EXPORT INVOICE" : "SATIŞ FATURASI"}</p></div><div class="invoice-label"><strong>${escapeHtml(documentNumber)}</strong><span>${date(invoice.invoice_date)}</span></div></header>
     <section class="meta"><div class="card"><h3>SATICI</h3>${seller}</div><div class="card"><h3>ALICI</h3>${buyer}</div></section>
-    <section class="invoice-info"><div><span>FATURA TARİHİ</span><strong>${date(invoice.invoice_date)}</strong></div><div><span>VADE TARİHİ</span><strong>${date(invoice.due_date)}</strong></div><div><span>SENARYO</span><strong>${invoice.scenario === "export" ? "İhracat / KDV %0" : "Türkiye"}</strong></div><div><span>PARA BİRİMİ / KUR</span><strong>${escapeHtml(invoice.currency)} / ${number(invoice.exchange_rate)}</strong></div></section>
+    <section class="invoice-info"><div><span>FATURA TARİHİ</span><strong>${date(invoice.invoice_date)}</strong></div><div><span>VADE TARİHİ</span><strong>${date(invoice.due_date)}</strong></div><div><span>SENARYO</span><strong>${invoice.scenario === "export" ? "İhracat / KDV %0" : "Türkiye"}</strong></div><div><span>PARA BİRİMİ</span><strong>${escapeHtml(invoice.currency)}</strong></div></section>
     <table><thead><tr><th>#</th><th>Barkod / Ürün Kodu</th><th>Mal / Hizmet</th><th class="right">Miktar</th><th class="right">Birim Fiyat</th><th class="right">İsk. 1/2/3</th><th class="right">KDV</th><th class="right">KDV Tutarı</th><th class="right">Tutar</th></tr></thead>
     <tbody>${items.map((item, index) => `<tr><td>${index + 1}</td><td class="barcode">${escapeHtml(item.barcode || item.products?.barcode || item.product_code || item.products?.sku || "-")}</td><td>${escapeHtml(item.description)}</td><td class="right">${number(item.quantity)} ${item.unit === "koli" ? "Koli" : "Adet"}</td><td class="right">${money(item.unit_price, invoice.currency)}</td><td class="right">%${number(item.discount_1)} / %${number(item.discount_2)} / %${number(item.discount_3)}</td><td class="right">%${number(item.tax_rate)}</td><td class="right">${money(item.line_tax, invoice.currency)}</td><td class="right">${money(item.line_total, invoice.currency)}</td></tr>`).join("")}</tbody></table>
     <div class="total"><p><span>Ara toplam</span><strong>${money(invoice.subtotal, invoice.currency)}</strong></p><p><span>Toplam iskonto</span><strong>${money(invoice.total_discount, invoice.currency)}</strong></p><p><span>KDV</span><strong>${money(invoice.tax_total, invoice.currency)}</strong></p><p><span>Genel toplam</span><strong>${money(invoice.grand_total, invoice.currency)}</strong></p></div>
-    <p class="note"><strong>Not / Teslim şekli:</strong><br>${escapeHtml(invoice.notes || "")}<br>Incoterm: ${escapeHtml(invoice.draft_data?.incoterm || "-")}<br>${escapeHtml(invoice.draft_data?.payment_note || "")}</p><button class="print-button" onclick="window.print()">Yazdır / PDF kaydet</button></body></html>`);
+    <p class="note"><strong>Açıklama:</strong><br>${escapeHtml(invoice.notes || "-")}<br>${escapeHtml(invoice.draft_data?.payment_note || "")}</p><button class="print-button" onclick="window.print()">Yazdır / PDF kaydet</button></body></html>`);
   popup.document.close();
 };
 
@@ -828,7 +914,7 @@ document.querySelector("#customerForm").addEventListener("submit", safely(saveCu
 document.querySelector("#productForm").addEventListener("submit", safely((event) => saveEntity(event, "products", "productDialog", ["purchase_price", "sale_price", "minimum_stock", "units_per_carton", "kg_per_carton", "vat_rate"])));
 document.querySelector("#stockForm").addEventListener("submit", safely(adjustStock));
 document.querySelector("#paymentForm").addEventListener("submit", safely(recordPayment));
-document.querySelector("#invoiceForm").addEventListener("submit", safely(saveInvoice));
+document.querySelector("#invoiceForm").addEventListener("submit", submitInvoice);
 document.querySelector("#templateForm").addEventListener("submit", safely(saveTemplate));
 document.querySelector("#importCatalogButton").addEventListener("click", safely(importCatalog));
 document.querySelector("#openStockCorrection").addEventListener("click", () => { renderInvoiceOptions(); document.querySelector("#stockDialog").showModal(); });
@@ -843,6 +929,22 @@ document.querySelector("#invoiceForm [name='currency']").addEventListener("chang
 document.querySelector("#invoiceForm [name='scenario']").addEventListener("change", renderInvoiceLines);
 document.querySelector("#invoiceForm [name='invoice_discount_rate']").addEventListener("input", renderInvoiceLines);
 document.querySelector("#invoiceProductSearch").addEventListener("input", renderInvoiceProductPicker);
+document.querySelector("#refreshInvoiceProductsButton").addEventListener("click", safely(refreshInvoiceProducts));
+document.querySelector("#invoiceForm [name='invoice_date']").addEventListener("change", updateInvoiceTermDays);
+document.querySelector("#invoiceForm [name='due_date']").addEventListener("change", updateInvoiceTermDays);
+document.querySelector("#selectAllCustomers").addEventListener("change", (event) => {
+  state.selectedCustomers.clear();
+  if (event.target.checked) {
+    const term = document.querySelector("#customerSearch").value.trim().toLocaleLowerCase("tr");
+    state.customers.filter((item) => [item.code, item.company, item.contact_name, item.email, item.tax_number]
+      .some((value) => String(value || "").toLocaleLowerCase("tr").includes(term)))
+      .forEach((item) => state.selectedCustomers.add(item.id));
+  }
+  renderCustomers();
+});
+document.querySelector("#activateCustomersButton").addEventListener("click", safely(() => updateSelectedCustomers("active")));
+document.querySelector("#deactivateCustomersButton").addEventListener("click", safely(() => updateSelectedCustomers("passive")));
+document.querySelector("#deleteCustomersButton").addEventListener("click", safely(deleteSelectedCustomers));
 document.querySelector("#selectAllProducts").addEventListener("change", (event) => {
   state.selectedProducts.clear();
   if (event.target.checked) getSortedProducts().forEach((item) => state.selectedProducts.add(item.id));
@@ -873,6 +975,12 @@ document.querySelectorAll("dialog").forEach((dialog) => {
 });
 
 document.addEventListener("change", (event) => {
+  const pickerCurrency = event.target.closest("[data-picker-currency]");
+  if (pickerCurrency) {
+    document.querySelector("#invoiceForm").elements.currency.value = pickerCurrency.value;
+    document.querySelectorAll("[data-picker-currency]").forEach((select) => { select.value = pickerCurrency.value; });
+    renderInvoiceLines();
+  }
   const pickerUnit = event.target.closest("[data-picker-unit]");
   if (pickerUnit) {
     const row = pickerUnit.closest("[data-picker-row]");
@@ -924,6 +1032,11 @@ document.addEventListener("click", safely(async (event) => {
     productSelect.checked ? state.selectedProducts.add(productSelect.dataset.productSelect) : state.selectedProducts.delete(productSelect.dataset.productSelect);
     renderProducts();
   }
+  const customerSelect = event.target.closest("[data-customer-select]");
+  if (customerSelect) {
+    customerSelect.checked ? state.selectedCustomers.add(customerSelect.dataset.customerSelect) : state.selectedCustomers.delete(customerSelect.dataset.customerSelect);
+    renderCustomers();
+  }
   const sortHeader = event.target.closest("[data-product-sort]");
   if (sortHeader) {
     const field = sortHeader.dataset.productSort;
@@ -946,6 +1059,8 @@ document.addEventListener("click", safely(async (event) => {
     const order = state.orders.find((item) => item.id === detail.dataset.orderDetail);
     alert((order.items || []).map((item, index) => `${index + 1}. ${item.brand || ""} ${item.product}: ${item.cartons} koli`).join("\n"));
   }
+  const deleteOrder = event.target.closest("[data-order-delete]");
+  if (deleteOrder) await deleteIncomingOrder(deleteOrder.dataset.orderDelete);
 }));
 
 document.querySelector("#exportCustomersButton").addEventListener("click", () => csvDownload("cari-bakiyeler.csv", [

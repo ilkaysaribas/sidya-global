@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,nofollow" />
     <title>Ticari Otomasyon</title>
-    <link rel="stylesheet" href="admin.css?v=20260619-1" />
+    <link rel="stylesheet" href="admin.css?v=20260620-1" />
   </head>
   <body>
     <div class="login-shell" id="loginShell">
@@ -73,8 +73,8 @@
         <section class="view" data-view-panel="customers">
           <div class="panel">
             <div class="panel-heading"><div><p class="eyebrow">CARİ YÖNETİMİ</p><h2>Alıcı ve satıcı cariler</h2></div><button class="primary" data-open-dialog="customerDialog">Yeni cari</button></div>
-            <input class="search" id="customerSearch" type="search" placeholder="Firma, kod, e-posta veya vergi no ara" />
-            <div class="table-wrap"><table><thead><tr><th>Kod</th><th>Firma</th><th>Rol</th><th>Yetkili</th><th>Ülke</th><th>E-posta</th><th>Net bakiye</th><th></th></tr></thead><tbody id="customerRows"></tbody></table></div>
+            <div class="table-tools"><input class="search" id="customerSearch" type="search" placeholder="Firma, kod, e-posta veya vergi no ara" /><div class="button-row"><span id="selectedCustomerCount" class="selection-count">0 cari seçildi</span><button id="activateCustomersButton" type="button">Aktif yap</button><button id="deactivateCustomersButton" type="button">Pasif yap</button><button id="deleteCustomersButton" class="danger" type="button">Sil</button></div></div>
+            <div class="table-wrap"><table><thead><tr><th><input id="selectAllCustomers" type="checkbox" aria-label="Tüm carileri seç" /></th><th>Kod</th><th>Firma</th><th>Rol</th><th>Yetkili</th><th>Ülke</th><th>E-posta</th><th>Net bakiye</th><th></th></tr></thead><tbody id="customerRows"></tbody></table></div>
           </div>
         </section>
 
@@ -187,31 +187,29 @@
 
     <dialog id="invoiceDialog" class="wide-dialog"><form method="dialog" class="dialog-form" id="invoiceForm">
       <div class="dialog-heading"><div><p class="eyebrow" id="invoiceKicker">SATIŞ FATURASI</p><h2 id="invoiceDialogTitle">Yeni fatura</h2></div><button type="button" data-close-dialog>×</button></div>
-      <input type="hidden" name="source_order_id" />
+      <input type="hidden" name="source_order_id" /><input type="hidden" name="currency" id="invoiceCurrency" value="USD" />
+      <p id="invoiceFormStatus" class="form-status" role="status"></p>
       <div class="form-grid invoice-head">
         <label>Fatura tipi<select name="invoice_type" id="invoiceType"><option value="purchase">Alış faturası</option><option value="sale">Satış faturası</option><option value="return">İade faturası</option></select></label>
         <label id="customerField">Cari<select name="customer_id" id="invoiceCustomer"></select></label>
-        <label>Fatura tarihi<input name="invoice_date" type="date" required /></label><label>Vade tarihi<input name="due_date" type="date" /></label>
+        <label>Fatura tarihi<input name="invoice_date" type="date" required /></label><label>Vade tarihi<div class="due-date-field"><input name="due_date" type="date" /><output id="invoiceTermDays">0 gün</output></div></label>
         <label>Fatura numarası<input name="document_number" placeholder="Boş bırakılırsa otomatik oluşur" /></label>
         <label>Senaryo<select name="scenario" id="invoiceScenario"><option value="export">İhracat - KDV %0</option><option value="domestic">Türkiye - KDV'li</option></select></label>
-        <label>Para birimi<select name="currency" id="invoiceCurrency"><option>USD</option><option>EUR</option><option>TRY</option><option>GBP</option></select></label>
-        <label>Kur <small>(1 USD kaç döviz)</small><input name="exchange_rate" type="number" min="0.000001" step="0.000001" value="1" required /></label>
         <label>Fatura altı iskonto %<input name="invoice_discount_rate" type="number" min="0" max="100" step="0.01" value="0" /></label>
-        <label>Not<input name="notes" /></label>
-        <label>Incoterm<input name="incoterm" placeholder="EXW, FCA, CIF..." /></label>
       </div>
       <div class="invoice-product-picker">
         <div class="picker-heading">
           <div><p class="eyebrow">ÜRÜN SEÇİMİ</p><h3>Ürün ekle</h3></div>
-          <input id="invoiceProductSearch" type="search" placeholder="Barkod, ürün veya marka ara" />
+          <div class="picker-actions"><input id="invoiceProductSearch" type="search" placeholder="Barkod, ürün veya marka ara" /><button type="button" id="refreshInvoiceProductsButton">Listeyi yenile</button><button type="button" class="primary" data-open-dialog="productDialog">Yeni ürün ekle</button></div>
         </div>
         <div class="table-wrap picker-table"><table>
-          <thead><tr><th>Barkod</th><th>Ürün</th><th>Stok</th><th>Miktar</th><th>Birim fiyat</th><th>Birim</th><th></th></tr></thead>
+          <thead><tr><th>Barkod</th><th>Ürün</th><th>Stok</th><th>Miktar</th><th>Birim fiyat</th><th>Para birimi</th><th>Birim</th><th></th></tr></thead>
           <tbody id="invoiceProductRows"></tbody>
         </table></div>
       </div>
       <div class="invoice-lines-heading"><h3>Fatura satırları</h3><span>Koli seçilirse koli içi adet otomatik olarak stoğa işlenir.</span></div>
-      <div class="table-wrap invoice-lines-table"><table><thead><tr><th>#</th><th>Barkod</th><th>Ürün</th><th>Stok</th><th>Miktar</th><th>Birim</th><th>Birim fiyat</th><th>İsk. 1</th><th>İsk. 2</th><th>İsk. 3</th><th>KDV</th><th>Toplam</th><th></th></tr></thead><tbody id="invoiceLineRows"></tbody></table></div>
+      <div class="table-wrap invoice-lines-table"><table><thead><tr><th>#</th><th>Barkod</th><th>Ürün</th><th>Stok</th><th>Miktar</th><th>Birim</th><th>Birim fiyat</th><th>Para birimi</th><th>İsk. 1</th><th>İsk. 2</th><th>İsk. 3</th><th>KDV %</th><th>KDV tutarı</th><th>KDV dahil toplam</th><th></th></tr></thead><tbody id="invoiceLineRows"></tbody></table></div>
+      <label class="invoice-description">Açıklama<textarea name="notes" rows="3" placeholder="Faturaya ait açıklamayı yazın"></textarea></label>
       <div class="invoice-summary"><span>Ara toplam <strong id="invoiceSubtotal">0</strong></span><span>İskonto <strong id="invoiceDiscountTotal">0</strong></span><span>KDV <strong id="invoiceTaxTotal">0</strong></span><span>Genel toplam <strong id="invoiceGrandTotal">0</strong></span></div>
       <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit" id="saveInvoiceButton">Faturayı kaydet</button></div>
     </form></dialog>
@@ -229,6 +227,6 @@
     <script src="/api/backend-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="catalog-products.generated.js?v=20260614-1"></script>
-    <script src="admin.js?v=20260619-1"></script>
+    <script src="admin.js?v=20260620-1"></script>
   </body>
 </html>
