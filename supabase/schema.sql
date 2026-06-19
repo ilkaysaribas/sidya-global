@@ -175,7 +175,7 @@ create sequence if not exists public.invoice_no_seq start 1;
 create table if not exists public.invoices (
   id uuid primary key default gen_random_uuid(),
   invoice_no text not null unique,
-  invoice_type text not null default 'sale' check (invoice_type in ('sale', 'purchase')),
+  invoice_type text not null default 'sale' check (invoice_type in ('sale', 'purchase', 'return')),
   customer_id uuid not null references public.customers(id),
   invoice_date date not null default current_date,
   due_date date,
@@ -680,6 +680,12 @@ add column if not exists gib_status text not null default 'not_sent',
 add column if not exists gib_uuid text,
 add column if not exists draft_data jsonb not null default '{}'::jsonb;
 
+alter table public.invoices
+drop constraint if exists invoices_invoice_type_check;
+
+alter table public.invoices
+add constraint invoices_invoice_type_check check (invoice_type in ('sale', 'purchase', 'return'));
+
 alter table public.invoice_items
 add column if not exists discount_1 numeric(6,2) not null default 0,
 add column if not exists discount_2 numeric(6,2) not null default 0,
@@ -822,21 +828,18 @@ begin
   normalized_scenario := lower(coalesce(p_scenario, 'domestic'));
   normalized_currency := upper(coalesce(nullif(p_currency, ''), 'USD'));
 
-  if normalized_type not in ('sale', 'purchase') then
+  if normalized_type not in ('sale', 'purchase', 'return') then
     raise exception 'Fatura tipi gecersiz';
   end if;
-  if normalized_type = 'sale' and p_customer_id is null then
-    raise exception 'Satis faturasi icin cari secilmelidir';
-  end if;
-  if normalized_type = 'purchase' and p_customer_id is null then
-    raise exception 'Alis faturasi icin cari secilmelidir';
+  if p_customer_id is null then
+    raise exception 'Fatura icin cari secilmelidir';
   end if;
   if jsonb_typeof(p_items) <> 'array' or jsonb_array_length(p_items) = 0 then
     raise exception 'Faturada en az bir urun bulunmalidir';
   end if;
 
   new_invoice_no :=
-    case when normalized_type = 'purchase' then 'PUR-' else 'INV-' end ||
+    case when normalized_type = 'purchase' then 'PUR-' when normalized_type = 'return' then 'RET-' else 'INV-' end ||
     to_char(coalesce(p_invoice_date, current_date), 'YYYY') || '-' ||
     lpad(nextval('public.invoice_no_seq')::text, 6, '0');
 
@@ -939,6 +942,21 @@ begin
         item_price / case when item_unit = 'koli' then item_units_per_carton else 1 end, 'invoice',
         new_invoice_id, new_invoice_no, auth.uid()
       );
+    elsif normalized_type = 'return' then
+      update public.products
+      set stock_quantity = stock_quantity + item_stock_quantity,
+          updated_at = now()
+      where id = product_record.id;
+
+      insert into public.stock_movements (
+        product_id, movement_type, quantity, unit_cost, reference_type,
+        reference_id, note, created_by
+      )
+      values (
+        product_record.id, 'sale_cancel', item_stock_quantity,
+        item_price / case when item_unit = 'koli' then item_units_per_carton else 1 end, 'invoice',
+        new_invoice_id, new_invoice_no, auth.uid()
+      );
     else
       update public.products
       set stock_quantity = stock_quantity - item_stock_quantity, updated_at = now()
@@ -1028,7 +1046,11 @@ as
 select
   date_trunc('month', invoice_date)::date as month,
   coalesce(sum(case when invoice_type = 'purchase' and currency = 'TRY' and status = 'posted' then tax_total else 0 end), 0)::numeric(14,2) as input_vat,
-  coalesce(sum(case when invoice_type = 'sale' and scenario = 'domestic' and currency = 'TRY' and status = 'posted' then tax_total else 0 end), 0)::numeric(14,2) as output_vat,
+  coalesce(sum(case
+    when invoice_type = 'sale' and scenario = 'domestic' and currency = 'TRY' and status = 'posted' then tax_total
+    when invoice_type = 'return' and scenario = 'domestic' and currency = 'TRY' and status = 'posted' then -tax_total
+    else 0
+  end), 0)::numeric(14,2) as output_vat,
   coalesce(sum(case
     when invoice_type = 'sale' and scenario = 'export' and status = 'posted'
     then case when currency = 'USD' then subtotal else subtotal / nullif(exchange_rate, 0) end

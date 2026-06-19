@@ -20,6 +20,7 @@ const state = {
   productSort: "name-asc", productPage: 1, productPageSize: 100,
   schemaReady: true,
   session: null,
+  activeInvoiceId: null,
 };
 
 const currencySymbols = { USD: "$", EUR: "€", TRY: "₺", GBP: "£" };
@@ -285,13 +286,41 @@ const renderOrders = () => {
 const renderInvoices = () => {
   document.querySelector("#invoiceRows").innerHTML = state.invoices.length ? state.invoices.map((item) => {
     const party = state.customers.find((customer) => customer.id === item.customer_id)?.company;
-    return `<tr><td><strong>${escapeHtml(item.invoice_no)}</strong></td>
-      <td><span class="badge">${item.invoice_type === "purchase" ? "Alış" : "Satış"}</span></td>
+    const typeLabel = ({ purchase: "Alış", sale: "Satış", return: "İade" })[item.invoice_type] || item.invoice_type;
+    const documentNumber = item.draft_data?.document_number || item.invoice_no;
+    return `<tr class="invoice-list-row" data-invoice-open="${item.id}"><td><strong>${escapeHtml(documentNumber)}</strong>${documentNumber !== item.invoice_no ? `<small>${escapeHtml(item.invoice_no)}</small>` : ""}</td>
+      <td><span class="badge">${typeLabel}</span></td>
       <td>${date(item.invoice_date)}</td><td>${escapeHtml(party || "-")}</td>
       <td>${item.scenario === "export" ? "İhracat %0" : "Türkiye"}</td>
       <td>${money(item.grand_total, item.currency)}</td><td>${money(item.tax_total, item.currency)}</td>
-      <td><button data-invoice-print="${item.id}">Taslak / Yazdır</button></td></tr>`;
+      <td><div class="row-actions"><button data-invoice-open="${item.id}">Aç</button><button data-invoice-print="${item.id}">Yazdır</button></div></td></tr>`;
   }).join("") : '<tr><td colspan="8" class="empty">Henüz fatura bulunmuyor.</td></tr>';
+};
+
+const openInvoiceDetail = async (invoiceId) => {
+  const invoice = state.invoices.find((item) => item.id === invoiceId);
+  if (!invoice) throw new Error("Fatura kaydı bulunamadı.");
+  const items = await query(client.from("invoice_items").select("*,products(sku,barcode,brand)").eq("invoice_id", invoiceId));
+  const customer = state.customers.find((item) => item.id === invoice.customer_id);
+  const typeLabel = ({ purchase: "Alış faturası", sale: "Satış faturası", return: "İade faturası" })[invoice.invoice_type] || invoice.invoice_type;
+  const documentNumber = invoice.draft_data?.document_number || invoice.invoice_no;
+  state.activeInvoiceId = invoiceId;
+  document.querySelector("#invoiceDetailHeading").textContent = `${typeLabel} · ${documentNumber}`;
+  document.querySelector("#invoiceDetailType").textContent = typeLabel;
+  document.querySelector("#invoiceDetailDate").textContent = date(invoice.invoice_date);
+  document.querySelector("#invoiceDetailNumber").textContent = documentNumber;
+  document.querySelector("#invoiceDetailDueDate").textContent = date(invoice.due_date);
+  document.querySelector("#invoiceDetailCustomer").textContent = `${customer?.code || ""} ${customer?.company || "-"}`.trim();
+  document.querySelector("#invoiceDetailCurrency").textContent = `${invoice.currency} · Kur ${number(invoice.exchange_rate)}`;
+  document.querySelector("#invoiceDetailScenario").textContent = invoice.scenario === "export" ? "İhracat / KDV %0" : "Türkiye / KDV'li";
+  document.querySelector("#invoiceDetailStatus").textContent = invoice.status === "posted" ? "Kayıtlı" : invoice.status;
+  document.querySelector("#invoiceDetailRows").innerHTML = items.length ? items.map((item, index) => `<tr><td>${index + 1}</td><td>${escapeHtml(item.barcode || item.products?.barcode || item.product_code || item.products?.sku || "-")}</td><td><strong>${escapeHtml(item.description)}</strong><small>${escapeHtml(item.products?.brand || "")}</small></td><td>${item.unit === "koli" ? "Koli" : "Adet"}</td><td>${number(item.quantity)}</td><td>${money(item.unit_price, invoice.currency)}</td><td>${money(item.line_subtotal, invoice.currency)}</td><td>%${number(item.tax_rate)} · ${money(item.line_tax, invoice.currency)}</td><td>%${number(item.discount_1)}</td><td>%${number(item.discount_2)}</td><td>%${number(item.discount_3)}</td><td>${escapeHtml(item.description)}</td></tr>`).join("") : '<tr><td colspan="12" class="empty">Fatura satırı bulunmuyor.</td></tr>';
+  document.querySelector("#invoiceDetailNote").textContent = invoice.notes || "-";
+  document.querySelector("#invoiceDetailSubtotal").textContent = money(invoice.subtotal, invoice.currency);
+  document.querySelector("#invoiceDetailDiscount").textContent = money(invoice.total_discount, invoice.currency);
+  document.querySelector("#invoiceDetailTax").textContent = money(invoice.tax_total, invoice.currency);
+  document.querySelector("#invoiceDetailGrandTotal").textContent = money(invoice.grand_total, invoice.currency);
+  document.querySelector("#invoiceDetailDialog").showModal();
 };
 
 const renderMovements = () => {
@@ -316,7 +345,7 @@ const renderDashboard = () => {
     <div class="compact-row"><div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.brand || "")}</small></div><span class="stock-low">${number(item.stock_quantity)} ${escapeHtml(item.unit)}</span></div>
   `).join("") : '<p class="empty">Kritik stok bulunmuyor.</p>';
   document.querySelector("#recentInvoices").innerHTML = state.invoices.length ? state.invoices.slice(0, 10).map((item) => `
-    <div class="compact-row"><div><strong>${escapeHtml(item.invoice_no)}</strong><small>${item.invoice_type === "purchase" ? "Alış" : "Satış"} · ${date(item.invoice_date)}</small></div><span>${money(item.grand_total, item.currency)}</span></div>
+    <div class="compact-row"><div><strong>${escapeHtml(item.draft_data?.document_number || item.invoice_no)}</strong><small>${({ purchase: "Alış", sale: "Satış", return: "İade" })[item.invoice_type] || item.invoice_type} · ${date(item.invoice_date)}</small></div><span>${money(item.grand_total, item.currency)}</span></div>
   `).join("") : '<p class="empty">Henüz fatura bulunmuyor.</p>';
 };
 
@@ -595,13 +624,14 @@ const setInvoiceMode = (type, order = null) => {
   form.elements.invoice_discount_rate.value = "0";
   form.elements.source_order_id.value = order?.id || "";
   const purchase = type === "purchase";
-  document.querySelector("#invoiceKicker").textContent = purchase ? "ALIŞ FATURASI" : "SATIŞ FATURASI";
-  document.querySelector("#invoiceDialogTitle").textContent = purchase ? "Alış faturası ve stok girişi" : "Satış / ihracat faturası";
+  const returnInvoice = type === "return";
+  document.querySelector("#invoiceKicker").textContent = purchase ? "ALIŞ FATURASI" : returnInvoice ? "İADE FATURASI" : "SATIŞ FATURASI";
+  document.querySelector("#invoiceDialogTitle").textContent = purchase ? "Alış faturası ve stok girişi" : returnInvoice ? "Müşteri iade faturası ve stok girişi" : "Satış / ihracat faturası";
   document.querySelector("#customerField").hidden = false;
   form.elements.customer_id.required = true;
-  form.elements.scenario.value = purchase ? "domestic" : "export";
-  form.elements.currency.value = purchase ? "TRY" : "USD";
-  document.querySelector("#saveInvoiceButton").textContent = purchase ? "Alış faturasını işle ve stoğa ekle" : "Satış faturasını kes ve stoktan düş";
+  form.elements.scenario.value = purchase || returnInvoice ? "domestic" : "export";
+  form.elements.currency.value = purchase || returnInvoice ? "TRY" : "USD";
+  document.querySelector("#saveInvoiceButton").textContent = purchase ? "Alış faturasını işle ve stoğa ekle" : returnInvoice ? "İade faturasını kaydet ve stoğa ekle" : "Satış faturasını kes ve stoktan düş";
   const template = state.settings.invoice_template || {};
   form.elements.incoterm.value = template.incoterm || "";
   document.querySelector("#invoiceProductSearch").value = "";
@@ -633,7 +663,8 @@ const setInvoiceMode = (type, order = null) => {
     if (matchedCustomer) form.elements.customer_id.value = matchedCustomer.id;
   }
   renderInvoiceLines();
-  document.querySelector("#invoiceDialog").showModal();
+  const invoiceDialog = document.querySelector("#invoiceDialog");
+  if (!invoiceDialog.open) invoiceDialog.showModal();
 };
 
 const addInvoiceLine = (button) => {
@@ -684,6 +715,7 @@ const saveInvoice = async (event) => {
     p_notes: values.notes,
     p_draft_data: {
       incoterm: values.incoterm,
+      document_number: values.document_number,
       payment_note: state.settings.invoice_template?.payment_note || "",
     },
     p_items: state.invoiceLines.map((item) => ({
@@ -697,7 +729,7 @@ const saveInvoice = async (event) => {
   state.invoiceLines = [];
   document.querySelector("#invoiceDialog").close();
   await loadData();
-  setStatus(`${values.invoice_type === "purchase" ? "Alış" : "Satış"} faturası kaydedildi; stok otomatik güncellendi.`);
+  setStatus(`${({ purchase: "Alış", sale: "Satış", return: "İade" })[values.invoice_type]} faturası kaydedildi; stok otomatik güncellendi.`);
   return result;
 };
 
@@ -730,12 +762,14 @@ const printInvoice = async (invoiceId) => {
     <p>${escapeHtml(settings.company_address || "")}<br>Vergi Dairesi: ${escapeHtml(settings.company_tax_office || "-")}<br>VKN: ${escapeHtml(settings.company_tax_number || "-")}</p>`;
   const partyBlock = `<strong>${escapeHtml(party?.company || "CARİ")}</strong>
     <p>${escapeHtml(party?.address || "")}<br>${escapeHtml(party?.country || "")}<br>Vergi Dairesi: ${escapeHtml(party?.tax_office || "-")}<br>VKN: ${escapeHtml(party?.tax_number || "-")}</p>`;
-  const seller = invoice.invoice_type === "purchase" ? partyBlock : companyBlock;
-  const buyer = invoice.invoice_type === "purchase" ? companyBlock : partyBlock;
+  const incomingInvoice = invoice.invoice_type === "purchase" || invoice.invoice_type === "return";
+  const seller = incomingInvoice ? partyBlock : companyBlock;
+  const buyer = incomingInvoice ? companyBlock : partyBlock;
+  const documentNumber = invoice.draft_data?.document_number || invoice.invoice_no;
   popup.document.write(`<!doctype html><html lang="tr"><head><meta charset="utf-8"><title>${escapeHtml(invoice.invoice_no)}</title>
     <style>@page{size:A4;margin:12mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;color:#18212b;margin:0;font-size:11px}header{display:flex;justify-content:space-between;border-bottom:2px solid #17202a;padding-bottom:12px}h1{margin:0;font-size:24px}.invoice-label{text-align:right}.invoice-label strong{display:block;font-size:16px}.meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.card{min-height:105px;padding:12px;border:1px solid #cfd6dc}.card h3{margin:0 0 8px;font-size:10px;color:#667085}.card p{line-height:1.45;margin:5px 0}.invoice-info{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-bottom:14px;background:#cfd6dc;border:1px solid #cfd6dc}.invoice-info div{padding:8px;background:#fff}.invoice-info span{display:block;color:#667085;font-size:9px;margin-bottom:3px}table{width:100%;border-collapse:collapse}th,td{padding:6px 5px;border:1px solid #d9dee3;text-align:left;font-size:9px;vertical-align:top}th{background:#f1f3f5}.right{text-align:right}.center{text-align:center}.total{margin:14px 0 0 auto;width:330px;border-top:2px solid #17202a}.total p{display:flex;justify-content:space-between;margin:0;padding:6px;border-bottom:1px solid #dde2e6}.total p:last-child{font-size:13px}.note{margin-top:18px;padding:10px;border:1px solid #dde2e6;color:#475467;white-space:pre-line}.warning{padding:8px;background:#fff4e5;color:#8a4b08}.barcode{font-family:Consolas,monospace}.print-button{margin-top:18px;padding:10px 16px}@media print{.print-button,.warning{display:none}}</style></head><body>
     <p class="warning">Düzenlenebilir taslak belgedir. GİB'e gönderilmemiştir.</p>
-    <header><div><h1>e-FATURA TASLAĞI</h1><p>${invoice.invoice_type === "purchase" ? "ALIŞ FATURASI" : invoice.scenario === "export" ? "COMMERCIAL EXPORT INVOICE" : "SATIŞ FATURASI"}</p></div><div class="invoice-label"><strong>${escapeHtml(invoice.invoice_no)}</strong><span>${date(invoice.invoice_date)}</span></div></header>
+    <header><div><h1>e-FATURA TASLAĞI</h1><p>${invoice.invoice_type === "purchase" ? "ALIŞ FATURASI" : invoice.invoice_type === "return" ? "İADE FATURASI" : invoice.scenario === "export" ? "COMMERCIAL EXPORT INVOICE" : "SATIŞ FATURASI"}</p></div><div class="invoice-label"><strong>${escapeHtml(documentNumber)}</strong><span>${date(invoice.invoice_date)}</span></div></header>
     <section class="meta"><div class="card"><h3>SATICI</h3>${seller}</div><div class="card"><h3>ALICI</h3>${buyer}</div></section>
     <section class="invoice-info"><div><span>FATURA TARİHİ</span><strong>${date(invoice.invoice_date)}</strong></div><div><span>VADE TARİHİ</span><strong>${date(invoice.due_date)}</strong></div><div><span>SENARYO</span><strong>${invoice.scenario === "export" ? "İhracat / KDV %0" : "Türkiye"}</strong></div><div><span>PARA BİRİMİ / KUR</span><strong>${escapeHtml(invoice.currency)} / ${number(invoice.exchange_rate)}</strong></div></section>
     <table><thead><tr><th>#</th><th>Barkod / Ürün Kodu</th><th>Mal / Hizmet</th><th class="right">Miktar</th><th class="right">Birim Fiyat</th><th class="right">İsk. 1/2/3</th><th class="right">KDV</th><th class="right">KDV Tutarı</th><th class="right">Tutar</th></tr></thead>
@@ -800,6 +834,11 @@ document.querySelector("#importCatalogButton").addEventListener("click", safely(
 document.querySelector("#openStockCorrection").addEventListener("click", () => { renderInvoiceOptions(); document.querySelector("#stockDialog").showModal(); });
 document.querySelector("#newSaleInvoiceButton").addEventListener("click", () => setInvoiceMode("sale"));
 document.querySelector("#newPurchaseInvoiceButton").addEventListener("click", () => setInvoiceMode("purchase"));
+document.querySelector("#newReturnInvoiceButton").addEventListener("click", () => setInvoiceMode("return"));
+document.querySelector("#invoiceType").addEventListener("change", (event) => setInvoiceMode(event.target.value));
+document.querySelector("#invoiceDetailPrint").addEventListener("click", safely(async () => {
+  if (state.activeInvoiceId) await printInvoice(state.activeInvoiceId);
+}));
 document.querySelector("#invoiceForm [name='currency']").addEventListener("change", renderInvoiceLines);
 document.querySelector("#invoiceForm [name='scenario']").addEventListener("change", renderInvoiceLines);
 document.querySelector("#invoiceForm [name='invoice_discount_rate']").addEventListener("input", renderInvoiceLines);
@@ -898,6 +937,8 @@ document.addEventListener("click", safely(async (event) => {
   if (removeLine) { state.invoiceLines.splice(Number(removeLine.dataset.removeLine), 1); renderInvoiceLines(); }
   const print = event.target.closest("[data-invoice-print]");
   if (print) await printInvoice(print.dataset.invoicePrint);
+  const invoiceOpen = event.target.closest("[data-invoice-open]");
+  if (invoiceOpen && !event.target.closest("[data-invoice-print]")) await openInvoiceDetail(invoiceOpen.dataset.invoiceOpen);
   const convert = event.target.closest("[data-order-convert]");
   if (convert) setInvoiceMode("sale", state.orders.find((item) => item.id === convert.dataset.orderConvert));
   const detail = event.target.closest("[data-order-detail]");

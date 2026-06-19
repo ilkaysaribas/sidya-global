@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,nofollow" />
     <title>Ticari Otomasyon</title>
-    <link rel="stylesheet" href="admin.css?v=20260614-pagination-100" />
+    <link rel="stylesheet" href="admin.css?v=20260619-1" />
   </head>
   <body>
     <div class="login-shell" id="loginShell">
@@ -92,10 +92,10 @@
         <section class="view" data-view-panel="invoices">
           <div class="panel">
             <div class="panel-heading">
-              <div><p class="eyebrow">FATURA YÖNETİMİ</p><h2>Alış ve satış faturaları</h2></div>
-              <div class="button-row"><button id="newPurchaseInvoiceButton">Alış faturası gir</button><button class="primary" id="newSaleInvoiceButton">Satış faturası kes</button></div>
+              <div><p class="eyebrow">FATURA YÖNETİMİ</p><h2>Alış, satış ve iade faturaları</h2></div>
+              <div class="button-row"><button id="newPurchaseInvoiceButton">Alış faturası</button><button id="newReturnInvoiceButton">İade faturası</button><button class="primary" id="newSaleInvoiceButton">Satış faturası</button></div>
             </div>
-            <div class="table-wrap"><table><thead><tr><th>Fatura no</th><th>Tür</th><th>Tarih</th><th>Cari / Tedarikçi</th><th>Senaryo</th><th>Tutar</th><th>KDV</th><th></th></tr></thead><tbody id="invoiceRows"></tbody></table></div>
+            <div class="table-wrap"><table><thead><tr><th>Fatura no</th><th>Tür</th><th>Tarih</th><th>Cari</th><th>Senaryo</th><th>Tutar</th><th>KDV</th><th></th></tr></thead><tbody id="invoiceRows"></tbody></table></div>
           </div>
         </section>
 
@@ -187,10 +187,12 @@
 
     <dialog id="invoiceDialog" class="wide-dialog"><form method="dialog" class="dialog-form" id="invoiceForm">
       <div class="dialog-heading"><div><p class="eyebrow" id="invoiceKicker">SATIŞ FATURASI</p><h2 id="invoiceDialogTitle">Yeni fatura</h2></div><button type="button" data-close-dialog>×</button></div>
-      <input type="hidden" name="invoice_type" value="sale" /><input type="hidden" name="source_order_id" />
+      <input type="hidden" name="source_order_id" />
       <div class="form-grid invoice-head">
+        <label>Fatura tipi<select name="invoice_type" id="invoiceType"><option value="purchase">Alış faturası</option><option value="sale">Satış faturası</option><option value="return">İade faturası</option></select></label>
         <label id="customerField">Cari<select name="customer_id" id="invoiceCustomer"></select></label>
         <label>Fatura tarihi<input name="invoice_date" type="date" required /></label><label>Vade tarihi<input name="due_date" type="date" /></label>
+        <label>Fatura numarası<input name="document_number" placeholder="Boş bırakılırsa otomatik oluşur" /></label>
         <label>Senaryo<select name="scenario" id="invoiceScenario"><option value="export">İhracat - KDV %0</option><option value="domestic">Türkiye - KDV'li</option></select></label>
         <label>Para birimi<select name="currency" id="invoiceCurrency"><option>USD</option><option>EUR</option><option>TRY</option><option>GBP</option></select></label>
         <label>Kur <small>(1 USD kaç döviz)</small><input name="exchange_rate" type="number" min="0.000001" step="0.000001" value="1" required /></label>
@@ -214,11 +216,19 @@
       <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit" id="saveInvoiceButton">Faturayı kaydet</button></div>
     </form></dialog>
 
+    <dialog id="invoiceDetailDialog" class="invoice-detail-dialog"><div class="invoice-detail-shell">
+      <div class="invoice-detail-toolbar"><button type="button" data-close-dialog>← Fatura listesine dön</button><div class="button-row"><button type="button" id="invoiceDetailPrint">Yazdır / PDF</button><button type="button" data-close-dialog>×</button></div></div>
+      <div class="invoice-detail-title"><div><p class="eyebrow">FATURA KAYDI</p><h2 id="invoiceDetailHeading">Fatura</h2></div><span class="badge" id="invoiceDetailStatus">Kayıtlı</span></div>
+      <div class="invoice-detail-meta"><div><span>Fatura tipi</span><strong id="invoiceDetailType">-</strong></div><div><span>Fatura tarihi</span><strong id="invoiceDetailDate">-</strong></div><div><span>Fatura numarası</span><strong id="invoiceDetailNumber">-</strong></div><div><span>Vade tarihi</span><strong id="invoiceDetailDueDate">-</strong></div><div class="wide"><span>Cari hesap</span><strong id="invoiceDetailCustomer">-</strong></div><div><span>Para birimi</span><strong id="invoiceDetailCurrency">-</strong></div><div><span>Senaryo</span><strong id="invoiceDetailScenario">-</strong></div></div>
+      <div class="table-wrap invoice-detail-lines"><table><thead><tr><th>#</th><th>Stok kodu / Barkod</th><th>Stok cinsi</th><th>Birim</th><th>Miktar</th><th>Birim fiyat</th><th>Tutar</th><th>KDV</th><th>İsk. 1</th><th>İsk. 2</th><th>İsk. 3</th><th>Açıklama</th></tr></thead><tbody id="invoiceDetailRows"></tbody></table></div>
+      <div class="invoice-detail-footer"><div class="invoice-detail-note"><span>Açıklama</span><p id="invoiceDetailNote">-</p></div><div class="invoice-detail-totals"><p><span>Mal / Hizmet Toplamı</span><strong id="invoiceDetailSubtotal">0</strong></p><p><span>Toplam iskonto</span><strong id="invoiceDetailDiscount">0</strong></p><p><span>KDV</span><strong id="invoiceDetailTax">0</strong></p><p class="grand"><span>Ödenecek Genel Toplam</span><strong id="invoiceDetailGrandTotal">0</strong></p></div></div>
+    </div></dialog>
+
     <datalist id="vatRates"><option value="0"></option><option value="1"></option><option value="10"></option><option value="20"></option></datalist>
     <script src="backend-config.js"></script>
     <script src="/api/backend-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="catalog-products.generated.js?v=20260614-1"></script>
-    <script src="admin.js?v=20260614-pagination-100"></script>
+    <script src="admin.js?v=20260619-1"></script>
   </body>
 </html>
