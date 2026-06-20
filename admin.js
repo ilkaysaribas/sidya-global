@@ -61,6 +61,11 @@ const friendlyError = (error) => {
   if (isSchemaError(error)) {
     state.schemaReady = false;
     document.querySelector("#schemaWarning").hidden = false;
+    const functionMissing = error?.code === "PGRST202" || /could not find the function/i.test(String(error?.message || ""));
+    document.querySelector("#schemaWarningText").innerHTML = functionMissing
+      ? "Fatura düzenleme ve silmeyi etkinleştirmek için Supabase SQL Editor'da <code>supabase/fatura-duzenle-sil.sql</code> dosyasını bir kez çalıştırın. Ardından Yenile'ye basın."
+      : "Supabase SQL Editor'da güncel <code>supabase/schema.sql</code> dosyasını çalıştırın. Ardından bu sayfada Yenile'ye basın.";
+    if (functionMissing) return "Fatura düzenleme/silme veritabanı güncellemesi eksik. fatura-duzenle-sil.sql dosyasını SQL Editor'da çalıştırın.";
     return "Supabase veritabanı henüz güncellenmemiş. Güncel schema.sql dosyasını SQL Editor'da çalıştırın.";
   }
   return error?.message || "İşlem tamamlanamadı.";
@@ -945,8 +950,59 @@ const deleteIncomingOrder = async (orderId) => {
   setStatus(`${order.order_no} numaralı sipariş silindi.`);
 };
 
-const openProductHistory = (productId) => {
-  window.open(`product-history.html?id=${encodeURIComponent(productId)}`, "_blank", "noopener");
+const openProductHistory = async (productId) => {
+  const product = state.products.find((item) => item.id === productId);
+  if (!product) throw new Error("Ürün kaydı bulunamadı.");
+  const dialog = document.querySelector("#productHistoryDialog");
+  const status = document.querySelector("#productHistoryStatus");
+  document.querySelector("#productHistoryTitle").textContent = `${product.brand || ""} ${product.name}`.trim();
+  document.querySelector("#productHistoryMeta").textContent = `${product.barcode || product.sku || "Barkod yok"} · ${product.grammage || "Gramaj yok"}`;
+  document.querySelector("#productHistoryStock").textContent = `${number(product.stock_quantity)} adet`;
+  document.querySelector("#productHistoryRows").innerHTML = '<tr><td colspan="10" class="empty">Hareketler yükleniyor...</td></tr>';
+  status.textContent = "";
+  status.classList.remove("error");
+  if (!dialog.open) dialog.showModal();
+
+  try {
+    const [items, movements] = await Promise.all([
+      query(client.from("invoice_items").select("*").eq("product_id", productId)),
+      query(client.from("stock_movements").select("*").eq("product_id", productId).order("created_at", { ascending: true })),
+    ]);
+    const itemByInvoice = new Map(items.map((item) => [item.invoice_id, item]));
+    const averages = productAveragePrices(productId);
+    const averagePurchase = averages.purchase || Number(product.purchase_price || 0);
+    const averageSale = averages.sale || Number(product.sale_price || 0);
+    const profitIndex = averagePurchase > 0 ? ((averageSale - averagePurchase) / averagePurchase) * 100 : 0;
+    document.querySelector("#productHistoryAveragePurchase").textContent = money(averagePurchase, "USD");
+    document.querySelector("#productHistoryAverageSale").textContent = money(averageSale, "USD");
+    const profitTarget = document.querySelector("#productHistoryProfitIndex");
+    profitTarget.textContent = `%${number(profitIndex)}`;
+    profitTarget.className = profitIndex > 0 ? "profit-positive" : profitIndex < 0 ? "profit-negative" : "profit-neutral";
+
+    const movementTotal = movements.reduce((sum, movement) => sum + Number(movement.quantity || 0), 0);
+    let balance = Number(product.stock_quantity || 0) - movementTotal;
+    const statementRows = [];
+    if (Math.abs(balance) > 0.0001) {
+      statementRows.push(`<tr><td>-</td><td>Önceki bakiye</td><td>-</td><td>-</td><td class="statement-in">${balance > 0 ? number(balance) : "-"}</td><td class="statement-out">${balance < 0 ? number(Math.abs(balance)) : "-"}</td><td>-</td><td>-</td><td><strong>${number(balance)}</strong></td><td>Hareket kaydı öncesi stok</td></tr>`);
+    }
+    movements.forEach((movement) => {
+      const quantity = Number(movement.quantity || 0);
+      balance += quantity;
+      const invoice = movement.reference_type === "invoice" ? state.invoices.find((item) => item.id === movement.reference_id) : null;
+      const invoiceItem = invoice ? itemByInvoice.get(invoice.id) : null;
+      const customer = invoice ? state.customers.find((item) => item.id === invoice.customer_id) : null;
+      const typeLabel = ({ purchase: "Alış", sale: "Satış", sale_cancel: "İade", adjustment_in: "Stok girişi", adjustment_out: "Stok çıkışı", opening: "Açılış" })[movement.movement_type] || movement.movement_type;
+      const reference = invoice ? invoice.draft_data?.document_number || invoice.invoice_no : movement.reference_type || "-";
+      const unitPrice = invoiceItem ? Number(invoiceItem.unit_price || 0) : Number(movement.unit_cost || 0);
+      const currency = invoice?.currency || "USD";
+      statementRows.push(`<tr><td>${date(movement.created_at)}</td><td>${escapeHtml(typeLabel)}</td><td>${escapeHtml(reference)}</td><td>${escapeHtml(customer ? `${customer.code} · ${customer.company}` : "-")}</td><td class="statement-in">${quantity > 0 ? number(quantity) : "-"}</td><td class="statement-out">${quantity < 0 ? number(Math.abs(quantity)) : "-"}</td><td>${money(unitPrice, currency)}</td><td>${escapeHtml(currency)}</td><td><strong>${number(balance)}</strong></td><td>${escapeHtml(movement.note || "-")}</td></tr>`);
+    });
+    document.querySelector("#productHistoryRows").innerHTML = statementRows.length ? statementRows.join("") : '<tr><td colspan="10" class="empty">Bu ürüne ait stok hareketi bulunmuyor.</td></tr>';
+  } catch (error) {
+    status.classList.add("error");
+    status.textContent = friendlyError(error);
+    document.querySelector("#productHistoryRows").innerHTML = '<tr><td colspan="10" class="empty">Ekstre yüklenemedi.</td></tr>';
+  }
 };
 
 const deleteProduct = async (productId) => {
@@ -1143,7 +1199,7 @@ document.querySelector("#productRows").addEventListener("contextmenu", (event) =
   const row = event.target.closest("[data-product-row]");
   if (!row) return;
   event.preventDefault();
-  openProductHistory(row.dataset.productRow);
+  openProductHistory(row.dataset.productRow).catch((error) => setStatus(friendlyError(error), true));
 });
 
 document.addEventListener("change", (event) => {
@@ -1194,7 +1250,7 @@ document.addEventListener("click", safely(async (event) => {
  const productEdit = event.target.closest("[data-product-edit]");
   if (productEdit) openEditForm("productDialog", "productForm", state.products.find((item) => item.id === productEdit.dataset.productEdit));
   const productHistory = event.target.closest("[data-product-history]");
-  if (productHistory) openProductHistory(productHistory.dataset.productHistory);
+  if (productHistory) await openProductHistory(productHistory.dataset.productHistory);
   const productDelete = event.target.closest("[data-product-delete]");
   if (productDelete) await deleteProduct(productDelete.dataset.productDelete);
   const payment = event.target.closest("[data-customer-payment]");

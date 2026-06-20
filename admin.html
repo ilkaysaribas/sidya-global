@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,nofollow" />
     <title>Ticari Otomasyon</title>
-    <link rel="stylesheet" href="admin.css?v=20260620-2" />
+    <link rel="stylesheet" href="admin.css?v=20260620-3" />
   </head>
   <body>
     <div class="login-shell" id="loginShell">
@@ -46,7 +46,7 @@
         <p class="global-status" id="globalStatus"></p>
         <div class="schema-warning" id="schemaWarning" hidden>
           <strong>Veritabanı güncellemesi gerekiyor</strong>
-          <span>Supabase SQL Editor'da güncel <code>supabase/schema.sql</code> dosyasını çalıştırın. Ardından bu sayfada Yenile'ye basın.</span>
+          <span id="schemaWarningText">Supabase SQL Editor'da güncel <code>supabase/schema.sql</code> dosyasını çalıştırın. Ardından bu sayfada Yenile'ye basın.</span>
         </div>
 
         <section class="view active" data-view-panel="dashboard">
@@ -186,6 +186,14 @@
       <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit">Kaydet</button></div>
     </form></dialog>
 
+    <dialog id="productHistoryDialog" class="wide-dialog statement-dialog"><div class="dialog-form">
+      <div class="dialog-heading"><div><p class="eyebrow">STOK EKSTRESİ</p><h2 id="productHistoryTitle">Ürün hareketleri</h2><p id="productHistoryMeta" class="helper"></p></div><button type="button" data-close-dialog>×</button></div>
+      <p id="productHistoryStatus" class="form-status" role="status"></p>
+      <div class="statement-metrics"><article><span>Mevcut stok</span><strong id="productHistoryStock">-</strong></article><article><span>Ortalama alış</span><strong id="productHistoryAveragePurchase">-</strong></article><article><span>Ortalama satış</span><strong id="productHistoryAverageSale">-</strong></article><article><span>Kâr endeksi</span><strong id="productHistoryProfitIndex">-</strong></article></div>
+      <div class="table-wrap statement-table"><table><thead><tr><th>Tarih</th><th>İşlem</th><th>Fatura / Referans</th><th>Cari</th><th>Giriş</th><th>Çıkış</th><th>Birim fiyat</th><th>Para birimi</th><th>Stok bakiyesi</th><th>Açıklama</th></tr></thead><tbody id="productHistoryRows"></tbody></table></div>
+      <div class="dialog-actions"><button type="button" data-close-dialog>Kapat</button></div>
+    </div></dialog>
+
     <dialog id="invoiceDialog" class="wide-dialog"><form method="dialog" class="dialog-form" id="invoiceForm">
       <div class="dialog-heading"><div><p class="eyebrow" id="invoiceKicker">SATIŞ FATURASI</p><h2 id="invoiceDialogTitle">Yeni fatura</h2></div><button type="button" data-close-dialog>×</button></div>
       <input type="hidden" name="source_order_id" /><input type="hidden" name="currency" id="invoiceCurrency" value="USD" />
@@ -228,6 +236,6 @@
     <script src="/api/backend-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="catalog-products.generated.js?v=20260614-1"></script>
-    <script src="admin.js?v=20260620-2"></script>
+    <script src="admin.js?v=20260620-3"></script>
   </body>
 </html>

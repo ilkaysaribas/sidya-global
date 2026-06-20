@@ -255,8 +255,19 @@ button.danger:hover { background: #fee4e2; }
 .picker-sort-button { min-width: 24px; padding: 2px 5px; margin-left: 3px; border: 0; background: transparent; color: #087e9e; font-weight: 900; }
 .picker-sort-button:hover { background: #e6f4f8; }
 [data-product-row] { cursor: context-menu; }
+.statement-dialog { width: min(1450px, calc(100vw - 24px)); }
+.statement-dialog .dialog-form { max-height: 92vh; overflow: auto; }
+.statement-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
+.statement-metrics article { padding: 13px 15px; border: 1px solid #dbe5ea; border-radius: 10px; background: #f8fafb; }
+.statement-metrics span { display: block; color: var(--muted); font-size: 12px; }
+.statement-metrics strong { display: block; margin-top: 5px; font-size: 18px; }
+.statement-table { max-height: 55vh; }
+.statement-table th { position: sticky; top: 0; z-index: 1; background: #f3f7f9; }
+.statement-in { color: #087462; font-weight: 800; }
+.statement-out { color: #b42318; font-weight: 800; }
 
 @media (max-width: 760px) {
   .picker-actions { justify-content: stretch; }
   .picker-actions > * { flex: 1 1 auto; }
+  .statement-metrics { grid-template-columns: 1fr 1fr; }
 }
