@@ -248,6 +248,13 @@ button.danger:hover { background: #fee4e2; }
 .picker-actions input { min-width: min(26rem, 100%); }
 .invoice-description { display: grid; gap: .45rem; margin-top: 1rem; font-weight: 700; }
 .invoice-description textarea { min-height: 5rem; }
+.profit-index { display: inline-flex; min-width: 70px; justify-content: center; padding: 5px 8px; border-radius: 999px; font-weight: 800; }
+.profit-positive { color: #1668b2; background: #e8f3ff; }
+.profit-negative { color: #c62828; background: #ffebee; }
+.profit-neutral { color: #667085; background: #f2f4f7; }
+.picker-sort-button { min-width: 24px; padding: 2px 5px; margin-left: 3px; border: 0; background: transparent; color: #087e9e; font-weight: 900; }
+.picker-sort-button:hover { background: #e6f4f8; }
+[data-product-row] { cursor: context-menu; }
 
 @media (max-width: 760px) {
   .picker-actions { justify-content: stretch; }

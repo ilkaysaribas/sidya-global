@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Ürün Hareketleri</title>
+    <link rel="stylesheet" href="admin.css?v=20260620-2" />
+    <link rel="stylesheet" href="product-history.css?v=20260620-1" />
+  </head>
+  <body class="history-page">
+    <main class="history-shell">
+      <div class="history-toolbar"><button type="button" id="closeHistoryButton">← Stok listesine dön</button><button type="button" onclick="window.print()">Yazdır</button></div>
+      <p class="eyebrow">STOK HAREKET DÖKÜMÜ</p>
+      <h1 id="historyTitle">Ürün hareketleri</h1>
+      <p id="historyMeta" class="helper">Bilgiler yükleniyor...</p>
+      <p id="historyStatus" class="form-status" role="status"></p>
+      <section class="history-metrics">
+        <article><span>Mevcut stok</span><strong id="historyStock">-</strong></article>
+        <article><span>Ortalama alış</span><strong id="historyAveragePurchase">-</strong></article>
+        <article><span>Ortalama satış</span><strong id="historyAverageSale">-</strong></article>
+        <article><span>Kâr endeksi</span><strong id="historyProfitIndex">-</strong></article>
+      </section>
+      <section class="panel"><div class="panel-heading"><h2>Faturalı alış, satış ve iadeler</h2></div><div class="table-wrap"><table><thead><tr><th>Tarih</th><th>İşlem</th><th>Fatura no</th><th>Cari</th><th>Miktar</th><th>Birim</th><th>Birim fiyat</th><th>KDV</th><th>Toplam</th></tr></thead><tbody id="historyInvoiceRows"></tbody></table></div></section>
+      <section class="panel"><div class="panel-heading"><h2>Tüm stok hareketleri</h2></div><div class="table-wrap"><table><thead><tr><th>Tarih</th><th>Hareket</th><th>Miktar</th><th>Birim maliyet</th><th>Referans</th><th>Açıklama</th></tr></thead><tbody id="historyMovementRows"></tbody></table></div></section>
+    </main>
+    <script src="backend-config.js"></script>
+    <script src="/api/backend-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="product-history.js?v=20260620-1"></script>
+  </body>
+</html>
