@@ -640,11 +640,13 @@ const renderInvoiceLines = () => {
   let subtotal = 0;
   let lineDiscount = 0;
   let tax = 0;
+  const taxByRate = new Map();
   document.querySelector("#invoiceLineRows").innerHTML = state.invoiceLines.length ? state.invoiceLines.map((line, index) => {
     const calc = calculateLine(line, scenario);
     subtotal += calc.net;
     lineDiscount += calc.discount;
     tax += calc.tax;
+    if (calc.taxRate > 0) taxByRate.set(calc.taxRate, (taxByRate.get(calc.taxRate) || 0) + calc.tax);
     const units = Math.max(Number(line.units_per_carton || 1), 1);
     const stockWarning = form.elements.invoice_type.value === "sale" && Number(line.stock_quantity) > Number(line.stock);
     return `<tr class="${stockWarning ? "stock-warning" : ""}">
@@ -662,7 +664,13 @@ const renderInvoiceLines = () => {
       <td>${money(calc.tax, currency)}</td><td><strong>${money(calc.total, currency)}</strong></td><td><button type="button" data-remove-line="${index}">Sil</button></td></tr>`;
   }).join("") : '<tr><td colspan="15" class="empty">Yukarıdaki listeden ürün ekleyin.</td></tr>';
   const bottomDiscount = subtotal * Math.min(Math.max(bottomRate, 0), 100) / 100;
-  const adjustedTax = subtotal > 0 ? tax * ((subtotal - bottomDiscount) / subtotal) : 0;
+  const taxFactor = subtotal > 0 ? (subtotal - bottomDiscount) / subtotal : 0;
+  const adjustedTax = tax * taxFactor;
+  const preferredTaxOrder = [20, 1, 10];
+  const remainingRates = [...taxByRate.keys()].filter((rate) => !preferredTaxOrder.includes(Number(rate))).sort((a, b) => Number(b) - Number(a));
+  const orderedRates = [...preferredTaxOrder, ...remainingRates].filter((rate) => taxByRate.has(Number(rate)));
+  const taxLabelNumber = (rate) => preferredTaxOrder.includes(Number(rate)) ? preferredTaxOrder.indexOf(Number(rate)) + 1 : preferredTaxOrder.length + remainingRates.indexOf(rate) + 1;
+  document.querySelector("#invoiceVatBreakdown").innerHTML = orderedRates.map((rate) => `<span>KDV ${taxLabelNumber(rate)} (%${number(rate)}) <strong>${money((taxByRate.get(Number(rate)) || 0) * taxFactor, currency)}</strong></span>`).join("");
   document.querySelector("#invoiceSubtotal").textContent = money(subtotal, currency);
   document.querySelector("#invoiceDiscountTotal").textContent = money(lineDiscount + bottomDiscount, currency);
   document.querySelector("#invoiceTaxTotal").textContent = money(adjustedTax, currency);
@@ -709,6 +717,7 @@ const saveEntity = async (event, table, dialogId, numericFields = []) => {
 
 const saveCustomer = async (event) => {
   event.preventDefault();
+  const openedFromInvoice = event.currentTarget.dataset.invoiceContext === "true";
   const values = formObject(event.currentTarget);
   const id = values.id;
   delete values.id;
@@ -717,10 +726,16 @@ const saveCustomer = async (event) => {
   if (!values.is_buyer && !values.is_seller) {
     throw new Error("Cari en az alıcı veya satıcı olarak işaretlenmelidir.");
   }
-  const request = id ? client.from("customers").update(values).eq("id", id) : client.from("customers").insert(values);
-  await query(request);
+  const request = id
+    ? client.from("customers").update(values).eq("id", id).select("*").single()
+    : client.from("customers").insert(values).select("*").single();
+  const savedCustomer = await query(request);
   document.querySelector("#customerDialog").close();
   await loadData();
+  if (openedFromInvoice && savedCustomer?.id) {
+    document.querySelector("#invoiceCustomer").value = savedCustomer.id;
+    document.querySelector("#invoiceFormStatus").textContent = `${savedCustomer.company} carisi eklendi ve faturaya seçildi.`;
+  }
 };
 
 const adjustStock = async (event) => {
@@ -1142,6 +1157,16 @@ document.querySelector("#openStockCorrection").addEventListener("click", () => {
 document.querySelector("#newSaleInvoiceButton").addEventListener("click", () => setInvoiceMode("sale"));
 document.querySelector("#newPurchaseInvoiceButton").addEventListener("click", () => setInvoiceMode("purchase"));
 document.querySelector("#newReturnInvoiceButton").addEventListener("click", () => setInvoiceMode("return"));
+document.querySelector("#invoiceNewCustomerButton").addEventListener("click", () => {
+  const form = document.querySelector("#customerForm");
+  openEditForm("customerDialog", "customerForm");
+  form.dataset.invoiceContext = "true";
+  form.elements.is_seller.checked = true;
+  form.elements.is_buyer.checked = true;
+});
+document.querySelector("#customerDialog").addEventListener("close", () => {
+  delete document.querySelector("#customerForm").dataset.invoiceContext;
+});
 document.querySelector("#invoiceType").addEventListener("change", (event) => setInvoiceMode(event.target.value));
 document.querySelector("#invoiceDetailPrint").addEventListener("click", safely(async () => {
   if (state.activeInvoiceId) await printInvoice(state.activeInvoiceId);
@@ -1244,7 +1269,10 @@ document.addEventListener("click", safely(async (event) => {
   return;
  }
  const opener = event.target.closest("[data-open-dialog]");
-  if (opener) openEditForm(opener.dataset.openDialog, opener.dataset.openDialog.replace("Dialog", "Form"));
+  if (opener) {
+    if (opener.dataset.openDialog === "customerDialog") delete document.querySelector("#customerForm").dataset.invoiceContext;
+    openEditForm(opener.dataset.openDialog, opener.dataset.openDialog.replace("Dialog", "Form"));
+  }
   const customerEdit = event.target.closest("[data-customer-edit]");
   if (customerEdit) openEditForm("customerDialog", "customerForm", state.customers.find((item) => item.id === customerEdit.dataset.customerEdit));
  const productEdit = event.target.closest("[data-product-edit]");

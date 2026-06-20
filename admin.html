@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,nofollow" />
     <title>Ticari Otomasyon</title>
-    <link rel="stylesheet" href="admin.css?v=20260620-3" />
+    <link rel="stylesheet" href="admin.css?v=20260620-4" />
   </head>
   <body>
     <div class="login-shell" id="loginShell">
@@ -200,7 +200,7 @@
       <p id="invoiceFormStatus" class="form-status" role="status"></p>
       <div class="form-grid invoice-head">
         <label>Fatura tipi<select name="invoice_type" id="invoiceType"><option value="purchase">Alış faturası</option><option value="sale">Satış faturası</option><option value="return">İade faturası</option></select></label>
-        <label id="customerField">Cari<select name="customer_id" id="invoiceCustomer"></select></label>
+        <div id="customerField" class="invoice-customer-field"><label>Cari<select name="customer_id" id="invoiceCustomer"></select></label><button type="button" id="invoiceNewCustomerButton">+ Yeni cari ekle</button></div>
         <label>Fatura tarihi<input name="invoice_date" type="date" required /></label><label>Vade tarihi<div class="due-date-field"><input name="due_date" type="date" /><output id="invoiceTermDays">0 gün</output></div></label>
         <label>Fatura numarası<input name="document_number" placeholder="Boş bırakılırsa otomatik oluşur" /></label>
         <label>Senaryo<select name="scenario" id="invoiceScenario"><option value="export">İhracat - KDV %0</option><option value="domestic">Türkiye - KDV'li</option></select></label>
@@ -218,8 +218,7 @@
       </div>
       <div class="invoice-lines-heading"><h3>Fatura satırları</h3><span>Koli seçilirse koli içi adet otomatik olarak stoğa işlenir.</span></div>
       <div class="table-wrap invoice-lines-table"><table><thead><tr><th>#</th><th>Barkod</th><th>Ürün</th><th>Stok</th><th>Miktar</th><th>Birim</th><th>Birim fiyat</th><th>Para birimi</th><th>İsk. 1</th><th>İsk. 2</th><th>İsk. 3</th><th>KDV %</th><th>KDV tutarı</th><th>KDV dahil toplam</th><th></th></tr></thead><tbody id="invoiceLineRows"></tbody></table></div>
-      <label class="invoice-description">Açıklama<textarea name="notes" rows="3" placeholder="Faturaya ait açıklamayı yazın"></textarea></label>
-      <div class="invoice-summary"><span>Ara toplam <strong id="invoiceSubtotal">0</strong></span><span>İskonto <strong id="invoiceDiscountTotal">0</strong></span><span>KDV <strong id="invoiceTaxTotal">0</strong></span><span>Genel toplam <strong id="invoiceGrandTotal">0</strong></span></div>
+      <div class="invoice-footer"><label class="invoice-description">Açıklama<textarea name="notes" rows="5" placeholder="Faturaya ait açıklamayı yazın"></textarea></label><div class="invoice-summary"><span>Ara toplam <strong id="invoiceSubtotal">0</strong></span><span>İskonto <strong id="invoiceDiscountTotal">0</strong></span><div id="invoiceVatBreakdown" class="invoice-vat-breakdown"></div><span>Toplam KDV <strong id="invoiceTaxTotal">0</strong></span><span class="invoice-grand-total">Genel toplam <strong id="invoiceGrandTotal">0</strong></span></div></div>
       <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit" id="saveInvoiceButton">Faturayı kaydet</button></div>
     </form></dialog>
 
@@ -236,6 +235,6 @@
     <script src="/api/backend-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="catalog-products.generated.js?v=20260614-1"></script>
-    <script src="admin.js?v=20260620-3"></script>
+    <script src="admin.js?v=20260620-4"></script>
   </body>
 </html>
