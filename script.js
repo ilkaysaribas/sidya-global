@@ -2565,6 +2565,7 @@ const renderProformaProducts = () => {
       const cartonsPerPallet = getCartonsPerPallet(product);
       const unitsPerCarton = getUnitsPerCarton(product);
       const kgPerCarton = getKgPerCarton(product);
+      const cartonPrice = formatPublishedPrice(product);
       return `<article class="proforma-product-row">
         <span class="proforma-product-index">${index + 1}</span>
         <img class="proforma-product-image proforma-brand-logo" src="${getBrandLogo(product)}" alt="${product.brand} logo" loading="lazy" />
@@ -2576,6 +2577,7 @@ const renderProformaProducts = () => {
           <div><dt>${t("proformaUnitsPerCarton")}</dt><dd>${formatNumberValue(unitsPerCarton)}</dd></div>
           <div><dt>${t("proformaCartonsPerPallet")}</dt><dd>${formatNumberValue(cartonsPerPallet)}</dd></div>
           <div><dt>${t("proformaKgPerCarton")}</dt><dd>${formatNumberValue(kgPerCarton, 2)}</dd></div>
+          ${cartonPrice ? `<div><dt>Fiyat / koli</dt><dd>${cartonPrice}</dd></div>` : ""}
         </dl>
         <label>
           <span>${t("proformaCartonQty")}</span>
@@ -2607,6 +2609,7 @@ const renderCatalogProformaProducts = () => {
       const cartonsPerPallet = getCartonsPerPallet(product);
       const unitsPerCarton = getUnitsPerCarton(product);
       const kgPerCarton = getKgPerCarton(product);
+      const cartonPrice = formatPublishedPrice(product);
       const catalogLinks = company
         ? [
             company.catalog ? `<a class="catalog-action" href="${company.catalog}" target="_blank" rel="noopener">${t("sampleCatalogCta")}</a>` : "",
@@ -2626,6 +2629,7 @@ const renderCatalogProformaProducts = () => {
           <div><dt>${t("proformaUnitsPerCarton")}</dt><dd>${formatNumberValue(unitsPerCarton)}</dd></div>
           <div><dt>${t("proformaCartonsPerPallet")}</dt><dd>${formatNumberValue(cartonsPerPallet)}</dd></div>
           <div><dt>${t("proformaKgPerCarton")}</dt><dd>${formatNumberValue(kgPerCarton, 2)}</dd></div>
+          ${cartonPrice ? `<div><dt>Fiyat / koli</dt><dd>${cartonPrice}</dd></div>` : ""}
         </dl>
         <label>
           <span>${t("proformaCartonQty")}</span>
@@ -2743,10 +2747,12 @@ const renderProformaOrder = () => {
       const kgPerCarton = getKgPerCarton(product);
       const pallets = cartonsPerPallet === null ? null : cartons / cartonsPerPallet;
       const weight = kgPerCarton === null ? null : cartons * kgPerCarton;
+      const linePrice = formatPublishedPrice(product, cartons);
       const lineMeta = [
         `${cartons.toLocaleString("en-US")} ${t("proformaCartonQty")}`,
         pallets === null ? null : `${pallets.toFixed(2)} PLT`,
         weight === null ? null : formatWeight(weight),
+        linePrice || null,
       ].filter(Boolean);
       return `<article class="proforma-line">
         <span class="proforma-line-index">${index + 1}</span>
@@ -2773,9 +2779,17 @@ const renderProformaOrder = () => {
     const kgPerCarton = getKgPerCarton(entry.product);
     return kgPerCarton === null ? sum : sum + entry.cartons * kgPerCarton;
   }, 0);
+  const totalsByCurrency = new Map();
+  entries.forEach(({ product, cartons }) => {
+    const unitPrice = Number(product.salePrice || 0);
+    if (!(unitPrice > 0)) return;
+    const currency = product.priceCurrency || "USD";
+    totalsByCurrency.set(currency, (totalsByCurrency.get(currency) || 0) + unitPrice * Math.max(Number(product.unitsPerCarton || 1), 1) * cartons);
+  });
   document.querySelector("#proformaTotalCartons").textContent = totalCartons.toLocaleString("en-US");
   document.querySelector("#proformaTotalPallets").textContent = totalPallets ? totalPallets.toFixed(2) : "-";
   document.querySelector("#proformaTotalWeight").textContent = formatWeight(totalWeight);
+  document.querySelector("#proformaTotalAmount").textContent = [...totalsByCurrency.entries()].map(([currency, amount]) => new Intl.NumberFormat(currentLang === "tr" ? "tr-TR" : "en-US", { style: "currency", currency, maximumFractionDigits: 2 }).format(amount)).join(" · ") || "-";
   renderLoadMeters(entries, totalWeight);
 };
 
@@ -2798,6 +2812,9 @@ const buildProformaRows = () =>
       pallets: cartonsPerPallet === null ? null : cartons / cartonsPerPallet,
       kgPerCarton,
       totalWeight: kgPerCarton === null ? null : cartons * kgPerCarton,
+      unitPrice: Number(product.salePrice || 0) || null,
+      currency: product.priceCurrency || "USD",
+      lineTotal: Number(product.salePrice || 0) > 0 ? Number(product.salePrice) * Math.max(Number(unitsPerCarton || 1), 1) * cartons : null,
       transport: selectedProformaTransport,
       containerRoute: selectedProformaTransport === "container" ? selectedContainerRoute : "",
     };
@@ -2818,6 +2835,9 @@ const createProformaWorkbook = (rows) => {
     "Pallet Coefficient",
     "Kg / Carton",
     "Total Kg",
+    "Unit Price",
+    "Currency",
+    "Line Total",
   ];
   const worksheetData = [
     headers,
@@ -2835,6 +2855,9 @@ const createProformaWorkbook = (rows) => {
       row.pallets,
       row.kgPerCarton,
       row.totalWeight,
+      row.unitPrice,
+      row.currency,
+      row.lineTotal,
     ]),
   ];
   const worksheet = window.XLSX.utils.aoa_to_sheet(worksheetData);
@@ -2853,7 +2876,7 @@ const createProformaWorkbook = (rows) => {
     { wch: 14 },
     { wch: 14 },
   ];
-  worksheet["!autofilter"] = { ref: `A1:M${rows.length + 1}` };
+  worksheet["!autofilter"] = { ref: `A1:P${rows.length + 1}` };
 
   for (let rowIndex = 2; rowIndex <= rows.length + 1; rowIndex += 1) {
     const barcodeCell = worksheet[`A${rowIndex}`];
@@ -2865,7 +2888,7 @@ const createProformaWorkbook = (rows) => {
       const cell = worksheet[`${column}${rowIndex}`];
       if (cell && typeof cell.v === "number") cell.z = "0";
     });
-    ["K", "L", "M"].forEach((column) => {
+    ["K", "L", "M", "N", "P"].forEach((column) => {
       const cell = worksheet[`${column}${rowIndex}`];
       if (cell && typeof cell.v === "number") cell.z = "0.00";
     });
@@ -3345,6 +3368,46 @@ const getSupabaseClient = () => {
     sidyaSupabase = window.supabase.createClient(config.supabaseUrl, getSupabasePublishableKey());
   }
   return sidyaSupabase;
+};
+
+const formatPublishedPrice = (product, cartons = null) => {
+  const unitPrice = Number(product?.salePrice || 0);
+  if (!(unitPrice > 0)) return "";
+  const units = Math.max(Number(product.unitsPerCarton || 1), 1);
+  const amount = cartons === null ? unitPrice * units : unitPrice * units * Number(cartons || 0);
+  return new Intl.NumberFormat(currentLang === "tr" ? "tr-TR" : "en-US", {
+    style: "currency", currency: product.priceCurrency || "USD", maximumFractionDigits: 2,
+  }).format(amount);
+};
+
+const loadPublishedCatalogPrices = async () => {
+  const db = getSupabaseClient();
+  if (!db) return;
+  const { data, error } = await db.from("site_catalog_prices").select("*").eq("active", true);
+  if (error || !data?.length) return;
+  data.forEach((row) => {
+    const existing = productCatalog.find((product) => product.id === row.catalog_id || product.id === row.publish_key || (row.barcode && product.barcode === row.barcode));
+    const values = {
+      salePrice: Number(row.sale_price || 0),
+      priceCurrency: row.currency || "USD",
+      barcode: row.barcode || existing?.barcode,
+      unitsPerCarton: Number(row.units_per_carton || existing?.unitsPerCarton || 1),
+      cartonsPerPallet: Number(row.cartons_per_pallet || existing?.cartonsPerPallet || 0) || existing?.cartonsPerPallet,
+      kgPerCarton: Number(row.kg_per_carton || existing?.kgPerCarton || 0) || existing?.kgPerCarton,
+    };
+    if (existing) Object.assign(existing, values);
+    else productCatalog.push({
+      id: row.catalog_id || row.publish_key,
+      brand: row.brand || "Sidya Global",
+      names: { tr: row.name, en: row.name },
+      liter: row.grammage || "",
+      category: row.category || "cleaning-products",
+      ...values,
+    });
+  });
+  if (!document.querySelector("#proforma")?.hidden) renderProformaProducts();
+  if (activeCatalogProformaCategory) renderCatalogProformaProducts();
+  renderProformaOrder();
 };
 
 const setB2BAuthStatus = (message) => {
@@ -3970,3 +4033,4 @@ setupTracking();
 refreshB2BSession();
 fetchLogisticsStatus();
 loadExchangeRates();
+loadPublishedCatalogPrices();
