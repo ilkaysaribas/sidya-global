@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,nofollow" />
     <title>Ticari Otomasyon</title>
-    <link rel="stylesheet" href="admin.css?v=20260621-1" />
+    <link rel="stylesheet" href="admin.css?v=20260628-1" />
   </head>
   <body>
     <div class="login-shell" id="loginShell">
@@ -79,10 +79,10 @@
             <div class="panel-heading"><div><p class="eyebrow">STOK YÖNETİMİ</p><h2>Ürün ve depo stokları</h2></div><button class="primary" data-open-dialog="productDialog">Yeni stok kartı</button></div>
             <div class="table-tools">
               <input class="search" id="productSearch" type="search" placeholder="Marka, barkod, ürün, gramaj veya SKU ara" />
-              <select id="productSort"><option value="brand-asc">Marka A-Z</option><option value="brand-desc">Marka Z-A</option><option value="name-asc">Ürün adı A-Z</option><option value="name-desc">Ürün adı Z-A</option><option value="sku-asc">Barkod / SKU A-Z</option><option value="sku-desc">Barkod / SKU Z-A</option><option value="grammage-asc">Gramaj A-Z</option><option value="grammage-desc">Gramaj Z-A</option><option value="purchase-asc">Alış fiyatı artan</option><option value="purchase-desc">Alış fiyatı azalan</option><option value="sale-asc">Satış fiyatı artan</option><option value="sale-desc">Satış fiyatı azalan</option><option value="stock-asc">Stok artan</option><option value="stock-desc">Stok azalan</option></select><span id="selectedProductCount" class="selection-count">0 ürün seçildi</span><button id="deleteSelectedProductsButton" class="danger" type="button">Seçilenleri sil</button>
+              <select id="productSort"><option value="brand-asc">Marka A-Z</option><option value="brand-desc">Marka Z-A</option><option value="name-asc">Ürün adı A-Z</option><option value="name-desc">Ürün adı Z-A</option><option value="sku-asc">Barkod / SKU A-Z</option><option value="sku-desc">Barkod / SKU Z-A</option><option value="grammage-asc">Gramaj A-Z</option><option value="grammage-desc">Gramaj Z-A</option><option value="purchase-asc">Alış fiyatı artan</option><option value="purchase-desc">Alış fiyatı azalan</option><option value="sale-asc">Satış fiyatı artan</option><option value="sale-desc">Satış fiyatı azalan</option><option value="stock-asc">Stok artan</option><option value="stock-desc">Stok azalan</option></select><button id="downloadPriceTemplateButton" type="button">Fiyat formatı indir</button><label class="file-button">Excel fiyat yükle<input id="priceImportFile" type="file" accept=".xlsx,.xls,.csv" /></label><span id="selectedProductCount" class="selection-count">0 ürün seçildi</span><button id="deleteSelectedProductsButton" class="danger" type="button">Seçilenleri sil</button>
             </div>
             <p class="helper">Hareketler, stok giriş/çıkışı, düzenleme ve silme komutları için ürün satırına sağ tıklayın.</p>
-            <div class="table-wrap selectable-table"><table><thead><tr><th>Sıra No</th><th><input id="selectAllProducts" type="checkbox" aria-label="Tümünü seç" /></th><th data-product-sort="brand">Marka</th><th data-product-sort="sku">Barkod</th><th data-product-sort="name">Ürün İsmi</th><th data-product-sort="grammage">Gramaj</th><th>Koli İçi</th><th data-product-sort="stock">Stok Adet</th><th>Stok Koli</th><th>Min.</th><th data-product-sort="purchase">Alış / adet</th><th>Ort. alış</th><th data-product-sort="sale">Satış / adet</th><th>Ort. satış</th><th>Kâr endeksi</th><th>KDV</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div><div class="product-pagination" id="productPagination" aria-label="Stok listesi sayfaları"></div>
+            <div class="table-wrap selectable-table product-stock-wrap"><table><thead><tr><th>Sıra No</th><th><input id="selectAllProducts" type="checkbox" aria-label="Tümünü seç" /></th><th data-product-sort="brand">Marka</th><th data-product-sort="sku">Barkod</th><th data-product-sort="name">Ürün İsmi</th><th data-product-sort="grammage">Gramaj</th><th>Takip birimi</th><th>Koli İçi</th><th data-product-sort="stock">Stok</th><th>Stok Koli</th><th>Min.</th><th data-product-sort="purchase">Alış / birim</th><th>Ort. alış</th><th data-product-sort="sale">Satış / birim</th><th>Ort. satış</th><th>Kâr endeksi</th><th>KDV</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div><div class="product-pagination" id="productPagination" aria-label="Stok listesi sayfaları"></div>
           </div>
         </section>
 
@@ -169,8 +169,17 @@
 
     <dialog id="productDialog"><form method="dialog" class="dialog-form" id="productForm">
       <div class="dialog-heading"><h2>Stok kartı</h2><button type="button" data-close-dialog>×</button></div><input type="hidden" name="id" />
-      <div class="form-grid"><label>Ürün adı<input name="name" required /></label><label>Marka<input name="brand" /></label><label>SKU<input name="sku" /></label><label>Barkod<input name="barcode" /></label><label>Gramaj<input name="grammage" placeholder="Örn. 750 ml" /></label><label>Kategori<input name="category" /></label><label>Stok takip birimi<select name="unit"><option>adet</option></select></label><label>Adet alış fiyatı USD<input name="purchase_price" type="number" min="0" step="0.0001" value="0" /></label><label>Adet satış fiyatı USD<input name="sale_price" type="number" min="0" step="0.0001" value="0" /></label><label>KDV oranı %<input name="vat_rate" type="number" list="vatRates" min="0" max="100" step="0.01" value="20" /></label><label>Minimum stok (adet)<input name="minimum_stock" type="number" min="0" step="0.001" value="0" /></label><label>Koli içi adet<input name="units_per_carton" type="number" min="1" step="1" value="1" /></label><label>Koli kg<input name="kg_per_carton" type="number" min="0" step="0.001" value="0" /></label></div>
+      <div class="form-grid"><label>Ürün adı<input name="name" required /></label><label>Marka<input name="brand" /></label><label>SKU<input name="sku" /></label><label>Barkod<input name="barcode" /></label><label>Gramaj<input name="grammage" placeholder="Örn. 750 ml" /></label><label>Kategori<input name="category" /></label><label>Stok takip birimi<select name="unit"><option value="adet">Adet</option><option value="koli">Koli</option><option value="litre">Litre</option><option value="metre">Metre</option><option value="kg">Kg</option></select></label><label>Alış fiyatı<span class="money-input"><input name="purchase_price" type="number" min="0" step="0.0001" value="0" /><select data-price-currency="purchase_price"><option>USD</option><option>TRY</option><option>EUR</option><option>RUB</option></select></span><small data-price-preview="purchase_price">USD ana fiyat olarak saklanır.</small></label><label>Satış fiyatı<span class="money-input"><input name="sale_price" type="number" min="0" step="0.0001" value="0" /><select data-price-currency="sale_price"><option>USD</option><option>TRY</option><option>EUR</option><option>RUB</option></select></span><small data-price-preview="sale_price">USD ana fiyat olarak saklanır.</small></label><label>KDV oranı %<input name="vat_rate" type="number" list="vatRates" min="0" max="100" step="0.01" value="20" /></label><label>Minimum stok<input name="minimum_stock" type="number" min="0" step="0.001" value="0" /></label><label>Koli içi adet<input name="units_per_carton" type="number" min="1" step="1" value="1" /></label><label>Koli kg<input name="kg_per_carton" type="number" min="0" step="0.001" value="0" /></label></div>
       <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit">Kaydet</button></div>
+    </form></dialog>
+
+    <dialog id="productPriceDialog"><form method="dialog" class="dialog-form narrow" id="productPriceForm">
+      <div class="dialog-heading"><div><p class="eyebrow">DÖVİZLİ FİYAT</p><h2 id="productPriceTitle">Fiyat girişi</h2></div><button type="button" data-close-dialog>×</button></div>
+      <input type="hidden" name="product_id" />
+      <label>Alış fiyatı<span class="money-input"><input name="purchase_price" type="number" min="0" step="0.0001" value="0" /><select name="purchase_currency"><option>USD</option><option>TRY</option><option>EUR</option><option>RUB</option></select></span><small id="pricePurchasePreview">-</small></label>
+      <label>Satış fiyatı<span class="money-input"><input name="sale_price" type="number" min="0" step="0.0001" value="0" /><select name="sale_currency"><option>USD</option><option>TRY</option><option>EUR</option><option>RUB</option></select></span><small id="priceSalePreview">-</small></label>
+      <p class="helper" id="priceRateInfo">Kur bilgisi Sidya Global TCMB alanından alınır. Kayıtta ana fiyat USD olarak saklanır.</p>
+      <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit">Fiyatı kaydet</button></div>
     </form></dialog>
 
     <dialog id="stockDialog"><form method="dialog" class="dialog-form narrow" id="stockForm">
@@ -240,7 +249,8 @@
     <script src="backend-config.js"></script>
     <script src="/api/backend-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/xlsx.full.min.js"></script>
     <script src="catalog-products.generated.js?v=20260614-1"></script>
-    <script src="admin.js?v=20260621-1"></script>
+    <script src="admin.js?v=20260628-1"></script>
   </body>
 </html>

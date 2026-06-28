@@ -20,6 +20,8 @@ const state = {
   selectedCustomers: new Set(),
   productSort: "name-asc", productPage: 1, productPageSize: 100,
   invoiceProductSort: { field: "name", direction: "asc" },
+  exchangeRates: { USD: 1, TRY: 1, EUR: 1, RUB: 1 },
+  exchangeUpdatedAt: null,
   editingInvoiceId: null,
   schemaReady: true,
   session: null,
@@ -43,6 +45,34 @@ const formObject = (form) => Object.fromEntries(new FormData(form).entries());
 const today = () => new Date().toISOString().slice(0, 10);
 const toUsd = (amount, currency, exchangeRate) =>
   String(currency).toUpperCase() === "USD" ? Number(amount || 0) : Number(amount || 0) / Math.max(Number(exchangeRate || 1), 0.000001);
+const normalizeCurrency = (value) => String(value || "USD").trim().toUpperCase();
+const rateToTry = (currency) => Number(state.exchangeRates[normalizeCurrency(currency)] || 0);
+const canConvertCurrency = (currency) => normalizeCurrency(currency) === "USD" || rateToTry(currency) > 0;
+const convertToUsd = (amount, currency = "USD") => {
+  const value = Number(amount || 0);
+  const target = normalizeCurrency(currency);
+  if (target === "USD") return value;
+  const usdTry = rateToTry("USD");
+  const selectedTry = target === "TRY" ? 1 : rateToTry(target);
+  return usdTry > 0 && selectedTry > 0 ? value * selectedTry / usdTry : value;
+};
+const convertFromUsd = (amount, currency = "USD") => {
+  const value = Number(amount || 0);
+  const target = normalizeCurrency(currency);
+  if (target === "USD") return value;
+  const usdTry = rateToTry("USD");
+  const selectedTry = target === "TRY" ? 1 : rateToTry(target);
+  return usdTry > 0 && selectedTry > 0 ? value * usdTry / selectedTry : value;
+};
+const formatConvertedPrices = (usdValue) =>
+  ["TRY", "EUR", "RUB"]
+    .filter((currency) => canConvertCurrency(currency))
+    .map((currency) => money(convertFromUsd(usdValue, currency), currency))
+    .join(" · ");
+const priceWithConversions = (usdValue) => {
+  const converted = formatConvertedPrices(usdValue);
+  return `<strong>${money(usdValue, "USD")}</strong>${converted ? `<small>${converted}</small>` : ""}`;
+};
 
 const setStatus = (message = "", error = false) => {
   const target = document.querySelector("#globalStatus");
@@ -201,6 +231,7 @@ const boot = async () => {
   if (await verifyAdmin(data.session)) {
     showApp(data.session);
     await loadData();
+    await loadAdminExchangeRates();
   } else {
     if (data.session) await client.auth.signOut();
     showLogin();
@@ -280,6 +311,31 @@ const productAveragePrices = (productId) => {
  };
 };
 
+const loadAdminExchangeRates = async () => {
+  if (window.location.protocol === "file:") return;
+  try {
+    const response = await fetch(`/api/exchange-rates?t=${Date.now()}`, { cache: "no-store" });
+    if (!response.ok) throw new Error("Kur bilgisi alınamadı.");
+    const data = await response.json();
+    const rates = Object.fromEntries((data.rates || [])
+      .filter((rate) => rate.code && Number.isFinite(Number(rate.value)))
+      .map((rate) => [String(rate.code).toUpperCase(), Number(rate.value)]));
+    state.exchangeRates = {
+      USD: rates.USD || rates.USDTRY || state.exchangeRates.USD || 1,
+      TRY: 1,
+      EUR: rates.EUR || state.exchangeRates.EUR || 1,
+      RUB: rates.RUB || state.exchangeRates.RUB || 1,
+    };
+    state.exchangeUpdatedAt = data.updatedAt || new Date().toISOString();
+    refreshProductPricePreviews();
+    renderProducts();
+  } catch (error) {
+    console.warn(error.message || "Kur bilgisi alınamadı.");
+  }
+};
+
+const unitLabel = (unit) => ({ adet: "Adet", koli: "Koli", litre: "Litre", metre: "Metre", kg: "Kg" })[String(unit || "adet").toLowerCase()] || unit || "Adet";
+
 const renderProductPagination = (totalRows, totalPages) => {
  const target = document.querySelector("#productPagination");
  if (!target) return;
@@ -323,18 +379,19 @@ const renderProducts = () => {
   <td>${escapeHtml(item.barcode || item.sku || "-")}</td>
   <td><strong>${escapeHtml(item.name)}</strong></td>
   <td>${escapeHtml(item.grammage || "-")}</td>
+  <td>${escapeHtml(unitLabel(item.unit))}</td>
   <td>${units > 0 ? number(units) : "-"}</td>
-  <td class="${low ? "stock-low" : ""}">${number(item.stock_quantity)} Adet</td>
+  <td class="${low ? "stock-low" : ""}">${number(item.stock_quantity)} ${escapeHtml(unitLabel(item.unit))}</td>
   <td>${formatStockCartons(item.stock_quantity, units)}</td>
   <td>${number(item.minimum_stock)}</td>
-  <td>${money(item.purchase_price, "USD")}</td>
-  <td>${money(averagePurchase, "USD")}</td>
-  <td>${money(item.sale_price, "USD")}</td>
-  <td>${money(averageSale, "USD")}</td>
+  <td class="price-cell">${priceWithConversions(item.purchase_price)}</td>
+  <td class="price-cell">${priceWithConversions(averagePurchase)}</td>
+  <td class="price-cell">${priceWithConversions(item.sale_price)}</td>
+  <td class="price-cell">${priceWithConversions(averageSale)}</td>
   <td><span class="profit-index ${profitClass}">%${number(profitIndex)}</span></td>
   <td>%${number(item.vat_rate)}</td>
   <td><span class="context-hint">Sağ tık · İşlemler</span></td></tr>`;
- }).join("") : '<tr><td colspan="17" class="empty">Stok kartı bulunamadı.</td></tr>';
+ }).join("") : '<tr><td colspan="18" class="empty">Stok kartı bulunamadı.</td></tr>';
 
  const selectAll = document.querySelector("#selectAllProducts");
  if (selectAll) {
@@ -702,7 +759,179 @@ const openEditForm = (dialogId, formId, data = {}) => {
     if (field.type === "checkbox") field.checked = value !== false;
     else field.value = value ?? "";
   });
+  if (formId === "productForm") {
+    form.querySelectorAll("[data-price-currency]").forEach((select) => { select.value = "USD"; });
+    refreshProductPricePreviews();
+  }
   document.querySelector(`#${dialogId}`).showModal();
+};
+
+const pricePreviewText = (amount, currency) => {
+  const selected = normalizeCurrency(currency);
+  if (!canConvertCurrency(selected)) return "Kur bulunamadı; değer USD kabul edilir.";
+  const usd = convertToUsd(amount, selected);
+  const parts = [`Ana kayıt: ${money(usd, "USD")}`];
+  ["TRY", "EUR", "RUB"].forEach((target) => {
+    if (target !== selected && canConvertCurrency(target)) parts.push(money(convertFromUsd(usd, target), target));
+  });
+  return parts.join(" · ");
+};
+
+const refreshProductPricePreviews = () => {
+  const productForm = document.querySelector("#productForm");
+  if (productForm) {
+    ["purchase_price", "sale_price"].forEach((fieldName) => {
+      const input = productForm.elements.namedItem(fieldName);
+      const currency = productForm.querySelector(`[data-price-currency="${fieldName}"]`)?.value || "USD";
+      const preview = productForm.querySelector(`[data-price-preview="${fieldName}"]`);
+      if (input && preview) preview.textContent = pricePreviewText(input.value, currency);
+    });
+  }
+  const priceForm = document.querySelector("#productPriceForm");
+  if (priceForm) {
+    document.querySelector("#pricePurchasePreview").textContent = pricePreviewText(priceForm.elements.purchase_price.value, priceForm.elements.purchase_currency.value);
+    document.querySelector("#priceSalePreview").textContent = pricePreviewText(priceForm.elements.sale_price.value, priceForm.elements.sale_currency.value);
+  }
+};
+
+const saveProduct = async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const values = formObject(form);
+  const id = values.id;
+  delete values.id;
+  ["purchase_price", "sale_price"].forEach((fieldName) => {
+    const currency = form.querySelector(`[data-price-currency="${fieldName}"]`)?.value || "USD";
+    values[fieldName] = convertToUsd(values[fieldName], currency);
+  });
+  ["minimum_stock", "units_per_carton", "kg_per_carton", "vat_rate"].forEach((key) => { values[key] = Number(values[key] || 0); });
+  values.currency = "USD";
+  const request = id ? client.from("products").update(values).eq("id", id) : client.from("products").insert(values);
+  await query(request);
+  document.querySelector("#productDialog").close();
+  await loadData();
+};
+
+const priceImportHeaders = [
+  "Barkod", "SKU", "Marka", "Ürün", "Stok Birimi",
+  "Alış Fiyatı", "Alış Para Birimi", "Satış Fiyatı", "Satış Para Birimi",
+  "KDV Oranı", "Koli İçi", "Minimum Stok", "Koli Kg",
+];
+const allowedUnits = new Set(["adet", "koli", "litre", "metre", "kg"]);
+const normalizeImportKey = (value) => String(value || "")
+  .toLocaleLowerCase("tr")
+  .replaceAll("ı", "i")
+  .replaceAll("ş", "s")
+  .replaceAll("ğ", "g")
+  .replaceAll("ü", "u")
+  .replaceAll("ö", "o")
+  .replaceAll("ç", "c")
+  .replace(/[^a-z0-9]/g, "");
+const getImportValue = (row, aliases) => {
+  const normalized = Object.fromEntries(Object.entries(row).map(([key, value]) => [normalizeImportKey(key), value]));
+  for (const alias of aliases) {
+    const value = normalized[normalizeImportKey(alias)];
+    if (value !== undefined && value !== null && String(value).trim() !== "") return value;
+  }
+  return "";
+};
+const parseImportedNumber = (value) => {
+  if (value === "" || value === null || value === undefined) return null;
+  if (typeof value === "number") return Number.isFinite(value) ? value : null;
+  const raw = String(value).trim().replace(/\s/g, "");
+  const clean = raw.includes(",")
+    ? raw.replace(/\./g, "").replace(",", ".")
+    : raw;
+  const parsed = Number(clean);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+const parseCsvRows = (text) => {
+  const lines = text.split(/\r?\n/).filter((line) => line.trim());
+  if (!lines.length) return [];
+  const separator = lines[0].includes(";") ? ";" : ",";
+  const split = (line) => line.split(separator).map((cell) => cell.trim().replace(/^"|"$/g, ""));
+  const headers = split(lines[0]);
+  return lines.slice(1).map((line) => Object.fromEntries(split(line).map((cell, index) => [headers[index] || `Kolon ${index + 1}`, cell])));
+};
+
+const downloadPriceTemplate = () => {
+  const rows = state.products.map((item) => ({
+    Barkod: item.barcode || "",
+    SKU: item.sku || "",
+    Marka: item.brand || "",
+    Ürün: item.name || "",
+    "Stok Birimi": item.unit || "adet",
+    "Alış Fiyatı": Number(item.purchase_price || 0),
+    "Alış Para Birimi": "USD",
+    "Satış Fiyatı": Number(item.sale_price || 0),
+    "Satış Para Birimi": "USD",
+    "KDV Oranı": Number(item.vat_rate || 20),
+    "Koli İçi": Number(item.units_per_carton || 1),
+    "Minimum Stok": Number(item.minimum_stock || 0),
+    "Koli Kg": Number(item.kg_per_carton || 0),
+  }));
+  if (window.XLSX) {
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(rows.length ? rows : [Object.fromEntries(priceImportHeaders.map((key) => [key, ""]))], { header: priceImportHeaders });
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Fiyat Güncelleme");
+    XLSX.writeFile(workbook, `sidya-fiyat-guncelleme-${today()}.xlsx`);
+    return;
+  }
+  const csv = [priceImportHeaders.join(";"), ...rows.map((row) => priceImportHeaders.map((key) => row[key] ?? "").join(";"))].join("\n");
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+  link.download = `sidya-fiyat-guncelleme-${today()}.csv`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+};
+
+const readPriceImportRows = async (file) => {
+  if (!file) return [];
+  if (/\.csv$/i.test(file.name)) return parseCsvRows(await file.text());
+  if (!window.XLSX) throw new Error("Excel okuma kütüphanesi yüklenemedi. Dosyayı CSV olarak deneyin.");
+  const workbook = XLSX.read(await file.arrayBuffer(), { type: "array" });
+  const sheet = workbook.Sheets[workbook.SheetNames[0]];
+  return XLSX.utils.sheet_to_json(sheet, { defval: "" });
+};
+
+const importPriceFile = async (event) => {
+  const file = event.target.files?.[0];
+  event.target.value = "";
+  if (!file) return;
+  const rows = await readPriceImportRows(file);
+  if (!rows.length) throw new Error("Dosyada okunacak satır bulunamadı.");
+  let updated = 0;
+  let skipped = 0;
+  const productByBarcode = new Map(state.products.flatMap((item) => [item.barcode, item.sku].filter(Boolean).map((key) => [String(key).trim(), item])));
+  for (const row of rows) {
+    const key = String(getImportValue(row, ["Barkod", "Barcode", "SKU", "Stok Kodu"]) || "").trim();
+    const product = productByBarcode.get(key);
+    if (!product) { skipped += 1; continue; }
+    const update = { updated_at: new Date().toISOString() };
+    const purchase = parseImportedNumber(getImportValue(row, ["Alış Fiyatı", "Alis Fiyati", "Purchase Price"]));
+    const sale = parseImportedNumber(getImportValue(row, ["Satış Fiyatı", "Satis Fiyati", "Sale Price"]));
+    if (purchase !== null) update.purchase_price = convertToUsd(purchase, getImportValue(row, ["Alış Para Birimi", "Alis Para Birimi", "Purchase Currency"]) || "USD");
+    if (sale !== null) update.sale_price = convertToUsd(sale, getImportValue(row, ["Satış Para Birimi", "Satis Para Birimi", "Sale Currency"]) || "USD");
+    const unit = String(getImportValue(row, ["Stok Birimi", "Takip Birimi", "Birim", "Unit"]) || "").trim().toLocaleLowerCase("tr");
+    if (unit && allowedUnits.has(unit)) update.unit = unit;
+    const vatRate = parseImportedNumber(getImportValue(row, ["KDV Oranı", "KDV", "VAT"]));
+    const unitsPerCarton = parseImportedNumber(getImportValue(row, ["Koli İçi", "Koli Ici", "Units Per Carton"]));
+    const minimumStock = parseImportedNumber(getImportValue(row, ["Minimum Stok", "Min Stok"]));
+    const kgPerCarton = parseImportedNumber(getImportValue(row, ["Koli Kg", "Kg Per Carton"]));
+    if (vatRate !== null) update.vat_rate = vatRate;
+    if (unitsPerCarton !== null) update.units_per_carton = Math.max(unitsPerCarton, 1);
+    if (minimumStock !== null) update.minimum_stock = minimumStock;
+    if (kgPerCarton !== null) update.kg_per_carton = kgPerCarton;
+    if ("purchase_price" in update || "sale_price" in update || "unit" in update || "vat_rate" in update || "units_per_carton" in update || "minimum_stock" in update || "kg_per_carton" in update) {
+      update.currency = "USD";
+      await query(client.from("products").update(update).eq("id", product.id).select("id"));
+      updated += 1;
+    } else {
+      skipped += 1;
+    }
+  }
+  await loadData();
+  setStatus(`${updated} ürün barkod/SKU eşleşmesiyle güncellendi${skipped ? `, ${skipped} satır atlandı` : ""}.`);
 };
 
 const saveEntity = async (event, table, dialogId, numericFields = []) => {
@@ -1141,6 +1370,43 @@ const openProductStockMovement = (productId, direction) => {
   document.querySelector("#stockDialog").showModal();
 };
 
+const openProductPriceDialog = (productId) => {
+  const product = state.products.find((item) => item.id === productId);
+  if (!product) throw new Error("Ürün kaydı bulunamadı.");
+  const form = document.querySelector("#productPriceForm");
+  form.reset();
+  form.elements.product_id.value = product.id;
+  form.elements.purchase_price.value = Number(product.purchase_price || 0);
+  form.elements.sale_price.value = Number(product.sale_price || 0);
+  form.elements.purchase_currency.value = "USD";
+  form.elements.sale_currency.value = "USD";
+  document.querySelector("#productPriceTitle").textContent = `${product.brand || ""} ${product.name}`.trim();
+  const updated = state.exchangeUpdatedAt
+    ? new Date(state.exchangeUpdatedAt).toLocaleString("tr-TR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })
+    : "kur alınamadı";
+  document.querySelector("#priceRateInfo").textContent = `Kur bilgisi Sidya Global TCMB alanından alınır. Son kontrol: ${updated}. Kayıtta ana fiyat USD olarak saklanır.`;
+  refreshProductPricePreviews();
+  document.querySelector("#productPriceDialog").showModal();
+};
+
+const saveProductPrices = async (event) => {
+  event.preventDefault();
+  const values = formObject(event.currentTarget);
+  const product = state.products.find((item) => item.id === values.product_id);
+  if (!product) throw new Error("Ürün kaydı bulunamadı.");
+  const purchasePrice = convertToUsd(values.purchase_price, values.purchase_currency);
+  const salePrice = convertToUsd(values.sale_price, values.sale_currency);
+  await query(client.from("products").update({
+    purchase_price: purchasePrice,
+    sale_price: salePrice,
+    currency: "USD",
+    updated_at: new Date().toISOString(),
+  }).eq("id", product.id).select("id"));
+  document.querySelector("#productPriceDialog").close();
+  await loadData();
+  setStatus(`${product.name} fiyatları güncellendi.`);
+};
+
 const deleteProduct = async (productId) => {
   const product = state.products.find((item) => item.id === productId);
   if (!product || !confirm(`${product.name} stok kartı veritabanından kalıcı olarak silinsin mi? Bu işlem geri alınamaz.`)) return;
@@ -1211,7 +1477,7 @@ const showRowContextMenu = (type, id, x, y) => {
     ],
     product: [
       ["Hareketler / Ekstre", "product-history", "primary"], ["Düzenle", "product-edit"],
-      ["Stok girişi", "stock-in"], ["Stok çıkışı", "stock-out"],
+      ["Fiyat gir", "product-price"], ["Stok girişi", "stock-in"], ["Stok çıkışı", "stock-out"],
       ["Sil", "product-delete", "danger"],
     ],
     invoice: [
@@ -1328,6 +1594,7 @@ document.querySelector("#loginForm").addEventListener("submit", safely(async (ev
   }
   showApp(data.session);
   await loadData();
+  await loadAdminExchangeRates();
 }));
 
 document.querySelector("#signOutButton").addEventListener("click", safely(async () => { await client.auth.signOut(); showLogin(); }));
@@ -1337,7 +1604,10 @@ document.querySelector("#customerSearch").addEventListener("input", renderCustom
 document.querySelector("#productSearch").addEventListener("input", () => { state.productPage = 1; renderProducts(); });
 document.querySelector("#productSort").addEventListener("change", (event) => { state.productSort = event.target.value; state.productPage = 1; renderProducts(); });
 document.querySelector("#customerForm").addEventListener("submit", safely(saveCustomer));
-document.querySelector("#productForm").addEventListener("submit", safely((event) => saveEntity(event, "products", "productDialog", ["purchase_price", "sale_price", "minimum_stock", "units_per_carton", "kg_per_carton", "vat_rate"])));
+document.querySelector("#productForm").addEventListener("submit", safely(saveProduct));
+document.querySelector("#productPriceForm").addEventListener("submit", safely(saveProductPrices));
+document.querySelector("#downloadPriceTemplateButton").addEventListener("click", downloadPriceTemplate);
+document.querySelector("#priceImportFile").addEventListener("change", safely(importPriceFile));
 document.querySelector("#stockForm").addEventListener("submit", safely(adjustStock));
 document.querySelector("#paymentForm").addEventListener("submit", safely(recordPayment));
 document.querySelector("#invoiceForm").addEventListener("submit", submitInvoice);
@@ -1442,6 +1712,7 @@ document.querySelector("#rowContextMenu").addEventListener("click", safely(async
   if (action === "customer-delete") await deleteCustomer(target.id);
   if (action === "product-history") await openProductHistory(target.id);
   if (action === "product-edit") openEditForm("productDialog", "productForm", state.products.find((item) => item.id === target.id));
+  if (action === "product-price") openProductPriceDialog(target.id);
   if (action === "stock-in") openProductStockMovement(target.id, "in");
   if (action === "stock-out") openProductStockMovement(target.id, "out");
   if (action === "product-delete") await deleteProduct(target.id);
@@ -1458,6 +1729,9 @@ window.addEventListener("scroll", hideRowContextMenu, true);
 window.addEventListener("resize", hideRowContextMenu);
 
 document.addEventListener("change", (event) => {
+  if (event.target.closest("[data-price-currency], #productPriceForm select")) {
+    refreshProductPricePreviews();
+  }
   const pickerCurrency = event.target.closest("[data-picker-currency]");
   if (pickerCurrency) {
     document.querySelector("#invoiceForm").elements.currency.value = pickerCurrency.value;
@@ -1488,6 +1762,12 @@ document.addEventListener("change", (event) => {
   }
   line.stock_quantity = stockQuantityFor(line.quantity, line.selected_unit, line.units_per_carton);
   renderInvoiceLines();
+});
+
+document.addEventListener("input", (event) => {
+  if (event.target.closest("#productForm [name='purchase_price'], #productForm [name='sale_price'], #productPriceForm input")) {
+    refreshProductPricePreviews();
+  }
 });
 
 document.addEventListener("click", safely(async (event) => {
