@@ -3,6 +3,7 @@ const path = require("path");
 
 const PROJECT_REF = "jhjforyykkxklfarjtjl";
 const CONFIRM = "RUN_SIDYA_COMMERCIAL_MIGRATION";
+// Deployment refresh: 2026-07-04T00:00:00+03:00
 
 const readSql = () => fs.readFileSync(path.join(process.cwd(), "supabase", "commercial-module.sql"), "utf8");
 
