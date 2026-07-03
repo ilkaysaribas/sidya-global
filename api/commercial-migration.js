@@ -8,6 +8,7 @@ const readSql = () => fs.readFileSync(path.join(process.cwd(), "supabase", "comm
 
 const envStatus = () => ({
   hasSupabaseAccessToken: Boolean(process.env.SUPABASE_ACCESS_TOKEN?.trim()),
+  hasMigrationAdminKey: Boolean(process.env.MIGRATION_ADMIN_KEY?.trim()),
 });
 
 module.exports = async (req, res) => {
@@ -23,6 +24,12 @@ module.exports = async (req, res) => {
   }
 
   try {
+    const adminKey = process.env.MIGRATION_ADMIN_KEY?.trim();
+    if (!adminKey || req.headers["x-migration-key"] !== adminKey) {
+      res.status(403).json({ error: "Migration admin key missing or invalid." });
+      return;
+    }
+
     const body = typeof req.body === "object" && req.body ? req.body : JSON.parse(req.body || "{}");
     if (body.confirm !== CONFIRM) {
       res.status(403).json({ error: "Migration confirmation missing." });
