@@ -97,7 +97,9 @@ window.SIDYA_BACKEND = {
   function injectShell() {
     const nav = document.querySelector("#mainNav");
     if (nav && !nav.querySelector('[data-view="profit-documents"]')) {
-      nav.insertAdjacentHTML("beforeend", '<button data-view="profit-documents">Sipariş / Kârlılık</button><button data-view="closing">Cari Kapanış</button>');
+      nav.insertAdjacentHTML("beforeend", '<button data-view="profit-documents">Sipariş / Kârlılık</button><button data-view="closing">Cari Kapanış</button><a class="nav-crm-link" href="crm.html">Global CRM</a>');
+    } else if (nav && !nav.querySelector(".nav-crm-link")) {
+      nav.insertAdjacentHTML("beforeend", '<a class="nav-crm-link" href="crm.html">Global CRM</a>');
     }
     const main = document.querySelector("main.main");
     if (main && !document.querySelector('[data-view-panel="profit-documents"]')) {
@@ -116,7 +118,7 @@ window.SIDYA_BACKEND = {
         </section>`);
     }
     if (!document.querySelector("#commercialRuntimeStyles")) {
-      document.head.insertAdjacentHTML("beforeend", `<style id="commercialRuntimeStyles">.profit-workspace{display:grid;gap:18px}.profit-head .dense-grid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}.profit-grid{display:grid;grid-template-columns:minmax(0,1fr)300px;gap:18px;align-items:start}.profit-lines table{min-width:1180px}.profit-lines td small{display:block;color:#64748b;margin-top:4px}.profit-lines input,.profit-lines select{width:100%;min-width:86px}.profit-summary{position:sticky;top:18px}.summary-card-list{display:grid;gap:10px}.summary-card-list article{border:1px solid #d9e2ec;border-radius:8px;padding:10px 12px;background:#fff}.summary-card-list span{display:block;color:#64748b;font-size:12px}.summary-card-list strong{display:block;margin-top:4px;font-size:18px}.profit-positive{color:#047857}.profit-negative{color:#b91c1c}.closing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}@media(max-width:1100px){.profit-grid,.closing-grid{grid-template-columns:1fr}.profit-summary{position:static}}</style>`);
+      document.head.insertAdjacentHTML("beforeend", `<style id="commercialRuntimeStyles">.profit-workspace{display:grid;gap:18px}.profit-head .dense-grid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}.profit-grid{display:grid;grid-template-columns:minmax(0,1fr)300px;gap:18px;align-items:start}.profit-lines table{min-width:1180px}.profit-lines td small{display:block;color:#64748b;margin-top:4px}.profit-lines input,.profit-lines select{width:100%;min-width:86px}.profit-summary{position:sticky;top:18px}.summary-card-list{display:grid;gap:10px}.summary-card-list article{border:1px solid #d9e2ec;border-radius:8px;padding:10px 12px;background:#fff}.summary-card-list span{display:block;color:#64748b;font-size:12px}.summary-card-list strong{display:block;margin-top:4px;font-size:18px}.profit-positive{color:#047857}.profit-negative{color:#b91c1c}.closing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.nav-crm-link{display:block;margin-top:6px;padding:12px 14px;border-radius:10px;background:#0f766e;color:#fff!important;text-decoration:none;font-weight:800}@media(max-width:1100px){.profit-grid,.closing-grid{grid-template-columns:1fr}.profit-summary{position:static}}</style>`);
     }
   }
 
@@ -126,7 +128,6 @@ window.SIDYA_BACKEND = {
     if (!form.elements.document_date.value) form.elements.document_date.value = today();
     if (!form.elements.document_no.value) form.elements.document_no.value = `SG-${today().replaceAll("-", "")}-001`;
     const selectedCustomer = form.elements.customer_id.value;
-    const selectedDate = form.elements.document_date.value;
     form.elements.customer_id.innerHTML = ['<option value="">Cari seç</option>', ...state.customers.map((item) => `<option value="${item.id}">${esc(item.company)}${item.due_days ? ` · ${item.due_days} gün` : ""}</option>`)].join("");
     form.elements.customer_id.value = selectedCustomer;
     const productOptions = ['<option value="">Ürün seç</option>', ...state.products.map((item) => `<option value="${item.id}">${esc(item.product_code || item.sku || item.barcode || "")} ${esc(item.name || "")}</option>`)].join("");
