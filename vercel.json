@@ -1,4 +1,10 @@
 {
+  "rewrites": [
+    {
+      "source": "/contact.php",
+      "destination": "/api/information-message"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
