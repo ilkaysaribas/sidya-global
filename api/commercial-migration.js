@@ -5,7 +5,20 @@ const PROJECT_REF = "jhjforyykkxklfarjtjl";
 const RUN_TOKEN = "sidya-commercial-run-20260704";
 
 const readSql = () => fs.readFileSync(path.join(process.cwd(), "supabase", "commercial-module.sql"), "utf8");
-const readAccessToken = () => String(process.env.SUPABASE_ACCESS_TOKEN || "").trim().replace(/^Bearer\s+/i, "").trim();
+const rawAccessToken = () => String(process.env.SUPABASE_ACCESS_TOKEN || "");
+const readAccessToken = () => rawAccessToken().trim().replace(/^Bearer\s+/i, "").replace(/^['\"]|['\"]$/g, "").trim();
+const tokenDiagnostics = () => {
+  const raw = rawAccessToken();
+  const cleaned = readAccessToken();
+  return {
+    rawLength: raw.length,
+    cleanedLength: cleaned.length,
+    prefix: cleaned.slice(0, 4),
+    hasWhitespace: /\s/.test(cleaned),
+    hasQuote: /['\"]/.test(cleaned),
+    looksLikeSupabasePat: cleaned.startsWith("sbp_"),
+  };
+};
 
 const runSql = async (query) => {
   const accessToken = readAccessToken();
@@ -64,9 +77,10 @@ module.exports = async (req, res) => {
     res.status(200).json({
       ok: true,
       hasSupabaseAccessToken: Boolean(readAccessToken()),
+      tokenDiagnostics: tokenDiagnostics(),
       mode: "temporary-get-runner",
     });
   } catch (error) {
-    res.status(error.statusCode || 500).json({ error: error.message || "Migration failed." });
+    res.status(error.statusCode || 500).json({ error: error.message || "Migration failed.", tokenDiagnostics: tokenDiagnostics() });
   }
 };
