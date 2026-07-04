@@ -1,14 +1,43 @@
-const fs = require("fs");
-const path = require("path");
-
 const PROJECT_REF = "jhjforyykkxklfarjtjl";
 const RUN_TOKEN = "sidya-commercial-run-20260704";
 
-const readFile = (relativePath) => fs.readFileSync(path.join(process.cwd(), relativePath), "utf8");
-const readSql = () => [
-  readFile("supabase/commercial-module.sql"),
-  readFile("supabase/bilgi-al-gonder.sql"),
-].join("\n\n");
+const catalogSql = `
+-- Yönetim panelindeki satış fiyatlarını müşteri sitesine güvenli biçimde yayınlar.
+-- Maliyet/alış fiyatı bu tabloda tutulmaz ve müşteriye açılmaz.
+
+create table if not exists public.site_catalog_prices (
+  publish_key text primary key,
+  catalog_id text,
+  barcode text,
+  name text not null,
+  brand text,
+  category text,
+  grammage text,
+  sale_price numeric(14,4) not null default 0 check (sale_price >= 0),
+  currency text not null default 'USD',
+  units_per_carton numeric(14,3) not null default 1,
+  cartons_per_pallet numeric(14,3),
+  kg_per_carton numeric(14,3),
+  active boolean not null default true,
+  updated_by uuid references auth.users(id),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.site_catalog_prices enable row level security;
+drop policy if exists "public reads active site catalog prices" on public.site_catalog_prices;
+create policy "public reads active site catalog prices"
+on public.site_catalog_prices for select to anon, authenticated
+using (active = true or public.is_admin());
+drop policy if exists "admins manage site catalog prices" on public.site_catalog_prices;
+create policy "admins manage site catalog prices"
+on public.site_catalog_prices for all to authenticated
+using (public.is_admin()) with check (public.is_admin());
+
+grant select on public.site_catalog_prices to anon, authenticated;
+grant insert, update, delete on public.site_catalog_prices to authenticated;
+notify pgrst, 'reload schema';
+`;
+
 const rawAccessToken = () => String(process.env.SUPABASE_ACCESS_TOKEN || "");
 const readAccessToken = () => rawAccessToken().trim().replace(/^Bearer\s+/i, "").replace(/^['\"]|['\"]$/g, "").trim();
 const tokenDiagnostics = () => {
@@ -67,9 +96,9 @@ module.exports = async (req, res) => {
       return;
     }
 
-    if (req.query?.run === RUN_TOKEN) {
-      const result = await runSql(readSql());
-      res.status(200).json({ ok: true, action: "run", result });
+    if (req.query?.catalog === RUN_TOKEN) {
+      const result = await runSql(catalogSql);
+      res.status(200).json({ ok: true, action: "catalog", result });
       return;
     }
 
@@ -83,7 +112,7 @@ module.exports = async (req, res) => {
       ok: true,
       hasSupabaseAccessToken: Boolean(readAccessToken()),
       tokenDiagnostics: tokenDiagnostics(),
-      mode: "temporary-get-runner",
+      mode: "temporary-catalog-runner",
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message || "Migration failed.", tokenDiagnostics: tokenDiagnostics() });
