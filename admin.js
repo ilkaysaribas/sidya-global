@@ -13,1069 +13,692 @@ const state = {
   ledger: [],
   orders: [],
   movements: [],
-  vat: [],
-  settings: {},
-  invoiceLines: [],
-  selectedProducts: new Set(),
-  selectedCustomers: new Set(),
-  productSort: "name-asc", productPage: 1, productPageSize: 100,
-  invoiceProductSort: { field: "name", direction: "asc" },
-  exchangeRates: { USD: 1, TRY: 1, EUR: 1, RUB: 1 },
-  exchangeUpdatedAt: null,
-  editingInvoiceId: null,
-  schemaReady: true,
+  settings: null,
   session: null,
+  schemaReady: true,
+  selectedCustomers: new Set(),
+  selectedProducts: new Set(),
   activeInvoiceId: null,
+  editingInvoiceId: null,
+  invoiceLines: [],
   contextTarget: null,
+  productPage: 1,
+  productPageSize: 100,
+  productSort: "brand-asc",
+  invoiceProductSort: { field: "name", direction: "asc" },
+  exchangeRates: { USD: 1, TRY: 32, EUR: 0.92, RUB: 90, GEL: 2.7 },
+  exchangeUpdatedAt: null,
 };
 
-const currencySymbols = { USD: "$", EUR: "€", RUB: "₽", TRY: "₺", GBP: "£" };
-const invoiceCurrencies = ["USD", "EUR", "RUB", "TRY", "GBP"];
-const money = (value, currency = "USD") => new Intl.NumberFormat("tr-TR", {
-  style: "currency",
-  currency: currency || "USD",
-  maximumFractionDigits: 2,
-}).format(Number(value || 0));
-const number = (value) => new Intl.NumberFormat("tr-TR", { maximumFractionDigits: 3 }).format(Number(value || 0));
-const date = (value) => value ? new Intl.DateTimeFormat("tr-TR").format(new Date(`${String(value).slice(0, 10)}T12:00:00`)) : "-";
-const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
-  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;",
-})[char]);
-const formObject = (form) => Object.fromEntries(new FormData(form).entries());
+const ADMIN_EMAILS = ["ilkaysaribas@gmail.com", "sidyaglobal@gmail.com"];
+
 const today = () => new Date().toISOString().slice(0, 10);
-const toUsd = (amount, currency, exchangeRate) =>
-  String(currency).toUpperCase() === "USD" ? Number(amount || 0) : Number(amount || 0) / Math.max(Number(exchangeRate || 1), 0.000001);
-const normalizeCurrency = (value) => String(value || "USD").trim().toUpperCase();
-const rateToTry = (currency) => Number(state.exchangeRates[normalizeCurrency(currency)] || 0);
-const canConvertCurrency = (currency) => normalizeCurrency(currency) === "USD" || rateToTry(currency) > 0;
-const convertToUsd = (amount, currency = "USD") => {
-  const value = Number(amount || 0);
-  const target = normalizeCurrency(currency);
-  if (target === "USD") return value;
-  const usdTry = rateToTry("USD");
-  const selectedTry = target === "TRY" ? 1 : rateToTry(target);
-  return usdTry > 0 && selectedTry > 0 ? value * selectedTry / usdTry : value;
-};
-const convertFromUsd = (amount, currency = "USD") => {
-  const value = Number(amount || 0);
-  const target = normalizeCurrency(currency);
-  if (target === "USD") return value;
-  const usdTry = rateToTry("USD");
-  const selectedTry = target === "TRY" ? 1 : rateToTry(target);
-  return usdTry > 0 && selectedTry > 0 ? value * usdTry / selectedTry : value;
-};
-const formatConvertedPrices = (usdValue) =>
-  ["TRY", "EUR", "RUB"]
-    .filter((currency) => canConvertCurrency(currency))
-    .map((currency) => money(convertFromUsd(usdValue, currency), currency))
-    .join(" · ");
-const priceWithConversions = (usdValue) => {
-  const converted = formatConvertedPrices(usdValue);
-  return `<strong>${money(usdValue, "USD")}</strong>${converted ? `<small>${converted}</small>` : ""}`;
-};
+const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
+const number = (value) => new Intl.NumberFormat("tr-TR", { maximumFractionDigits: 3 }).format(Number(value || 0));
+const money = (value, currency = "USD") => new Intl.NumberFormat("tr-TR", { style: "currency", currency: currency || "USD", maximumFractionDigits: 2 }).format(Number(value || 0));
+const date = (value) => value ? new Date(value).toLocaleDateString("tr-TR") : "-";
 
-const setStatus = (message = "", error = false) => {
+const setStatus = (message, error = false) => {
   const target = document.querySelector("#globalStatus");
-  target.textContent = message;
+  if (!target) return;
+  target.textContent = message || "";
   target.style.color = error ? "#b42318" : "#087462";
 };
 
-const isSchemaError = (error) => {
-  const message = String(error?.message || "");
-  return error?.code === "PGRST204" ||
-    error?.code === "PGRST205" ||
-    error?.code === "PGRST202" ||
-    /schema cache|could not find the table|could not find the .* column|could not find the function/i.test(message);
-};
-
 const friendlyError = (error) => {
-  if (isSchemaError(error)) {
-    state.schemaReady = false;
-    document.querySelector("#schemaWarning").hidden = false;
-    const functionMissing = error?.code === "PGRST202" || /could not find the function/i.test(String(error?.message || ""));
-    document.querySelector("#schemaWarningText").innerHTML = functionMissing
-      ? "Fatura düzenleme ve silmeyi etkinleştirmek için Supabase SQL Editor'da <code>supabase/fatura-duzenle-sil.sql</code> dosyasını bir kez çalıştırın. Ardından Yenile'ye basın."
-      : "Supabase SQL Editor'da güncel <code>supabase/schema.sql</code> dosyasını çalıştırın. Ardından bu sayfada Yenile'ye basın.";
-    if (functionMissing) return "Fatura düzenleme/silme veritabanı güncellemesi eksik. fatura-duzenle-sil.sql dosyasını SQL Editor'da çalıştırın.";
-    return "Supabase veritabanı henüz güncellenmemiş. Güncel schema.sql dosyasını SQL Editor'da çalıştırın.";
-  }
-  return error?.message || "İşlem tamamlanamadı.";
+  const message = String(error?.message || error || "Bilinmeyen hata");
+  if (/Failed to fetch|NetworkError/i.test(message)) return "Sunucuya ulaşılamadı. İnternet/Vercel/Supabase bağlantısını kontrol edin.";
+  if (/JWT|permission|policy|row-level/i.test(message)) return "Yetki hatası. Supabase RLS/policy veya admin yetkisini kontrol edin.";
+  return message;
 };
 
-const requireClient = () => {
-  if (!client) throw new Error("Supabase bağlantı ayarları bulunamadı.");
-  return client;
-};
-
-const query = async (promise) => {
-  const { data, error } = await promise;
+const query = async (request) => {
+  const { data, error } = await request;
   if (error) throw error;
   return data || [];
 };
 
-const optionalQuery = async (promise, fallback = []) => {
-  const { data, error } = await promise;
-  if (error) {
-    if (isSchemaError(error)) state.schemaReady = false;
-    console.warn(error.message || "Optional module is not available yet.");
-    return fallback;
-  }
-  return data ?? fallback;
+const safeQuery = async (request, fallback = []) => {
+  const { data, error } = await request;
+  if (error) return fallback;
+  return data || fallback;
 };
 
-const loadAllProducts = async (db) => {
- const pageSize = 1000;
- const allProducts = [];
- for (let from = 0; ; from += pageSize) {
-  const { data, error } = await db
-   .from("products")
-   .select("*")
-   .order("name", { ascending: true })
-   .range(from, from + pageSize - 1);
-  if (error) throw error;
-  const page = data || [];
-  allProducts.push(...page);
-  if (page.length < pageSize) break;
- }
- return allProducts;
-};
-
-const loadAllInvoices = async (db) => {
- const pageSize = 1000;
- const rows = [];
- for (let from = 0; ; from += pageSize) {
-  const { data, error } = await db.from("invoices").select("*").order("invoice_date", { ascending: false }).range(from, from + pageSize - 1);
-  if (error) throw error;
-  const page = data || [];
-  rows.push(...page);
-  if (page.length < pageSize) break;
- }
- return rows;
-};
-
-const loadAllInvoiceItems = async (db) => {
- const pageSize = 1000;
- const rows = [];
- for (let from = 0; ; from += pageSize) {
-  const { data, error } = await db.from("invoice_items")
-   .select("product_id,quantity,stock_quantity,unit,units_per_carton,unit_price,line_subtotal,line_total,invoice_id,products(name),invoices(invoice_type,currency,exchange_rate)")
-   .range(from, from + pageSize - 1);
-  if (error) {
-   if (isSchemaError(error)) state.schemaReady = false;
-   console.warn(error.message || "Fatura satırları okunamadı.");
-   return rows;
-  }
-  const page = data || [];
-  rows.push(...page);
-  if (page.length < pageSize) break;
- }
- return rows;
-};
-
-const findBalance = (items, id, currency) =>
-  items.find((item) => item.id === id && (item.currency || currency) === currency)?.balance || 0;
-
-const loadData = async () => {
-  setStatus("Veriler güncelleniyor...");
-  state.schemaReady = true;
-  const db = requireClient();
-  const [
-    customers, balances, products, invoices,
-    invoiceItems, ledger, orders, movements, vat, settings,
-  ] = await Promise.all([
-    query(db.from("customers").select("*").order("created_at", { ascending: false })),
-    query(db.from("customer_balances").select("*")),
-    loadAllProducts(db),
-    loadAllInvoices(db),
-    loadAllInvoiceItems(db),
-    query(db.from("customer_ledger").select("*").order("transaction_date", { ascending: false }).limit(5000)),
-    optionalQuery(db.from("site_orders").select("*").order("created_at", { ascending: false }).limit(500)),
-    query(db.from("stock_movements").select("*,products(name,sku)").order("created_at", { ascending: false }).limit(250)),
-    optionalQuery(db.from("vat_summary").select("*").order("month", { ascending: false })),
-    optionalQuery(db.from("app_settings").select("*").eq("id", "main").maybeSingle(), {}),
-  ]);
-  Object.assign(state, {
-    customers, balances, products, invoices,
-    invoiceItems, ledger, orders, movements, vat, settings: settings || {},
+const formObject = (form) => {
+  const result = {};
+  new FormData(form).forEach((value, key) => {
+    if (result[key] !== undefined) result[key] = Array.isArray(result[key]) ? [...result[key], value] : [result[key], value];
+    else result[key] = value;
   });
-  document.querySelector("#schemaWarning").hidden = state.schemaReady;
-  renderAll();
-  setStatus("");
+  form.querySelectorAll("input[type='checkbox']").forEach((input) => { result[input.name] = input.checked; });
+  return result;
+};
+
+const normalizeCurrency = (value, fallback = "USD") => {
+  const raw = String(value || fallback || "USD").trim().toUpperCase();
+  if (["TL", "TRY", "TRL", "₺"].includes(raw)) return "TRY";
+  if (["USD", "US$", "$", "DOLAR", "DOLLAR"].includes(raw)) return "USD";
+  if (["EUR", "EURO", "€"].includes(raw)) return "EUR";
+  if (["RUB", "RUBLE", "RUBLE", "RUBLE", "₽"].includes(raw)) return "RUB";
+  if (["GEL", "LARI", "LARİ"].includes(raw)) return "GEL";
+  if (["SAR", "AED", "GBP"].includes(raw)) return raw;
+  throw new Error(`Desteklenmeyen para birimi: ${value}`);
+};
+
+const exchangeRate = (currency) => {
+  const code = normalizeCurrency(currency);
+  if (code === "USD") return 1;
+  return Number(state.exchangeRates[code] || 0) || 1;
+};
+
+const convertToUsd = (amount, currency) => {
+  const value = Number(String(amount || 0).replace(",", "."));
+  const code = normalizeCurrency(currency);
+  if (code === "USD") return value;
+  if (code === "EUR") return value / Math.max(Number(state.exchangeRates.EUR || 0.92), 0.0001);
+  if (code === "TRY") return value / Math.max(Number(state.exchangeRates.TRY || 32), 0.0001);
+  if (code === "RUB") return value / Math.max(Number(state.exchangeRates.RUB || 90), 0.0001);
+  if (code === "GEL") return value / Math.max(Number(state.exchangeRates.GEL || 2.7), 0.0001);
+  return value;
+};
+
+const convertFromUsd = (usd, currency) => {
+  const code = normalizeCurrency(currency);
+  const value = Number(usd || 0);
+  if (code === "USD") return value;
+  return value * exchangeRate(code);
+};
+
+const formatCurrencyGroups = (items) => {
+  const totals = new Map();
+  items.forEach((item) => {
+    const currency = item.currency || "USD";
+    totals.set(currency, (totals.get(currency) || 0) + Number(item.amount || 0));
+  });
+  return [...totals.entries()].map(([currency, amount]) => money(amount, currency)).join(" · ") || money(0, "USD");
+};
+
+const isSchemaError = (error) => /PGRST205|does not exist|schema cache|relation .* does not exist|42P01|404/i.test(String(error?.message || error));
+
+const verifyAdmin = async (session) => {
+  if (!session?.user) return false;
+  if (ADMIN_EMAILS.includes(session.user.email)) return true;
+  try {
+    const admin = await safeQuery(client.from("admin_users").select("user_id").eq("user_id", session.user.id).maybeSingle(), null);
+    return !!admin;
+  } catch {
+    return ADMIN_EMAILS.includes(session.user.email);
+  }
+};
+
+const showLogin = () => {
+  document.querySelector("#loginShell").hidden = false;
+  document.querySelector("#appShell").hidden = true;
 };
 
 const showApp = (session) => {
   state.session = session;
   document.querySelector("#loginShell").hidden = true;
   document.querySelector("#appShell").hidden = false;
-  document.querySelector("#currentUser").textContent = session.user.email || "";
+  document.querySelector("#currentUser").textContent = session.user.email;
 };
 
-const showLogin = () => {
-  state.session = null;
-  document.querySelector("#loginShell").hidden = false;
-  document.querySelector("#appShell").hidden = true;
-};
-
-const verifyAdmin = async (session) => {
-  if (!session) return false;
-  const { data, error } = await client.from("admin_users").select("user_id").eq("user_id", session.user.id).maybeSingle();
-  return !error && Boolean(data);
-};
-
-const boot = async () => {
-  if (!client) {
-    document.querySelector("#loginStatus").textContent = "Backend bağlantısı yapılandırılmamış.";
-    return;
+const loadAdminExchangeRates = async () => {
+  try {
+    const res = await fetch("/api/exchange-rates", { cache: "no-store" });
+    if (!res.ok) throw new Error("Kur API yanıt vermedi");
+    const data = await res.json();
+    const rates = data.rates || data;
+    state.exchangeRates = {
+      USD: 1,
+      TRY: Number(rates.TRY || rates.USDTRY || state.exchangeRates.TRY || 32),
+      EUR: Number(rates.EUR || rates.USDEUR || state.exchangeRates.EUR || 0.92),
+      RUB: Number(rates.RUB || rates.USDRUB || state.exchangeRates.RUB || 90),
+      GEL: Number(rates.GEL || rates.USDGEL || state.exchangeRates.GEL || 2.7),
+    };
+    state.exchangeUpdatedAt = data.updated_at || new Date().toISOString();
+  } catch (error) {
+    console.warn("Kur alınamadı, varsayılan kurlar kullanılacak", error);
   }
-  const { data } = await client.auth.getSession();
-  if (await verifyAdmin(data.session)) {
-    showApp(data.session);
-    await loadData();
-    await loadAdminExchangeRates();
-  } else {
-    if (data.session) await client.auth.signOut();
-    showLogin();
-  }
+};
+
+const loadData = async () => {
+  if (!client) throw new Error("Supabase bağlantısı bulunamadı. backend-config.js ayarlarını kontrol edin.");
+  setStatus("Veriler yükleniyor...");
+  const [customers, products, invoices, invoiceItems, ledger, orders, movements, settings, sitePrices] = await Promise.all([
+    safeQuery(client.from("customers").select("*").order("created_at", { ascending: false })),
+    safeQuery(client.from("products").select("*").neq("active", false).order("brand", { ascending: true }).limit(5000)),
+    safeQuery(client.from("invoices").select("*").order("created_at", { ascending: false })),
+    safeQuery(client.from("invoice_items").select("*")),
+    safeQuery(client.from("customer_ledger").select("*")),
+    safeQuery(client.from("site_orders").select("*").order("created_at", { ascending: false })),
+    safeQuery(client.from("stock_movements").select("*")),
+    safeQuery(client.from("app_settings").select("*").eq("id", "main").maybeSingle(), null),
+    safeQuery(client.from("site_catalog_prices").select("publish_key"), null),
+  ]);
+  state.customers = customers || [];
+  state.products = products || [];
+  state.invoices = invoices || [];
+  state.invoiceItems = invoiceItems || [];
+  state.ledger = ledger || [];
+  state.orders = orders || [];
+  state.movements = movements || [];
+  state.settings = settings || null;
+  state.schemaReady = sitePrices !== null;
+  renderAll();
+  document.querySelector("#schemaWarning").hidden = state.schemaReady;
+  if (!state.schemaReady) document.querySelector("#schemaWarningText").innerHTML = "Bilgi gönderme özelliğini etkinleştirmek için Supabase SQL Editor'da <code>supabase/bilgi-al-gonder.sql</code> dosyasını bir kez çalıştırın.";
+  setStatus("");
+};
+
+const customerRole = (item) => {
+  const roles = [];
+  if (item.is_buyer) roles.push("Alıcı");
+  if (item.is_seller) roles.push("Satıcı");
+  return roles.join(" / ") || "Cari";
+};
+
+const productAveragePrices = (productId) => {
+  const lines = state.invoiceItems.filter((item) => item.product_id === productId);
+  const purchaseLines = lines.filter((item) => item.line_type === "purchase" || item.invoice_type === "purchase");
+  const saleLines = lines.filter((item) => item.line_type === "sale" || item.invoice_type === "sale");
+  const avg = (items) => {
+    const totalQty = items.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
+    if (!totalQty) return 0;
+    return items.reduce((sum, item) => sum + Number(item.unit_price || 0) * Number(item.quantity || 0), 0) / totalQty;
+  };
+  return { purchase: avg(purchaseLines), sale: avg(saleLines) };
+};
+
+const productUnitPrice = (product, invoiceType, selectedUnit = "adet") => {
+  const base = invoiceType === "purchase" ? Number(product.purchase_price || 0) : Number(product.sale_price || 0);
+  if (selectedUnit === "koli") return base * Math.max(Number(product.units_per_carton || 1), 1);
+  return base;
+};
+
+const stockQuantityFor = (quantity, selectedUnit, unitsPerCarton) => selectedUnit === "koli" ? Number(quantity || 0) * Math.max(Number(unitsPerCarton || 1), 1) : Number(quantity || 0);
+const formatStockCartons = (stock, unitsPerCarton) => {
+  const units = Math.max(Number(unitsPerCarton || 1), 1);
+  return `${number(Number(stock || 0) / units)} koli`;
+};
+
+const renderMetrics = () => {
+  const purchaseValue = state.products.reduce((sum, item) => sum + Number(item.purchase_price || 0) * Number(item.stock_quantity || 0), 0);
+  const saleValue = state.products.reduce((sum, item) => sum + Number(item.sale_price || 0) * Number(item.stock_quantity || 0), 0);
+  const thisMonth = new Date().toISOString().slice(0, 7);
+  const monthlySales = state.invoices.filter((item) => item.invoice_type === "sale" && String(item.invoice_date || item.created_at).startsWith(thisMonth)).reduce((sum, item) => sum + Number(item.grand_total || 0), 0);
+  document.querySelector("#metricPurchaseValue").textContent = money(purchaseValue, "USD");
+  document.querySelector("#metricSaleValue").textContent = money(saleValue, "USD");
+  document.querySelector("#metricMonthlySales").textContent = money(monthlySales, "USD");
+  document.querySelector("#metricOrders").textContent = number(state.orders.filter((item) => item.status !== "converted" && item.status !== "cancelled").length);
+  const low = state.products.filter((item) => Number(item.minimum_stock || 0) > 0 && Number(item.stock_quantity || 0) <= Number(item.minimum_stock || 0)).slice(0, 8);
+  document.querySelector("#lowStockList").innerHTML = low.length ? low.map((item) => `<div class="compact-row"><div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.brand || "")}</small></div><span class="stock-low">${number(item.stock_quantity)} adet</span></div>`).join("") : '<p class="empty">Kritik stok yok.</p>';
+  document.querySelector("#recentInvoices").innerHTML = state.invoices.slice(0, 8).map((item) => `<div class="compact-row"><div><strong>${escapeHtml(item.invoice_no || item.draft_data?.document_number || "Fatura")}</strong><small>${date(item.invoice_date)} · ${escapeHtml(item.invoice_type)}</small></div><span>${money(item.grand_total, item.currency || "USD")}</span></div>`).join("") || '<p class="empty">Henüz fatura bulunmuyor.</p>';
+};
+
+const customerBalance = (customerId) => {
+  const rows = state.ledger.filter((item) => item.customer_id === customerId);
+  const totals = new Map();
+  rows.forEach((row) => {
+    const currency = row.currency || "USD";
+    totals.set(currency, (totals.get(currency) || 0) + Number(row.debit || 0) - Number(row.credit || 0));
+  });
+  return totals;
 };
 
 const renderCustomers = () => {
   const term = document.querySelector("#customerSearch").value.trim().toLocaleLowerCase("tr");
-  const rows = state.customers.filter((item) =>
-    [item.code, item.company, item.contact_name, item.email, item.tax_number].some((value) =>
-      String(value || "").toLocaleLowerCase("tr").includes(term)));
-  document.querySelector("#customerRows").innerHTML = rows.length ? rows.map((item) => `
-    <tr class="${state.selectedCustomers.has(item.id) ? "selected-row" : ""}" data-customer-row="${item.id}" title="İşlemler için sağ tıklayın"><td><input type="checkbox" data-customer-select="${item.id}" ${state.selectedCustomers.has(item.id) ? "checked" : ""} /></td><td>${escapeHtml(item.code)}</td><td><strong>${escapeHtml(item.company)}</strong>${item.status === "passive" ? '<small class="passive-label">Pasif</small>' : ""}</td>
-    <td>${item.is_buyer && item.is_seller ? "Alıcı + Satıcı" : item.is_seller ? "Satıcı" : "Alıcı"}</td>
-    <td>${escapeHtml(item.contact_name || "-")}</td><td>${escapeHtml(item.country || "-")}</td>
-    <td>${escapeHtml(item.email || "-")}</td><td>${money(findBalance(state.balances, item.id, item.currency), item.currency)}</td>
-    <td><span class="context-hint">Sağ tık · İşlemler</span></td></tr>
-  `).join("") : '<tr><td colspan="9" class="empty">Cari kaydı bulunamadı.</td></tr>';
-  const selectedCount = rows.filter((item) => state.selectedCustomers.has(item.id)).length;
-  const selectAll = document.querySelector("#selectAllCustomers");
-  selectAll.checked = rows.length > 0 && selectedCount === rows.length;
-  selectAll.indeterminate = selectedCount > 0 && selectedCount < rows.length;
+  const rows = state.customers.filter((item) => [item.code, item.company, item.contact_name, item.email, item.tax_number]
+    .some((value) => String(value || "").toLocaleLowerCase("tr").includes(term)));
+  document.querySelector("#customerRows").innerHTML = rows.length ? rows.map((item) => {
+    const balances = [...customerBalance(item.id).entries()].map(([currency, amount]) => money(amount, currency)).join(" · ") || money(0, item.currency || "USD");
+    return `<tr data-customer-row="${item.id}"><td><input type="checkbox" data-customer-select="${item.id}" ${state.selectedCustomers.has(item.id) ? "checked" : ""}></td><td>${escapeHtml(item.code || "-")}</td><td><strong>${escapeHtml(item.company)}</strong><small>${escapeHtml(item.notes || "")}</small></td><td>${customerRole(item)}</td><td>${escapeHtml(item.contact_name || "-")}</td><td>${escapeHtml(item.country || "-")}</td><td>${escapeHtml(item.email || "-")}</td><td>${balances}</td><td class="row-actions"><button data-customer-payment="${item.id}">Tahsilat</button><button data-customer-edit="${item.id}">Düzenle</button></td></tr>`;
+  }).join("") : '<tr><td colspan="9" class="empty">Cari bulunamadı.</td></tr>';
   document.querySelector("#selectedCustomerCount").textContent = `${state.selectedCustomers.size} cari seçildi`;
 };
 
 const getSortedProducts = () => {
-  const term = document.querySelector("#productSearch").value.trim().toLocaleLowerCase("tr");
-  const [field, direction] = state.productSort.split("-");
-  const filtered = state.products.filter((item) => item.active !== false &&
-    [item.sku, item.barcode, item.name, item.brand, item.grammage, item.category].some((value) =>
-      String(value || "").toLocaleLowerCase("tr").includes(term)));
-  const key = {
-    name: (item) => item.name || "",
-    sku: (item) => item.sku || item.barcode || "",
+  const term = document.querySelector("#productSearch")?.value.trim().toLocaleLowerCase("tr") || "";
+  const [field, direction] = String(state.productSort || "brand-asc").split("-");
+  const keyMap = {
     brand: (item) => item.brand || "",
-
- grammage: (item) => item.grammage || "",
-    stock: (item) => Number(item.stock_quantity),
-    purchase: (item) => Number(item.purchase_price),
-    sale: (item) => Number(item.sale_price),
-  }[field] || ((item) => item.name || "");
-  return filtered.sort((a, b) => {
-    const av = key(a);
-    const bv = key(b);
-    const result = typeof av === "number" ? av - bv : String(av).localeCompare(String(bv), "tr");
-    return direction === "desc" ? -result : result;
-  });
+    name: (item) => item.name || "",
+    sku: (item) => item.barcode || item.sku || "",
+    grammage: (item) => item.grammage || "",
+    purchase: (item) => Number(item.purchase_price || 0),
+    sale: (item) => Number(item.sale_price || 0),
+    stock: (item) => Number(item.stock_quantity || 0),
+  };
+  return state.products
+    .filter((item) => [item.brand, item.barcode, item.sku, item.name, item.grammage, item.category]
+      .some((value) => String(value || "").toLocaleLowerCase("tr").includes(term)))
+    .sort((a, b) => {
+      const av = (keyMap[field] || keyMap.brand)(a);
+      const bv = (keyMap[field] || keyMap.brand)(b);
+      if (typeof av === "number" || typeof bv === "number") return direction === "desc" ? Number(bv) - Number(av) : Number(av) - Number(bv);
+      return direction === "desc" ? String(bv).localeCompare(String(av), "tr") : String(av).localeCompare(String(bv), "tr");
+    });
 };
 
-const formatStockCartons = (stockQuantity, unitsPerCarton) => {
- const stock = Number(stockQuantity || 0);
- const units = Number(unitsPerCarton || 0);
- if (!(units > 0)) return "Koli bilgisi yok";
- const fullCartons = Math.floor(stock / units);
- const remainder = Math.round((stock - (fullCartons * units)) * 1000) / 1000;
- return remainder > 0
-  ? `${number(fullCartons)} Koli + ${number(remainder)} Adet`
-  : `${number(fullCartons)} Koli`;
-};
-
-const productAveragePrices = (productId) => {
- const totals = { purchaseValue: 0, purchaseQuantity: 0, saleValue: 0, saleQuantity: 0 };
- state.invoiceItems.filter((item) => item.product_id === productId).forEach((item) => {
-  const type = item.invoices?.invoice_type;
-  if (type !== "purchase" && type !== "sale") return;
-  const quantity = Math.abs(Number(item.stock_quantity || item.quantity || 0));
-  const unitPrice = Number(item.stock_quantity || 0) > 0
-    ? Number(item.line_subtotal || 0) / Number(item.stock_quantity)
-    : Number(item.unit_price || 0) / (item.unit === "koli" ? Math.max(Number(item.units_per_carton || 1), 1) : 1);
-  const usdPrice = toUsd(unitPrice, item.invoices?.currency, item.invoices?.exchange_rate);
-  totals[`${type}Value`] += usdPrice * quantity;
-  totals[`${type}Quantity`] += quantity;
- });
- return {
-  purchase: totals.purchaseQuantity ? totals.purchaseValue / totals.purchaseQuantity : 0,
-  sale: totals.saleQuantity ? totals.saleValue / totals.saleQuantity : 0,
- };
-};
-
-const loadAdminExchangeRates = async () => {
-  if (window.location.protocol === "file:") return;
-  try {
-    const response = await fetch(`/api/exchange-rates?t=${Date.now()}`, { cache: "no-store" });
-    if (!response.ok) throw new Error("Kur bilgisi alınamadı.");
-    const data = await response.json();
-    const rates = Object.fromEntries((data.rates || [])
-      .filter((rate) => rate.code && Number.isFinite(Number(rate.value)))
-      .map((rate) => [String(rate.code).toUpperCase(), Number(rate.value)]));
-    state.exchangeRates = {
-      USD: rates.USD || rates.USDTRY || state.exchangeRates.USD || 1,
-      TRY: 1,
-      EUR: rates.EUR || state.exchangeRates.EUR || 1,
-      RUB: rates.RUB || state.exchangeRates.RUB || 1,
-    };
-    state.exchangeUpdatedAt = data.updatedAt || new Date().toISOString();
-    refreshProductPricePreviews();
-    renderProducts();
-  } catch (error) {
-    console.warn(error.message || "Kur bilgisi alınamadı.");
-  }
-};
-
-const unitLabel = (unit) => ({ adet: "Adet", koli: "Koli", litre: "Litre", metre: "Metre", kg: "Kg" })[String(unit || "adet").toLowerCase()] || unit || "Adet";
-
-const renderProductPagination = (totalRows, totalPages) => {
- const target = document.querySelector("#productPagination");
- if (!target) return;
- if (!totalRows) {
-  target.innerHTML = "";
-  return;
- }
- const currentPage = state.productPage;
- const pageButtons = Array.from({ length: totalPages }, (_, index) => {
-  const page = index + 1;
-  return `<button type="button" class="pagination-page${page === currentPage ? " active" : ""}" data-product-page="${page}" ${page === currentPage ? 'aria-current="page"' : ""}>${page}</button>`;
- }).join("");
- target.innerHTML = `
-  <div class="pagination-summary">Toplam ${number(totalRows)} ürün · Sayfa ${number(currentPage)} / ${number(totalPages)} · Sayfa başına 100 satır</div>
-  <div class="pagination-buttons">
-   <button type="button" data-product-page="${currentPage - 1}" ${currentPage <= 1 ? "disabled" : ""}>‹ Önceki</button>
-   ${pageButtons}
-   <button type="button" data-product-page="${currentPage + 1}" ${currentPage >= totalPages ? "disabled" : ""}>Sonraki ›</button>
-  </div>`;
+const currencyPreview = (usdValue) => {
+  const usd = Number(usdValue || 0);
+  return `${money(usd, "USD")} · ${money(convertFromUsd(usd, "TRY"), "TRY")} · ${money(convertFromUsd(usd, "EUR"), "EUR")} · ${money(convertFromUsd(usd, "GEL"), "GEL")} · ${money(convertFromUsd(usd, "RUB"), "RUB")}`;
 };
 
 const renderProducts = () => {
- const filteredRows = getSortedProducts();
- const pageSize = Number(state.productPageSize || 100);
- const totalPages = Math.max(1, Math.ceil(filteredRows.length / pageSize));
- state.productPage = Math.min(Math.max(Number(state.productPage || 1), 1), totalPages);
- const startIndex = (state.productPage - 1) * pageSize;
- const rows = filteredRows.slice(startIndex, startIndex + pageSize);
- document.querySelector("#productRows").innerHTML = rows.length ? rows.map((item, index) => {
-  const low = Number(item.stock_quantity) <= Number(item.minimum_stock);
-  const units = Number(item.units_per_carton || 0);
-  const averages = productAveragePrices(item.id);
-  const averagePurchase = averages.purchase || Number(item.purchase_price || 0);
-  const averageSale = averages.sale || Number(item.sale_price || 0);
-  const profitIndex = averagePurchase > 0 ? ((averageSale - averagePurchase) / averagePurchase) * 100 : 0;
-  const profitClass = profitIndex > 0 ? "profit-positive" : profitIndex < 0 ? "profit-negative" : "profit-neutral";
-  return `<tr class="${state.selectedProducts.has(item.id) ? "selected-row" : ""}" data-product-row="${item.id}" title="Hareketleri görmek için sağ tıklayın">
-  <td>${startIndex + index + 1}</td>
-  <td><input type="checkbox" data-product-select="${item.id}" ${state.selectedProducts.has(item.id) ? "checked" : ""} /></td>
-  <td><strong>${escapeHtml(item.brand || "-")}</strong></td>
-  <td>${escapeHtml(item.barcode || item.sku || "-")}</td>
-  <td><strong>${escapeHtml(item.name)}</strong></td>
-  <td>${escapeHtml(item.grammage || "-")}</td>
-  <td>${escapeHtml(unitLabel(item.unit))}</td>
-  <td>${units > 0 ? number(units) : "-"}</td>
-  <td class="${low ? "stock-low" : ""}">${number(item.stock_quantity)} ${escapeHtml(unitLabel(item.unit))}</td>
-  <td>${formatStockCartons(item.stock_quantity, units)}</td>
-  <td>${number(item.minimum_stock)}</td>
-  <td class="price-cell">${priceWithConversions(item.purchase_price)}</td>
-  <td class="price-cell">${priceWithConversions(averagePurchase)}</td>
-  <td class="price-cell">${priceWithConversions(item.sale_price)}</td>
-  <td class="price-cell">${priceWithConversions(averageSale)}</td>
-  <td><span class="profit-index ${profitClass}">%${number(profitIndex)}</span></td>
-  <td>%${number(item.vat_rate)}</td>
-  <td><span class="context-hint">Sağ tık · İşlemler</span></td></tr>`;
- }).join("") : '<tr><td colspan="18" class="empty">Stok kartı bulunamadı.</td></tr>';
+  const sorted = getSortedProducts();
+  const totalPages = Math.max(Math.ceil(sorted.length / state.productPageSize), 1);
+  state.productPage = Math.min(Math.max(state.productPage, 1), totalPages);
+  const start = (state.productPage - 1) * state.productPageSize;
+  const pageRows = sorted.slice(start, start + state.productPageSize);
+  document.querySelector("#productRows").innerHTML = pageRows.length ? pageRows.map((item, index) => {
+    const averages = productAveragePrices(item.id);
+    const averagePurchase = averages.purchase || Number(item.purchase_price || 0);
+    const averageSale = averages.sale || Number(item.sale_price || 0);
+    const profitIndex = averagePurchase > 0 ? ((averageSale - averagePurchase) / averagePurchase) * 100 : 0;
+    const stock = Number(item.stock_quantity || 0);
+    const low = Number(item.minimum_stock || 0) > 0 && stock <= Number(item.minimum_stock || 0);
+    return `<tr data-product-row="${item.id}"><td>${start + index + 1}</td><td><input type="checkbox" data-product-select="${item.id}" ${state.selectedProducts.has(item.id) ? "checked" : ""}></td><td><strong>${escapeHtml(item.brand || "-")}</strong><small>${escapeHtml(item.category || "")}</small></td><td>${escapeHtml(item.barcode || item.sku || "-")}</td><td><strong>${escapeHtml(item.name)}</strong></td><td>${escapeHtml(item.grammage || "-")}</td><td>${escapeHtml(item.unit || "adet")}</td><td>${number(item.units_per_carton || 1)}</td><td class="${low ? "stock-low" : ""}">${number(stock)}</td><td>${formatStockCartons(stock, item.units_per_carton)}</td><td>${number(item.minimum_stock || 0)}</td><td>${currencyPreview(item.purchase_price)}</td><td>${money(averagePurchase, "USD")}</td><td>${currencyPreview(item.sale_price)}</td><td>${money(averageSale, "USD")}</td><td class="${profitIndex > 0 ? "profit-positive" : profitIndex < 0 ? "profit-negative" : "profit-neutral"}">%${number(profitIndex)}</td><td>%${number(item.vat_rate || 0)}</td><td class="row-actions"><button data-product-price="${item.id}">Fiyat</button><button data-product-edit="${item.id}">Düzenle</button></td></tr>`;
+  }).join("") : '<tr><td colspan="18" class="empty">Ürün bulunamadı.</td></tr>';
+  renderProductPagination(sorted.length, totalPages);
+  document.querySelector("#selectedProductCount").textContent = `${state.selectedProducts.size} ürün seçildi`;
+};
 
- const selectAll = document.querySelector("#selectAllProducts");
- if (selectAll) {
-  const selectedCount = rows.filter((item) => state.selectedProducts.has(item.id)).length;
-  selectAll.checked = rows.length > 0 && selectedCount === rows.length;
-  selectAll.indeterminate = selectedCount > 0 && selectedCount < rows.length;
- }
- document.querySelector("#selectedProductCount").textContent = `${state.selectedProducts.size} ürün seçildi`;
- renderProductPagination(filteredRows.length, totalPages);
+const renderProductPagination = (total, totalPages) => {
+  const target = document.querySelector("#productPagination");
+  if (!target) return;
+  if (total <= state.productPageSize) { target.innerHTML = `<span>${number(total)} ürün</span>`; return; }
+  const buttons = [];
+  for (let page = 1; page <= totalPages; page += 1) {
+    if (page === 1 || page === totalPages || Math.abs(page - state.productPage) <= 2) buttons.push(`<button type="button" data-product-page="${page}" ${page === state.productPage ? "disabled" : ""}>${page}</button>`);
+    else if (!buttons.at(-1)?.includes("…")) buttons.push("<span>…</span>");
+  }
+  target.innerHTML = `<button type="button" data-product-page="${state.productPage - 1}" ${state.productPage <= 1 ? "disabled" : ""}>Önceki</button>${buttons.join("")}<button type="button" data-product-page="${state.productPage + 1}" ${state.productPage >= totalPages ? "disabled" : ""}>Sonraki</button><span>${number(total)} ürün</span>`;
 };
 
 const renderOrders = () => {
-  const visibleOrders = state.orders.filter((item) => item.status !== "cancelled");
-  const newCount = visibleOrders.filter((item) => item.status === "new").length;
-  document.querySelector("#newOrderCount").textContent = newCount;
-  document.querySelector("#metricOrders").textContent = number(newCount);
-  document.querySelector("#orderRows").innerHTML = visibleOrders.length ? visibleOrders.map((item) => `
-    <tr><td><strong>${escapeHtml(item.order_no)}</strong></td><td>${date(item.created_at)}</td>
-    <td>${escapeHtml(item.customer_company || item.customer_email || "Misafir siparişi")}</td>
-    <td>${Array.isArray(item.items) ? item.items.length : 0}</td><td>${number(item.total_cartons)}</td>
-    <td><span class="badge ${item.status}">${({ new: "Yeni", reviewing: "İnceleniyor", converted: "Faturaya dönüştü", cancelled: "İptal" })[item.status] || item.status}</span></td>
-    <td><div class="row-actions"><button data-order-detail="${item.id}">Detay</button><button class="primary" data-order-convert="${item.id}" ${item.status === "converted" ? "disabled" : ""}>Faturaya aktar</button><button class="danger" data-order-delete="${item.id}">Sil</button></div></td></tr>
-  `).join("") : '<tr><td colspan="7" class="empty">Henüz siteden sipariş gelmedi.</td></tr>';
+  document.querySelector("#newOrderCount").textContent = state.orders.filter((item) => item.status !== "converted" && item.status !== "cancelled").length;
+  document.querySelector("#orderRows").innerHTML = state.orders.length ? state.orders.map((item) => `<tr data-order-row="${item.id}"><td>${escapeHtml(item.order_no || item.id.slice(0, 8))}</td><td>${date(item.created_at)}</td><td><strong>${escapeHtml(item.customer_name || item.company || "-")}</strong><small>${escapeHtml(item.email || item.phone || "")}</small></td><td>${escapeHtml((item.items || [])[0]?.product || "-")}</td><td>${number((item.items || []).reduce((sum, line) => sum + Number(line.cartons || 0), 0))}</td><td><span class="badge">${escapeHtml(item.status || "new")}</span></td><td class="row-actions"><button data-order-convert="${item.id}">Fatura aktar</button><button data-order-detail="${item.id}">Detay</button><button data-order-delete="${item.id}">Sil</button></td></tr>`).join("") : '<tr><td colspan="7" class="empty">Henüz sipariş bulunmuyor.</td></tr>';
 };
 
 const renderInvoices = () => {
   document.querySelector("#invoiceRows").innerHTML = state.invoices.length ? state.invoices.map((item) => {
-    const party = state.customers.find((customer) => customer.id === item.customer_id)?.company;
-    const typeLabel = ({ purchase: "Alış", sale: "Satış", return: "İade" })[item.invoice_type] || item.invoice_type;
-    const documentNumber = item.draft_data?.document_number || item.invoice_no;
-    return `<tr class="invoice-list-row" data-invoice-open="${item.id}" data-invoice-row="${item.id}" title="İşlemler için sağ tıklayın"><td><strong>${escapeHtml(documentNumber)}</strong>${documentNumber !== item.invoice_no ? `<small>${escapeHtml(item.invoice_no)}</small>` : ""}</td>
-      <td><span class="badge">${typeLabel}</span></td>
-      <td>${date(item.invoice_date)}</td><td>${escapeHtml(party || "-")}</td>
-      <td>${item.scenario === "export" ? "İhracat %0" : "Türkiye"}</td>
-      <td>${money(item.grand_total, item.currency)}</td><td>${money(item.tax_total, item.currency)}</td>
-      <td><span class="context-hint">Sağ tık · İşlemler</span></td></tr>`;
+    const customer = state.customers.find((entry) => entry.id === item.customer_id);
+    const documentNo = item.draft_data?.document_number || item.invoice_no || "Fatura";
+    return `<tr data-invoice-row="${item.id}" data-invoice-open="${item.id}"><td><strong>${escapeHtml(documentNo)}</strong><small>${escapeHtml(item.status || "draft")}</small></td><td>${escapeHtml(item.invoice_type || "-")}</td><td>${date(item.invoice_date)}</td><td>${escapeHtml(customer?.company || "-")}</td><td>${escapeHtml(item.scenario || "-")}</td><td>${money(item.grand_total, item.currency || "USD")}</td><td>${money(item.tax_total, item.currency || "USD")}</td><td class="row-actions"><button data-invoice-print="${item.id}">Yazdır</button><button data-invoice-edit="${item.id}">Düzenle</button><button data-invoice-delete="${item.id}">Sil</button></td></tr>`;
   }).join("") : '<tr><td colspan="8" class="empty">Henüz fatura bulunmuyor.</td></tr>';
 };
 
-const openInvoiceDetail = async (invoiceId) => {
-  const invoice = state.invoices.find((item) => item.id === invoiceId);
-  if (!invoice) throw new Error("Fatura kaydı bulunamadı.");
-  const items = await query(client.from("invoice_items").select("*,products(sku,barcode,brand)").eq("invoice_id", invoiceId));
-  const customer = state.customers.find((item) => item.id === invoice.customer_id);
-  const typeLabel = ({ purchase: "Alış faturası", sale: "Satış faturası", return: "İade faturası" })[invoice.invoice_type] || invoice.invoice_type;
-  const documentNumber = invoice.draft_data?.document_number || invoice.invoice_no;
-  state.activeInvoiceId = invoiceId;
-  document.querySelector("#invoiceDetailHeading").textContent = `${typeLabel} · ${documentNumber}`;
-  document.querySelector("#invoiceDetailType").textContent = typeLabel;
-  document.querySelector("#invoiceDetailDate").textContent = date(invoice.invoice_date);
-  document.querySelector("#invoiceDetailNumber").textContent = documentNumber;
-  document.querySelector("#invoiceDetailDueDate").textContent = date(invoice.due_date);
-  document.querySelector("#invoiceDetailCustomer").textContent = `${customer?.code || ""} ${customer?.company || "-"}`.trim();
-  document.querySelector("#invoiceDetailCurrency").textContent = invoice.currency;
-  document.querySelector("#invoiceDetailScenario").textContent = invoice.scenario === "export" ? "İhracat / KDV %0" : "Türkiye / KDV'li";
-  document.querySelector("#invoiceDetailStatus").textContent = invoice.status === "posted" ? "Kayıtlı" : invoice.status;
-  document.querySelector("#invoiceDetailRows").innerHTML = items.length ? items.map((item, index) => `<tr><td>${index + 1}</td><td>${escapeHtml(item.barcode || item.products?.barcode || item.product_code || item.products?.sku || "-")}</td><td><strong>${escapeHtml(item.description)}</strong><small>${escapeHtml(item.products?.brand || "")}</small></td><td>${item.unit === "koli" ? "Koli" : "Adet"}</td><td>${number(item.quantity)}</td><td>${money(item.unit_price, invoice.currency)}</td><td>${money(item.line_subtotal, invoice.currency)}</td><td>%${number(item.tax_rate)} · ${money(item.line_tax, invoice.currency)}</td><td>%${number(item.discount_1)}</td><td>%${number(item.discount_2)}</td><td>%${number(item.discount_3)}</td><td>${escapeHtml(item.description)}</td></tr>`).join("") : '<tr><td colspan="12" class="empty">Fatura satırı bulunmuyor.</td></tr>';
-  document.querySelector("#invoiceDetailNote").textContent = invoice.notes || "-";
-  document.querySelector("#invoiceDetailSubtotal").textContent = money(invoice.subtotal, invoice.currency);
-  document.querySelector("#invoiceDetailDiscount").textContent = money(invoice.total_discount, invoice.currency);
-  document.querySelector("#invoiceDetailTax").textContent = money(invoice.tax_total, invoice.currency);
-  document.querySelector("#invoiceDetailGrandTotal").textContent = money(invoice.grand_total, invoice.currency);
-  document.querySelector("#invoiceDetailDialog").showModal();
-};
-
-const editInvoice = async (invoiceId) => {
-  const invoice = state.invoices.find((item) => item.id === invoiceId);
-  if (!invoice) throw new Error("Fatura kaydı bulunamadı.");
-  const items = await query(client.from("invoice_items").select("*").eq("invoice_id", invoiceId));
-  setInvoiceMode(invoice.invoice_type);
-  state.editingInvoiceId = invoiceId;
-  const form = document.querySelector("#invoiceForm");
-  const invoiceCustomer = state.customers.find((item) => item.id === invoice.customer_id);
-  if (invoiceCustomer && ![...form.elements.customer_id.options].some((option) => option.value === invoiceCustomer.id)) {
-    form.elements.customer_id.insertAdjacentHTML("beforeend", `<option value="${invoiceCustomer.id}">${escapeHtml(invoiceCustomer.code)} · ${escapeHtml(invoiceCustomer.company)}</option>`);
-  }
-  form.elements.customer_id.value = invoice.customer_id || "";
-  form.elements.invoice_date.value = invoice.invoice_date || today();
-  form.elements.due_date.value = invoice.due_date || "";
-  form.elements.document_number.value = invoice.draft_data?.document_number || "";
-  form.elements.scenario.value = invoice.scenario || "domestic";
-  form.elements.currency.value = invoice.currency || "USD";
-  form.elements.invoice_discount_rate.value = Number(invoice.invoice_discount_rate || 0);
-  form.elements.notes.value = invoice.notes || "";
-  form.elements.source_order_id.value = invoice.source_order_id || "";
-  state.invoiceLines = items.map((item) => {
-    const product = state.products.find((entry) => entry.id === item.product_id);
-    return {
-      product_id: item.product_id,
-      name: item.description,
-      barcode: item.barcode || product?.barcode,
-      sku: item.product_code || product?.sku,
-      stock: Number(product?.stock_quantity || 0),
-      quantity: Number(item.quantity),
-      selected_unit: item.unit === "koli" ? "koli" : "adet",
-      units_per_carton: Number(item.units_per_carton || product?.units_per_carton || 1),
-      stock_quantity: Number(item.stock_quantity),
-      unit_price: Number(item.unit_price),
-      tax_rate: Number(item.tax_rate),
-      discount_1: Number(item.discount_1 || 0),
-      discount_2: Number(item.discount_2 || 0),
-      discount_3: Number(item.discount_3 || 0),
-    };
-  });
-  document.querySelector("#invoiceDialogTitle").textContent = `${invoice.draft_data?.document_number || invoice.invoice_no} faturayı düzenle`;
-  document.querySelector("#saveInvoiceButton").textContent = "Değişiklikleri kaydet ve stokları güncelle";
-  renderInvoiceProductPicker();
-  renderInvoiceLines();
-  updateInvoiceTermDays();
-};
-
-const deleteInvoice = async (invoiceId) => {
-  const invoice = state.invoices.find((item) => item.id === invoiceId);
-  if (!invoice) throw new Error("Fatura kaydı bulunamadı.");
-  const documentNumber = invoice.draft_data?.document_number || invoice.invoice_no;
-  if (!confirm(`${documentNumber} faturası silinsin mi? Stok ve cari hareketleri de geri alınacaktır.`)) return;
-  await query(client.rpc("delete_invoice_v2", { p_invoice_id: invoiceId }));
-  if (state.activeInvoiceId === invoiceId) document.querySelector("#invoiceDetailDialog").close();
-  await loadData();
-  setStatus(`${documentNumber} faturası ve bağlı stok/cari hareketleri silindi.`);
-};
-
-const renderMovements = () => {
-  document.querySelector("#movementRows").innerHTML = state.movements.length ? state.movements.map((item) => `
-    <tr><td>${date(item.created_at)}</td><td>${escapeHtml(item.products?.name || "-")}</td>
-    <td>${escapeHtml(item.movement_type)}</td><td class="${Number(item.quantity) < 0 ? "stock-low" : ""}">${number(item.quantity)}</td>
-    <td>${escapeHtml(item.reference_type || "-")}</td><td>${escapeHtml(item.note || "-")}</td></tr>
-  `).join("") : '<tr><td colspan="6" class="empty">Stok hareketi bulunmuyor.</td></tr>';
-};
-
-const renderDashboard = () => {
-  const currentMonth = today().slice(0, 7);
-  const purchaseValue = state.products.reduce((sum, item) => sum + Number(item.stock_quantity) * Number(item.purchase_price), 0);
-  const saleValue = state.products.reduce((sum, item) => sum + Number(item.stock_quantity) * Number(item.sale_price), 0);
-  const monthlySales = state.invoices.filter((item) => item.invoice_type === "sale" && item.invoice_date?.startsWith(currentMonth))
-    .reduce((sum, item) => sum + toUsd(item.grand_total, item.currency, item.exchange_rate), 0);
-  const low = state.products.filter((item) => Number(item.stock_quantity) <= Number(item.minimum_stock));
-  document.querySelector("#metricPurchaseValue").textContent = money(purchaseValue, "USD");
-  document.querySelector("#metricSaleValue").textContent = money(saleValue, "USD");
-  document.querySelector("#metricMonthlySales").textContent = money(monthlySales, "USD");
-  document.querySelector("#lowStockList").innerHTML = low.length ? low.slice(0, 10).map((item) => `
-    <div class="compact-row"><div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.brand || "")}</small></div><span class="stock-low">${number(item.stock_quantity)} ${escapeHtml(item.unit)}</span></div>
-  `).join("") : '<p class="empty">Kritik stok bulunmuyor.</p>';
-  document.querySelector("#recentInvoices").innerHTML = state.invoices.length ? state.invoices.slice(0, 10).map((item) => `
-    <div class="compact-row"><div><strong>${escapeHtml(item.draft_data?.document_number || item.invoice_no)}</strong><small>${({ purchase: "Alış", sale: "Satış", return: "İade" })[item.invoice_type] || item.invoice_type} · ${date(item.invoice_date)}</small></div><span>${money(item.grand_total, item.currency)}</span></div>
-  `).join("") : '<p class="empty">Henüz fatura bulunmuyor.</p>';
-};
-
-const renderVat = () => {
-  const totals = state.vat.reduce((sum, item) => ({
-    input: sum.input + Number(item.input_vat),
-    output: sum.output + Number(item.output_vat),
-    exportSales: sum.exportSales + Number(item.export_sales),
-  }), { input: 0, output: 0, exportSales: 0 });
-  document.querySelector("#vatInput").textContent = money(totals.input, "TRY");
-  document.querySelector("#vatOutput").textContent = money(totals.output, "TRY");
-  document.querySelector("#vatRefund").textContent = money(Math.max(0, totals.input - totals.output), "TRY");
-  document.querySelector("#vatExportSales").textContent = money(totals.exportSales, "USD");
-  document.querySelector("#vatExportReference").textContent = money(totals.exportSales * 0.2, "USD");
-  document.querySelector("#vatRows").innerHTML = state.vat.length ? state.vat.map((item) => `
-    <tr><td>${date(item.month)}</td><td>${money(item.input_vat, "TRY")}</td><td>${money(item.output_vat, "TRY")}</td>
-    <td>${money(Number(item.input_vat) - Number(item.output_vat), "TRY")}</td><td>${money(item.export_sales, "USD")}</td></tr>
-  `).join("") : '<tr><td colspan="5" class="empty">KDV hareketi bulunmuyor.</td></tr>';
-};
-
-const renderReports = () => {
-  const sales = state.invoices.filter((item) => item.invoice_type === "sale")
-    .reduce((sum, item) => sum + toUsd(item.grand_total, item.currency, item.exchange_rate), 0);
-  const purchasesTry = state.invoices.filter((item) => item.invoice_type === "purchase" && item.currency === "TRY")
-    .reduce((sum, item) => sum + Number(item.grand_total), 0);
-  const stockQty = state.products.reduce((sum, item) => sum + Number(item.stock_quantity), 0);
-  const lowCount = state.products.filter((item) => Number(item.stock_quantity) <= Number(item.minimum_stock)).length;
-  document.querySelector("#reportSales").textContent = money(sales, "USD");
-  document.querySelector("#reportPurchases").textContent = money(purchasesTry, "TRY");
-  document.querySelector("#reportStockQty").textContent = number(stockQty);
-  document.querySelector("#reportLowStock").textContent = number(lowCount);
-  const balances = state.balances.filter((item) => Number(item.balance) !== 0).sort((a, b) => Number(b.balance) - Number(a.balance));
-  document.querySelector("#balanceReport").innerHTML = balances.length ? balances.slice(0, 12).map((item) => `
-    <div class="compact-row"><div><strong>${escapeHtml(item.company)}</strong><small>${escapeHtml(item.code)}</small></div><span>${money(item.balance, item.currency || "USD")}</span></div>
-  `).join("") : '<p class="empty">Açık bakiye bulunmuyor.</p>';
-  const productSales = new Map();
-  state.invoiceItems.filter((item) => item.invoices?.invoice_type === "sale").forEach((item) => {
-    const current = productSales.get(item.product_id) || { name: item.products?.name || "-", quantity: 0, total: 0 };
-    current.quantity += Number(item.stock_quantity || item.quantity);
-    current.total += toUsd(item.line_total, item.invoices?.currency, item.invoices?.exchange_rate);
-    productSales.set(item.product_id, current);
-  });
-  const sorted = [...productSales.values()].sort((a, b) => b.quantity - a.quantity);
-  document.querySelector("#salesProductReport").innerHTML = sorted.length ? sorted.slice(0, 12).map((item) => `
-    <div class="compact-row"><div><strong>${escapeHtml(item.name)}</strong><small>${number(item.quantity)} adet</small></div><span>${money(item.total, "USD")}</span></div>
-  `).join("") : '<p class="empty">Satış verisi bulunmuyor.</p>';
-};
-
-const renderTemplate = () => {
-  const form = document.querySelector("#templateForm");
-  const template = state.settings.invoice_template || {};
-  ["company_name", "company_tax_number", "company_tax_office", "company_address"].forEach((key) => {
-    if (form.elements[key]) form.elements[key].value = state.settings[key] || "";
-  });
-  form.elements.incoterm.value = template.incoterm || "";
-  form.elements.payment_note.value = template.payment_note || "";
-  document.querySelector("#gibProvider").value = state.settings.gib_provider || "";
-};
-
 const renderInvoiceOptions = () => {
-  const invoiceType = document.querySelector("#invoiceForm").elements.invoice_type.value || "sale";
   const customerSelect = document.querySelector("#invoiceCustomer");
-  const selectedCustomer = customerSelect.value;
-  const eligibleCustomers = state.customers.filter((item) =>
-    item.status !== "passive" && (invoiceType === "purchase" ? item.is_seller !== false : item.is_buyer !== false));
-  customerSelect.innerHTML = '<option value="">Cari seçin</option>' + eligibleCustomers.map((item) =>
-    `<option value="${item.id}">${escapeHtml(item.code)} · ${escapeHtml(item.company)}</option>`).join("");
-  if (eligibleCustomers.some((item) => item.id === selectedCustomer)) customerSelect.value = selectedCustomer;
-  const productOptions = '<option value="">Ürün seçin</option>' + state.products.filter((item) => item.active).map((item) =>
-    `<option value="${item.id}">${escapeHtml(item.name)} · stok ${number(item.stock_quantity)}</option>`).join("");
-  document.querySelector("#stockProduct").innerHTML = productOptions;
-  renderInvoiceProductPicker();
+  const stockSelect = document.querySelector("#stockProduct");
+  const paymentCustomerSelect = document.querySelector("#paymentForm [name='customer_id']");
+  const customerOptions = state.customers.map((item) => `<option value="${item.id}">${escapeHtml(item.code || "")} ${escapeHtml(item.company)}</option>`).join("");
+  if (customerSelect) customerSelect.innerHTML = '<option value="">Cari seç</option>' + customerOptions;
+  if (paymentCustomerSelect) paymentCustomerSelect.innerHTML = customerOptions;
+  if (stockSelect) stockSelect.innerHTML = state.products.map((item) => `<option value="${item.id}">${escapeHtml(item.barcode || item.sku || "")} ${escapeHtml(item.name)}</option>`).join("");
 };
 
-const refreshInvoiceProducts = async () => {
-  const button = document.querySelector("#refreshInvoiceProductsButton");
-  button.disabled = true;
-  try {
-    state.products = await loadAllProducts(client);
-    renderProducts();
-    renderInvoiceOptions();
-    document.querySelector("#invoiceFormStatus").textContent = `${state.products.length} ürün güncellendi.`;
-  } finally {
-    button.disabled = false;
-  }
-};
-
-const cartonSize = (product) => Math.max(Number(product?.units_per_carton || 1), 1);
-const stockQuantityFor = (quantity, unit, unitsPerCarton) =>
-  Number(quantity || 0) * (unit === "koli" ? Math.max(Number(unitsPerCarton || 1), 1) : 1);
-const productUnitPrice = (product, invoiceType, unit) => {
-  const basePrice = Number(invoiceType === "purchase" ? product.purchase_price : product.sale_price);
-  return basePrice * (unit === "koli" ? cartonSize(product) : 1);
+const invoiceLineCalc = (line) => {
+  const qty = Number(line.quantity || 0);
+  const unitPrice = Number(line.unit_price || 0);
+  const d1 = Number(line.discount_1 || 0);
+  const d2 = Number(line.discount_2 || 0);
+  const d3 = Number(line.discount_3 || 0);
+  const taxRate = Number(line.tax_rate || 0);
+  let net = qty * unitPrice;
+  const discounts = [d1, d2, d3].reduce((amount, rate) => amount * (1 - rate / 100), net);
+  const discountTotal = net - discounts;
+  const tax = discounts * taxRate / 100;
+  return { subtotal: net, discount: discountTotal, net: discounts, tax, total: discounts + tax };
 };
 
 const renderInvoiceProductPicker = () => {
-  const target = document.querySelector("#invoiceProductRows");
-  if (!target) return;
-  const term = document.querySelector("#invoiceProductSearch")?.value.trim().toLocaleLowerCase("tr") || "";
-  const form = document.querySelector("#invoiceForm");
-  const invoiceType = form.elements.invoice_type.value || "sale";
-  const currency = form.elements.currency.value || "USD";
-  const { field, direction } = state.invoiceProductSort;
-  const sortValue = {
-    barcode: (item) => item.barcode || item.sku || "",
-    name: (item) => item.name || "",
-    stock: (item) => Number(item.stock_quantity || 0),
-    price: (item) => productUnitPrice(item, invoiceType, cartonSize(item) > 1 ? "koli" : "adet"),
-  }[field] || ((item) => item.name || "");
-  const products = state.products.filter((item) => item.active && [item.barcode, item.sku, item.name, item.brand]
-    .some((value) => String(value || "").toLocaleLowerCase("tr").includes(term)))
-    .sort((a, b) => {
-      const av = sortValue(a); const bv = sortValue(b);
-      const result = typeof av === "number" ? av - bv : String(av).localeCompare(String(bv), "tr");
-      return direction === "desc" ? -result : result;
-    });
-  target.innerHTML = products.length ? products.map((product) => {
-    const units = cartonSize(product);
-    const defaultUnit = units > 1 ? "koli" : "adet";
-    const stock = Number(product.stock_quantity || 0);
-    return `<tr data-picker-row="${product.id}">
-      <td>${escapeHtml(product.barcode || product.sku || "-")}</td>
-      <td class="product-name"><strong>${escapeHtml(product.name)}</strong><small>${escapeHtml(product.brand || "")}</small></td>
-      <td>${number(stock)} ad.<small>${units > 1 ? `${number(stock / units)} koli` : ""}</small></td>
-      <td><input data-picker-quantity type="number" min="0.001" step="0.001" value="1" aria-label="Miktar" /></td>
-      <td><input data-picker-price type="number" min="0" step="0.0001" value="${productUnitPrice(product, invoiceType, defaultUnit)}" aria-label="Birim fiyat" /></td>
-      <td><select data-picker-currency aria-label="Para birimi">${invoiceCurrencies.map((item) => `<option ${item === currency ? "selected" : ""}>${item}</option>`).join("")}</select></td>
-      <td><select data-picker-unit aria-label="Birim"><option value="adet" ${defaultUnit === "adet" ? "selected" : ""}>Adet</option><option value="koli" ${defaultUnit === "koli" ? "selected" : ""}>Koli</option></select></td>
-      <td><button type="button" class="primary" data-add-invoice-product="${product.id}">Ekle</button></td>
-    </tr>`;
-  }).join("") : '<tr><td colspan="8" class="empty">Ürün bulunamadı.</td></tr>';
-  document.querySelectorAll("[data-picker-sort]").forEach((button) => {
-    button.textContent = button.dataset.pickerSort === field ? (direction === "asc" ? "↑" : "↓") : "↕";
-  });
-};
-
-const updateInvoiceTermDays = () => {
-  const form = document.querySelector("#invoiceForm");
-  const start = form.elements.invoice_date.value;
-  const end = form.elements.due_date.value;
-  const target = document.querySelector("#invoiceTermDays");
-  if (!start || !end) { target.textContent = "0 gün"; return; }
-  const days = Math.round((new Date(`${end}T12:00:00`) - new Date(`${start}T12:00:00`)) / 86400000);
-  target.textContent = days >= 0 ? `${days} gün` : "Geçersiz tarih";
-};
-
-const calculateLine = (line, scenario) => {
-  const gross = line.quantity * line.unit_price;
-  const net = gross * (1 - line.discount_1 / 100) * (1 - line.discount_2 / 100) * (1 - line.discount_3 / 100);
-  const taxRate = scenario === "export" ? 0 : line.tax_rate;
-  const tax = net * taxRate / 100;
-  return { gross, net, discount: gross - net, tax, total: net + tax, taxRate };
+  const tbody = document.querySelector("#invoiceProductRows");
+  if (!tbody) return;
+  const term = document.querySelector("#invoiceProductSearch").value.trim().toLocaleLowerCase("tr");
+  const invoiceType = document.querySelector("#invoiceForm").elements.invoice_type.value;
+  const invoiceCurrency = document.querySelector("#invoiceForm").elements.currency.value || "USD";
+  const sorted = state.products.filter((item) => [item.name, item.brand, item.barcode, item.sku].some((value) => String(value || "").toLocaleLowerCase("tr").includes(term))).sort((a, b) => {
+    const field = state.invoiceProductSort.field;
+    const direction = state.invoiceProductSort.direction;
+    const read = (item) => field === "stock" ? Number(item.stock_quantity || 0) : field === "price" ? productUnitPrice(item, invoiceType) : String(item[field] || "");
+    const av = read(a); const bv = read(b);
+    if (typeof av === "number" || typeof bv === "number") return direction === "desc" ? Number(bv) - Number(av) : Number(av) - Number(bv);
+    return direction === "desc" ? String(bv).localeCompare(String(av), "tr") : String(av).localeCompare(String(bv), "tr");
+  }).slice(0, 100);
+  tbody.innerHTML = sorted.length ? sorted.map((item) => `<tr data-picker-row="${item.id}"><td>${escapeHtml(item.barcode || item.sku || "-")}</td><td><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.brand || "")}</small></td><td>${number(item.stock_quantity || 0)}</td><td><input data-picker-qty type="number" min="0.001" step="0.001" value="1" /></td><td><input data-picker-price type="number" step="0.0001" value="${productUnitPrice(item, invoiceType)}" /></td><td><select data-picker-currency><option ${invoiceCurrency === "USD" ? "selected" : ""}>USD</option><option ${invoiceCurrency === "EUR" ? "selected" : ""}>EUR</option><option ${invoiceCurrency === "TRY" ? "selected" : ""}>TRY</option><option ${invoiceCurrency === "RUB" ? "selected" : ""}>RUB</option><option ${invoiceCurrency === "GEL" ? "selected" : ""}>GEL</option></select></td><td><select data-picker-unit><option value="adet">Adet</option><option value="koli">Koli</option></select></td><td><button data-add-invoice-product="${item.id}">Ekle</button></td></tr>`).join("") : '<tr><td colspan="8" class="empty">Ürün bulunamadı.</td></tr>';
 };
 
 const renderInvoiceLines = () => {
-  const form = document.querySelector("#invoiceForm");
-  const currency = form.elements.currency.value || "USD";
-  const scenario = form.elements.scenario.value;
-  const bottomRate = Number(form.elements.invoice_discount_rate.value || 0);
-  let subtotal = 0;
-  let lineDiscount = 0;
-  let tax = 0;
-  const taxByRate = new Map();
-  document.querySelector("#invoiceLineRows").innerHTML = state.invoiceLines.length ? state.invoiceLines.map((line, index) => {
-    const calc = calculateLine(line, scenario);
-    subtotal += calc.net;
-    lineDiscount += calc.discount;
-    tax += calc.tax;
-    if (calc.taxRate > 0) taxByRate.set(calc.taxRate, (taxByRate.get(calc.taxRate) || 0) + calc.tax);
-    const units = Math.max(Number(line.units_per_carton || 1), 1);
-    const stockWarning = form.elements.invoice_type.value === "sale" && Number(line.stock_quantity) > Number(line.stock);
-    return `<tr class="${stockWarning ? "stock-warning" : ""}">
-      <td>${index + 1}</td><td class="line-barcode">${escapeHtml(line.barcode || line.sku || "-")}</td>
-      <td class="line-product"><strong>${escapeHtml(line.name)}</strong><small>${escapeHtml(line.sku || "")}</small></td>
-      <td>${number(line.stock)} ad.<small>${units > 1 ? `${number(Number(line.stock) / units)} koli` : ""}</small></td>
-      <td><input data-line-index="${index}" data-line-field="quantity" type="number" min="0.001" step="0.001" value="${line.quantity}" /></td>
-      <td><select data-line-index="${index}" data-line-field="selected_unit"><option value="adet" ${line.selected_unit === "adet" ? "selected" : ""}>Adet</option><option value="koli" ${line.selected_unit === "koli" ? "selected" : ""}>Koli</option></select></td>
-      <td><input data-line-index="${index}" data-line-field="unit_price" type="number" min="0" step="0.0001" value="${line.unit_price}" /></td>
-      <td><strong>${escapeHtml(currency)}</strong></td>
-      <td><input data-line-index="${index}" data-line-field="discount_1" type="number" min="0" max="100" step="0.01" value="${line.discount_1}" /></td>
-      <td><input data-line-index="${index}" data-line-field="discount_2" type="number" min="0" max="100" step="0.01" value="${line.discount_2}" /></td>
-      <td><input data-line-index="${index}" data-line-field="discount_3" type="number" min="0" max="100" step="0.01" value="${line.discount_3}" /></td>
-      <td><input data-line-index="${index}" data-line-field="tax_rate" type="number" list="vatRates" min="0" max="100" step="0.01" value="${line.tax_rate}" ${scenario === "export" ? "disabled" : ""} /></td>
-      <td>${money(calc.tax, currency)}</td><td><strong>${money(calc.total, currency)}</strong></td><td><button type="button" data-remove-line="${index}">Sil</button></td></tr>`;
-  }).join("") : '<tr><td colspan="15" class="empty">Yukarıdaki listeden ürün ekleyin.</td></tr>';
-  const bottomDiscount = subtotal * Math.min(Math.max(bottomRate, 0), 100) / 100;
-  const taxFactor = subtotal > 0 ? (subtotal - bottomDiscount) / subtotal : 0;
-  const adjustedTax = tax * taxFactor;
-  const preferredTaxOrder = [20, 1, 10];
-  const remainingRates = [...taxByRate.keys()].filter((rate) => !preferredTaxOrder.includes(Number(rate))).sort((a, b) => Number(b) - Number(a));
-  const orderedRates = [...preferredTaxOrder, ...remainingRates].filter((rate) => taxByRate.has(Number(rate)));
-  const taxLabelNumber = (rate) => preferredTaxOrder.includes(Number(rate)) ? preferredTaxOrder.indexOf(Number(rate)) + 1 : preferredTaxOrder.length + remainingRates.indexOf(rate) + 1;
-  document.querySelector("#invoiceVatBreakdown").innerHTML = orderedRates.map((rate) => `<span>KDV ${taxLabelNumber(rate)} (%${number(rate)}) <strong>${money((taxByRate.get(Number(rate)) || 0) * taxFactor, currency)}</strong></span>`).join("");
-  document.querySelector("#invoiceSubtotal").textContent = money(subtotal, currency);
-  document.querySelector("#invoiceDiscountTotal").textContent = money(lineDiscount + bottomDiscount, currency);
-  document.querySelector("#invoiceTaxTotal").textContent = money(adjustedTax, currency);
-  document.querySelector("#invoiceGrandTotal").textContent = money(subtotal - bottomDiscount + adjustedTax, currency);
+  const tbody = document.querySelector("#invoiceLineRows");
+  if (!tbody) return;
+  let subtotal = 0, discount = 0, tax = 0, total = 0;
+  tbody.innerHTML = state.invoiceLines.length ? state.invoiceLines.map((line, index) => {
+    const calc = invoiceLineCalc(line);
+    subtotal += calc.subtotal; discount += calc.discount; tax += calc.tax; total += calc.total;
+    return `<tr><td>${index + 1}</td><td>${escapeHtml(line.barcode || "-")}</td><td>${escapeHtml(line.description)}</td><td>${number(line.available_stock || 0)}</td><td><input data-line-index="${index}" data-line-field="quantity" type="number" step="0.001" value="${line.quantity}" /></td><td><select data-line-index="${index}" data-line-field="selected_unit"><option value="adet" ${line.selected_unit === "adet" ? "selected" : ""}>Adet</option><option value="koli" ${line.selected_unit === "koli" ? "selected" : ""}>Koli</option></select><small>${number(line.stock_quantity)} adet stok etkisi</small></td><td><input data-line-index="${index}" data-line-field="unit_price" type="number" step="0.0001" value="${line.unit_price}" /></td><td><select data-line-index="${index}" data-line-field="currency"><option ${line.currency === "USD" ? "selected" : ""}>USD</option><option ${line.currency === "EUR" ? "selected" : ""}>EUR</option><option ${line.currency === "TRY" ? "selected" : ""}>TRY</option><option ${line.currency === "RUB" ? "selected" : ""}>RUB</option><option ${line.currency === "GEL" ? "selected" : ""}>GEL</option></select></td><td><input data-line-index="${index}" data-line-field="discount_1" type="number" step="0.01" value="${line.discount_1}" /></td><td><input data-line-index="${index}" data-line-field="discount_2" type="number" step="0.01" value="${line.discount_2}" /></td><td><input data-line-index="${index}" data-line-field="discount_3" type="number" step="0.01" value="${line.discount_3}" /></td><td><input data-line-index="${index}" data-line-field="tax_rate" type="number" step="0.01" value="${line.tax_rate}" /></td><td>${money(calc.tax, line.currency)}</td><td><strong>${money(calc.total, line.currency)}</strong></td><td><button data-remove-line="${index}">Sil</button></td></tr>`;
+  }).join("") : '<tr><td colspan="15" class="empty">Henüz satır yok.</td></tr>';
+  document.querySelector("#invoiceSubtotal").textContent = money(subtotal, document.querySelector("#invoiceForm").elements.currency.value || "USD");
+  document.querySelector("#invoiceDiscountTotal").textContent = money(discount, document.querySelector("#invoiceForm").elements.currency.value || "USD");
+  document.querySelector("#invoiceTaxTotal").textContent = money(tax, document.querySelector("#invoiceForm").elements.currency.value || "USD");
+  document.querySelector("#invoiceGrandTotal").textContent = money(total, document.querySelector("#invoiceForm").elements.currency.value || "USD");
+  document.querySelector("#invoiceVatBreakdown").innerHTML = "";
+};
+
+const renderReports = () => {
+  const sales = state.invoices.filter((i) => i.invoice_type === "sale").reduce((sum, i) => sum + Number(i.grand_total || 0), 0);
+  const purchases = state.invoices.filter((i) => i.invoice_type === "purchase").reduce((sum, i) => sum + Number(i.grand_total || 0), 0);
+  document.querySelector("#reportSales").textContent = money(sales, "USD");
+  document.querySelector("#reportPurchases").textContent = money(purchases, "TRY");
+  document.querySelector("#reportStockQty").textContent = number(state.products.reduce((sum, p) => sum + Number(p.stock_quantity || 0), 0));
+  document.querySelector("#reportLowStock").textContent = number(state.products.filter((p) => Number(p.minimum_stock || 0) > 0 && Number(p.stock_quantity || 0) <= Number(p.minimum_stock || 0)).length);
+  document.querySelector("#balanceReport").innerHTML = state.customers.slice(0, 10).map((item) => `<div class="compact-row"><div><strong>${escapeHtml(item.company)}</strong><small>${customerRole(item)}</small></div><span>${[...customerBalance(item.id).entries()].map(([c, a]) => money(a, c)).join(" · ") || money(0, item.currency || "USD")}</span></div>`).join("") || '<p class="empty">Cari yok.</p>';
+  document.querySelector("#salesProductReport").innerHTML = state.products.slice(0, 10).map((item) => `<div class="compact-row"><div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.brand || "")}</small></div><span>${number(item.stock_quantity || 0)}</span></div>`).join("");
+};
+
+const renderSettings = () => {
+  if (!state.settings) return;
+  const form = document.querySelector("#templateForm");
+  ["company_name", "company_tax_number", "company_tax_office", "company_address"].forEach((key) => { if (form.elements[key]) form.elements[key].value = state.settings[key] || ""; });
+  form.elements.incoterm.value = state.settings.invoice_template?.incoterm || "";
+  form.elements.payment_note.value = state.settings.invoice_template?.payment_note || "";
+  document.querySelector("#gibProvider").value = state.settings.gib_provider || "";
 };
 
 const renderAll = () => {
+  renderMetrics();
   renderCustomers();
   renderProducts();
   renderOrders();
   renderInvoices();
-  renderMovements();
-  renderDashboard();
-  renderVat();
-  renderReports();
-  renderTemplate();
   renderInvoiceOptions();
+  renderInvoiceProductPicker();
   renderInvoiceLines();
+  renderReports();
+  renderSettings();
 };
 
-const openEditForm = (dialogId, formId, data = {}) => {
+const openEditForm = (dialogId, formId, item = {}) => {
   const form = document.querySelector(`#${formId}`);
   form.reset();
-  Object.entries(data).forEach(([key, value]) => {
-    const field = form.elements.namedItem(key);
-    if (!field) return;
-    if (field.type === "checkbox") field.checked = value !== false;
+  Object.entries(item || {}).forEach(([key, value]) => {
+    if (!form.elements[key]) return;
+    const field = form.elements[key];
+    if (field.type === "checkbox") field.checked = !!value;
     else field.value = value ?? "";
   });
-  if (formId === "productForm") {
-    form.querySelectorAll("[data-price-currency]").forEach((select) => { select.value = "USD"; });
-    refreshProductPricePreviews();
-  }
+  if (!item.id && formId === "customerForm") { form.elements.is_buyer.checked = true; form.elements.is_seller.checked = true; }
   document.querySelector(`#${dialogId}`).showModal();
-};
-
-const pricePreviewText = (amount, currency) => {
-  const selected = normalizeCurrency(currency);
-  if (!canConvertCurrency(selected)) return "Kur bulunamadı; değer USD kabul edilir.";
-  const usd = convertToUsd(amount, selected);
-  const parts = [`Ana kayıt: ${money(usd, "USD")}`];
-  ["TRY", "EUR", "RUB"].forEach((target) => {
-    if (target !== selected && canConvertCurrency(target)) parts.push(money(convertFromUsd(usd, target), target));
-  });
-  return parts.join(" · ");
-};
-
-const refreshProductPricePreviews = () => {
-  const productForm = document.querySelector("#productForm");
-  if (productForm) {
-    ["purchase_price", "sale_price"].forEach((fieldName) => {
-      const input = productForm.elements.namedItem(fieldName);
-      const currency = productForm.querySelector(`[data-price-currency="${fieldName}"]`)?.value || "USD";
-      const preview = productForm.querySelector(`[data-price-preview="${fieldName}"]`);
-      if (input && preview) preview.textContent = pricePreviewText(input.value, currency);
-    });
-  }
-  const priceForm = document.querySelector("#productPriceForm");
-  if (priceForm) {
-    document.querySelector("#pricePurchasePreview").textContent = pricePreviewText(priceForm.elements.purchase_price.value, priceForm.elements.purchase_currency.value);
-    document.querySelector("#priceSalePreview").textContent = pricePreviewText(priceForm.elements.sale_price.value, priceForm.elements.sale_currency.value);
-  }
-};
-
-const saveProduct = async (event) => {
-  event.preventDefault();
-  const form = event.currentTarget;
-  const values = formObject(form);
-  const id = values.id;
-  delete values.id;
-  ["purchase_price", "sale_price"].forEach((fieldName) => {
-    const currency = form.querySelector(`[data-price-currency="${fieldName}"]`)?.value || "USD";
-    values[fieldName] = convertToUsd(values[fieldName], currency);
-  });
-  ["minimum_stock", "units_per_carton", "kg_per_carton", "vat_rate"].forEach((key) => { values[key] = Number(values[key] || 0); });
-  values.currency = "USD";
-  const request = id ? client.from("products").update(values).eq("id", id) : client.from("products").insert(values);
-  await query(request);
-  document.querySelector("#productDialog").close();
-  await loadData();
-};
-
-const priceImportHeaders = [
-  "Barkod", "SKU", "Marka", "Ürün", "Stok Birimi",
-  "Alış Fiyatı", "Alış Para Birimi", "Satış Fiyatı", "Satış Para Birimi",
-  "KDV Oranı", "Koli İçi", "Minimum Stok", "Koli Kg",
-];
-const allowedUnits = new Set(["adet", "koli", "litre", "metre", "kg"]);
-const normalizeImportKey = (value) => String(value || "")
-  .toLocaleLowerCase("tr")
-  .replaceAll("ı", "i")
-  .replaceAll("ş", "s")
-  .replaceAll("ğ", "g")
-  .replaceAll("ü", "u")
-  .replaceAll("ö", "o")
-  .replaceAll("ç", "c")
-  .replace(/[^a-z0-9]/g, "");
-const getImportValue = (row, aliases) => {
-  const normalized = Object.fromEntries(Object.entries(row).map(([key, value]) => [normalizeImportKey(key), value]));
-  for (const alias of aliases) {
-    const value = normalized[normalizeImportKey(alias)];
-    if (value !== undefined && value !== null && String(value).trim() !== "") return value;
-  }
-  return "";
-};
-const parseImportedNumber = (value) => {
-  if (value === "" || value === null || value === undefined) return null;
-  if (typeof value === "number") return Number.isFinite(value) ? value : null;
-  const raw = String(value).trim().replace(/\s/g, "");
-  const clean = raw.includes(",")
-    ? raw.replace(/\./g, "").replace(",", ".")
-    : raw;
-  const parsed = Number(clean);
-  return Number.isFinite(parsed) ? parsed : null;
-};
-const parseCsvRows = (text) => {
-  const lines = text.split(/\r?\n/).filter((line) => line.trim());
-  if (!lines.length) return [];
-  const separator = lines[0].includes(";") ? ";" : ",";
-  const split = (line) => line.split(separator).map((cell) => cell.trim().replace(/^"|"$/g, ""));
-  const headers = split(lines[0]);
-  return lines.slice(1).map((line) => Object.fromEntries(split(line).map((cell, index) => [headers[index] || `Kolon ${index + 1}`, cell])));
-};
-
-const downloadPriceTemplate = () => {
-  const rows = state.products.map((item) => ({
-    Barkod: item.barcode || "",
-    SKU: item.sku || "",
-    Marka: item.brand || "",
-    Ürün: item.name || "",
-    "Stok Birimi": item.unit || "adet",
-    "Alış Fiyatı": Number(item.purchase_price || 0),
-    "Alış Para Birimi": "USD",
-    "Satış Fiyatı": Number(item.sale_price || 0),
-    "Satış Para Birimi": "USD",
-    "KDV Oranı": Number(item.vat_rate || 20),
-    "Koli İçi": Number(item.units_per_carton || 1),
-    "Minimum Stok": Number(item.minimum_stock || 0),
-    "Koli Kg": Number(item.kg_per_carton || 0),
-  }));
-  if (window.XLSX) {
-    const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.json_to_sheet(rows.length ? rows : [Object.fromEntries(priceImportHeaders.map((key) => [key, ""]))], { header: priceImportHeaders });
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Fiyat Güncelleme");
-    XLSX.writeFile(workbook, `sidya-fiyat-guncelleme-${today()}.xlsx`);
-    return;
-  }
-  const csv = [priceImportHeaders.join(";"), ...rows.map((row) => priceImportHeaders.map((key) => row[key] ?? "").join(";"))].join("\n");
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
-  link.download = `sidya-fiyat-guncelleme-${today()}.csv`;
-  link.click();
-  URL.revokeObjectURL(link.href);
-};
-
-const readPriceImportRows = async (file) => {
-  if (!file) return [];
-  if (/\.csv$/i.test(file.name)) return parseCsvRows(await file.text());
-  if (!window.XLSX) throw new Error("Excel okuma kütüphanesi yüklenemedi. Dosyayı CSV olarak deneyin.");
-  const workbook = XLSX.read(await file.arrayBuffer(), { type: "array" });
-  const sheet = workbook.Sheets[workbook.SheetNames[0]];
-  return XLSX.utils.sheet_to_json(sheet, { defval: "" });
-};
-
-const importPriceFile = async (event) => {
-  const file = event.target.files?.[0];
-  event.target.value = "";
-  if (!file) return;
-  const rows = await readPriceImportRows(file);
-  if (!rows.length) throw new Error("Dosyada okunacak satır bulunamadı.");
-  let updated = 0;
-  let skipped = 0;
-  const productByBarcode = new Map(state.products.flatMap((item) => [item.barcode, item.sku].filter(Boolean).map((key) => [String(key).trim(), item])));
-  for (const row of rows) {
-    const key = String(getImportValue(row, ["Barkod", "Barcode", "SKU", "Stok Kodu"]) || "").trim();
-    const product = productByBarcode.get(key);
-    if (!product) { skipped += 1; continue; }
-    const update = { updated_at: new Date().toISOString() };
-    const purchase = parseImportedNumber(getImportValue(row, ["Alış Fiyatı", "Alis Fiyati", "Purchase Price"]));
-    const sale = parseImportedNumber(getImportValue(row, ["Satış Fiyatı", "Satis Fiyati", "Sale Price"]));
-    if (purchase !== null) update.purchase_price = convertToUsd(purchase, getImportValue(row, ["Alış Para Birimi", "Alis Para Birimi", "Purchase Currency"]) || "USD");
-    if (sale !== null) update.sale_price = convertToUsd(sale, getImportValue(row, ["Satış Para Birimi", "Satis Para Birimi", "Sale Currency"]) || "USD");
-    const unit = String(getImportValue(row, ["Stok Birimi", "Takip Birimi", "Birim", "Unit"]) || "").trim().toLocaleLowerCase("tr");
-    if (unit && allowedUnits.has(unit)) update.unit = unit;
-    const vatRate = parseImportedNumber(getImportValue(row, ["KDV Oranı", "KDV", "VAT"]));
-    const unitsPerCarton = parseImportedNumber(getImportValue(row, ["Koli İçi", "Koli Ici", "Units Per Carton"]));
-    const minimumStock = parseImportedNumber(getImportValue(row, ["Minimum Stok", "Min Stok"]));
-    const kgPerCarton = parseImportedNumber(getImportValue(row, ["Koli Kg", "Kg Per Carton"]));
-    if (vatRate !== null) update.vat_rate = vatRate;
-    if (unitsPerCarton !== null) update.units_per_carton = Math.max(unitsPerCarton, 1);
-    if (minimumStock !== null) update.minimum_stock = minimumStock;
-    if (kgPerCarton !== null) update.kg_per_carton = kgPerCarton;
-    if ("purchase_price" in update || "sale_price" in update || "unit" in update || "vat_rate" in update || "units_per_carton" in update || "minimum_stock" in update || "kg_per_carton" in update) {
-      update.currency = "USD";
-      await query(client.from("products").update(update).eq("id", product.id).select("id"));
-      updated += 1;
-    } else {
-      skipped += 1;
-    }
-  }
-  await loadData();
-  setStatus(`${updated} ürün barkod/SKU eşleşmesiyle güncellendi${skipped ? `, ${skipped} satır atlandı` : ""}.`);
-};
-
-const saveEntity = async (event, table, dialogId, numericFields = []) => {
-  event.preventDefault();
-  const values = formObject(event.currentTarget);
-  const id = values.id;
-  delete values.id;
-  numericFields.forEach((key) => { values[key] = Number(values[key] || 0); });
-  const request = id ? client.from(table).update(values).eq("id", id) : client.from(table).insert(values);
-  await query(request);
-  document.querySelector(`#${dialogId}`).close();
-  await loadData();
 };
 
 const saveCustomer = async (event) => {
   event.preventDefault();
-  const openedFromInvoice = event.currentTarget.dataset.invoiceContext === "true";
   const values = formObject(event.currentTarget);
-  const id = values.id;
-  delete values.id;
-  values.is_buyer = event.currentTarget.elements.is_buyer.checked;
-  values.is_seller = event.currentTarget.elements.is_seller.checked;
-  if (!values.is_buyer && !values.is_seller) {
-    throw new Error("Cari en az alıcı veya satıcı olarak işaretlenmelidir.");
-  }
-  const request = id
-    ? client.from("customers").update(values).eq("id", id).select("*").single()
-    : client.from("customers").insert(values).select("*").single();
-  const savedCustomer = await query(request);
+  const payload = {
+    code: values.code || null,
+    company: values.company,
+    contact_name: values.contact_name || null,
+    email: values.email || null,
+    phone: values.phone || null,
+    country: values.country || null,
+    tax_number: values.tax_number || null,
+    tax_office: values.tax_office || null,
+    currency: values.currency || "USD",
+    is_buyer: !!values.is_buyer,
+    is_seller: !!values.is_seller,
+    address: values.address || null,
+    notes: values.notes || null,
+    updated_at: new Date().toISOString(),
+  };
+  if (values.id) await query(client.from("customers").update(payload).eq("id", values.id).select("id"));
+  else await query(client.from("customers").insert(payload).select("id"));
   document.querySelector("#customerDialog").close();
   await loadData();
-  if (openedFromInvoice && savedCustomer?.id) {
-    document.querySelector("#invoiceCustomer").value = savedCustomer.id;
-    document.querySelector("#invoiceFormStatus").textContent = `${savedCustomer.company} carisi eklendi ve faturaya seçildi.`;
-  }
+  setStatus("Cari kartı kaydedildi.");
 };
 
-const adjustStock = async (event) => {
+const saveProduct = async (event) => {
   event.preventDefault();
   const values = formObject(event.currentTarget);
-  const direction = event.currentTarget.dataset.direction || "in";
-  const quantity = Math.abs(Number(values.quantity || 0)) * (direction === "out" ? -1 : 1);
-  if (!quantity) throw new Error("Stok miktarı sıfırdan büyük olmalıdır.");
-  await query(client.rpc("adjust_stock", {
-    p_product_id: values.product_id,
-    p_quantity: quantity,
-    p_note: `MANUEL STOK ${direction === "out" ? "ÇIKIŞI" : "GİRİŞİ"}: ${values.note}`,
-  }));
-  document.querySelector("#stockDialog").close();
-  await loadData();
-  setStatus(`Manuel stok ${direction === "out" ? "çıkışı" : "girişi"} kaydedildi.`);
-};
-
-const recordPayment = async (event) => {
-  event.preventDefault();
-  const values = formObject(event.currentTarget);
-  await query(client.rpc("record_customer_payment", {
-    p_customer_id: values.customer_id,
-    p_amount: Number(values.amount),
-    p_currency: values.currency,
-    p_payment_date: values.payment_date,
-    p_description: values.description,
-  }));
-  document.querySelector("#paymentDialog").close();
-  await loadData();
-};
-
-const loadFreshCatalog = async () => {
-  const response = await fetch(`/catalog-products.generated.js?fresh=${Date.now()}`, { cache: "no-store" });
-  if (!response.ok) throw new Error("Güncel katalog dosyası alınamadı.");
-  const source = await response.text();
-  const sandbox = {};
-  Function("window", source)(sandbox);
-  return Array.isArray(sandbox.SIDYA_CATALOG_PRODUCTS) ? sandbox.SIDYA_CATALOG_PRODUCTS : [];
-};
-
-const inferVatRate = (item) => {
-  const text = `${item.sourceCategory || ""} ${item.category || ""} ${item.names?.tr || ""}`.toLocaleLowerCase("tr");
-  if (/hasta bezi|yetişkin bezi|adult diaper/.test(text)) return 10;
-  if (/gıda|food|çikolata|salça|yağ|içecek|kahve|şeker/.test(text)) return 1;
-  return 20;
-};
-
-const importCatalog = async () => {
-  if (!state.schemaReady) throw new Error("SCHEMA_UPDATE_REQUIRED");
-  const catalog = await loadFreshCatalog();
-  if (!catalog.length) throw new Error("Site kataloğu bulunamadı.");
-  const rows = catalog.map((item) => ({
-    catalog_id: item.id,
-    sku: item.barcode || item.id,
-    barcode: item.barcode || null,
-    name: item.names?.tr || item.names?.en || item.name || item.id,
-    brand: item.brand || null,
-    category: item.sourceCategory || item.category || null,
- grammage: item.liter || null,
-    unit: "adet",
-    units_per_carton: Number(item.unitsPerCarton || 1),
-    kg_per_carton: Number(item.kgPerCarton || 0),
+  const purchaseCurrency = event.currentTarget.querySelector('[data-price-currency="purchase_price"]')?.value || "USD";
+  const saleCurrency = event.currentTarget.querySelector('[data-price-currency="sale_price"]')?.value || "USD";
+  const payload = {
+    name: values.name,
+    brand: values.brand || null,
+    sku: values.sku || null,
+    barcode: values.barcode || null,
+    grammage: values.grammage || null,
+    category: values.category || null,
+    unit: values.unit || "adet",
+    purchase_price: convertToUsd(values.purchase_price, purchaseCurrency),
+    sale_price: convertToUsd(values.sale_price, saleCurrency),
     currency: "USD",
-    vat_rate: inferVatRate(item),
-  }));
-  setStatus(`${rows.length} katalog ürünü aktarılıyor...`);
-  for (let index = 0; index < rows.length; index += 250) {
-    await query(client.from("products").upsert(rows.slice(index, index + 250), { onConflict: "catalog_id" }));
-  }
+    vat_rate: Number(values.vat_rate || 0),
+    minimum_stock: Number(values.minimum_stock || 0),
+    units_per_carton: Number(values.units_per_carton || 1),
+    kg_per_carton: Number(values.kg_per_carton || 0),
+    active: true,
+    updated_at: new Date().toISOString(),
+  };
+  if (values.id) await query(client.from("products").update(payload).eq("id", values.id).select("id"));
+  else await query(client.from("products").insert(payload).select("id"));
+  document.querySelector("#productDialog").close();
   await loadData();
-  setStatus(`${rows.length} ürün güncel katalogdan aktarıldı.`);
+  setStatus("Stok kartı kaydedildi.");
 };
 
-const ß = async () => {
-  const publishableProducts = state.products.filter((item) => item.active !== false && Number(item.sale_price || 0) > 0);
-  if (!publishableProducts.length) throw new Error("Satış fiyatı girilmiş aktif ürün bulunamadı.");
-  const rows = publishableProducts.map((item) => ({
-    publish_key: item.catalog_id || `product-${item.id}`,
-    catalog_id: item.catalog_id || null,
-    barcode: item.barcode || item.sku || null,
-    name: item.name,
-    brand: item.brand || null,
-    category: item.category || null,
-    grammage: item.grammage || null,
-    sale_price: Number(item.sale_price || 0),
-    currency: item.currency || "USD",
-    units_per_carton: Math.max(Number(item.units_per_carton || 1), 1),
-    cartons_per_pallet: null,
-    kg_per_carton: Number(item.kg_per_carton || 0) || null,
-    active: true,
-    updated_by: state.session?.user?.id || null,
-    updated_at: new Date().toISOString(),
-  }));
-  setStatus(`${rows.length} ürünün satış bilgileri siteye gönderiliyor...`);
-  try {
-  for (let index = 0; index < rows.length; index += 250) {
-    await query(client.from("site_catalog_prices").upsert(rows.slice(index, index + 250), { onConflict: "publish_key" }));
+const refreshProductPricePreviews = () => {
+  document.querySelectorAll("[data-price-preview]").forEach((target) => {
+    const field = target.dataset.pricePreview;
+    const input = document.querySelector(`#productForm [name="${field}"]`);
+    const currency = document.querySelector(`#productForm [data-price-currency="${field}"]`)?.value || "USD";
+    if (input) target.textContent = `${money(Number(input.value || 0), normalizeCurrency(currency))} = ${money(convertToUsd(input.value, currency), "USD")} ana fiyat`;
+  });
+  const priceForm = document.querySelector("#productPriceForm");
+  if (priceForm) {
+    const purchase = priceForm.elements.purchase_price ? convertToUsd(priceForm.elements.purchase_price.value, priceForm.elements.purchase_currency.value) : 0;
+    const sale = priceForm.elements.sale_price ? convertToUsd(priceForm.elements.sale_price.value, priceForm.elements.sale_currency.value) : 0;
+    const pp = document.querySelector("#pricePurchasePreview");
+    const sp = document.querySelector("#priceSalePreview");
+    if (pp) pp.textContent = currencyPreview(purchase);
+    if (sp) sp.textContent = currencyPreview(sale);
   }
+};
 
-  // Güvenlik: Bilgi Gönder sadece gelen ürünlerin fiyat/koli bilgisini günceller.
-  // Gönderimde olmayan mevcut ürünler silinmez, pasife alınmaz.
-} catch (error) {
-  if (!isSchemaError(error)) throw error;
-  document.querySelector("#schemaWarning").hidden = false;
-  document.querySelector("#schemaWarningText").innerHTML = "Bilgi gönderme özelliğini etkinleştirmek için Supabase SQL Editor'da <code>supabase/bilgi-al-gonder.sql</code> dosyasını bir kez çalıştırın.";
-  throw new Error("Bilgi gönderme tablosu henüz kurulmamış. bilgi-al-gonder.sql dosyasını SQL Editor’da çalıştırın.");
-}
-  setStatus(`${rows.length} ürünün satış fiyatı ve koli bilgisi online siteye gönderildi.`);
+const parseNumberFlexible = (value) => {
+  if (value === null || value === undefined || value === "") return null;
+  let text = String(value).trim();
+  if (!text) return null;
+  const hasComma = text.includes(",");
+  const hasDot = text.includes(".");
+  if (hasComma && hasDot) {
+    const lastComma = text.lastIndexOf(",");
+    const lastDot = text.lastIndexOf(".");
+    if (lastComma > lastDot) text = text.replace(/\./g, "").replace(",", ".");
+    else text = text.replace(/,/g, "");
+  } else if (hasComma) text = text.replace(",", ".");
+  const n = Number(text);
+  return Number.isFinite(n) ? n : null;
+};
+
+const readCell = (row, aliases) => {
+  const keys = Object.keys(row || {});
+  const normalized = (s) => String(s || "").toLocaleLowerCase("tr").replace(/\s+/g, "").replace(/[._-]/g, "");
+  for (const alias of aliases) {
+    const key = keys.find((k) => normalized(k) === normalized(alias));
+    if (key) return row[key];
+  }
+  return undefined;
+};
+
+const downloadPriceTemplate = () => {
+  const currency = prompt("Şablon para birimi seçin: USD, TRY, EUR, GEL, RUB", "USD") || "USD";
+  const code = normalizeCurrency(currency);
+  const rows = [
+    ["Barkod", "SKU", "Ürün Adı", "Alış Fiyatı", "Alış Para Birimi", "Satış Fiyatı", "Satış Para Birimi", "KDV Oranı", "Koli İçi", "Minimum Stok", "Koli Kg", "Stok Birimi"],
+    ["8690000000000", "SKU-001", "Örnek Ürün", "10,50", code, "14,00", code, "20", "12", "0", "8,5", "adet"],
+  ];
+  csvDownload(`sidya-fiyat-format-${code}.csv`, rows);
+};
+
+const importPriceFile = async (event) => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  setStatus("Excel/CSV fiyat dosyası okunuyor...");
+  const beforeCount = state.products.filter((p) => p.active !== false).length;
+  let rows = [];
+  const text = await file.text();
+  if (/\.csv$/i.test(file.name)) {
+    const lines = text.split(/\r?\n/).filter(Boolean);
+    const headers = lines.shift().split(/[;,]/).map((h) => h.replace(/^\uFEFF/, "").trim().replace(/^"|"$/g, ""));
+    rows = lines.map((line) => Object.fromEntries(line.split(/[;,]/).map((v, i) => [headers[i], v.replace(/^"|"$/g, "").trim()])));
+  } else if (window.XLSX) {
+    const buffer = await file.arrayBuffer();
+    const workbook = XLSX.read(buffer, { type: "array" });
+    rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { defval: "" });
+  } else {
+    throw new Error("Excel okuma kütüphanesi yüklenemedi. CSV formatı kullanın.");
+  }
+  const summary = { read: rows.length, updated: 0, unmatched: 0, invalid: 0, blank: 0, deleted: 0, deactivated: 0, errors: [] };
+  const byBarcode = new Map(state.products.map((p) => [String(p.barcode || "").trim(), p]).filter(([k]) => k));
+  const bySku = new Map(state.products.map((p) => [String(p.sku || "").trim(), p]).filter(([k]) => k));
+  for (let i = 0; i < rows.length; i += 1) {
+    const row = rows[i];
+    const barcode = String(readCell(row, ["Barkod", "Barcode"]) || "").trim();
+    const sku = String(readCell(row, ["SKU", "Stok Kodu", "Ürün Kodu"]) || "").trim();
+    if (!barcode && !sku) { summary.blank += 1; continue; }
+    const product = (barcode && byBarcode.get(barcode)) || (sku && bySku.get(sku));
+    if (!product) { summary.unmatched += 1; summary.errors.push(`Satır ${i + 2}: Barkod/SKU bulunamadı (${barcode || sku})`); continue; }
+    const purchaseRaw = readCell(row, ["Alış Fiyatı", "Purchase Price", "Alis Fiyati"]);
+    const saleRaw = readCell(row, ["Satış Fiyatı", "Satis Fiyati", "Sale Price"]);
+    const purchaseValue = parseNumberFlexible(purchaseRaw);
+    const saleValue = parseNumberFlexible(saleRaw);
+    const purchaseCurrency = normalizeCurrency(readCell(row, ["Alış Para Birimi", "Alis Para Birimi", "Purchase Currency"]) || "USD");
+    const saleCurrency = normalizeCurrency(readCell(row, ["Satış Para Birimi", "Satis Para Birimi", "Sale Currency"]) || "USD");
+    const payload = { updated_at: new Date().toISOString() };
+    if (purchaseValue !== null) {
+      if (purchaseValue < 0) { summary.invalid += 1; summary.errors.push(`Satır ${i + 2}: Alış fiyatı negatif.`); continue; }
+      payload.purchase_price = convertToUsd(purchaseValue, purchaseCurrency);
+    }
+    if (saleValue !== null) {
+      if (saleValue < 0) { summary.invalid += 1; summary.errors.push(`Satır ${i + 2}: Satış fiyatı negatif.`); continue; }
+      payload.sale_price = convertToUsd(saleValue, saleCurrency);
+    }
+    const vat = parseNumberFlexible(readCell(row, ["KDV Oranı", "KDV", "VAT"]));
+    const units = parseNumberFlexible(readCell(row, ["Koli İçi", "Koli Ici", "Units Per Carton"]));
+    const minStock = parseNumberFlexible(readCell(row, ["Minimum Stok", "Min Stock"]));
+    const kg = parseNumberFlexible(readCell(row, ["Koli Kg", "Kg Per Carton"]));
+    const unit = readCell(row, ["Stok Birimi", "Birim", "Unit"]);
+    if (vat !== null) payload.vat_rate = vat;
+    if (units !== null) payload.units_per_carton = units;
+    if (minStock !== null) payload.minimum_stock = minStock;
+    if (kg !== null) payload.kg_per_carton = kg;
+    if (unit) payload.unit = String(unit).trim();
+    await query(client.from("products").update(payload).eq("id", product.id).select("id"));
+    summary.updated += 1;
+  }
+  await loadData();
+  const afterCount = state.products.filter((p) => p.active !== false).length;
+  if (afterCount < beforeCount) throw new Error("Güvenlik nedeniyle işlem iptal edildi: fiyat yükleme ürün silmeye/pasife almaya çalıştı.");
+  setStatus(`Fiyat yükleme tamamlandı. Okunan: ${summary.read}, güncellenen: ${summary.updated}, eşleşmeyen: ${summary.unmatched}, hatalı: ${summary.invalid}, boş: ${summary.blank}, silinen: 0, pasife alınan: 0.${summary.errors.length ? " Detay: " + summary.errors.slice(0, 5).join(" | ") : ""}`);
+  event.target.value = "";
+};
+
+const saveInvoice = async (event) => {
+  const form = event.currentTarget;
+  const values = formObject(form);
+  if (!state.invoiceLines.length) throw new Error("En az bir fatura satırı ekleyin.");
+  const currency = values.currency || "USD";
+  const linePayloads = state.invoiceLines.map((line) => {
+    const calc = invoiceLineCalc(line);
+    return { ...line, quantity: Number(line.stock_quantity || line.quantity || 0), unit_price: Number(line.unit_price || 0), line_subtotal: calc.subtotal, line_discount: calc.discount, line_tax: calc.tax, line_total: calc.total };
+  });
+  const subtotal = linePayloads.reduce((sum, line) => sum + Number(line.line_subtotal || 0), 0);
+  const totalDiscount = linePayloads.reduce((sum, line) => sum + Number(line.line_discount || 0), 0);
+  const taxTotal = linePayloads.reduce((sum, line) => sum + Number(line.line_tax || 0), 0);
+  const grandTotal = linePayloads.reduce((sum, line) => sum + Number(line.line_total || 0), 0);
+  const invoiceNo = values.document_number || `INV-${today().replaceAll("-", "")}-${String(state.invoices.length + 1).padStart(3, "0")}`;
+  const invoiceData = {
+    customer_id: values.customer_id || null,
+    invoice_type: values.invoice_type,
+    scenario: values.scenario,
+    invoice_no: invoiceNo,
+    invoice_date: values.invoice_date || today(),
+    due_date: values.due_date || null,
+    currency,
+    subtotal,
+    total_discount: totalDiscount,
+    tax_total: taxTotal,
+    grand_total: grandTotal,
+    notes: values.notes || null,
+    status: "posted",
+    draft_data: { document_number: invoiceNo, payment_note: state.settings?.invoice_template?.payment_note || "" },
+    updated_at: new Date().toISOString(),
+  };
+  let invoice;
+  if (state.editingInvoiceId) {
+    [invoice] = await query(client.from("invoices").update(invoiceData).eq("id", state.editingInvoiceId).select("*"));
+    await query(client.from("invoice_items").delete().eq("invoice_id", state.editingInvoiceId).select("id"));
+  } else {
+    [invoice] = await query(client.from("invoices").insert(invoiceData).select("*"));
+  }
+  const items = linePayloads.map((line, index) => ({
+    invoice_id: invoice.id,
+    product_id: line.product_id,
+    line_no: index + 1,
+    description: line.description,
+    barcode: line.barcode || null,
+    quantity: line.quantity,
+    unit: line.selected_unit || "adet",
+    unit_price: line.unit_price,
+    currency: line.currency || currency,
+    discount_1: Number(line.discount_1 || 0),
+    discount_2: Number(line.discount_2 || 0),
+    discount_3: Number(line.discount_3 || 0),
+    tax_rate: Number(line.tax_rate || 0),
+    line_subtotal: line.line_subtotal,
+    line_discount: line.line_discount,
+    line_tax: line.line_tax,
+    line_total: line.line_total,
+  }));
+  await query(client.from("invoice_items").insert(items).select("id"));
+  for (const line of state.invoiceLines) {
+    const direction = values.invoice_type === "purchase" ? 1 : -1;
+    const qty = direction * Number(line.stock_quantity || line.quantity || 0);
+    await query(client.from("products").update({ stock_quantity: Number(line.available_stock || 0) + qty, updated_at: new Date().toISOString() }).eq("id", line.product_id).select("id"));
+    await query(client.from("stock_movements").insert({ product_id: line.product_id, movement_type: values.invoice_type, quantity: qty, reference_type: "invoice", reference_id: invoice.id, unit_cost: Number(line.unit_price || 0), note: invoiceNo }).select("id"));
+  }
+  document.querySelector("#invoiceDialog").close();
+  state.invoiceLines = [];
+  await loadData();
+  setStatus(`${invoiceNo} kaydedildi ve stok güncellendi.`);
+};
+
+const addInvoiceLine = (button) => {
+  const row = button.closest("[data-picker-row]");
+  const product = state.products.find((item) => item.id === row.dataset.pickerRow);
+  if (!product) return;
+  const quantity = Number(row.querySelector("[data-picker-qty]").value || 1);
+  const selectedUnit = row.querySelector("[data-picker-unit]").value;
+  const stockQty = stockQuantityFor(quantity, selectedUnit, product.units_per_carton);
+  state.invoiceLines.push({
+    product_id: product.id,
+    barcode: product.barcode || product.sku || "",
+    description: `${product.brand || ""} ${product.name} ${product.grammage || ""}`.trim(),
+    available_stock: Number(product.stock_quantity || 0),
+    quantity,
+    selected_unit: selectedUnit,
+    stock_quantity: stockQty,
+    units_per_carton: Number(product.units_per_carton || 1),
+    unit_price: Number(row.querySelector("[data-picker-price]").value || 0),
+    currency: row.querySelector("[data-picker-currency]").value,
+    discount_1: 0,
+    discount_2: 0,
+    discount_3: 0,
+    tax_rate: Number(product.vat_rate || 0),
+  });
+  renderInvoiceLines();
 };
 
 const setInvoiceMode = (type, order = null) => {
@@ -1085,7 +708,7 @@ const setInvoiceMode = (type, order = null) => {
   state.invoiceLines = [];
   form.elements.invoice_type.value = type;
   form.elements.invoice_date.value = today();
-  form.elements.invoice_discount_rate.value = "0";
+  form.elements.discount_rate.value = "0";
   form.elements.source_order_id.value = order?.id || "";
   const purchase = type === "purchase";
   const returnInvoice = type === "return";
@@ -1094,116 +717,117 @@ const setInvoiceMode = (type, order = null) => {
   document.querySelector("#customerField").hidden = false;
   form.elements.customer_id.required = true;
   form.elements.scenario.value = purchase || returnInvoice ? "domestic" : "export";
-  form.elements.currency.value = purchase || returnInvoice ? "TRY" : "USD";
-  document.querySelector("#saveInvoiceButton").textContent = purchase ? "Alış faturasını işle ve stoğa ekle" : returnInvoice ? "İade faturasını kaydet ve stoğa ekle" : "Satış faturasını kes ve stoktan düş";
-  document.querySelector("#invoiceFormStatus").textContent = "";
+  document.querySelector("#saveInvoiceButton").textContent = purchase ? "Alış faturasını işle ve stoğa ekle" : returnInvoice ? "İade faturasını kaydet ve stoğa ekle" : "Satış faturasını kaydet ve stoktan düş";
   document.querySelector("#invoiceProductSearch").value = "";
   if (order) {
-    const matchedCustomer = state.customers.find((item) =>
-      (order.customer_id && item.id === order.customer_id) ||
-      (order.customer_email && item.email?.toLowerCase() === order.customer_email.toLowerCase()));
-    if (matchedCustomer) form.elements.customer_id.value = matchedCustomer.id;
-    const items = Array.isArray(order.items) ? order.items : [];
-    state.invoiceLines = items.map((item) => {
-      const product = state.products.find((entry) =>
-        entry.catalog_id === item.productId || (item.barcode && entry.barcode === item.barcode));
-      return product ? {
-        product_id: product.id, name: product.name, stock: Number(product.stock_quantity),
-        barcode: product.barcode, sku: product.sku, units_per_carton: cartonSize(product),
-        quantity: Number(item.cartons || 1), selected_unit: "koli",
-        stock_quantity: stockQuantityFor(Number(item.cartons || 1), "koli", cartonSize(product)),
-        unit_price: productUnitPrice(product, "sale", "koli"),
-        tax_rate: Number(product.vat_rate || 20), discount_1: 0, discount_2: 0, discount_3: 0,
-      } : null;
-    }).filter(Boolean);
-    form.elements.notes.value = `Web siparişi: ${order.order_no}`;
+    const customer = state.customers.find((item) => item.email && item.email === order.email) || state.customers[0];
+    form.elements.customer_id.value = customer?.id || "";
+    (order.items || []).forEach((line) => {
+      const product = state.products.find((item) => item.id === line.product_id || item.sku === line.sku || item.name === line.product);
+      if (product) state.invoiceLines.push({ product_id: product.id, barcode: product.barcode || product.sku || "", description: `${product.brand || ""} ${product.name}`.trim(), available_stock: Number(product.stock_quantity || 0), quantity: Number(line.cartons || line.quantity || 1), selected_unit: "koli", stock_quantity: stockQuantityFor(line.cartons || line.quantity || 1, "koli", product.units_per_carton), units_per_carton: Number(product.units_per_carton || 1), unit_price: productUnitPrice(product, "sale", "koli"), currency: "USD", discount_1: 0, discount_2: 0, discount_3: 0, tax_rate: form.elements.scenario.value === "export" ? 0 : Number(product.vat_rate || 20) });
+    });
   }
-  renderInvoiceOptions();
-  if (order) {
-    const matchedCustomer = state.customers.find((item) =>
-      (order.customer_id && item.id === order.customer_id) ||
-      (order.customer_email && item.email?.toLowerCase() === order.customer_email.toLowerCase()));
-    if (matchedCustomer) form.elements.customer_id.value = matchedCustomer.id;
-  }
+  renderInvoiceProductPicker();
   renderInvoiceLines();
-  updateInvoiceTermDays();
-  const invoiceDialog = document.querySelector("#invoiceDialog");
-  if (!invoiceDialog.open) invoiceDialog.showModal();
+  document.querySelector("#invoiceDialog").showModal();
 };
 
-const addInvoiceLine = (button) => {
-  const product = state.products.find((item) => item.id === button.dataset.addInvoiceProduct);
-  if (!product) throw new Error("Ürün seçin.");
+const editInvoice = async (invoiceId) => {
+  const invoice = state.invoices.find((item) => item.id === invoiceId);
+  if (!invoice) throw new Error("Fatura kaydı bulunamadı.");
+  setInvoiceMode(invoice.invoice_type || "sale");
+  state.editingInvoiceId = invoiceId;
   const form = document.querySelector("#invoiceForm");
-  const row = button.closest("[data-picker-row]");
-  const quantity = Number(row.querySelector("[data-picker-quantity]").value);
-  const selectedUnit = row.querySelector("[data-picker-unit]").value;
-  form.elements.currency.value = row.querySelector("[data-picker-currency]").value;
-  const unitPrice = Number(row.querySelector("[data-picker-price]").value);
-  const unitsPerCarton = cartonSize(product);
-  if (!(quantity > 0)) throw new Error("Miktar sıfırdan büyük olmalı.");
-  const line = {
-    product_id: product.id,
-    name: product.name,
-    barcode: product.barcode,
-    sku: product.sku,
-    stock: Number(product.stock_quantity),
-    quantity,
-    selected_unit: selectedUnit,
-    units_per_carton: unitsPerCarton,
-    stock_quantity: stockQuantityFor(quantity, selectedUnit, unitsPerCarton),
-    unit_price: unitPrice,
-    tax_rate: Number(product.vat_rate || 20),
-    discount_1: 0,
-    discount_2: 0,
-    discount_3: 0,
-  };
-  state.invoiceLines.push(line);
+  form.elements.customer_id.value = invoice.customer_id || "";
+  form.elements.invoice_date.value = invoice.invoice_date || today();
+  form.elements.due_date.value = invoice.due_date || "";
+  form.elements.document_number.value = invoice.draft_data?.document_number || invoice.invoice_no || "";
+  form.elements.scenario.value = invoice.scenario || "export";
+  form.elements.currency.value = invoice.currency || "USD";
+  form.elements.notes.value = invoice.notes || "";
+  const items = await query(client.from("invoice_items").select("*").eq("invoice_id", invoiceId));
+  state.invoiceLines = items.map((item) => {
+    const product = state.products.find((p) => p.id === item.product_id) || {};
+    return { product_id: item.product_id, barcode: item.barcode || product.barcode || product.sku || "", description: item.description, available_stock: Number(product.stock_quantity || 0), quantity: Number(item.quantity || 0), selected_unit: item.unit || "adet", stock_quantity: Number(item.quantity || 0), units_per_carton: Number(product.units_per_carton || 1), unit_price: Number(item.unit_price || 0), currency: item.currency || invoice.currency || "USD", discount_1: Number(item.discount_1 || 0), discount_2: Number(item.discount_2 || 0), discount_3: Number(item.discount_3 || 0), tax_rate: Number(item.tax_rate || 0) };
+  });
   renderInvoiceLines();
 };
 
-const saveInvoice = async (event) => {
-  event.preventDefault();
-  if (!state.invoiceLines.length) throw new Error("Faturaya en az bir ürün ekleyin.");
-  const values = formObject(event.currentTarget);
-  const payload = {
-    p_invoice_type: values.invoice_type,
-    p_customer_id: values.customer_id,
-    p_supplier_id: null,
-    p_source_order_id: values.source_order_id || null,
-    p_invoice_date: values.invoice_date,
-    p_due_date: values.due_date || null,
-    p_currency: values.currency,
-    p_exchange_rate: 1,
-    p_scenario: values.scenario,
-    p_invoice_discount_rate: Number(values.invoice_discount_rate || 0),
-    p_notes: values.notes,
-    p_draft_data: {
-      document_number: values.document_number,
-      payment_note: state.settings.invoice_template?.payment_note || "",
-    },
-    p_items: state.invoiceLines.map((item) => ({
-      product_id: item.product_id, description: item.name, quantity: item.quantity,
-      barcode: item.barcode, product_code: item.sku, unit: item.selected_unit,
-      stock_quantity: item.stock_quantity, units_per_carton: item.units_per_carton,
-      unit_price: item.unit_price, tax_rate: item.tax_rate,
-      discount_1: item.discount_1, discount_2: item.discount_2, discount_3: item.discount_3,
-    })),
-  };
-  const editingInvoiceId = state.editingInvoiceId;
-  const result = editingInvoiceId
-    ? await query(client.rpc("replace_invoice_v2", { p_invoice_id: editingInvoiceId, ...payload }))
-    : await query(client.rpc("create_invoice_v2", payload));
-  const savedInvoiceId = Array.isArray(result) ? result[0] : result;
-  if (!savedInvoiceId) throw new Error("Fatura kimliği alınamadı; kayıt doğrulanamadı.");
-  const savedInvoice = await query(client.from("invoices").select("id,invoice_no,invoice_type").eq("id", savedInvoiceId).maybeSingle());
-  if (!savedInvoice?.id) throw new Error("Fatura veritabanında doğrulanamadı. Pencere kapatılmadı.");
+const deleteInvoice = async (invoiceId) => {
+  const invoice = state.invoices.find((item) => item.id === invoiceId);
+  if (!invoice || !confirm(`${invoice.invoice_no} silinsin mi?`)) return;
+  await query(client.from("invoices").delete().eq("id", invoiceId).select("id"));
   await loadData();
-  state.invoiceLines = [];
-  state.editingInvoiceId = null;
-  document.querySelector("#invoiceDialog").close();
-  setStatus(`${({ purchase: "Alış", sale: "Satış", return: "İade" })[values.invoice_type]} faturası ${editingInvoiceId ? "güncellendi" : "kaydedildi"}; fatura ve stok kaydı doğrulandı.`);
-  return result;
+  setStatus("Fatura silindi.");
+};
+
+const openInvoiceDetail = async (invoiceId) => {
+  state.activeInvoiceId = invoiceId;
+  const invoice = state.invoices.find((item) => item.id === invoiceId);
+  if (!invoice) throw new Error("Fatura bulunamadı.");
+  const customer = state.customers.find((item) => item.id === invoice.customer_id);
+  const items = await query(client.from("invoice_items").select("*,products(sku,barcode)").eq("invoice_id", invoiceId));
+  document.querySelector("#invoiceDetailHeading").textContent = invoice.draft_data?.document_number || invoice.invoice_no || "Fatura";
+  document.querySelector("#invoiceDetailStatus").textContent = invoice.status || "Kayıtlı";
+  document.querySelector("#invoiceDetailType").textContent = invoice.invoice_type || "-";
+  document.querySelector("#invoiceDetailDate").textContent = date(invoice.invoice_date);
+  document.querySelector("#invoiceDetailNumber").textContent = invoice.draft_data?.document_number || invoice.invoice_no || "-";
+  document.querySelector("#invoiceDetailDueDate").textContent = date(invoice.due_date);
+  document.querySelector("#invoiceDetailCustomer").textContent = customer?.company || "-";
+  document.querySelector("#invoiceDetailCurrency").textContent = invoice.currency || "USD";
+  document.querySelector("#invoiceDetailScenario").textContent = invoice.scenario || "-";
+  document.querySelector("#invoiceDetailRows").innerHTML = items.map((item, index) => `<tr><td>${index + 1}</td><td>${escapeHtml(item.barcode || item.products?.barcode || item.products?.sku || "-")}</td><td>${escapeHtml(item.description)}</td><td>${escapeHtml(item.unit || "adet")}</td><td>${number(item.quantity)}</td><td>${money(item.unit_price, item.currency || invoice.currency)}</td><td>${money(item.line_subtotal, item.currency || invoice.currency)}</td><td>${money(item.line_tax, item.currency || invoice.currency)}</td><td>%${number(item.discount_1)}</td><td>%${number(item.discount_2)}</td><td>%${number(item.discount_3)}</td><td>${escapeHtml(item.notes || "-")}</td></tr>`).join("");
+  document.querySelector("#invoiceDetailNote").textContent = invoice.notes || "-";
+  document.querySelector("#invoiceDetailSubtotal").textContent = money(invoice.subtotal, invoice.currency);
+  document.querySelector("#invoiceDetailDiscount").textContent = money(invoice.total_discount, invoice.currency);
+  document.querySelector("#invoiceDetailTax").textContent = money(invoice.tax_total, invoice.currency);
+  document.querySelector("#invoiceDetailGrandTotal").textContent = money(invoice.grand_total, invoice.currency);
+  document.querySelector("#invoiceDetailDialog").showModal();
+};
+
+const updateInvoiceTermDays = () => {
+  const form = document.querySelector("#invoiceForm");
+  const out = document.querySelector("#invoiceTermDays");
+  if (!form.elements.invoice_date.value || !form.elements.due_date.value) { out.textContent = "0 gün"; return; }
+  const diff = Math.round((new Date(form.elements.due_date.value) - new Date(form.elements.invoice_date.value)) / 86400000);
+  out.textContent = `${diff} gün`;
+};
+
+const refreshInvoiceProducts = async () => {
+  await loadData();
+  renderInvoiceProductPicker();
+  setStatus("Ürün listesi yenilendi.");
+};
+
+const recordPayment = async (event) => {
+  event.preventDefault();
+  const values = formObject(event.currentTarget);
+  await query(client.from("customer_ledger").insert({
+    customer_id: values.customer_id,
+    transaction_type: "payment",
+    transaction_date: values.payment_date || today(),
+    currency: values.currency || "USD",
+    debit: 0,
+    credit: Number(values.amount || 0),
+    description: values.description || "Tahsilat / ödeme",
+  }).select("id"));
+  document.querySelector("#paymentDialog").close();
+  await loadData();
+  setStatus("Tahsilat/ödeme kaydedildi.");
+};
+
+const adjustStock = async (event) => {
+  event.preventDefault();
+  const values = formObject(event.currentTarget);
+  const product = state.products.find((item) => item.id === values.product_id);
+  if (!product) throw new Error("Ürün bulunamadı.");
+  const direction = event.currentTarget.dataset.direction === "out" ? -1 : 1;
+  const qty = direction * Number(values.quantity || 0);
+  await query(client.from("products").update({ stock_quantity: Number(product.stock_quantity || 0) + qty, updated_at: new Date().toISOString() }).eq("id", product.id).select("id"));
+  await query(client.from("stock_movements").insert({ product_id: product.id, movement_type: qty > 0 ? "adjustment_in" : "adjustment_out", quantity: qty, reference_type: "manual", note: values.note }).select("id"));
+  document.querySelector("#stockDialog").close();
+  await loadData();
+  setStatus("Manuel stok düzeltmesi kaydedildi.");
 };
 
 const updateSelectedCustomers = async (status) => {
@@ -1218,190 +842,11 @@ const updateSelectedCustomers = async (status) => {
 const deleteSelectedCustomers = async () => {
   const ids = [...state.selectedCustomers];
   if (!ids.length) throw new Error("Önce en az bir cari seçin.");
-  if (!confirm(`${ids.length} cari kalıcı olarak silinsin mi? Hareketi olan cariler silinemez.`)) return;
-  try {
-    await query(client.from("customers").delete().in("id", ids).select("id"));
-  } catch (error) {
-    throw new Error(`Cari silinemedi. Faturası veya hesap hareketi olan cariyi pasife alın. ${error.message || ""}`.trim());
-  }
+  if (!confirm(`${ids.length} seçili cari kalıcı olarak silinsin mi?`)) return;
+  await query(client.from("customers").delete().in("id", ids).select("id"));
   state.selectedCustomers.clear();
   await loadData();
   setStatus(`${ids.length} cari silindi.`);
-};
-
-const formatCurrencyGroups = (values) => {
-  const groups = new Map();
-  values.forEach(({ amount, currency }) => groups.set(currency || "USD", (groups.get(currency || "USD") || 0) + Number(amount || 0)));
-  return [...groups.entries()].map(([currency, amount]) => money(amount, currency)).join(" · ") || money(0, "USD");
-};
-
-const openCustomerHistory = async (customerId) => {
-  const customer = state.customers.find((item) => item.id === customerId);
-  if (!customer) throw new Error("Cari kaydı bulunamadı.");
-  const dialog = document.querySelector("#customerHistoryDialog");
-  const status = document.querySelector("#customerHistoryStatus");
-  document.querySelector("#customerHistoryTitle").textContent = `${customer.code} · ${customer.company}`;
-  document.querySelector("#customerHistoryMeta").textContent = `${customer.contact_name || "Yetkili yok"} · ${customer.email || customer.phone || "İletişim bilgisi yok"}`;
-  document.querySelector("#customerHistoryRows").innerHTML = '<tr><td colspan="8" class="empty">Cari hareketleri yükleniyor...</td></tr>';
-  status.textContent = "";
-  status.classList.remove("error");
-  if (!dialog.open) dialog.showModal();
-  try {
-    const ledger = await query(client.from("customer_ledger").select("*").eq("customer_id", customerId).order("transaction_date", { ascending: true }).order("created_at", { ascending: true }));
-    const balances = new Map();
-    let totalDebit = 0;
-    let totalCredit = 0;
-    const rows = ledger.map((item) => {
-      const currency = item.currency || customer.currency || "USD";
-      const debit = Number(item.debit || 0);
-      const credit = Number(item.credit || 0);
-      totalDebit += debit;
-      totalCredit += credit;
-      balances.set(currency, (balances.get(currency) || 0) + debit - credit);
-      const invoice = item.reference_type === "invoice" ? state.invoices.find((entry) => entry.id === item.reference_id) : null;
-      const typeLabel = ({ invoice: "Fatura", payment: "Tahsilat / Ödeme", credit_note: "İade", opening: "Açılış" })[item.transaction_type] || item.transaction_type;
-      return `<tr><td>${date(item.transaction_date || item.created_at)}</td><td>${escapeHtml(typeLabel)}</td><td>${escapeHtml(invoice?.draft_data?.document_number || invoice?.invoice_no || item.reference_type || "-")}</td><td class="statement-out">${debit ? money(debit, currency) : "-"}</td><td class="statement-in">${credit ? money(credit, currency) : "-"}</td><td>${escapeHtml(currency)}</td><td><strong>${money(balances.get(currency), currency)}</strong></td><td>${escapeHtml(item.description || "-")}</td></tr>`;
-    });
-    document.querySelector("#customerHistoryDebit").textContent = formatCurrencyGroups(ledger.map((item) => ({ amount: item.debit, currency: item.currency })));
-    document.querySelector("#customerHistoryCredit").textContent = formatCurrencyGroups(ledger.map((item) => ({ amount: item.credit, currency: item.currency })));
-    document.querySelector("#customerHistoryBalance").textContent = [...balances.entries()].map(([currency, amount]) => money(amount, currency)).join(" · ") || money(0, customer.currency || "USD");
-    document.querySelector("#customerHistoryCount").textContent = number(ledger.length);
-    document.querySelector("#customerHistoryRows").innerHTML = rows.length ? rows.join("") : '<tr><td colspan="8" class="empty">Bu cariye ait hareket bulunmuyor.</td></tr>';
-  } catch (error) {
-    status.classList.add("error");
-    status.textContent = friendlyError(error);
-  }
-};
-
-const deleteCustomer = async (customerId) => {
-  const customer = state.customers.find((item) => item.id === customerId);
-  if (!customer || !confirm(`${customer.company} carisi kalıcı olarak silinsin mi?`)) return;
-  try {
-    const deleted = await query(client.from("customers").delete().eq("id", customerId).select("id"));
-    if (!deleted.length) throw new Error("Cari silinemedi.");
-  } catch (error) {
-    if (/foreign key|violates|reference|23503/i.test(String(error.message || error))) {
-      throw new Error("Bu carinin fatura veya hesap hareketi var. Sağ tık menüsündeki Hareketler komutundan ekstresini kontrol edin; hareketli cari silinemez, pasife alınabilir.");
-    }
-    throw error;
-  }
-  state.selectedCustomers.delete(customerId);
-  await loadData();
-  setStatus(`${customer.company} carisi kalıcı olarak silindi.`);
-};
-
-const deleteIncomingOrder = async (orderId) => {
-  const order = state.orders.find((item) => item.id === orderId);
-  if (!order || !confirm(`${order.order_no} numaralı sipariş silinsin mi?`)) return;
-  await query(client.from("site_orders").update({ status: "cancelled", updated_at: new Date().toISOString() }).eq("id", orderId).select("id"));
-  await loadData();
-  setStatus(`${order.order_no} numaralı sipariş silindi.`);
-};
-
-const openProductHistory = async (productId) => {
-  const product = state.products.find((item) => item.id === productId);
-  if (!product) throw new Error("Ürün kaydı bulunamadı.");
-  const dialog = document.querySelector("#productHistoryDialog");
-  const status = document.querySelector("#productHistoryStatus");
-  document.querySelector("#productHistoryTitle").textContent = `${product.brand || ""} ${product.name}`.trim();
-  document.querySelector("#productHistoryMeta").textContent = `${product.barcode || product.sku || "Barkod yok"} · ${product.grammage || "Gramaj yok"}`;
-  document.querySelector("#productHistoryStock").textContent = `${number(product.stock_quantity)} adet`;
-  document.querySelector("#productHistoryRows").innerHTML = '<tr><td colspan="10" class="empty">Hareketler yükleniyor...</td></tr>';
-  status.textContent = "";
-  status.classList.remove("error");
-  if (!dialog.open) dialog.showModal();
-
-  try {
-    const [items, movements] = await Promise.all([
-      query(client.from("invoice_items").select("*").eq("product_id", productId)),
-      query(client.from("stock_movements").select("*").eq("product_id", productId).order("created_at", { ascending: true })),
-    ]);
-    const itemByInvoice = new Map(items.map((item) => [item.invoice_id, item]));
-    const averages = productAveragePrices(productId);
-    const averagePurchase = averages.purchase || Number(product.purchase_price || 0);
-    const averageSale = averages.sale || Number(product.sale_price || 0);
-    const profitIndex = averagePurchase > 0 ? ((averageSale - averagePurchase) / averagePurchase) * 100 : 0;
-    document.querySelector("#productHistoryAveragePurchase").textContent = money(averagePurchase, "USD");
-    document.querySelector("#productHistoryAverageSale").textContent = money(averageSale, "USD");
-    const profitTarget = document.querySelector("#productHistoryProfitIndex");
-    profitTarget.textContent = `%${number(profitIndex)}`;
-    profitTarget.className = profitIndex > 0 ? "profit-positive" : profitIndex < 0 ? "profit-negative" : "profit-neutral";
-
-    const movementTotal = movements.reduce((sum, movement) => sum + Number(movement.quantity || 0), 0);
-    let balance = Number(product.stock_quantity || 0) - movementTotal;
-    const statementRows = [];
-    if (Math.abs(balance) > 0.0001) {
-      statementRows.push(`<tr><td>-</td><td>Önceki bakiye</td><td>-</td><td>-</td><td class="statement-in">${balance > 0 ? number(balance) : "-"}</td><td class="statement-out">${balance < 0 ? number(Math.abs(balance)) : "-"}</td><td>-</td><td>-</td><td><strong>${number(balance)}</strong></td><td>Hareket kaydı öncesi stok</td></tr>`);
-    }
-    movements.forEach((movement) => {
-      const quantity = Number(movement.quantity || 0);
-      balance += quantity;
-      const invoice = movement.reference_type === "invoice" ? state.invoices.find((item) => item.id === movement.reference_id) : null;
-      const invoiceItem = invoice ? itemByInvoice.get(invoice.id) : null;
-      const customer = invoice ? state.customers.find((item) => item.id === invoice.customer_id) : null;
-      const typeLabel = ({ purchase: "Alış", sale: "Satış", sale_cancel: "İade", adjustment_in: "Stok girişi", adjustment_out: "Stok çıkışı", opening: "Açılış" })[movement.movement_type] || movement.movement_type;
-      const reference = invoice ? invoice.draft_data?.document_number || invoice.invoice_no : movement.reference_type || "-";
-      const unitPrice = invoiceItem ? Number(invoiceItem.unit_price || 0) : Number(movement.unit_cost || 0);
-      const currency = invoice?.currency || "USD";
-      statementRows.push(`<tr><td>${date(movement.created_at)}</td><td>${escapeHtml(typeLabel)}</td><td>${escapeHtml(reference)}</td><td>${escapeHtml(customer ? `${customer.code} · ${customer.company}` : "-")}</td><td class="statement-in">${quantity > 0 ? number(quantity) : "-"}</td><td class="statement-out">${quantity < 0 ? number(Math.abs(quantity)) : "-"}</td><td>${money(unitPrice, currency)}</td><td>${escapeHtml(currency)}</td><td><strong>${number(balance)}</strong></td><td>${escapeHtml(movement.note || "-")}</td></tr>`);
-    });
-    document.querySelector("#productHistoryRows").innerHTML = statementRows.length ? statementRows.join("") : '<tr><td colspan="10" class="empty">Bu ürüne ait stok hareketi bulunmuyor.</td></tr>';
-  } catch (error) {
-    status.classList.add("error");
-    status.textContent = friendlyError(error);
-    document.querySelector("#productHistoryRows").innerHTML = '<tr><td colspan="10" class="empty">Ekstre yüklenemedi.</td></tr>';
-  }
-};
-
-const openProductStockMovement = (productId, direction) => {
-  const product = state.products.find((item) => item.id === productId);
-  if (!product) throw new Error("Ürün kaydı bulunamadı.");
-  const form = document.querySelector("#stockForm");
-  form.reset();
-  form.dataset.direction = direction;
-  renderInvoiceOptions();
-  form.elements.product_id.value = productId;
-  document.querySelector("#stockDialogTitle").textContent = direction === "in" ? "Manuel stok girişi" : "Manuel stok çıkışı";
-  document.querySelector("#stockQuantityLabel").childNodes[0].textContent = direction === "in" ? "Giriş miktarı (adet)" : "Çıkış miktarı (adet)";
-  document.querySelector("#saveStockMovementButton").textContent = direction === "in" ? "Stoğa ekle" : "Stoktan çıkar";
-  document.querySelector("#stockDialog").showModal();
-};
-
-const openProductPriceDialog = (productId) => {
-  const product = state.products.find((item) => item.id === productId);
-  if (!product) throw new Error("Ürün kaydı bulunamadı.");
-  const form = document.querySelector("#productPriceForm");
-  form.reset();
-  form.elements.product_id.value = product.id;
-  form.elements.purchase_price.value = Number(product.purchase_price || 0);
-  form.elements.sale_price.value = Number(product.sale_price || 0);
-  form.elements.purchase_currency.value = "USD";
-  form.elements.sale_currency.value = "USD";
-  document.querySelector("#productPriceTitle").textContent = `${product.brand || ""} ${product.name}`.trim();
-  const updated = state.exchangeUpdatedAt
-    ? new Date(state.exchangeUpdatedAt).toLocaleString("tr-TR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })
-    : "kur alınamadı";
-  document.querySelector("#priceRateInfo").textContent = `Kur bilgisi Sidya Global TCMB alanından alınır. Son kontrol: ${updated}. Kayıtta ana fiyat USD olarak saklanır.`;
-  refreshProductPricePreviews();
-  document.querySelector("#productPriceDialog").showModal();
-};
-
-const saveProductPrices = async (event) => {
-  event.preventDefault();
-  const values = formObject(event.currentTarget);
-  const product = state.products.find((item) => item.id === values.product_id);
-  if (!product) throw new Error("Ürün kaydı bulunamadı.");
-  const purchasePrice = convertToUsd(values.purchase_price, values.purchase_currency);
-  const salePrice = convertToUsd(values.sale_price, values.sale_currency);
-  await query(client.from("products").update({
-    purchase_price: purchasePrice,
-    sale_price: salePrice,
-    currency: "USD",
-    updated_at: new Date().toISOString(),
-  }).eq("id", product.id).select("id"));
-  document.querySelector("#productPriceDialog").close();
-  await loadData();
-  setStatus(`${product.name} fiyatları güncellendi.`);
 };
 
 const deleteProduct = async (productId) => {
@@ -1576,6 +1021,16 @@ const safely = (handler) => async (event) => {
     }
     setStatus(friendlyError(error), true);
   }
+};
+
+const boot = async () => {
+  if (!client) throw new Error("Supabase istemcisi kurulamadı. backend-config.js dosyasını kontrol edin.");
+  await loadAdminExchangeRates();
+  const { data } = await client.auth.getSession();
+  if (await verifyAdmin(data.session)) {
+    showApp(data.session);
+    await loadData();
+  } else showLogin();
 };
 
 document.querySelector("#loginForm").addEventListener("submit", safely(async (event) => {
@@ -1784,6 +1239,8 @@ document.addEventListener("click", safely(async (event) => {
   if (customerEdit) openEditForm("customerDialog", "customerForm", state.customers.find((item) => item.id === customerEdit.dataset.customerEdit));
  const productEdit = event.target.closest("[data-product-edit]");
   if (productEdit) openEditForm("productDialog", "productForm", state.products.find((item) => item.id === productEdit.dataset.productEdit));
+  const productPrice = event.target.closest("[data-product-price]");
+  if (productPrice) openProductPriceDialog(productPrice.dataset.productPrice);
   const productHistory = event.target.closest("[data-product-history]");
   if (productHistory) await openProductHistory(productHistory.dataset.productHistory);
   const productDelete = event.target.closest("[data-product-delete]");
