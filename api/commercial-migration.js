@@ -2,60 +2,70 @@ const fs = require("fs");
 const path = require("path");
 
 const PROJECT_REF = "jhjforyykkxklfarjtjl";
-const CONFIRM = "RUN_SIDYA_COMMERCIAL_MIGRATION";
+const RUN_TOKEN = "sidya-commercial-run-20260704";
 
 const readSql = () => fs.readFileSync(path.join(process.cwd(), "supabase", "commercial-module.sql"), "utf8");
 
-const envStatus = () => ({
-  hasSupabaseAccessToken: Boolean(process.env.SUPABASE_ACCESS_TOKEN?.trim()),
-  mode: "temporary-open-runner",
-});
+const runSql = async (query) => {
+  const accessToken = process.env.SUPABASE_ACCESS_TOKEN?.trim();
+  if (!accessToken) {
+    const error = new Error("SUPABASE_ACCESS_TOKEN is not configured in Vercel.");
+    error.statusCode = 501;
+    throw error;
+  }
+  const response = await fetch(`https://api.supabase.com/v1/projects/${PROJECT_REF}/database/query`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ query }),
+  });
+  const text = await response.text();
+  if (!response.ok) {
+    const error = new Error(text || "Supabase SQL API failed.");
+    error.statusCode = response.status;
+    throw error;
+  }
+  return text ? JSON.parse(text) : null;
+};
+
+const verifySql = `
+select
+  to_regclass('public.documents') is not null as documents,
+  to_regclass('public.document_items') is not null as document_items,
+  to_regclass('public.receivables') is not null as receivables,
+  to_regclass('public.payables') is not null as payables,
+  to_regclass('public.assets') is not null as assets,
+  to_regprocedure('public.post_document_v1(jsonb)') is not null as post_document_v1;
+`;
 
 module.exports = async (req, res) => {
-  if (req.method === "GET") {
-    res.status(200).json({ ok: true, ...envStatus() });
-    return;
-  }
-
-  if (req.method !== "POST") {
-    res.setHeader("Allow", "GET, POST");
-    res.status(405).json({ error: "Method not allowed" });
-    return;
-  }
-
   try {
-    const body = typeof req.body === "object" && req.body ? req.body : JSON.parse(req.body || "{}");
-    if (body.confirm !== CONFIRM) {
-      res.status(403).json({ error: "Migration confirmation missing." });
+    if (req.method !== "GET") {
+      res.setHeader("Allow", "GET");
+      res.status(405).json({ error: "Method not allowed" });
       return;
     }
 
-    const accessToken = process.env.SUPABASE_ACCESS_TOKEN?.trim();
-    if (!accessToken) {
-      res.status(501).json({
-        error: "SUPABASE_ACCESS_TOKEN is not configured in Vercel.",
-        required: ["SUPABASE_ACCESS_TOKEN"],
-      });
+    if (req.query?.run === RUN_TOKEN) {
+      const result = await runSql(readSql());
+      res.status(200).json({ ok: true, action: "run", result });
       return;
     }
 
-    const response = await fetch(`https://api.supabase.com/v1/projects/${PROJECT_REF}/database/query`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ query: readSql() }),
+    if (req.query?.verify === RUN_TOKEN) {
+      const result = await runSql(verifySql);
+      res.status(200).json({ ok: true, action: "verify", result });
+      return;
+    }
+
+    res.status(200).json({
+      ok: true,
+      hasSupabaseAccessToken: Boolean(process.env.SUPABASE_ACCESS_TOKEN?.trim()),
+      mode: "temporary-get-runner",
     });
-
-    const text = await response.text();
-    if (!response.ok) {
-      res.status(response.status).json({ error: text || "Supabase SQL API failed." });
-      return;
-    }
-
-    res.status(200).json({ ok: true, result: text ? JSON.parse(text) : null });
   } catch (error) {
-    res.status(500).json({ error: error.message || "Migration failed." });
+    res.status(error.statusCode || 500).json({ error: error.message || "Migration failed." });
   }
 };
