@@ -45,6 +45,37 @@ var importCatalog = async function () {
   setStatus(rows.length + " ürün güncel katalogdan aktarıldı.");
 };
 
+var publishSiteData = async function () {
+  var publishableProducts = state.products.filter(function (item) {
+    return item.active !== false && Number(item.sale_price || 0) > 0;
+  });
+  if (!publishableProducts.length) throw new Error("Satış fiyatı girilmiş aktif ürün bulunamadı.");
+  var rows = publishableProducts.map(function (item) {
+    return {
+      publish_key: item.catalog_id || "product-" + item.id,
+      catalog_id: item.catalog_id || null,
+      barcode: item.barcode || item.sku || null,
+      name: item.name,
+      brand: item.brand || null,
+      category: item.category || null,
+      grammage: item.grammage || null,
+      sale_price: Number(item.sale_price || 0),
+      currency: item.currency || "USD",
+      units_per_carton: Math.max(Number(item.units_per_carton || 1), 1),
+      cartons_per_pallet: null,
+      kg_per_carton: Number(item.kg_per_carton || 0) || null,
+      active: true,
+      updated_by: state.session && state.session.user ? state.session.user.id : null,
+      updated_at: new Date().toISOString(),
+    };
+  });
+  setStatus(rows.length + " ürünün satış bilgileri siteye gönderiliyor...");
+  for (var index = 0; index < rows.length; index += 250) {
+    await query(client.from("site_catalog_prices").upsert(rows.slice(index, index + 250), { onConflict: "publish_key" }));
+  }
+  setStatus(rows.length + " ürünün satış fiyatı ve koli bilgisi online siteye gönderildi. Mevcut ürünler silinmedi/pasife alınmadı.");
+};
+
 var saveProductPrices = async function (event) {
   event.preventDefault();
   var form = event.currentTarget;
