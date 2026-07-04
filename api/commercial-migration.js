@@ -112,7 +112,7 @@ module.exports = async (req, res) => {
       ok: true,
       hasSupabaseAccessToken: Boolean(readAccessToken()),
       tokenDiagnostics: tokenDiagnostics(),
-      mode: "temporary-catalog-runner-20260704b",
+      mode: "temporary-catalog-runner-20260704c",
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message || "Migration failed.", tokenDiagnostics: tokenDiagnostics() });
