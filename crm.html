@@ -8,10 +8,17 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="backend-config.js"></script>
   <style>
-    :root{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#102033;background:#f4f7fb}
-    *{box-sizing:border-box} body{margin:0} button,input,select,textarea{font:inherit} button{cursor:pointer}
-    .login,.app{max-width:1320px;margin:0 auto;padding:24px}.login-card,.panel{background:#fff;border:1px solid #d9e2ec;border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
-    .login-card{max-width:420px;margin:10vh auto;padding:28px;display:grid;gap:14px}.login-card h1{margin:0}.login-card label,.form-grid label{display:grid;gap:6px;font-weight:700;color:#243b53}.login-card input,.form-grid input,.form-grid select,.form-grid textarea,.toolbar input,.toolbar select{border:1px solid #bcccdc;border-radius:10px;padding:10px 12px;background:#fff}.login-card button,.primary{border:0;border-radius:10px;padding:11px 16px;background:#0f766e;color:#fff;font-weight:800}.muted{color:#627d98}.status{min-height:20px;color:#b42318}.topbar{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:18px}.topbar h1{margin:0}.topbar-actions{display:flex;gap:8px;align-items:center}.secondary{border:1px solid #bcccdc;border-radius:10px;background:#fff;padding:10px 14px}.danger{border:0;border-radius:10px;background:#b42318;color:#fff;padding:10px 14px}.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}.metric{background:#fff;border:1px solid #d9e2ec;border-radius:14px;padding:14px}.metric span{display:block;color:#627d98;font-size:12px}.metric strong{display:block;margin-top:4px;font-size:24px}.layout{display:grid;grid-template-columns:390px minmax(0,1fr);gap:16px;align-items:start}.panel{padding:16px}.panel h2{margin:0 0 12px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-grid .full{grid-column:1/-1}.toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}.toolbar-left{display:flex;gap:8px;flex-wrap:wrap}.table-wrap{overflow:auto;border:1px solid #d9e2ec;border-radius:12px}table{width:100%;border-collapse:collapse;background:#fff;min-width:980px}th,td{padding:10px;border-bottom:1px solid #edf2f7;text-align:left;vertical-align:top}th{background:#f8fafc;color:#486581;font-size:12px;text-transform:uppercase}td small{display:block;color:#829ab1}.badge{display:inline-flex;border-radius:999px;padding:4px 8px;background:#e6fffa;color:#047857;font-weight:800;font-size:12px}.badge.passive,.badge.lost{background:#fee2e2;color:#b42318}.badge.proposal{background:#e0f2fe;color:#075985}.badge.negotiation{background:#fef3c7;color:#92400e}.badge.won{background:#dcfce7;color:#166534}.row-actions{display:flex;gap:6px;flex-wrap:wrap}.row-actions button{border:1px solid #bcccdc;background:#fff;border-radius:8px;padding:7px 9px}.empty{text-align:center;color:#829ab1;padding:24px}.note{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:12px;padding:10px 12px;margin-bottom:12px}@media(max-width:1000px){.layout,.metric-grid{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.form-grid{grid-template-columns:1fr}}
+    :root{--bg:#f4f7fb;--card:#fff;--ink:#102033;--muted:#627d98;--line:#d9e2ec;--brand:#0f766e;--brand2:#176b87;--danger:#b42318;--warn:#92400e;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg)}
+    *{box-sizing:border-box} html,body{margin:0;min-height:100%;background:var(--bg)} button,input,select,textarea{font:inherit} button,a{cursor:pointer} input,select,textarea{width:100%;max-width:100%;min-width:0;border:1px solid #bcccdc;border-radius:10px;padding:10px 12px;background:#fff;color:var(--ink)} input:focus,select:focus,textarea:focus{outline:3px solid rgba(15,118,110,.15);border-color:var(--brand)} textarea{resize:vertical;min-height:92px}
+    .login,.app{width:min(1400px,100%);margin:0 auto;padding:24px}.login-card,.panel,.metric{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 28px rgba(15,23,42,.05)}
+    .login-card{max-width:430px;margin:10vh auto;padding:28px;display:grid;gap:14px}.login-card h1{margin:0}.muted{color:var(--muted)}.status{min-height:20px;color:var(--danger)}
+    .primary,.login-card button{border:0;border-radius:10px;padding:11px 16px;background:var(--brand);color:#fff;font-weight:800}.secondary{display:inline-flex;align-items:center;justify-content:center;border:1px solid #bcccdc;border-radius:10px;background:#fff;padding:10px 14px;color:#0f3760;text-decoration:none;font-weight:700}.danger{border:0;border-radius:10px;background:var(--danger);color:#fff;padding:10px 14px;font-weight:700}.topbar-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.topbar{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:22px}.topbar h1{margin:0 0 8px;font-size:28px}
+    .notice{display:none;margin-bottom:14px;border:1px solid #fed7aa;background:#fff7ed;color:#9a3412;border-radius:12px;padding:10px 12px}.notice.error{display:block;border-color:#fecaca;background:#fef2f2;color:var(--danger)}.notice.ok{display:block;border-color:#bbf7d0;background:#f0fdf4;color:#166534}
+    .metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:16px}.metric{padding:16px;min-width:0}.metric span{display:block;color:var(--muted);font-size:12px}.metric strong{display:block;margin:6px 0 3px;font-size:26px}.metric small{color:var(--muted)}
+    .layout{display:grid;grid-template-columns:minmax(360px,420px) minmax(0,1fr);gap:24px;align-items:start;width:100%}.layout>*{min-width:0}.panel{padding:18px;min-width:0;position:relative}.panel h2{margin:0 0 14px;font-size:24px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.form-grid label{display:grid;gap:6px;min-width:0;font-weight:750;color:#243b53}.form-grid .full{grid-column:1/-1}.form-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}.toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}.toolbar-left{display:flex;gap:8px;flex:1;min-width:0}.toolbar-left input{min-width:220px}.table-wrap{width:100%;max-width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#fff}.table-wrap table{width:100%;min-width:900px;border-collapse:collapse}th,td{padding:11px 10px;border-bottom:1px solid #edf2f7;text-align:left;vertical-align:top;font-size:13px}th{background:#f8fafc;color:#486581;font-size:12px;text-transform:uppercase}td small{display:block;color:#829ab1;margin-top:3px}.badge{display:inline-flex;border-radius:999px;padding:4px 8px;background:#e6fffa;color:#047857;font-weight:800;font-size:12px}.badge.lost{background:#fee2e2;color:var(--danger)}.badge.proposal{background:#e0f2fe;color:#075985}.badge.negotiation{background:#fef3c7;color:var(--warn)}.badge.won{background:#dcfce7;color:#166534}.row-actions{display:flex;gap:6px;flex-wrap:wrap}.row-actions button{border:1px solid #bcccdc;background:#fff;border-radius:8px;padding:7px 9px}.empty{text-align:center;color:#829ab1;padding:28px!important}.side-panel{z-index:1}.list-panel{z-index:0}.app *{pointer-events:auto}
+    @media(max-width:1150px){.metric-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.layout{grid-template-columns:1fr}.toolbar{align-items:stretch;flex-direction:column}.toolbar-left{flex-direction:column}.toolbar-left input{min-width:0}}
+    @media(max-width:760px){.app,.login{padding:16px}.topbar{flex-direction:column}.metric-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.table-wrap table{min-width:760px}}
+    @media(max-width:520px){.metric-grid{grid-template-columns:1fr}.topbar-actions>*{width:100%}.secondary,.danger{width:100%}}
   </style>
 </head>
 <body>
@@ -29,14 +36,13 @@
   <section class="app" id="appView" hidden>
     <header class="topbar">
       <div><h1>Global CRM</h1><p class="muted">Firma kartı, aşama takibi ve satış hunisi</p></div>
-      <div class="topbar-actions"><span id="userEmail" class="muted"></span><a class="secondary" href="admin.html">Admin panele dön</a><button class="secondary" id="reloadButton">Yenile</button><button class="danger" id="signOutButton">Çıkış</button></div>
+      <div class="topbar-actions"><span id="userEmail" class="muted"></span><a class="secondary" href="admin.html">Admin panele dön</a><button class="secondary" id="reloadButton" type="button">Yenile</button><button class="danger" id="signOutButton" type="button">Çıkış</button></div>
     </header>
-
-    <div class="note" id="statusBox">CRM hazırlanıyor...</div>
+    <div class="notice" id="statusBox"></div>
     <div class="metric-grid" id="pipelineCards"></div>
 
     <div class="layout">
-      <form class="panel" id="firmForm">
+      <form class="panel side-panel" id="firmForm">
         <h2>Firma kartı</h2>
         <input type="hidden" name="id" />
         <div class="form-grid">
@@ -58,10 +64,10 @@
           <label>Para birimi<select name="currency"><option>USD</option><option>EUR</option><option>TRY</option><option>SAR</option><option>AED</option></select></label>
           <label class="full">Not<textarea name="notes" rows="5"></textarea></label>
         </div>
-        <div class="topbar-actions" style="margin-top:12px"><button class="primary" type="submit">Kaydet</button><button class="secondary" type="button" id="resetButton">Temizle</button></div>
+        <div class="form-actions"><button class="primary" type="submit">Kaydet</button><button class="secondary" type="button" id="resetButton">Temizle</button></div>
       </form>
 
-      <div class="panel">
+      <div class="panel list-panel">
         <div class="toolbar">
           <div class="toolbar-left"><input id="searchInput" type="search" placeholder="Firma, ülke, sektör, e-posta ara" /><select id="stageFilter"><option value="">Tüm aşamalar</option><option value="lead">Lead</option><option value="first_contact">İlk temas</option><option value="proposal">Teklif</option><option value="negotiation">Pazarlık</option><option value="won">Kazanıldı</option><option value="lost">Kaybedildi</option></select></div>
           <button class="secondary" id="csvButton" type="button">CSV indir</button>
@@ -80,7 +86,7 @@
     const esc = (v) => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
     const fmt = (v, c="USD") => new Intl.NumberFormat("tr-TR", { style:"currency", currency:c || "USD", maximumFractionDigits:2 }).format(Number(v || 0));
     const label = { lead:"Lead", first_contact:"İlk temas", proposal:"Teklif", negotiation:"Pazarlık", won:"Kazanıldı", lost:"Kaybedildi" };
-    const setStatus = (msg, err=false) => { const el=document.querySelector("#statusBox"); el.textContent=msg||""; el.style.display=msg?"block":"none"; el.style.borderColor=err?"#fecaca":"#fed7aa"; el.style.color=err?"#b42318":"#9a3412"; };
+    const setStatus = (msg, type="") => { const el=document.querySelector("#statusBox"); el.textContent=msg||""; el.className=`notice ${type || ""}`.trim(); };
 
     async function verifyAdmin(session){
       if(!db || !session) return false;
@@ -122,7 +128,7 @@
         <td>${esc(f.sector || "-")}<small>${esc(f.product_interest || "")}</small></td>
         <td><span class="badge ${esc(f.stage)}">${label[f.stage] || esc(f.stage || "-")}</span><small>${esc(f.priority || "normal")}</small></td>
         <td>${fmt(f.estimated_value, f.currency || "USD")}</td>
-        <td><div class="row-actions"><button data-edit="${f.id}">Düzenle</button><button data-stage="${f.id}" data-next="proposal">Teklif</button><button data-stage="${f.id}" data-next="won">Kazanıldı</button><button data-delete="${f.id}">Sil</button></div></td>
+        <td><div class="row-actions"><button type="button" data-edit="${f.id}">Düzenle</button><button type="button" data-stage="${f.id}" data-next="proposal">Teklif</button><button type="button" data-stage="${f.id}" data-next="won">Kazanıldı</button><button type="button" data-delete="${f.id}">Sil</button></div></td>
       </tr>`).join("") : `<tr><td class="empty" colspan="7">CRM kaydı yok.</td></tr>`;
     }
     function fillForm(f){ const form=document.querySelector("#firmForm"); form.reset(); Object.entries(f||{}).forEach(([k,v])=>{ if(form.elements[k]) form.elements[k].value = v ?? ""; }); window.scrollTo({top:0,behavior:"smooth"}); }
@@ -133,7 +139,7 @@
       payload.estimated_value = Number(payload.estimated_value || 0);
       if(payload.id){ const id=payload.id; delete payload.id; const { error }=await db.from("crm_firms").update(payload).eq("id", id); if(error) throw error; }
       else { delete payload.id; const { error }=await db.from("crm_firms").insert(payload); if(error) throw error; }
-      form.reset(); await loadFirms(); setStatus("Firma kaydedildi.");
+      form.reset(); await loadFirms(); setStatus("Firma kaydedildi.", "ok");
     }
     async function updateStage(id, stage){ const { error }=await db.from("crm_firms").update({ stage, last_contacted_at:new Date().toISOString() }).eq("id", id); if(error) throw error; await loadFirms(); }
     async function softDelete(id){ if(!confirm("Firma silinsin mi?")) return; const { error }=await db.from("crm_firms").update({ status:"deleted" }).eq("id", id); if(error) throw error; await loadFirms(); }
@@ -143,15 +149,15 @@
       const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"})); a.download="sidya-global-crm.csv"; a.click(); URL.revokeObjectURL(a.href);
     }
     document.querySelector("#loginForm").addEventListener("submit", async e => { e.preventDefault(); const { data, error } = await db.auth.signInWithPassword({ email:email.value, password:password.value }); if(error){ loginStatus.textContent=error.message; return; } if(await verifyAdmin(data.session)){ showApp(data.session); await loadFirms(); } else { loginStatus.textContent="Bu kullanıcı admin yetkili değil."; await db.auth.signOut(); } });
-    document.querySelector("#firmForm").addEventListener("submit", e => saveFirm(e).catch(err => setStatus(err.message || err, true)));
+    document.querySelector("#firmForm").addEventListener("submit", e => saveFirm(e).catch(err => setStatus(err.message || err, "error")));
     document.querySelector("#resetButton").addEventListener("click", () => document.querySelector("#firmForm").reset());
-    document.querySelector("#reloadButton").addEventListener("click", () => loadFirms().catch(err => setStatus(err.message || err, true)));
+    document.querySelector("#reloadButton").addEventListener("click", () => loadFirms().catch(err => setStatus(err.message || err, "error")));
     document.querySelector("#signOutButton").addEventListener("click", async () => { await db.auth.signOut(); showLogin(); });
     document.querySelector("#searchInput").addEventListener("input", render);
     document.querySelector("#stageFilter").addEventListener("change", render);
     document.querySelector("#csvButton").addEventListener("click", downloadCsv);
-    document.addEventListener("click", e => { const edit=e.target.closest("[data-edit]"); if(edit) fillForm(state.firms.find(f=>f.id===edit.dataset.edit)); const st=e.target.closest("[data-stage]"); if(st) updateStage(st.dataset.stage, st.dataset.next).catch(err=>setStatus(err.message||err,true)); const del=e.target.closest("[data-delete]"); if(del) softDelete(del.dataset.delete).catch(err=>setStatus(err.message||err,true)); });
-    boot().catch(err => { console.error(err); setStatus(err.message || err, true); });
+    document.addEventListener("click", e => { const edit=e.target.closest("[data-edit]"); if(edit) fillForm(state.firms.find(f=>f.id===edit.dataset.edit)); const st=e.target.closest("[data-stage]"); if(st) updateStage(st.dataset.stage, st.dataset.next).catch(err=>setStatus(err.message||err,"error")); const del=e.target.closest("[data-delete]"); if(del) softDelete(del.dataset.delete).catch(err=>setStatus(err.message||err,"error")); });
+    boot().catch(err => { console.error(err); setStatus(err.message || err, "error"); });
   </script>
 </body>
 </html>
