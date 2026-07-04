@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Sidya Global CRM</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="backend-config.js"></script>
+  <style>
+    :root{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#102033;background:#f4f7fb}
+    *{box-sizing:border-box} body{margin:0} button,input,select,textarea{font:inherit} button{cursor:pointer}
+    .login,.app{max-width:1320px;margin:0 auto;padding:24px}.login-card,.panel{background:#fff;border:1px solid #d9e2ec;border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
+    .login-card{max-width:420px;margin:10vh auto;padding:28px;display:grid;gap:14px}.login-card h1{margin:0}.login-card label,.form-grid label{display:grid;gap:6px;font-weight:700;color:#243b53}.login-card input,.form-grid input,.form-grid select,.form-grid textarea,.toolbar input,.toolbar select{border:1px solid #bcccdc;border-radius:10px;padding:10px 12px;background:#fff}.login-card button,.primary{border:0;border-radius:10px;padding:11px 16px;background:#0f766e;color:#fff;font-weight:800}.muted{color:#627d98}.status{min-height:20px;color:#b42318}.topbar{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:18px}.topbar h1{margin:0}.topbar-actions{display:flex;gap:8px;align-items:center}.secondary{border:1px solid #bcccdc;border-radius:10px;background:#fff;padding:10px 14px}.danger{border:0;border-radius:10px;background:#b42318;color:#fff;padding:10px 14px}.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}.metric{background:#fff;border:1px solid #d9e2ec;border-radius:14px;padding:14px}.metric span{display:block;color:#627d98;font-size:12px}.metric strong{display:block;margin-top:4px;font-size:24px}.layout{display:grid;grid-template-columns:390px minmax(0,1fr);gap:16px;align-items:start}.panel{padding:16px}.panel h2{margin:0 0 12px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-grid .full{grid-column:1/-1}.toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}.toolbar-left{display:flex;gap:8px;flex-wrap:wrap}.table-wrap{overflow:auto;border:1px solid #d9e2ec;border-radius:12px}table{width:100%;border-collapse:collapse;background:#fff;min-width:980px}th,td{padding:10px;border-bottom:1px solid #edf2f7;text-align:left;vertical-align:top}th{background:#f8fafc;color:#486581;font-size:12px;text-transform:uppercase}td small{display:block;color:#829ab1}.badge{display:inline-flex;border-radius:999px;padding:4px 8px;background:#e6fffa;color:#047857;font-weight:800;font-size:12px}.badge.passive,.badge.lost{background:#fee2e2;color:#b42318}.badge.proposal{background:#e0f2fe;color:#075985}.badge.negotiation{background:#fef3c7;color:#92400e}.badge.won{background:#dcfce7;color:#166534}.row-actions{display:flex;gap:6px;flex-wrap:wrap}.row-actions button{border:1px solid #bcccdc;background:#fff;border-radius:8px;padding:7px 9px}.empty{text-align:center;color:#829ab1;padding:24px}.note{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:12px;padding:10px 12px;margin-bottom:12px}@media(max-width:1000px){.layout,.metric-grid{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.form-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <section class="login" id="loginView">
+    <form class="login-card" id="loginForm">
+      <h1>Sidya Global CRM</h1>
+      <p class="muted">Yönetici hesabıyla giriş yap.</p>
+      <label>E-posta<input id="email" type="email" autocomplete="email" required /></label>
+      <label>Şifre<input id="password" type="password" autocomplete="current-password" required /></label>
+      <button type="submit">Giriş yap</button>
+      <p class="status" id="loginStatus"></p>
+    </form>
+  </section>
+
+  <section class="app" id="appView" hidden>
+    <header class="topbar">
+      <div><h1>Global CRM</h1><p class="muted">Firma kartı, aşama takibi ve satış hunisi</p></div>
+      <div class="topbar-actions"><span id="userEmail" class="muted"></span><a class="secondary" href="admin.html">Admin panele dön</a><button class="secondary" id="reloadButton">Yenile</button><button class="danger" id="signOutButton">Çıkış</button></div>
+    </header>
+
+    <div class="note" id="statusBox">CRM hazırlanıyor...</div>
+    <div class="metric-grid" id="pipelineCards"></div>
+
+    <div class="layout">
+      <form class="panel" id="firmForm">
+        <h2>Firma kartı</h2>
+        <input type="hidden" name="id" />
+        <div class="form-grid">
+          <label class="full">Firma adı<input name="company_name" required placeholder="Örn. Lulu Hypermarket" /></label>
+          <label>Yetkili<input name="contact_name" /></label>
+          <label>E-posta<input name="email" type="email" /></label>
+          <label>Telefon<input name="phone" /></label>
+          <label>WhatsApp<input name="whatsapp" /></label>
+          <label>Web sitesi<input name="website" /></label>
+          <label>Ülke<input name="country" /></label>
+          <label>Şehir<input name="city" /></label>
+          <label>Sektör<input name="sector" placeholder="Temizlik, gıda..." /></label>
+          <label>Ürün ilgisi<input name="product_interest" /></label>
+          <label>Aşama<select name="stage"><option value="lead">Lead</option><option value="first_contact">İlk temas</option><option value="proposal">Teklif</option><option value="negotiation">Pazarlık</option><option value="won">Kazanıldı</option><option value="lost">Kaybedildi</option></select></label>
+          <label>Durum<select name="status"><option value="active">Aktif</option><option value="passive">Pasif</option><option value="deleted">Silindi</option></select></label>
+          <label>Öncelik<select name="priority"><option value="normal">Normal</option><option value="high">Yüksek</option><option value="low">Düşük</option></select></label>
+          <label>Kaynak<input name="source" placeholder="TurkishExporter, mail, fuar..." /></label>
+          <label>Tahmini değer<input name="estimated_value" type="number" step="0.01" value="0" /></label>
+          <label>Para birimi<select name="currency"><option>USD</option><option>EUR</option><option>TRY</option><option>SAR</option><option>AED</option></select></label>
+          <label class="full">Not<textarea name="notes" rows="5"></textarea></label>
+        </div>
+        <div class="topbar-actions" style="margin-top:12px"><button class="primary" type="submit">Kaydet</button><button class="secondary" type="button" id="resetButton">Temizle</button></div>
+      </form>
+
+      <div class="panel">
+        <div class="toolbar">
+          <div class="toolbar-left"><input id="searchInput" type="search" placeholder="Firma, ülke, sektör, e-posta ara" /><select id="stageFilter"><option value="">Tüm aşamalar</option><option value="lead">Lead</option><option value="first_contact">İlk temas</option><option value="proposal">Teklif</option><option value="negotiation">Pazarlık</option><option value="won">Kazanıldı</option><option value="lost">Kaybedildi</option></select></div>
+          <button class="secondary" id="csvButton" type="button">CSV indir</button>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Firma</th><th>İletişim</th><th>Konum</th><th>Sektör / ürün</th><th>Aşama</th><th>Değer</th><th>İşlem</th></tr></thead><tbody id="firmRows"></tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const cfg = window.SIDYA_BACKEND || {};
+    const db = window.supabase && cfg.supabaseUrl && (cfg.supabasePublishableKey || cfg.supabaseAnonKey)
+      ? window.supabase.createClient(cfg.supabaseUrl, cfg.supabasePublishableKey || cfg.supabaseAnonKey)
+      : null;
+    const state = { firms: [], session: null };
+    const esc = (v) => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+    const fmt = (v, c="USD") => new Intl.NumberFormat("tr-TR", { style:"currency", currency:c || "USD", maximumFractionDigits:2 }).format(Number(v || 0));
+    const label = { lead:"Lead", first_contact:"İlk temas", proposal:"Teklif", negotiation:"Pazarlık", won:"Kazanıldı", lost:"Kaybedildi" };
+    const setStatus = (msg, err=false) => { const el=document.querySelector("#statusBox"); el.textContent=msg||""; el.style.display=msg?"block":"none"; el.style.borderColor=err?"#fecaca":"#fed7aa"; el.style.color=err?"#b42318":"#9a3412"; };
+
+    async function verifyAdmin(session){
+      if(!db || !session) return false;
+      const { data, error } = await db.from("admin_users").select("user_id").eq("user_id", session.user.id).maybeSingle();
+      return !error && !!data;
+    }
+    function showLogin(){ document.querySelector("#loginView").hidden=false; document.querySelector("#appView").hidden=true; }
+    function showApp(session){ state.session=session; document.querySelector("#loginView").hidden=true; document.querySelector("#appView").hidden=false; document.querySelector("#userEmail").textContent=session.user.email||""; }
+    async function boot(){
+      if(!db){ document.querySelector("#loginStatus").textContent="Supabase bağlantısı bulunamadı."; return; }
+      const { data } = await db.auth.getSession();
+      if(await verifyAdmin(data.session)){ showApp(data.session); await loadFirms(); } else { showLogin(); }
+    }
+    async function loadFirms(){
+      setStatus("CRM kayıtları yükleniyor...");
+      const { data, error } = await db.from("crm_firms").select("*").neq("status","deleted").order("created_at", { ascending:false }).limit(1000);
+      if(error) throw error;
+      state.firms = data || [];
+      render();
+      setStatus("");
+    }
+    function filtered(){
+      const q = document.querySelector("#searchInput").value.trim().toLocaleLowerCase("tr");
+      const st = document.querySelector("#stageFilter").value;
+      return state.firms.filter(f => (!st || f.stage === st) && [f.company_name,f.contact_name,f.email,f.phone,f.country,f.city,f.sector,f.product_interest,f.source].some(v => String(v||"").toLocaleLowerCase("tr").includes(q)));
+    }
+    function render(){
+      const rows = filtered();
+      const stages = ["lead","first_contact","proposal","negotiation","won","lost"];
+      document.querySelector("#pipelineCards").innerHTML = stages.map(s => {
+        const items = state.firms.filter(f => f.stage === s && f.status !== "deleted");
+        const total = items.reduce((a,b)=>a+Number(b.estimated_value||0),0);
+        return `<article class="metric"><span>${label[s]}</span><strong>${items.length}</strong><small>${fmt(total,"USD")}</small></article>`;
+      }).join("");
+      document.querySelector("#firmRows").innerHTML = rows.length ? rows.map(f => `<tr>
+        <td><strong>${esc(f.company_name)}</strong><small>${esc(f.source || "-")}</small></td>
+        <td>${esc(f.contact_name || "-")}<small>${esc(f.email || "-")} · ${esc(f.phone || f.whatsapp || "-")}</small></td>
+        <td>${esc(f.country || "-")}<small>${esc(f.city || "")}</small></td>
+        <td>${esc(f.sector || "-")}<small>${esc(f.product_interest || "")}</small></td>
+        <td><span class="badge ${esc(f.stage)}">${label[f.stage] || esc(f.stage || "-")}</span><small>${esc(f.priority || "normal")}</small></td>
+        <td>${fmt(f.estimated_value, f.currency || "USD")}</td>
+        <td><div class="row-actions"><button data-edit="${f.id}">Düzenle</button><button data-stage="${f.id}" data-next="proposal">Teklif</button><button data-stage="${f.id}" data-next="won">Kazanıldı</button><button data-delete="${f.id}">Sil</button></div></td>
+      </tr>`).join("") : `<tr><td class="empty" colspan="7">CRM kaydı yok.</td></tr>`;
+    }
+    function fillForm(f){ const form=document.querySelector("#firmForm"); form.reset(); Object.entries(f||{}).forEach(([k,v])=>{ if(form.elements[k]) form.elements[k].value = v ?? ""; }); window.scrollTo({top:0,behavior:"smooth"}); }
+    async function saveFirm(e){
+      e.preventDefault();
+      const form=e.currentTarget;
+      const payload=Object.fromEntries(new FormData(form).entries());
+      payload.estimated_value = Number(payload.estimated_value || 0);
+      if(payload.id){ const id=payload.id; delete payload.id; const { error }=await db.from("crm_firms").update(payload).eq("id", id); if(error) throw error; }
+      else { delete payload.id; const { error }=await db.from("crm_firms").insert(payload); if(error) throw error; }
+      form.reset(); await loadFirms(); setStatus("Firma kaydedildi.");
+    }
+    async function updateStage(id, stage){ const { error }=await db.from("crm_firms").update({ stage, last_contacted_at:new Date().toISOString() }).eq("id", id); if(error) throw error; await loadFirms(); }
+    async function softDelete(id){ if(!confirm("Firma silinsin mi?")) return; const { error }=await db.from("crm_firms").update({ status:"deleted" }).eq("id", id); if(error) throw error; await loadFirms(); }
+    function downloadCsv(){
+      const rows = [["Firma","Yetkili","E-posta","Telefon","Ülke","Şehir","Sektör","Ürün","Aşama","Kaynak","Not"], ...filtered().map(f => [f.company_name,f.contact_name,f.email,f.phone,f.country,f.city,f.sector,f.product_interest,label[f.stage]||f.stage,f.source,f.notes])];
+      const csv = "\uFEFF" + rows.map(r => r.map(v => `"${String(v ?? "").replaceAll('"','""')}"`).join(";")).join("\r\n");
+      const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"})); a.download="sidya-global-crm.csv"; a.click(); URL.revokeObjectURL(a.href);
+    }
+    document.querySelector("#loginForm").addEventListener("submit", async e => { e.preventDefault(); const { data, error } = await db.auth.signInWithPassword({ email:email.value, password:password.value }); if(error){ loginStatus.textContent=error.message; return; } if(await verifyAdmin(data.session)){ showApp(data.session); await loadFirms(); } else { loginStatus.textContent="Bu kullanıcı admin yetkili değil."; await db.auth.signOut(); } });
+    document.querySelector("#firmForm").addEventListener("submit", e => saveFirm(e).catch(err => setStatus(err.message || err, true)));
+    document.querySelector("#resetButton").addEventListener("click", () => document.querySelector("#firmForm").reset());
+    document.querySelector("#reloadButton").addEventListener("click", () => loadFirms().catch(err => setStatus(err.message || err, true)));
+    document.querySelector("#signOutButton").addEventListener("click", async () => { await db.auth.signOut(); showLogin(); });
+    document.querySelector("#searchInput").addEventListener("input", render);
+    document.querySelector("#stageFilter").addEventListener("change", render);
+    document.querySelector("#csvButton").addEventListener("click", downloadCsv);
+    document.addEventListener("click", e => { const edit=e.target.closest("[data-edit]"); if(edit) fillForm(state.firms.find(f=>f.id===edit.dataset.edit)); const st=e.target.closest("[data-stage]"); if(st) updateStage(st.dataset.stage, st.dataset.next).catch(err=>setStatus(err.message||err,true)); const del=e.target.closest("[data-delete]"); if(del) softDelete(del.dataset.delete).catch(err=>setStatus(err.message||err,true)); });
+    boot().catch(err => { console.error(err); setStatus(err.message || err, true); });
+  </script>
+</body>
+</html>
