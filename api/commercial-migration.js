@@ -5,9 +5,10 @@ const PROJECT_REF = "jhjforyykkxklfarjtjl";
 const RUN_TOKEN = "sidya-commercial-run-20260704";
 
 const readSql = () => fs.readFileSync(path.join(process.cwd(), "supabase", "commercial-module.sql"), "utf8");
+const readAccessToken = () => String(process.env.SUPABASE_ACCESS_TOKEN || "").trim().replace(/^Bearer\s+/i, "").trim();
 
 const runSql = async (query) => {
-  const accessToken = process.env.SUPABASE_ACCESS_TOKEN?.trim();
+  const accessToken = readAccessToken();
   if (!accessToken) {
     const error = new Error("SUPABASE_ACCESS_TOKEN is not configured in Vercel.");
     error.statusCode = 501;
@@ -62,7 +63,7 @@ module.exports = async (req, res) => {
 
     res.status(200).json({
       ok: true,
-      hasSupabaseAccessToken: Boolean(process.env.SUPABASE_ACCESS_TOKEN?.trim()),
+      hasSupabaseAccessToken: Boolean(readAccessToken()),
       mode: "temporary-get-runner",
     });
   } catch (error) {
