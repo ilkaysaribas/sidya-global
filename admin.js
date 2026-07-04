@@ -1041,7 +1041,7 @@ const importCatalog = async () => {
   setStatus(`${rows.length} ürün güncel katalogdan aktarıldı.`);
 };
 
-const publishSiteData = async () => {
+const ß = async () => {
   const publishableProducts = state.products.filter((item) => item.active !== false && Number(item.sale_price || 0) > 0);
   if (!publishableProducts.length) throw new Error("Satış fiyatı girilmiş aktif ürün bulunamadı.");
   const rows = publishableProducts.map((item) => ({
@@ -1063,21 +1063,18 @@ const publishSiteData = async () => {
   }));
   setStatus(`${rows.length} ürünün satış bilgileri siteye gönderiliyor...`);
   try {
-    for (let index = 0; index < rows.length; index += 250) {
-      await query(client.from("site_catalog_prices").upsert(rows.slice(index, index + 250), { onConflict: "publish_key" }));
-    }
-    const publishedRows = await query(client.from("site_catalog_prices").select("publish_key"));
-    const currentKeys = new Set(rows.map((item) => item.publish_key));
-    const staleKeys = publishedRows.map((item) => item.publish_key).filter((key) => !currentKeys.has(key));
-    for (let index = 0; index < staleKeys.length; index += 250) {
-      await query(client.from("site_catalog_prices").update({ active: false, updated_at: new Date().toISOString() }).in("publish_key", staleKeys.slice(index, index + 250)).select("publish_key"));
-    }
-  } catch (error) {
-    if (!isSchemaError(error)) throw error;
-    document.querySelector("#schemaWarning").hidden = false;
-    document.querySelector("#schemaWarningText").innerHTML = "Bilgi gönderme özelliğini etkinleştirmek için Supabase SQL Editor'da <code>supabase/bilgi-al-gonder.sql</code> dosyasını bir kez çalıştırın.";
-    throw new Error("Bilgi gönderme tablosu henüz kurulmamış. bilgi-al-gonder.sql dosyasını SQL Editor'da çalıştırın.");
+  for (let index = 0; index < rows.length; index += 250) {
+    await query(client.from("site_catalog_prices").upsert(rows.slice(index, index + 250), { onConflict: "publish_key" }));
   }
+
+  // Güvenlik: Bilgi Gönder sadece gelen ürünlerin fiyat/koli bilgisini günceller.
+  // Gönderimde olmayan mevcut ürünler silinmez, pasife alınmaz.
+} catch (error) {
+  if (!isSchemaError(error)) throw error;
+  document.querySelector("#schemaWarning").hidden = false;
+  document.querySelector("#schemaWarningText").innerHTML = "Bilgi gönderme özelliğini etkinleştirmek için Supabase SQL Editor'da <code>supabase/bilgi-al-gonder.sql</code> dosyasını bir kez çalıştırın.";
+  throw new Error("Bilgi gönderme tablosu henüz kurulmamış. bilgi-al-gonder.sql dosyasını SQL Editor’da çalıştırın.");
+}
   setStatus(`${rows.length} ürünün satış fiyatı ve koli bilgisi online siteye gönderildi.`);
 };
 
