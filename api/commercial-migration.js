@@ -4,7 +4,11 @@ const path = require("path");
 const PROJECT_REF = "jhjforyykkxklfarjtjl";
 const RUN_TOKEN = "sidya-commercial-run-20260704";
 
-const readSql = () => fs.readFileSync(path.join(process.cwd(), "supabase", "commercial-module.sql"), "utf8");
+const readFile = (relativePath) => fs.readFileSync(path.join(process.cwd(), relativePath), "utf8");
+const readSql = () => [
+  readFile("supabase/commercial-module.sql"),
+  readFile("supabase/bilgi-al-gonder.sql"),
+].join("\n\n");
 const rawAccessToken = () => String(process.env.SUPABASE_ACCESS_TOKEN || "");
 const readAccessToken = () => rawAccessToken().trim().replace(/^Bearer\s+/i, "").replace(/^['\"]|['\"]$/g, "").trim();
 const tokenDiagnostics = () => {
@@ -51,6 +55,7 @@ select
   to_regclass('public.receivables') is not null as receivables,
   to_regclass('public.payables') is not null as payables,
   to_regclass('public.assets') is not null as assets,
+  to_regclass('public.site_catalog_prices') is not null as site_catalog_prices,
   to_regprocedure('public.post_document_v1(jsonb)') is not null as post_document_v1;
 `;
 
