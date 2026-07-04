@@ -1,5 +1,6 @@
 const PROJECT_REF = "jhjforyykkxklfarjtjl";
 const RUN_TOKEN = "sidya-commercial-run-20260704";
+const DEFAULT_SUPABASE_URL = "https://jhjforyykkxklfarjtjl.supabase.co";
 
 const readEnv = (...names) => {
   for (const name of names) {
@@ -166,6 +167,51 @@ const runSqlWithManagementApi = async (query) => {
 
 const runSql = async (query) => runSqlWithManagementApi(query);
 
+const runRestWriteTest = async () => {
+  const supabaseUrl = readEnv("NEXT_PUBLIC_SUPABASE_URL", "SUPABASE_URL") || DEFAULT_SUPABASE_URL;
+  const serviceRoleKey = readEnv("SUPABASE_SERVICE_ROLE_KEY", "SIDYA_SUPABASE_SERVICE_ROLE_KEY");
+  if (!serviceRoleKey) {
+    const error = new Error("SUPABASE_SERVICE_ROLE_KEY is not configured.");
+    error.statusCode = 501;
+    throw error;
+  }
+
+  const response = await fetch(`${supabaseUrl.replace(/\/$/, "")}/rest/v1/information_messages`, {
+    method: "POST",
+    headers: {
+      apikey: serviceRoleKey,
+      Authorization: `Bearer ${serviceRoleKey}`,
+      "Content-Type": "application/json",
+      Prefer: "return=representation",
+    },
+    body: JSON.stringify({
+      name: "Sidya Migration Test",
+      email: "migration-test@sidyaglobal.com",
+      phone: "",
+      company: "Sidya Global",
+      message: "Automatic live write test from commercial migration endpoint.",
+      source: "commercial-migration-rest-test",
+    }),
+  });
+
+  const text = await response.text();
+  let data = null;
+  try {
+    data = text ? JSON.parse(text) : null;
+  } catch (_error) {
+    data = text;
+  }
+
+  if (!response.ok) {
+    const error = new Error("Service role REST write test failed.");
+    error.statusCode = response.status;
+    error.safeDetails = data;
+    throw error;
+  }
+
+  return data;
+};
+
 const respondMethodNotAllowed = (res) => {
   res.setHeader("Allow", "GET");
   res.status(405).json({ ok: false, error: "Method not allowed" });
@@ -204,6 +250,12 @@ module.exports = async (req, res) => {
       return;
     }
 
+    if (req.query?.restTest === RUN_TOKEN) {
+      const result = await runRestWriteTest();
+      res.status(200).json({ ok: true, action: "restTest", result });
+      return;
+    }
+
     res.status(200).json({
       ok: true,
       mode: "commercial-migration-runner-20260704",
@@ -212,6 +264,7 @@ module.exports = async (req, res) => {
         runInformation: `/api/commercial-migration?bilgi=${RUN_TOKEN}`,
         runCatalog: `/api/commercial-migration?catalog=${RUN_TOKEN}`,
         verify: `/api/commercial-migration?verify=${RUN_TOKEN}`,
+        restTest: `/api/commercial-migration?restTest=${RUN_TOKEN}`,
       },
       env: envDiagnostics(),
     });
