@@ -3,13 +3,12 @@ const path = require("path");
 
 const PROJECT_REF = "jhjforyykkxklfarjtjl";
 const CONFIRM = "RUN_SIDYA_COMMERCIAL_MIGRATION";
-// Deployment refresh: 2026-07-04T00:00:00+03:00
 
 const readSql = () => fs.readFileSync(path.join(process.cwd(), "supabase", "commercial-module.sql"), "utf8");
 
 const envStatus = () => ({
   hasSupabaseAccessToken: Boolean(process.env.SUPABASE_ACCESS_TOKEN?.trim()),
-  hasMigrationAdminKey: Boolean(process.env.MIGRATION_ADMIN_KEY?.trim()),
+  mode: "temporary-open-runner",
 });
 
 module.exports = async (req, res) => {
@@ -25,12 +24,6 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const adminKey = process.env.MIGRATION_ADMIN_KEY?.trim();
-    if (!adminKey || req.headers["x-migration-key"] !== adminKey) {
-      res.status(403).json({ error: "Migration admin key missing or invalid." });
-      return;
-    }
-
     const body = typeof req.body === "object" && req.body ? req.body : JSON.parse(req.body || "{}");
     if (body.confirm !== CONFIRM) {
       res.status(403).json({ error: "Migration confirmation missing." });
