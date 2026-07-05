@@ -40,10 +40,11 @@ module.exports = async (req, res) => {
         if (!appReady()) return;
         appendScript("sidyaAdminPanelFixesScript", "/admin-panel-fixes.js?v=20260705-2");
         appendScript("sidyaAdminRateFixScript", "/admin-rate-fix.js?v=20260705-1");
+        appendScript("sidyaAdminProfitFixScript", "/admin-profit-fix.js?v=20260705-1");
       }
       var timer = setInterval(function(){
         loadFixes();
-        if (appReady() && document.getElementById("sidyaAdminPanelFixesScript") && document.getElementById("sidyaAdminRateFixScript")) clearInterval(timer);
+        if (appReady() && document.getElementById("sidyaAdminPanelFixesScript") && document.getElementById("sidyaAdminRateFixScript") && document.getElementById("sidyaAdminProfitFixScript")) clearInterval(timer);
       }, 500);
       document.addEventListener("DOMContentLoaded", loadFixes);
       window.addEventListener("load", loadFixes);
