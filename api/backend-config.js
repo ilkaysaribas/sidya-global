@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
     configured: Boolean(supabaseUrl && supabasePublishableKey),
   };
 
-  const adminLiveFixLoader = `\n(function(){\n  window.addEventListener("load", function(){\n    if (document.querySelector("script[data-admin-live-fixes]")) return;\n    var script = document.createElement("script");\n    script.src = "/admin-live-fixes.js?v=20260705-1";\n    script.defer = true;\n    script.dataset.adminLiveFixes = "true";\n    document.head.appendChild(script);\n  });\n})();`;
+  const adminLiveFixLoader = `\n(function(){\n  if (document.querySelector("script[data-admin-live-fixes]")) return;\n  var script = document.createElement("script");\n  script.src = "/admin-live-fixes.js?v=20260705-1";\n  script.defer = true;\n  script.dataset.adminLiveFixes = "true";\n  document.head.appendChild(script);\n})();`;
 
   res.status(200).send(`window.SIDYA_BACKEND = ${JSON.stringify(config)};${adminLiveFixLoader}`);
 };
