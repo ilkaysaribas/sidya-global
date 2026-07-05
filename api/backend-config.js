@@ -28,17 +28,22 @@ module.exports = async (req, res) => {
         var shell = document.getElementById("appShell");
         return !!(shell && !shell.hidden);
       }
-      function loadFixes(){
-        if (!appReady() || document.getElementById("sidyaAdminPanelFixesScript")) return;
+      function appendScript(id, src){
+        if (document.getElementById(id)) return;
         var script = document.createElement("script");
-        script.id = "sidyaAdminPanelFixesScript";
-        script.src = "/admin-panel-fixes.js?v=20260705-2";
+        script.id = id;
+        script.src = src;
         script.defer = true;
         document.head.appendChild(script);
       }
+      function loadFixes(){
+        if (!appReady()) return;
+        appendScript("sidyaAdminPanelFixesScript", "/admin-panel-fixes.js?v=20260705-2");
+        appendScript("sidyaAdminRateFixScript", "/admin-rate-fix.js?v=20260705-1");
+      }
       var timer = setInterval(function(){
         loadFixes();
-        if (appReady() && document.getElementById("sidyaAdminPanelFixesScript")) clearInterval(timer);
+        if (appReady() && document.getElementById("sidyaAdminPanelFixesScript") && document.getElementById("sidyaAdminRateFixScript")) clearInterval(timer);
       }, 500);
       document.addEventListener("DOMContentLoaded", loadFixes);
       window.addEventListener("load", loadFixes);
