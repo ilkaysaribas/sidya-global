@@ -19,5 +19,29 @@ module.exports = async (req, res) => {
     configured: Boolean(supabaseUrl && supabasePublishableKey),
   };
 
-  res.status(200).send(`window.SIDYA_BACKEND = ${JSON.stringify(config)};`);
+  res.status(200).send(`
+    window.SIDYA_BACKEND = ${JSON.stringify(config)};
+    (function(){
+      if (window.__sidyaAdminFixLoader) return;
+      window.__sidyaAdminFixLoader = true;
+      function appReady(){
+        var shell = document.getElementById("appShell");
+        return !!(shell && !shell.hidden);
+      }
+      function loadFixes(){
+        if (!appReady() || document.getElementById("sidyaAdminPanelFixesScript")) return;
+        var script = document.createElement("script");
+        script.id = "sidyaAdminPanelFixesScript";
+        script.src = "/admin-panel-fixes.js?v=20260705-2";
+        script.defer = true;
+        document.head.appendChild(script);
+      }
+      var timer = setInterval(function(){
+        loadFixes();
+        if (appReady() && document.getElementById("sidyaAdminPanelFixesScript")) clearInterval(timer);
+      }, 500);
+      document.addEventListener("DOMContentLoaded", loadFixes);
+      window.addEventListener("load", loadFixes);
+    })();
+  `);
 };
