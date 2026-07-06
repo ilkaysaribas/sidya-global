@@ -39,13 +39,13 @@ module.exports = async (req, res) => {
       function loadFixes(){
         if (!appReady()) return;
         appendScript("sidyaAdminPanelFixesScript", "/admin-panel-fixes.js?v=20260705-2");
-        appendScript("sidyaAdminRateFixScript", "/admin-rate-fix.js?v=20260705-1");
+        appendScript("sidyaAdminRateFixScript", "/admin-rate-fix.js?v=20260706-1");
         appendScript("sidyaAdminProfitFixScript", "/admin-profit-fix.js?v=20260705-1");
-        appendScript("sidyaAdminProfitTableV3Script", "/admin-profit-table-v3.js?v=20260706-1");
+        appendScript("sidyaAdminProfitTableV4Script", "/admin-profit-table-v4.js?v=20260706-1");
       }
       var timer = setInterval(function(){
         loadFixes();
-        if (appReady() && document.getElementById("sidyaAdminProfitTableV3Script")) clearInterval(timer);
+        if (appReady() && document.getElementById("sidyaAdminProfitTableV4Script")) clearInterval(timer);
       }, 500);
       document.addEventListener("DOMContentLoaded", loadFixes);
       window.addEventListener("load", loadFixes);
