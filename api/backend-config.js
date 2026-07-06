@@ -36,17 +36,24 @@ module.exports = async (req, res) => {
         script.defer = true;
         document.head.appendChild(script);
       }
+      function loadSiteEnhancements(){
+        if (document.getElementById("quoteForm")) {
+          appendScript("sidyaSiteMailCrmScript", "/site-mail-crm.js?v=20260706-1");
+        }
+      }
       function loadFixes(){
+        loadSiteEnhancements();
         if (!appReady()) return;
         appendScript("sidyaAdminPanelFixesScript", "/admin-panel-fixes.js?v=20260705-2");
         appendScript("sidyaAdminRateFixScript", "/admin-rate-fix.js?v=20260706-2");
         appendScript("sidyaAdminProfitFixScript", "/admin-profit-fix.js?v=20260705-1");
         appendScript("sidyaAdminProfitTableV4Script", "/admin-profit-table-v4.js?v=20260706-1");
         appendScript("sidyaInfoActionsScript", "/admin-info-actions.js?v=20260706-1");
+        appendScript("sidyaMailCrmAdminScript", "/admin-mail-crm.js?v=20260706-1");
       }
       var timer = setInterval(function(){
         loadFixes();
-        if (appReady() && document.getElementById("sidyaAdminProfitTableV4Script") && document.getElementById("sidyaInfoActionsScript")) clearInterval(timer);
+        if (appReady() && document.getElementById("sidyaAdminProfitTableV4Script") && document.getElementById("sidyaInfoActionsScript") && document.getElementById("sidyaMailCrmAdminScript")) clearInterval(timer);
       }, 500);
       document.addEventListener("DOMContentLoaded", loadFixes);
       window.addEventListener("load", loadFixes);
