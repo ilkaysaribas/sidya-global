@@ -1,12 +1,10 @@
 const TCMB_URL = "https://www.tcmb.gov.tr/kurlar/today.xml";
-const NBG_URL = "https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/en/json";
 
 const wantedCurrencies = {
-  USD: "Dolar",
+  USD: "Amerikan Doları",
   EUR: "Euro",
-  AZN: "Manat",
-  RUB: "Ruble",
-  GEL: "Lari",
+  GEL: "Gürcistan Larisi",
+  RUB: "Rus Rublesi",
 };
 
 const decodeXml = (value = "") =>
@@ -22,58 +20,29 @@ const readTag = (block, tag) => {
   return match ? decodeXml(match[1].trim()) : "";
 };
 
+const toNumber = (value = "") => {
+  const number = Number.parseFloat(String(value).trim().replace(",", "."));
+  return Number.isFinite(number) && number > 0 ? number : null;
+};
+
 const readCurrency = (xml, code) => {
   const blockMatch = xml.match(new RegExp(`<Currency[^>]*(?:Kod|CurrencyCode)="${code}"[^>]*>([\\s\\S]*?)<\\/Currency>`));
   if (!blockMatch) return null;
+
   const block = blockMatch[1];
-  const value = Number.parseFloat(readTag(block, "ForexSelling").replace(",", "."));
-  if (!Number.isFinite(value)) return null;
+  const value =
+    toNumber(readTag(block, "ForexSelling")) ??
+    toNumber(readTag(block, "BanknoteSelling")) ??
+    toNumber(readTag(block, "ForexBuying"));
+
+  if (!value) return null;
+
   return {
     code,
     label: wantedCurrencies[code],
-    name: readTag(block, "Isim") || readTag(block, "CurrencyName"),
+    name: readTag(block, "Isim") || readTag(block, "CurrencyName") || wantedCurrencies[code],
     value,
-  };
-};
-
-const buildCrossRate = (currencyRate, usdRate, eurRate) => {
-  if (!currencyRate || !usdRate || !eurRate) return null;
-  return {
-    currency: currencyRate.code,
-    label: currencyRate.label,
-    usd: usdRate.value / currencyRate.value,
-    eur: eurRate.value / currencyRate.value,
-    source: "TCMB",
-  };
-};
-
-const readLariFromNbg = async (usdTry) => {
-  const response = await fetch(NBG_URL, {
-    headers: { "User-Agent": "SidyaGlobal/1.0" },
-  });
-
-  if (!response.ok) return null;
-
-  const data = await response.json();
-  const currencies = Array.isArray(data?.[0]?.currencies) ? data[0].currencies : [];
-  const usdGel = currencies.find((currency) => currency.code === "USD");
-  const eurGel = currencies.find((currency) => currency.code === "EUR");
-  const usdGelValue = Number(usdGel?.rate);
-  const eurGelValue = Number(eurGel?.rate);
-
-  if (!Number.isFinite(usdGelValue) || !Number.isFinite(usdTry)) return null;
-
-  return {
-    code: "GEL",
-    label: "Lari",
-    name: "GEORGIAN LARI",
-    value: usdTry / usdGelValue,
-    crossRate: {
-      source: "National Bank of Georgia",
-      usd: usdGelValue,
-      eur: Number.isFinite(eurGelValue) ? eurGelValue : null,
-      date: data?.[0]?.date || usdGel?.validFromDate || "",
-    },
+    sourceField: readTag(block, "ForexSelling") ? "ForexSelling" : readTag(block, "BanknoteSelling") ? "BanknoteSelling" : "ForexBuying",
   };
 };
 
@@ -89,42 +58,29 @@ module.exports = async function handler(request, response) {
 
     const xml = await tcmbResponse.text();
     const dateMatch = xml.match(/Tarih="([^"]+)"/) || xml.match(/Date="([^"]+)"/);
-    const rates = Object.keys(wantedCurrencies).map((code) => readCurrency(xml, code)).filter(Boolean);
-    const usd = rates.find((rate) => rate.code === "USD");
-    const eur = rates.find((rate) => rate.code === "EUR");
-    const azn = rates.find((rate) => rate.code === "AZN");
-    const rub = rates.find((rate) => rate.code === "RUB");
-    const crossRates = {
-      az: buildCrossRate(azn, usd, eur),
-      ru: buildCrossRate(rub, usd, eur),
-    };
+    const parsed = Object.keys(wantedCurrencies)
+      .map((code) => readCurrency(xml, code))
+      .filter(Boolean);
 
-    if (usd) {
-      rates.splice(2, 0, { ...usd, code: "USDTRY", label: "Dolar/TL" });
-      const lari = await readLariFromNbg(usd.value);
-      if (lari) {
-        rates.push(lari);
-        crossRates.ka = {
-          currency: "GEL",
-          label: "Lari",
-          usd: lari.crossRate.usd,
-          eur: lari.crossRate.eur,
-          source: lari.crossRate.source,
-        };
-      }
-    }
+    const rates = parsed.reduce((acc, item) => {
+      acc[item.code] = item.value;
+      return acc;
+    }, {});
 
     response.setHeader("Cache-Control", "no-store, max-age=0");
     response.status(200).json({
-      source: "Türkiye Cumhuriyet Merkez Bankası + National Bank of Georgia",
+      source: "TCMB",
+      sourceUrl: TCMB_URL,
       date: dateMatch ? dateMatch[1] : "",
       updatedAt: new Date().toISOString(),
       rates,
-      crossRates,
+      rateList: parsed,
+      missing: Object.keys(wantedCurrencies).filter((code) => !rates[code]),
     });
   } catch (error) {
     response.setHeader("Cache-Control", "no-store");
     response.status(502).json({
+      source: "TCMB",
       error: "TCMB exchange rates could not be loaded",
       detail: error instanceof Error ? error.message : String(error),
     });
