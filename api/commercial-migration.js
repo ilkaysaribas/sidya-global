@@ -1,6 +1,6 @@
 const PROJECT_REF = "jhjforyykkxklfarjtjl";
-const RUN_TOKEN = "sidya-commercial-run-20260704";
 const DEFAULT_SUPABASE_URL = "https://jhjforyykkxklfarjtjl.supabase.co";
+const rateBuckets = new Map();
 
 const readEnv = (...names) => {
   for (const name of names) {
@@ -18,11 +18,25 @@ const stripBearer = (value) =>
     .replace(/^[\"]|[\"]$/g, "")
     .trim();
 
+const clientIp = (req) => String(req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || req.socket?.remoteAddress || "unknown").split(",")[0].trim();
+
+const rateLimit = (req, key, limit = 10, windowMs = 60_000) => {
+  const id = `${key}:${clientIp(req)}`;
+  const now = Date.now();
+  const bucket = rateBuckets.get(id) || { count: 0, reset: now + windowMs };
+  if (bucket.reset <= now) { bucket.count = 0; bucket.reset = now + windowMs; }
+  bucket.count += 1;
+  rateBuckets.set(id, bucket);
+  if (bucket.count > limit) {
+    const error = new Error("Too many migration requests. Try again later.");
+    error.statusCode = 429;
+    throw error;
+  }
+};
+
 const safePresence = (name, value, extra = {}) => ({
   name,
   configured: Boolean(value),
-  length: value ? value.length : 0,
-  prefix: value ? value.slice(0, 4) : "",
   ...extra,
 });
 
@@ -31,19 +45,16 @@ const envDiagnostics = () => {
   const supabaseUrl = readEnv("NEXT_PUBLIC_SUPABASE_URL", "SUPABASE_URL");
   const serviceRoleKey = readEnv("SUPABASE_SERVICE_ROLE_KEY", "SIDYA_SUPABASE_SERVICE_ROLE_KEY");
   const databaseUrl = readEnv("DATABASE_URL", "POSTGRES_URL", "POSTGRES_PRISMA_URL", "POSTGRES_URL_NON_POOLING");
+  const migrationKey = readEnv("MIGRATION_ADMIN_KEY");
 
   return {
+    migrationAdminKey: safePresence("MIGRATION_ADMIN_KEY", migrationKey),
     supabaseAccessToken: safePresence("SUPABASE_ACCESS_TOKEN", accessToken, {
       looksLikeSupabasePat: accessToken.startsWith("sbp_"),
-      looksLikeOtherToken: Boolean(accessToken) && !accessToken.startsWith("sbp_"),
     }),
     supabaseUrl: safePresence("NEXT_PUBLIC_SUPABASE_URL or SUPABASE_URL", supabaseUrl, {
       host: supabaseUrl ? (() => {
-        try {
-          return new URL(supabaseUrl).host;
-        } catch (_error) {
-          return "invalid-url";
-        }
+        try { return new URL(supabaseUrl).host; } catch (_error) { return "invalid-url"; }
       })() : "",
     }),
     serviceRoleKey: safePresence("SUPABASE_SERVICE_ROLE_KEY or SIDYA_SUPABASE_SERVICE_ROLE_KEY", serviceRoleKey, {
@@ -130,6 +141,16 @@ select
   to_regprocedure('public.post_document_v1(jsonb)') is not null as post_document_v1;
 `;
 
+const requireMigrationToken = (req) => {
+  const configured = readEnv("MIGRATION_ADMIN_KEY");
+  const supplied = String(req.query?.token || req.query?.run || req.headers["x-migration-token"] || "").trim();
+  if (!configured || !supplied || supplied !== configured) {
+    const error = new Error("MIGRATION_ADMIN_KEY is required for migration actions.");
+    error.statusCode = 401;
+    throw error;
+  }
+};
+
 const runSqlWithManagementApi = async (query) => {
   const accessToken = stripBearer(readEnv("SUPABASE_ACCESS_TOKEN"));
   if (!accessToken || !accessToken.startsWith("sbp_")) {
@@ -149,11 +170,7 @@ const runSqlWithManagementApi = async (query) => {
 
   const text = await response.text();
   let data = null;
-  try {
-    data = text ? JSON.parse(text) : null;
-  } catch (_error) {
-    data = text;
-  }
+  try { data = text ? JSON.parse(text) : null; } catch (_error) { data = text; }
 
   if (!response.ok) {
     const error = new Error("Supabase Management SQL API failed.");
@@ -196,11 +213,7 @@ const runRestWriteTest = async () => {
 
   const text = await response.text();
   let data = null;
-  try {
-    data = text ? JSON.parse(text) : null;
-  } catch (_error) {
-    data = text;
-  }
+  try { data = text ? JSON.parse(text) : null; } catch (_error) { data = text; }
 
   if (!response.ok) {
     const error = new Error("Service role REST write test failed.");
@@ -224,19 +237,35 @@ module.exports = async (req, res) => {
   }
 
   try {
-    if (req.query?.bilgi === RUN_TOKEN || req.query?.information === RUN_TOKEN) {
+    rateLimit(req, "commercial-migration");
+    const action = ["information", "bilgi", "catalog", "all", "verify", "restTest"].find((key) => Object.prototype.hasOwnProperty.call(req.query || {}, key));
+
+    if (!action) {
+      res.status(200).json({
+        ok: true,
+        mode: "commercial-migration-runner-secured",
+        actions: ["information", "catalog", "all", "verify", "restTest"],
+        token: "Send MIGRATION_ADMIN_KEY as ?token=... or x-migration-token header.",
+        env: envDiagnostics(),
+      });
+      return;
+    }
+
+    requireMigrationToken(req);
+
+    if (action === "bilgi" || action === "information") {
       const result = await runSql(informationSql);
       res.status(200).json({ ok: true, action: "information", result });
       return;
     }
 
-    if (req.query?.catalog === RUN_TOKEN) {
+    if (action === "catalog") {
       const result = await runSql(catalogSql);
       res.status(200).json({ ok: true, action: "catalog", result });
       return;
     }
 
-    if (req.query?.all === RUN_TOKEN) {
+    if (action === "all") {
       const information = await runSql(informationSql);
       const catalog = await runSql(catalogSql);
       const verify = await runSql(verifySql);
@@ -244,30 +273,17 @@ module.exports = async (req, res) => {
       return;
     }
 
-    if (req.query?.verify === RUN_TOKEN) {
+    if (action === "verify") {
       const result = await runSql(verifySql);
       res.status(200).json({ ok: true, action: "verify", result });
       return;
     }
 
-    if (req.query?.restTest === RUN_TOKEN) {
+    if (action === "restTest") {
       const result = await runRestWriteTest();
       res.status(200).json({ ok: true, action: "restTest", result });
       return;
     }
-
-    res.status(200).json({
-      ok: true,
-      mode: "commercial-migration-runner-20260704",
-      actions: {
-        runAll: `/api/commercial-migration?all=${RUN_TOKEN}`,
-        runInformation: `/api/commercial-migration?bilgi=${RUN_TOKEN}`,
-        runCatalog: `/api/commercial-migration?catalog=${RUN_TOKEN}`,
-        verify: `/api/commercial-migration?verify=${RUN_TOKEN}`,
-        restTest: `/api/commercial-migration?restTest=${RUN_TOKEN}`,
-      },
-      env: envDiagnostics(),
-    });
   } catch (error) {
     res.status(error.statusCode || 500).json({
       ok: false,
