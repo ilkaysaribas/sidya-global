@@ -64,7 +64,7 @@ export default function NewOrderScreen() {
       <TextInput value={customerSearch} onChangeText={setCustomerSearch} style={styles.input} placeholder="Firma adı, telefon veya e-posta" />
       <View style={styles.customerList}>
         {customers.slice(0, 5).map((customer) => (
-          <AppButton key={customer.id} title={customer.company_name || customer.name || "Cari"} variant={customerId === customer.id ? "primary" : "secondary"} onPress={() => setCustomerId(customer.id)} />
+          <AppButton key={customer.id} title={customer.company || customer.company_name || customer.name || "Cari"} variant={customerId === customer.id ? "primary" : "secondary"} onPress={() => setCustomerId(customer.id)} />
         ))}
       </View>
       <Text style={styles.label}>Ürün ekle</Text>
