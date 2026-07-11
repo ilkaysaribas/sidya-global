@@ -6,10 +6,26 @@ const wantedCurrencies = {
   EUR: "Euro",
   GEL: "Gürcistan Larisi",
   RUB: "Rus Rublesi",
+  AZN: "Azerbaycan Manatı",
+  SAR: "Suudi Arabistan Riyali",
+  AED: "Birleşik Arap Emirlikleri Dirhemi",
+  QAR: "Katar Riyali",
+  KWD: "Kuveyt Dinarı",
+  BHD: "Bahreyn Dinarı",
+  OMR: "Umman Riyali",
 };
 
 const REQUIRED_TCMB_CODES = ["USD", "EUR", "RUB"];
 const RATE_FIELD_PRIORITY = ["ForexSelling", "BanknoteSelling", "ForexBuying"];
+const USD_CROSS_RATES = {
+  AZN: 1.7,
+  SAR: 3.75,
+  AED: 3.6725,
+  QAR: 3.64,
+  KWD: 0.307,
+  BHD: 0.376,
+  OMR: 0.3845,
+};
 const CACHE_SETTING_ID = "main";
 const CACHE_KEY = "exchange_rates";
 
@@ -106,6 +122,21 @@ const readGelFromNbg = async (usdTry) => {
   }
 };
 
+const buildUsdCrossRateFallback = (code, usdTry) => {
+  const usdCrossRate = USD_CROSS_RATES[code];
+  if (!usdCrossRate || !usdTry) return null;
+  return {
+    code,
+    label: wantedCurrencies[code],
+    name: wantedCurrencies[code],
+    value: usdTry / usdCrossRate,
+    unit: 1,
+    rawValue: usdCrossRate,
+    sourceField: `USD/${code} cross-rate`,
+    source: "USD cross-rate fallback",
+  };
+};
+
 const validateRates = (rates) => {
   for (const code of REQUIRED_TCMB_CODES) {
     const value = rates[code];
@@ -117,6 +148,13 @@ const validateRates = (rates) => {
   if (rates.EUR < rates.USD * 0.5) throw new Error("EUR/TRY rate is inconsistent with USD/TRY");
   if (rates.RUB < 0.01 || rates.RUB > 10) throw new Error("RUB/TRY rate is outside safe range");
   if (rates.GEL !== undefined && (rates.GEL < 0.5 || rates.GEL > 100)) throw new Error("GEL/TRY rate is outside safe range");
+  if (rates.AZN !== undefined && (rates.AZN < 1 || rates.AZN > 150)) throw new Error("AZN/TRY rate is outside safe range");
+  for (const code of ["SAR", "AED", "QAR"]) {
+    if (rates[code] !== undefined && (rates[code] < 1 || rates[code] > 100)) throw new Error(`${code}/TRY rate is outside safe range`);
+  }
+  for (const code of ["KWD", "BHD", "OMR"]) {
+    if (rates[code] !== undefined && (rates[code] < 10 || rates[code] > 500)) throw new Error(`${code}/TRY rate is outside safe range`);
+  }
 };
 
 const supabaseConfig = () => ({
@@ -210,12 +248,22 @@ const buildPayloadFromXml = async (xml) => {
     }
   }
 
+  for (const code of Object.keys(USD_CROSS_RATES)) {
+    if (!rates[code]) {
+      const fallback = buildUsdCrossRateFallback(code, rates.USD);
+      if (fallback) {
+        rates[code] = fallback.value;
+        rateList.push(fallback);
+      }
+    }
+  }
+
   validateRates(rates);
 
   return {
     ok: true,
     base: "TRY",
-    source: rates.GEL && missing.includes("GEL") ? "TCMB + NBG GEL fallback" : "TCMB",
+    source: missing.some((code) => code === "GEL" || USD_CROSS_RATES[code]) ? "TCMB + regional cross-rate fallback" : "TCMB",
     sourceUrl: TCMB_URL,
     rate_type: "ForexSelling",
     rate_field_priority: RATE_FIELD_PRIORITY,
