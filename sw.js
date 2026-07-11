@@ -1,4 +1,4 @@
-const CACHE_NAME = "sidya-global-v90";
+const CACHE_NAME = "sidya-global-v91";
 
 const SHELL_ASSETS = [
   "./",
@@ -7,6 +7,7 @@ const SHELL_ASSETS = [
   "./styles.css?v=20260613-4",
   "./catalog-products.generated.js?v=20260614-1",
   "./script.js?v=20260621-1",
+  "./sidya-arabic-currency-extension.js?v=20260711-1",
   "./assets/xlsx.full.min.js",
   "./manifest.webmanifest",
   "./assets/app-icon.svg",
@@ -107,7 +108,8 @@ self.addEventListener("fetch", (event) => {
   if (
     url.pathname === "/catalog-products.generated.js" ||
     url.pathname === "/admin.js" ||
-    url.pathname === "/admin.css"
+    url.pathname === "/admin.css" ||
+    url.pathname === "/sidya-arabic-currency-extension.js"
   ) {
     event.respondWith(
       fetch(request, { cache: "no-store" })
