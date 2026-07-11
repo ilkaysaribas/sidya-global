@@ -6,10 +6,10 @@ function sum(values: Array<number | null | undefined>) {
 }
 
 export async function listCustomers(search = ""): Promise<Customer[]> {
-  let query = supabase.from("customers").select("*").order("company_name", { ascending: true }).limit(100);
+  let query = supabase.from("customers").select("*").order("company", { ascending: true }).limit(100);
   if (search.trim()) {
     const value = `%${search.trim()}%`;
-    query = query.or(`company_name.ilike.${value},name.ilike.${value},email.ilike.${value},phone.ilike.${value},country.ilike.${value}`);
+    query = query.or(`company.ilike.${value},contact_name.ilike.${value},email.ilike.${value},phone.ilike.${value},country.ilike.${value}`);
   }
   const { data, error } = await query;
   if (error) throw error;
@@ -17,7 +17,17 @@ export async function listCustomers(search = ""): Promise<Customer[]> {
 }
 
 export async function upsertCustomer(customer: Partial<Customer>) {
-  const payload = { ...customer, updated_at: new Date().toISOString() };
+  const payload: Record<string, unknown> = {
+    company: customer.company || customer.company_name || customer.name,
+    contact_name: customer.contact_name || null,
+    email: customer.email || null,
+    phone: customer.phone || null,
+    country: customer.country || null,
+    notes: customer.notes || null,
+    status: customer.status || "active",
+    updated_at: new Date().toISOString()
+  };
+  if (customer.id) payload.id = customer.id;
   const { data, error } = await supabase.from("customers").upsert(payload).select("*").single();
   if (error) throw error;
   return data as Customer;
@@ -26,7 +36,7 @@ export async function upsertCustomer(customer: Partial<Customer>) {
 export async function listProducts(search = ""): Promise<Product[]> {
   let query = supabase
     .from("products")
-    .select("id,sku,barcode,name,brand,category,grammage,unit,units_per_carton,kg_per_carton,purchase_price,sale_price,currency,vat_rate,stock_quantity,minimum_stock,active,image_url")
+    .select("*")
     .eq("active", true)
     .order("brand", { ascending: true })
     .limit(80);
@@ -71,20 +81,22 @@ export async function createInvoiceOrder(input: {
   lines: OrderLine[];
 }) {
   const subtotal = sum(input.lines.map((line) => line.quantity * line.unit_price * (1 - line.discount_rate / 100)));
-  const vat = sum(input.lines.map((line) => line.quantity * line.unit_price * (1 - line.discount_rate / 100) * (line.vat_rate / 100)));
-  const total = subtotal + vat;
+  const taxTotal = sum(input.lines.map((line) => line.quantity * line.unit_price * (1 - line.discount_rate / 100) * (line.vat_rate / 100)));
+  const grandTotal = subtotal + taxTotal;
+  const invoiceNo = `MOB-${Date.now()}`;
 
   const { data: invoice, error: invoiceError } = await supabase
     .from("invoices")
     .insert({
+      invoice_no: invoiceNo,
+      invoice_type: "sale",
       customer_id: input.customer_id,
-      type: "order",
       status: "draft",
       currency: input.currency,
-      exchange_rate: input.exchange_rate,
+      exchange_rate: input.exchange_rate || 1,
       subtotal,
-      vat_total: vat,
-      total,
+      tax_total: taxTotal,
+      grand_total: grandTotal,
       notes: input.notes || null
     })
     .select("id")
@@ -92,18 +104,25 @@ export async function createInvoiceOrder(input: {
 
   if (invoiceError) throw invoiceError;
 
-  const items = input.lines.map((line) => ({
-    invoice_id: invoice.id,
-    product_id: line.product_id || null,
-    product_name: line.product_name,
-    barcode: line.barcode || null,
-    quantity: line.quantity,
-    unit_price: line.unit_price,
-    discount_rate: line.discount_rate,
-    vat_rate: line.vat_rate,
-    line_total: line.quantity * line.unit_price * (1 - line.discount_rate / 100)
-  }));
+  const items = input.lines
+    .filter((line) => line.product_id)
+    .map((line) => {
+      const lineSubtotal = line.quantity * line.unit_price * (1 - line.discount_rate / 100);
+      const lineTax = lineSubtotal * (line.vat_rate / 100);
+      return {
+        invoice_id: invoice.id,
+        product_id: line.product_id,
+        description: line.product_name,
+        quantity: line.quantity,
+        unit_price: line.unit_price,
+        tax_rate: line.vat_rate,
+        line_subtotal: lineSubtotal,
+        line_tax: lineTax,
+        line_total: lineSubtotal + lineTax
+      };
+    });
 
+  if (!items.length) throw new Error("Fatura kalemi için ürün kartı seçilmelidir.");
   const { error: itemError } = await supabase.from("invoice_items").insert(items);
   if (itemError) throw itemError;
   return invoice.id as string;
@@ -116,9 +135,9 @@ export async function getDashboardSummary(): Promise<DashboardSummary> {
 
   const [orders, invoices, products, customers] = await Promise.all([
     supabase.from("site_orders").select("id,status,created_at").gte("created_at", startOfMonth),
-    supabase.from("invoices").select("id,status,total,created_at").gte("created_at", startOfMonth),
+    supabase.from("invoices").select("id,status,grand_total,created_at").gte("created_at", startOfMonth),
     supabase.from("products").select("id,stock_quantity,minimum_stock").eq("active", true),
-    supabase.from("customers").select("id,next_follow_up_at")
+    supabase.from("customers").select("id")
   ]);
 
   for (const result of [orders, invoices, products, customers]) {
@@ -128,16 +147,15 @@ export async function getDashboardSummary(): Promise<DashboardSummary> {
   const orderRows = orders.data || [];
   const invoiceRows = invoices.data || [];
   const productRows = products.data || [];
-  const customerRows = customers.data || [];
 
   return {
     todaysOrders: orderRows.filter((row: any) => row.created_at >= startOfDay).length,
     pendingOrders: orderRows.filter((row: any) => ["new", "pending", "draft"].includes(row.status)).length,
-    invoicedOrders: invoiceRows.filter((row: any) => row.status === "invoiced" || row.status === "paid").length,
-    dailySales: sum(invoiceRows.filter((row: any) => row.created_at >= startOfDay).map((row: any) => row.total)),
-    monthlySales: sum(invoiceRows.map((row: any) => row.total)),
+    invoicedOrders: invoiceRows.filter((row: any) => row.status === "posted").length,
+    dailySales: sum(invoiceRows.filter((row: any) => row.created_at >= startOfDay).map((row: any) => row.grand_total)),
+    monthlySales: sum(invoiceRows.map((row: any) => row.grand_total)),
     receivablesDue: 0,
     lowStockCount: productRows.filter((row: any) => Number(row.stock_quantity || 0) <= Number(row.minimum_stock || 0)).length,
-    followUpsDue: customerRows.filter((row: any) => row.next_follow_up_at && row.next_follow_up_at <= today.toISOString()).length
+    followUpsDue: 0
   };
 }
