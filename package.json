@@ -2,6 +2,10 @@
   "name": "sidya-global-web",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "test": "node scripts/test-smtp-crypto.js",
+    "build": "node -c api/backend-config.js && node -c api/smtp-crypto.js && node -c admin-mail-crm.js"
+  },
   "dependencies": {
     "nodemailer": "^6.9.15"
   }
