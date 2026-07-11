@@ -18,7 +18,7 @@ export default function CustomersScreen() {
         refreshControl={<RefreshControl refreshing={isFetching} onRefresh={refetch} />}
         renderItem={({ item }) => (
           <View style={styles.row}>
-            <Text style={styles.name}>{item.company_name || item.name || "İsimsiz cari"}</Text>
+            <Text style={styles.name}>{item.company || item.company_name || item.name || "İsimsiz cari"}</Text>
             <Text style={styles.meta}>{[item.contact_name, item.country, item.email, item.phone].filter(Boolean).join(" • ") || "Cari kartı"}</Text>
             {item.next_follow_up_at ? <Text style={styles.follow}>Takip: {new Date(item.next_follow_up_at).toLocaleDateString("tr-TR")}</Text> : null}
           </View>
