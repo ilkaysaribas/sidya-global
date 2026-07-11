@@ -1,4 +1,5 @@
 const TCMB_URL = "https://www.tcmb.gov.tr/kurlar/today.xml";
+const NBG_URL = "https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/en/json";
 
 const wantedCurrencies = {
   USD: "Amerikan Doları",
@@ -7,6 +8,7 @@ const wantedCurrencies = {
   RUB: "Rus Rublesi",
 };
 
+const REQUIRED_TCMB_CODES = ["USD", "EUR", "RUB"];
 const RATE_FIELD_PRIORITY = ["ForexSelling", "BanknoteSelling", "ForexBuying"];
 const CACHE_SETTING_ID = "main";
 const CACHE_KEY = "exchange_rates";
@@ -46,7 +48,7 @@ const readCurrencyBlock = (xml, code) => {
 
 const readCurrency = (xml, code) => {
   const block = readCurrencyBlock(xml, code);
-  if (!block) throw new Error(`TCMB currency code not found: ${code}`);
+  if (!block) return null;
 
   const unit = toPositiveNumber(readTag(block, "Unit")) || 1;
   let selectedField = "";
@@ -61,10 +63,10 @@ const readCurrency = (xml, code) => {
     }
   }
 
-  if (!rawValue) throw new Error(`TCMB rate value not found: ${code}`);
+  if (!rawValue) return null;
 
   const value = rawValue / unit;
-  if (!Number.isFinite(value) || value <= 0) throw new Error(`Invalid TCMB rate for ${code}`);
+  if (!Number.isFinite(value) || value <= 0) return null;
 
   return {
     code,
@@ -74,12 +76,38 @@ const readCurrency = (xml, code) => {
     unit,
     rawValue,
     sourceField: selectedField,
+    source: "TCMB",
   };
 };
 
+const readGelFromNbg = async (usdTry) => {
+  try {
+    const response = await fetch(NBG_URL, { headers: { "User-Agent": "SidyaGlobal/1.0" } });
+    if (!response.ok) return null;
+    const data = await response.json();
+    const currencies = Array.isArray(data?.[0]?.currencies) ? data[0].currencies : [];
+    const usdGel = currencies.find((currency) => currency.code === "USD");
+    const usdGelValue = toPositiveNumber(usdGel?.rate);
+    if (!usdGelValue || !usdTry) return null;
+    return {
+      code: "GEL",
+      label: wantedCurrencies.GEL,
+      name: "GEORGIAN LARI",
+      value: usdTry / usdGelValue,
+      unit: 1,
+      rawValue: usdGelValue,
+      sourceField: "USD/GEL cross-rate",
+      source: "NBG",
+      sourceDate: data?.[0]?.date || usdGel?.validFromDate || "",
+    };
+  } catch (error) {
+    console.warn("NBG GEL fallback failed", error.message || error);
+    return null;
+  }
+};
+
 const validateRates = (rates) => {
-  const required = Object.keys(wantedCurrencies);
-  for (const code of required) {
+  for (const code of REQUIRED_TCMB_CODES) {
     const value = rates[code];
     if (!Number.isFinite(value) || value <= 0) throw new Error(`Invalid exchange rate: ${code}`);
   }
@@ -88,7 +116,7 @@ const validateRates = (rates) => {
   if (rates.EUR < 5 || rates.EUR > 300) throw new Error("EUR/TRY rate is outside safe range");
   if (rates.EUR < rates.USD * 0.5) throw new Error("EUR/TRY rate is inconsistent with USD/TRY");
   if (rates.RUB < 0.01 || rates.RUB > 10) throw new Error("RUB/TRY rate is outside safe range");
-  if (rates.GEL < 0.5 || rates.GEL > 100) throw new Error("GEL/TRY rate is outside safe range");
+  if (rates.GEL !== undefined && (rates.GEL < 0.5 || rates.GEL > 100)) throw new Error("GEL/TRY rate is outside safe range");
 };
 
 const supabaseConfig = () => ({
@@ -154,19 +182,40 @@ const writeCachedPayload = async (payload) => {
   }
 };
 
-const buildPayloadFromXml = (xml) => {
+const buildPayloadFromXml = async (xml) => {
   const dateMatch = xml.match(/Tarih="([^"]+)"/) || xml.match(/Date="([^"]+)"/);
-  const rateList = Object.keys(wantedCurrencies).map((code) => readCurrency(xml, code));
+  const rateList = [];
+  const missing = [];
+
+  for (const code of Object.keys(wantedCurrencies)) {
+    const item = readCurrency(xml, code);
+    if (item) rateList.push(item);
+    else missing.push(code);
+  }
+
   const rates = rateList.reduce((acc, item) => {
     acc[item.code] = item.value;
     return acc;
   }, {});
+
+  for (const code of REQUIRED_TCMB_CODES) {
+    if (!rates[code]) throw new Error(`TCMB currency code not found: ${code}`);
+  }
+
+  if (!rates.GEL) {
+    const gel = await readGelFromNbg(rates.USD);
+    if (gel) {
+      rates.GEL = gel.value;
+      rateList.push(gel);
+    }
+  }
+
   validateRates(rates);
 
   return {
     ok: true,
     base: "TRY",
-    source: "TCMB",
+    source: rates.GEL && missing.includes("GEL") ? "TCMB + NBG GEL fallback" : "TCMB",
     sourceUrl: TCMB_URL,
     rate_type: "ForexSelling",
     rate_field_priority: RATE_FIELD_PRIORITY,
@@ -192,7 +241,7 @@ module.exports = async function handler(request, response) {
     }
 
     const xml = await tcmbResponse.text();
-    const payload = buildPayloadFromXml(xml);
+    const payload = await buildPayloadFromXml(xml);
     await writeCachedPayload(payload);
     response.status(200).json(payload);
   } catch (error) {
