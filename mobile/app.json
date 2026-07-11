@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "Sidya Global Ticari Otomasyon",
+    "slug": "sidya-crm",
+    "scheme": "sidyacrm",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "bundleIdentifier": "com.sidyaglobal.ticariotomasyon",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Barkod okutmak, ürün fotoğrafı ve belge çekmek için kamera kullanılır.",
+        "NSPhotoLibraryUsageDescription": "Dekont, ürün görseli ve belge yüklemek için galeri erişimi kullanılır.",
+        "NSFaceIDUsageDescription": "İsteğe bağlı güvenli giriş için Face ID kullanılabilir."
+      }
+    },
+    "android": {
+      "package": "com.sidyaglobal.ticariotomasyon",
+      "permissions": ["CAMERA", "POST_NOTIFICATIONS"],
+      "adaptiveIcon": {
+        "backgroundColor": "#111827"
+      }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-local-authentication",
+      ["expo-camera", { "cameraPermission": "Barkod okutmak ve belge çekmek için kamera izni gerekiyor." }],
+      ["expo-image-picker", { "photosPermission": "Belge ve ürün görseli seçmek için galeri izni gerekiyor." }],
+      ["expo-notifications", { "icon": "./assets/notification-icon.png", "color": "#d6a23f" }]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "sidya-global-mobile"
+      }
+    }
+  }
+}
