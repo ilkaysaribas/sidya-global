@@ -29,8 +29,22 @@ function rateLimit(req, key, limit = 30, windowMs = 60_000) {
 
 function encryptionKey() {
   const raw = readEnv("SMTP_ENCRYPTION_KEY");
-  if (!raw) return null;
-  return crypto.createHash("sha256").update(raw).digest();
+  if (!raw) {
+    console.error("SMTP_ENCRYPTION_KEY is missing");
+    return null;
+  }
+  const value = raw.replace(/^base64:/i, "").replace(/^hex:/i, "").trim();
+  let key = null;
+  if (/^[0-9a-f]{64}$/i.test(value)) key = Buffer.from(value, "hex");
+  else {
+    try { key = Buffer.from(value, "base64"); } catch (_error) { key = null; }
+  }
+  if (!key || key.length !== 32) {
+    const error = new Error("SMTP_ENCRYPTION_KEY geçersiz. 32 byte base64 veya 64 karakter hex anahtar kullanın.");
+    error.statusCode = 501;
+    throw error;
+  }
+  return key;
 }
 
 function encryptSecret(value) {
@@ -49,10 +63,17 @@ function decryptSecret(value) {
   if (!text.startsWith("enc:v1:")) return "";
   const key = encryptionKey();
   if (!key) return "";
-  const [, , ivB64, tagB64, dataB64] = text.split(":");
-  const decipher = crypto.createDecipheriv("aes-256-gcm", key, Buffer.from(ivB64, "base64"));
-  decipher.setAuthTag(Buffer.from(tagB64, "base64"));
-  return Buffer.concat([decipher.update(Buffer.from(dataB64, "base64")), decipher.final()]).toString("utf8");
+  try {
+    const [, , ivB64, tagB64, dataB64] = text.split(":");
+    const decipher = crypto.createDecipheriv("aes-256-gcm", key, Buffer.from(ivB64, "base64"));
+    decipher.setAuthTag(Buffer.from(tagB64, "base64"));
+    return Buffer.concat([decipher.update(Buffer.from(dataB64, "base64")), decipher.final()]).toString("utf8");
+  } catch (error) {
+    console.error("SMTP password decrypt failed", { message: error.message });
+    const safe = new Error("Kayıtlı SMTP şifresi çözülemedi. Lütfen şifreyi yeniden girip kaydedin.");
+    safe.statusCode = 400;
+    throw safe;
+  }
 }
 
 async function rest(path, options = {}) {
@@ -115,8 +136,11 @@ async function sendSmtpMail({ to, subject, body, source = "crm" }) {
     await logMail({ recipient: to, subject, status: "sent", source });
     return result;
   } catch (error) {
+    console.error("SMTP send failed", { code: error.code || "", command: error.command || "", responseCode: error.responseCode || "", source });
     await logMail({ recipient: to, subject, status: "failed", errorMessage: error.message, source });
-    const safe = new Error(`Mail gönderilemedi: ${error.message}`); safe.statusCode = 502; throw safe;
+    const safe = new Error(`Mail gönderilemedi. SMTP hata kodu: ${error.code || error.responseCode || "bilinmiyor"}. Mail Center ayarlarını kontrol edin.`);
+    safe.statusCode = 502;
+    throw safe;
   }
 }
 
@@ -206,8 +230,12 @@ async function handleMailCrm(req, res, action) {
       const body = parseBody(req);
       const current = await readMailSettingsRow();
       const payload = { id: "main", smtp_host: String(body.smtp_host || "").trim().slice(0, 300), smtp_port: Number.parseInt(body.smtp_port, 10) || 587, smtp_secure: Boolean(body.smtp_secure), smtp_user: String(body.smtp_user || "").trim().slice(0, 320), sender_name: FIXED_SENDER_NAME, sender_email: FIXED_SENDER_EMAIL };
+      if (!payload.smtp_host) return json(res, 400, { ok: false, error: "SMTP host gerekli." });
+      if (!payload.smtp_user) return json(res, 400, { ok: false, error: "SMTP user gerekli." });
+      if (payload.smtp_port < 1 || payload.smtp_port > 65535) return json(res, 400, { ok: false, error: "SMTP port geçersiz." });
       if (String(body.smtp_password || "").trim()) payload.smtp_password = encryptSecret(String(body.smtp_password).trim());
       else if (String(current.smtp_password || "").startsWith("enc:v1:")) payload.smtp_password = current.smtp_password;
+      else if (!readEnv("SMTP_PASSWORD", "MAIL_PASSWORD")) return json(res, 400, { ok: false, error: "SMTP şifresi gerekli. Mevcut şifre yoksa yeni şifre girin." });
       await rest("mail_settings?on_conflict=id", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" }, body: JSON.stringify(payload) });
       return json(res, 200, { ok: true, message: "Mail ayarları kaydedildi." });
     }
