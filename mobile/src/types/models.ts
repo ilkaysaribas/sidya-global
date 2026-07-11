@@ -3,6 +3,7 @@ export type UserRole = "admin" | "sales" | "warehouse" | "accounting";
 export type Customer = {
   id: string;
   code?: string | null;
+  company?: string | null;
   company_name?: string | null;
   name?: string | null;
   contact_name?: string | null;
