@@ -5,6 +5,7 @@
   const FIXED_NAME = "Sidya Global Export Department";
   const FIXED_EMAIL = "export@sidyaglobal.com";
   const $ = (selector, root = document) => root.querySelector(selector);
+  let lastMailStatusCheck = 0;
 
   function setStatus(message, isError = false) {
     const status = $("#globalStatus");
@@ -12,6 +13,13 @@
     status.textContent = message;
     status.classList.toggle("error", Boolean(isError));
     status.classList.toggle("success", !isError);
+  }
+
+  function setMailStatus(message, isError = false) {
+    const status = $("#mailSettingsStatus");
+    if (!status) return;
+    status.textContent = message || "";
+    status.style.color = isError ? "#b91c1c" : "#0f766e";
   }
 
   function lockSenderFields() {
@@ -39,6 +47,8 @@
     form.addEventListener("submit", () => {
       if (form.elements.sender_name) form.elements.sender_name.value = FIXED_NAME;
       if (form.elements.sender_email) form.elements.sender_email.value = FIXED_EMAIL;
+      const current = $("#mailSettingsStatus")?.textContent || "";
+      if (/SMTP_ENCRYPTION_KEY|şifreleme|geçersiz/i.test(current)) setMailStatus("");
     }, true);
   }
 
@@ -63,6 +73,32 @@
       throw new Error("Admin oturumu bulunamadı. Lütfen tekrar giriş yapın.");
     }
     return data.session.access_token;
+  }
+
+  async function refreshMailSettingsStatus(force = false) {
+    if (!$("#mailSettingsForm")) return;
+    const now = Date.now();
+    if (!force && now - lastMailStatusCheck < 5000) return;
+    lastMailStatusCheck = now;
+    try {
+      const token = await getAccessToken();
+      const response = await fetch("/api/mail-settings", { headers: { Authorization: `Bearer ${token}` } });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || result.ok === false) return;
+      const settings = result.settings || {};
+      if (settings.invalidEncryptionKey) {
+        setMailStatus(settings.encryptionKeyMessage || "SMTP_ENCRYPTION_KEY geçersiz.", true);
+        return;
+      }
+      if (settings.needsEncryptionKey && !settings.usingEnv?.password && settings.hasPassword) {
+        setMailStatus("SMTP şifresini kullanmak için SMTP_ENCRYPTION_KEY env değeri gerekli.", true);
+        return;
+      }
+      const current = $("#mailSettingsStatus")?.textContent || "";
+      if (/SMTP_ENCRYPTION_KEY|şifreleme|geçersiz/i.test(current)) setMailStatus("");
+    } catch (_error) {
+      // Main Mail Center loader reports auth/network errors; this helper only clears stale encryption-key messages.
+    }
   }
 
   function selectedProductIds() {
@@ -128,8 +164,14 @@
     }
   }
 
-  function init() { lockSenderFields(); }
+  function init() {
+    lockSenderFields();
+    refreshMailSettingsStatus();
+  }
   setInterval(init, 700);
   document.addEventListener("DOMContentLoaded", init);
-  document.addEventListener("click", deleteSelectedProducts, true);
+  document.addEventListener("click", (event) => {
+    deleteSelectedProducts(event);
+    if (event.target.closest("#sendTestMailButton")) setTimeout(() => refreshMailSettingsStatus(true), 1200);
+  }, true);
 })();
