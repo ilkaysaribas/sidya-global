@@ -22,13 +22,17 @@ window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
   if (window.__sidyaArabicCurrencyExtensionLoader) return;
   window.__sidyaArabicCurrencyExtensionLoader = true;
 
-  var loadArabicCurrencyExtension = function () {
-    if (document.getElementById("sidyaArabicCurrencyExtension")) return;
+  var loadScript = function (id, src) {
+    if (document.getElementById(id)) return;
     var script = document.createElement("script");
-    script.id = "sidyaArabicCurrencyExtension";
-    script.src = "sidya-arabic-currency-extension.js?v=20260711-1";
+    script.id = id;
+    script.src = src;
     script.defer = true;
     document.head.appendChild(script);
+  };
+
+  var loadArabicCurrencyExtension = function () {
+    loadScript("sidyaArabicCurrencyExtension", "sidya-arabic-currency-extension.js?v=20260711-1");
   };
 
   if (document.readyState === "loading") {
@@ -116,97 +120,96 @@ window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
     });
   };
 
-  var formatTryRate = function (value) {
-    var number = parseNumber(value);
-    if (!number) return "-";
-    return new Intl.NumberFormat("tr-TR", {
-      style: "currency",
-      currency: "TRY",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 4,
-    }).format(number);
+  originalFetch("/api/exchange-rates?sidya_raw=1&t=" + Date.now(), { cache: "no-store" })
+    .then(function (response) {
+      if (!response.ok) throw new Error("Kur API yanıt vermedi");
+      return response.json();
+    })
+    .then(function (payload) {
+      if (validTryRates(payload.rates)) window.SIDYA_EXCHANGE_RATES_TRY = payload;
+    })
+    .catch(function () {});
+})();
+
+(function () {
+  if (window.__sidyaCurrencySeoNormalizer) return;
+  window.__sidyaCurrencySeoNormalizer = true;
+
+  var supportedCurrencies = ["TRY", "USD", "EUR", "RUB", "GEL", "AZN", "SAR", "AED", "QAR", "KWD", "BHD", "OMR"];
+  var aliases = {
+    "AMERIKAN DOLARI": "USD",
+    "AMERİKAN DOLARI": "USD",
+    "DENEMEK": "USD",
+    "EURO": "EUR",
+    "OVMAK": "RUB",
+    "RUS RUBLESI": "RUB",
+    "RUS RUBLESİ": "RUB",
+    "JEL": "GEL",
+    "GURCISTAN LARISI": "GEL",
+    "GÜRCİSTAN LARİSİ": "GEL"
   };
 
-  var findMount = function () {
-    return document.querySelector(".topbar") || document.querySelector(".main header") || document.querySelector("#appShell");
+  var normalizeCode = function (value) {
+    var raw = String(value || "").trim();
+    var upper = raw.toLocaleUpperCase("tr-TR");
+    return aliases[upper] || (supportedCurrencies.indexOf(upper) > -1 ? upper : raw);
   };
 
-  var ensureStrip = function () {
-    var strip = document.getElementById("exchangeRateStrip");
-    if (strip) return strip;
-    strip = document.createElement("div");
-    strip.id = "exchangeRateStrip";
-    strip.className = "exchange-rate-strip";
-    strip.innerHTML = '<strong>Canlı Kur Bilgisi</strong><span data-rate="USD">USD -</span><span data-rate="EUR">EUR -</span><span data-rate="RUB">RUB -</span><span data-rate="GEL">GEL -</span><small id="exchangeRateSource">Kaynak: TCMB</small><button type="button" id="refreshExchangeRatesButton">Kuru yenile</button>';
+  var normalizeCurrencySelect = function (select) {
+    if (!select || select.__sidyaCurrencyNormalized) return;
+    var seen = {};
+    Array.from(select.options || []).forEach(function (option) {
+      var code = normalizeCode(option.value || option.textContent);
+      if (supportedCurrencies.indexOf(code) === -1) code = normalizeCode(option.textContent);
+      if (supportedCurrencies.indexOf(code) === -1) return;
+      option.value = code;
+      option.textContent = code;
+      seen[code] = true;
+    });
+    supportedCurrencies.forEach(function (code) {
+      if (seen[code]) return;
+      var option = document.createElement("option");
+      option.value = code;
+      option.textContent = code;
+      select.appendChild(option);
+      seen[code] = true;
+    });
+    select.__sidyaCurrencyNormalized = true;
+  };
 
-    if (!document.getElementById("sidyaExchangeRateStyle")) {
-      var style = document.createElement("style");
-      style.id = "sidyaExchangeRateStyle";
-      style.textContent = ".exchange-rate-strip{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 14px;padding:10px 12px;border:1px solid #d8e1ec;border-radius:8px;background:#f8fbff;color:#111827}.exchange-rate-strip span,.exchange-rate-strip button{border:1px solid #d8e1ec;border-radius:6px;background:#fff;padding:7px 10px;font-size:13px}.exchange-rate-strip small{color:#64748b}.exchange-rate-strip button{cursor:pointer;font-weight:700;color:#0f5f78}.exchange-rate-strip .rate-warning{color:#b45309}@media(max-width:760px){.exchange-rate-strip{overflow:auto;flex-wrap:nowrap}.exchange-rate-strip>*{white-space:nowrap}}";
-      document.head.appendChild(style);
+  var normalizeCurrencySelectors = function () {
+    Array.from(document.querySelectorAll("select")).forEach(function (select) {
+      var values = Array.from(select.options || []).map(function (option) {
+        return normalizeCode(option.value || option.textContent);
+      });
+      if (select.id === "currencySelector" || values.indexOf("USD") > -1 || values.indexOf("EUR") > -1) {
+        normalizeCurrencySelect(select);
+      }
+    });
+  };
+
+  var ensureSeoLinks = function () {
+    if (!document.querySelector('link[rel="alternate"][hreflang="ar"]')) {
+      var link = document.createElement("link");
+      link.rel = "alternate";
+      link.hreflang = "ar";
+      link.href = "https://sidyaglobal.com/?lang=ar";
+      document.head.appendChild(link);
     }
-
-    var mount = findMount();
-    if (mount && mount.parentNode) mount.insertAdjacentElement("afterend", strip);
-    return strip;
+    if (!document.querySelector('link[rel="alternate"][hreflang="x-default"]')) {
+      var fallback = document.createElement("link");
+      fallback.rel = "alternate";
+      fallback.hreflang = "x-default";
+      fallback.href = "https://sidyaglobal.com/";
+      document.head.appendChild(fallback);
+    }
   };
 
-  var renderStrip = function (payload) {
-    var strip = ensureStrip();
-    var rates = payload && payload.rates ? payload.rates : {};
-    strip.querySelector('[data-rate="USD"]').textContent = "USD " + formatTryRate(rates.USD);
-    strip.querySelector('[data-rate="EUR"]').textContent = "EUR " + formatTryRate(rates.EUR);
-    strip.querySelector('[data-rate="RUB"]').textContent = "RUB " + formatTryRate(rates.RUB);
-    strip.querySelector('[data-rate="GEL"]').textContent = "GEL " + formatTryRate(rates.GEL);
-
-    var updated = payload && (payload.fetched_at || payload.updatedAt || payload.updated_at);
-    var dateText = updated ? new Date(updated).toLocaleString("tr-TR") : "-";
-    var source = strip.querySelector("#exchangeRateSource");
-    source.textContent = "Kaynak: " + (payload.source || "TCMB") + " · Güncelleme: " + dateText + (payload.warning ? " · " + payload.warning : "");
-    source.className = payload.fallback ? "rate-warning" : "";
+  var run = function () {
+    normalizeCurrencySelectors();
+    ensureSeoLinks();
   };
 
-  var loadRawRates = function () {
-    return originalFetch("/api/exchange-rates?sidya_raw=1&t=" + Date.now(), { cache: "no-store" })
-      .then(function (response) {
-        if (!response.ok) throw new Error("Kur API yanıt vermedi");
-        return response.json();
-      })
-      .then(function (payload) {
-        if (!validTryRates(payload.rates)) throw new Error("Kur verisi doğrulanamadı");
-        window.SIDYA_EXCHANGE_RATES_TRY = payload;
-        renderStrip(payload);
-        return payload;
-      })
-      .catch(function (error) {
-        var strip = ensureStrip();
-        var source = strip.querySelector("#exchangeRateSource");
-        source.textContent = "Kur alınamadı: " + (error.message || "Bilinmeyen hata");
-        source.className = "rate-warning";
-      });
-  };
-
-  var bindRefresh = function () {
-    ensureStrip();
-    document.addEventListener("click", function (event) {
-      var button = event.target.closest && event.target.closest("#refreshExchangeRatesButton");
-      if (!button) return;
-      button.disabled = true;
-      button.textContent = "Yenileniyor...";
-      loadRawRates().finally(function () {
-        button.disabled = false;
-        button.textContent = "Kuru yenile";
-      });
-    });
-  };
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", function () {
-      bindRefresh();
-      loadRawRates();
-    });
-  } else {
-    bindRefresh();
-    loadRawRates();
-  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run); else run();
+  new MutationObserver(run).observe(document.documentElement, { childList: true, subtree: true });
 })();
