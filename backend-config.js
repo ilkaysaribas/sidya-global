@@ -19,6 +19,26 @@ window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
 })();
 
 (function () {
+  if (window.__sidyaArabicCurrencyExtensionLoader) return;
+  window.__sidyaArabicCurrencyExtensionLoader = true;
+
+  var loadArabicCurrencyExtension = function () {
+    if (document.getElementById("sidyaArabicCurrencyExtension")) return;
+    var script = document.createElement("script");
+    script.id = "sidyaArabicCurrencyExtension";
+    script.src = "sidya-arabic-currency-extension.js?v=20260711-1";
+    script.defer = true;
+    document.head.appendChild(script);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", loadArabicCurrencyExtension);
+  } else {
+    loadArabicCurrencyExtension();
+  }
+})();
+
+(function () {
   if (window.__sidyaExchangeRateBridge) return;
   window.__sidyaExchangeRateBridge = true;
 
@@ -47,19 +67,28 @@ window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
     var gel = parseNumber(rates.GEL);
     if (!validTryRates(rates)) return payload;
 
+    var legacyRates = {
+      USD: 1,
+      TRY: usd,
+      USDTRY: usd,
+      EUR: usd / eur,
+      USDEUR: usd / eur,
+      RUB: usd / rub,
+      USDRUB: usd / rub,
+      GEL: usd / gel,
+      USDGEL: usd / gel,
+    };
+
+    Object.keys(rates).forEach(function (code) {
+      var tryRate = parseNumber(rates[code]);
+      if (!tryRate || code === "USD" || code === "TRY") return;
+      legacyRates[code] = usd / tryRate;
+      legacyRates["USD" + code] = usd / tryRate;
+    });
+
     return Object.assign({}, payload, {
       tryRates: rates,
-      rates: {
-        USD: 1,
-        TRY: usd,
-        USDTRY: usd,
-        EUR: usd / eur,
-        USDEUR: usd / eur,
-        RUB: usd / rub,
-        USDRUB: usd / rub,
-        GEL: usd / gel,
-        USDGEL: usd / gel,
-      },
+      rates: legacyRates,
       updated_at: payload.fetched_at || payload.updatedAt || new Date().toISOString(),
     });
   };
