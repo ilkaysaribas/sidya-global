@@ -5,11 +5,10 @@
   "scripts": {
     "lint": "node scripts/validate-static.js",
     "typecheck": "node --check script.js && node --check backend-config.js && node --check sidya-locale-layout-fixes.js && node --check sidya-proforma-core-fix.js && node --check api/exchange-rates.js",
-    "build": "node scripts/validate-static.js",
+    "build": "node scripts/build-static.js",
     "test": "node scripts/test-smtp-crypto.js && node scripts/test-rfq-rules.js"
   },
   "dependencies": {
     "nodemailer": "^9.0.3"
   }
 }
-

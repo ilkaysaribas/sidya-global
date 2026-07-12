@@ -65,4 +65,3 @@ window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
     loadExtensions();
   }
 })();
-

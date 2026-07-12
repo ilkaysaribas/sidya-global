@@ -2,16 +2,16 @@ const TCMB_URL = "https://www.tcmb.gov.tr/kurlar/today.xml";
 const NBG_URL = "https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/en/json";
 
 const wantedCurrencies = {
-  USD: "Amerikan DolarÄ±",
+  USD: "Amerikan Doları",
   EUR: "Euro",
-  GEL: "GÃ¼rcistan Larisi",
+  GEL: "Gürcistan Larisi",
   RUB: "Rus Rublesi",
-  AZN: "Azerbaycan ManatÄ±",
+  AZN: "Azerbaycan Manatı",
   SAR: "Suudi Arabistan Riyali",
-  AED: "BirleÅŸik Arap Emirlikleri Dirhemi",
+  AED: "Birleşik Arap Emirlikleri Dirhemi",
   QAR: "Katar Riyali",
-  KWD: "Kuveyt DinarÄ±",
-  BHD: "Bahreyn DinarÄ±",
+  KWD: "Kuveyt Dinarı",
+  BHD: "Bahreyn Dinarı",
   OMR: "Umman Riyali",
 };
 
@@ -190,7 +190,7 @@ const readCachedPayload = async () => {
     const cached = template?.[CACHE_KEY];
     if (!cached?.rates) return null;
     validateRates(cached.rates);
-    return { ...cached, warning: "Son geÃ§erli kur gÃ¶steriliyor" };
+    return { ...cached, warning: "Son geçerli kur gösteriliyor" };
   } catch (error) {
     console.warn("Exchange rate cache read failed", error.message || error);
     return null;
@@ -317,4 +317,3 @@ module.exports = async function handler(request, response) {
     });
   }
 };
-

@@ -42,4 +42,3 @@ Never expose the service-role key in browser code or commit secret values. The `
 5. Verify the production URL in Turkish, English, and Arabic.
 6. Check proforma, exchange-rate API, Supabase requests, browser console, and responsive layouts.
 7. Confirm the footer build SHA matches the deployed GitHub commit.
-

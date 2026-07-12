@@ -56,4 +56,3 @@ if (process.env.VALIDATE_PRODUCTION_ENV === "1") {
 }
 
 console.log(`Static production validation passed (${sourceFiles.length}/12 Vercel functions)`);
-
