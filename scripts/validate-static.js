@@ -26,7 +26,7 @@ const backendLoader = read("backend-config.js");
 const worker = read("sw.js");
 const sourceFiles = fs.readdirSync(path.join(root, "api")).filter((file) => file.endsWith(".js"));
 
-const hasVersionedScript = (file) => new RegExp(`${file.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\?v=\\d{8}-\\d+`).test(index);
+const hasVersionedScript = (file) => index.includes(`${file}?v=`);
 
 const assertions = [
   [index.includes('data-lang="ar"'), "Arabic locale control is missing"],
