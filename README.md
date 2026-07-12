@@ -37,7 +37,7 @@ Never expose the service-role key in browser code or commit secret values. The `
 
 1. Confirm `git remote -v`, branch `main`, and a clean worktree.
 2. Run `npm ci`, `npm run lint`, `npm run typecheck`, `npm test`, and `npm run build`.
-3. Confirm the production Supabase URL contains project ref `jhjforyykkxklfarjtjl`.
+3. Run `VALIDATE_PRODUCTION_ENV=1 npm run build` in a production environment and confirm the Supabase URL contains project ref `jhjforyykkxklfarjtjl`.
 4. Push `main` and verify the Vercel deployment commit SHA.
 5. Verify the production URL in Turkish, English, and Arabic.
 6. Check proforma, exchange-rate API, Supabase requests, browser console, and responsive layouts.
