@@ -1057,7 +1057,7 @@ document.querySelector("#productSearch").addEventListener("input", () => { state
 document.querySelector("#productSort").addEventListener("change", (event) => { state.productSort = event.target.value; state.productPage = 1; renderProducts(); });
 document.querySelector("#customerForm").addEventListener("submit", safely(saveCustomer));
 document.querySelector("#productForm").addEventListener("submit", safely(saveProduct));
-document.querySelector("#productPriceForm").addEventListener("submit", safely(saveProductPrices));
+if (typeof saveProductPrices === "function") document.querySelector("#productPriceForm").addEventListener("submit", safely(saveProductPrices));
 document.querySelector("#downloadPriceTemplateButton").addEventListener("click", downloadPriceTemplate);
 document.querySelector("#priceImportFile").addEventListener("change", safely(importPriceFile));
 document.querySelector("#stockForm").addEventListener("submit", safely(adjustStock));
