@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "node scripts/test-smtp-crypto.js"
+    "test": "node scripts/test-smtp-crypto.js && node scripts/test-rfq-rules.js"
   },
   "dependencies": {
     "nodemailer": "^6.9.15"
