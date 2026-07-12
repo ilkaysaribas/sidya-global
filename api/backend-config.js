@@ -243,7 +243,42 @@ drop policy if exists "admins manage crm customers" on public.crm_customers; cre
 drop policy if exists "admins manage crm interactions" on public.crm_interactions; create policy "admins manage crm interactions" on public.crm_interactions for all to authenticated using (public.is_admin()) with check (public.is_admin());
 drop policy if exists "public creates crm customers" on public.crm_customers; create policy "public creates crm customers" on public.crm_customers for insert to anon, authenticated with check (true);
 drop policy if exists "public creates crm interactions" on public.crm_interactions; create policy "public creates crm interactions" on public.crm_interactions for insert to anon, authenticated with check (true);
-grant select, insert, update, delete on public.mail_settings to authenticated; grant select on public.mail_logs to authenticated; grant select, insert, update, delete on public.crm_customers to authenticated; grant select, insert, update, delete on public.crm_interactions to authenticated; grant insert on public.crm_customers to anon; grant insert on public.crm_interactions to anon;Ámm¢Gß≤⁄Óù∆≠yŸGRATION_ADMIN_KEY");
+grant select, insert, update, delete on public.mail_settings to authenticated; grant select on public.mail_logs to authenticated; grant select, insert, update, delete on public.crm_customers to authenticated; grant select, insert, update, delete on public.crm_interactions to authenticated; grant insert on public.crm_customers to anon; grant insert on public.crm_interactions to anon;
+insert into public.mail_settings (id, sender_name, sender_email) values ('main', 'Sidya Global Export Department', 'export@sidyaglobal.com') on conflict (id) do update set sender_name = 'Sidya Global Export Department', sender_email = 'export@sidyaglobal.com';
+notify pgrst, 'reload schema';
+`;
+
+async function runManagementSql(query) {
+  const accessToken = stripBearer(readEnv("SUPABASE_ACCESS_TOKEN"));
+  if (!accessToken || !accessToken.startsWith("sbp_")) {
+    const error = new Error("SUPABASE_ACCESS_TOKEN eksik veya Supabase personal access token deƒüil.");
+    error.statusCode = 501;
+    throw error;
+  }
+  const response = await fetch(`https://api.supabase.com/v1/projects/${PROJECT_REF}/database/query`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ query }),
+  });
+  const text = await response.text();
+  let data = text;
+  try { data = text ? JSON.parse(text) : null; } catch (_error) {}
+  if (!response.ok) {
+    const error = new Error("Supabase SQL API hata verdi.");
+    error.statusCode = response.status;
+    error.safeDetails = data;
+    throw error;
+  }
+  return data;
+}
+
+async function handleMailCrm(req, res, action) {
+  rateLimit(req, `mail-crm:${action}`, action === "contact" ? 12 : 60);
+  if (req.method === "OPTIONS") return res.status(204).end();
+
+  if (action === "migrate") {
+    const token = req.query.run || req.query.verify || req.headers["x-migration-token"];
+    const envToken = readEnv("MIGRATION_ADMIN_KEY");
     if (!envToken || !token || token !== envToken) return json(res, 401, { ok: false, error: "Migration admin token gerekli." });
     const verifySql = "select to_regclass('public.mail_settings') is not null as mail_settings, to_regclass('public.mail_logs') is not null as mail_logs, to_regclass('public.crm_customers') is not null as crm_customers, to_regclass('public.crm_interactions') is not null as crm_interactions;";
     const result = req.query.verify ? await runManagementSql(verifySql) : await runManagementSql(mailCrmSql);
