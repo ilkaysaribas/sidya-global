@@ -34,7 +34,7 @@ window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
   var loadExtensions = function () {
     loadScript("sidyaArabicCurrencyExtension", "sidya-arabic-currency-extension.js?v=20260711-1");
     loadScript("sidyaLocaleLayoutFixes", "sidya-locale-layout-fixes.js?v=20260712-2");
-    loadScript("sidyaRtlHeroFix", "sidya-rtl-hero-fix.js?v=20260712-1");
+    loadScript("sidyaRtlHeroFix", "sidya-rtl-hero-fix.js?v=20260712-2");
     loadScript("sidyaRfqCurrencies", "rfq-currencies.js?v=20260712-1");
     loadScript("sidyaRfqSiteExtension", "rfq-site-extension.js?v=20260712-1");
     if (location.pathname.endsWith("/admin.html") || location.pathname === "/admin.html") {
