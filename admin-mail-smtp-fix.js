@@ -11,9 +11,17 @@
     smtp_user: "api_token",
     test_to: "export@sidyaglobal.com",
   };
+  const MAIL_API_TIMEOUT_MS = 20_000;
   const $ = (selector, root = document) => root.querySelector(selector);
   let lastMailStatusCheck = 0;
   let mailCenterBound = false;
+
+  function forceAdminLtr() {
+    document.documentElement.setAttribute("dir", "ltr");
+    document.body?.setAttribute("dir", "ltr");
+    const shell = $("#appShell");
+    if (shell) shell.setAttribute("dir", "ltr");
+  }
 
   function setStatus(message, isError = false) {
     const status = $("#globalStatus");
@@ -27,17 +35,20 @@
     const status = $("#mailSettingsStatus");
     if (!status) return;
     status.textContent = message || "";
-    status.style.display = message ? "inline-flex" : "none";
+    status.style.display = message ? "flex" : "none";
     status.style.alignItems = "center";
-    status.style.minHeight = "34px";
+    status.style.minHeight = "38px";
+    status.style.width = message ? "100%" : "auto";
     status.style.maxWidth = "100%";
-    status.style.padding = message ? "8px 10px" : "0";
+    status.style.padding = message ? "9px 12px" : "0";
     status.style.borderRadius = "8px";
     status.style.border = message ? `1px solid ${isError ? "#fecaca" : "#99f6e4"}` : "0";
     status.style.background = message ? (isError ? "#fff1f2" : "#f0fdfa") : "transparent";
     status.style.color = isError ? "#b91c1c" : "#0f766e";
     status.style.whiteSpace = "normal";
     status.style.overflowWrap = "anywhere";
+    status.style.direction = "ltr";
+    status.style.textAlign = "left";
     if (message) {
       clearTimeout(window.__sidyaMailStatusTimer);
       window.__sidyaMailStatusTimer = setTimeout(() => {
@@ -49,13 +60,15 @@
 
   function explainMailError(error) {
     const raw = String(error?.message || error || "İşlem başarısız.");
-    const code = raw.match(/SMTP hata kodu:\s*([A-Z_0-9-]+)/i)?.[1] || raw.match(/\b(EAUTH|EENVELOPE|ECONNECTION|ETIMEDOUT|ESOCKET|ECONNREFUSED)\b/i)?.[1] || "";
-    const normalized = code.toUpperCase();
-    if (normalized === "EAUTH") return `${raw} SMTP kullanıcı adı veya token doğrulanamadı. Cloudflare tokenini ve kullanıcı adını kontrol edin.`;
-    if (normalized === "EENVELOPE") return `${raw} Gönderen adresi veya gönderici domaini SMTP sağlayıcısı tarafından kabul edilmedi.`;
-    if (["ECONNECTION", "ETIMEDOUT", "ESOCKET", "ECONNREFUSED"].includes(normalized)) return `${raw} SMTP sunucusuna bağlantı kurulamadı. Host, port ve SSL ayarını kontrol edin.`;
+    const code = String(error?.code || "").toUpperCase() || raw.match(/\b(SMTP_[A-Z_]+|EAUTH|EENVELOPE|ECONNECTION|ETIMEDOUT|ESOCKET|ECONNREFUSED)\b/i)?.[1]?.toUpperCase() || "";
+    if (code === "SMTP_TIMEOUT") return "SMTP bağlantısı zaman aşımına uğradı. Host, port ve SSL ayarını kontrol edin.";
+    if (code === "SMTP_AUTH_FAILED" || code === "EAUTH") return "SMTP kimlik doğrulaması başarısız. API token geçersiz veya yetkisiz.";
+    if (code === "SMTP_ENVELOPE_FAILED" || code === "EENVELOPE") return "Alıcı adresi veya gönderim zarfı SMTP sunucusu tarafından reddedildi.";
+    if (code === "SMTP_SENDER_REJECTED") return "Gönderen adresi veya sidyaglobal.com gönderici domaini SMTP sağlayıcısı tarafından kabul edilmedi.";
+    if (code === "SMTP_TLS_FAILED") return "TLS/SSL bağlantısı kurulamadı. Cloudflare SMTP için port 465 ve SSL seçili olmalı.";
+    if (["SMTP_CONNECTION_FAILED", "ECONNECTION", "ETIMEDOUT", "ESOCKET", "ECONNREFUSED"].includes(code)) return "SMTP sunucusuna bağlantı kurulamadı. Host smtp.mx.cloudflare.net, port 465 ve SSL ayarını kontrol edin.";
     if (/json/i.test(raw)) return "Sunucudan beklenmeyen yanıt geldi. Lütfen tekrar deneyin.";
-    if (/Failed to fetch|NetworkError|Load failed/i.test(raw)) return "Ağ bağlantısı kurulamadı. İnternet veya Vercel API erişimini kontrol edin.";
+    if (/Failed to fetch|NetworkError|Load failed|aborted|abort/i.test(raw)) return "Ağ bağlantısı veya API isteği tamamlanamadı. Lütfen tekrar deneyin.";
     return raw;
   }
 
@@ -64,20 +77,27 @@
     const style = document.createElement("style");
     style.id = "sidyaMailCenterHardeningStyles";
     style.textContent = `
+      html,body,#appShell,.app-shell,.main{direction:ltr!important;}
+      .app-shell{grid-template-columns:230px minmax(0,1fr)!important;}
+      .main{min-width:0!important;width:100%!important;}
+      .view[data-view-panel="mail-center"]{width:100%;min-width:0;direction:ltr!important;text-align:left!important;}
       .view[data-view-panel="mail-center"],
       .view[data-view-panel="mail-center"] *{direction:ltr!important;text-align:left;box-sizing:border-box;}
-      .view[data-view-panel="mail-center"] .panel{max-width:1120px;margin-inline:0 auto;overflow:hidden;}
+      .view[data-view-panel="mail-center"] .panel{width:100%;max-width:1100px;margin-inline:auto;overflow:visible;}
+      .view[data-view-panel="mail-center"] .panel-heading{align-items:flex-start;}
+      .view[data-view-panel="mail-center"] .helper{max-width:100%;}
       .view[data-view-panel="mail-center"] .mail-crm-form{display:grid;gap:14px;width:100%;min-width:0;}
       .view[data-view-panel="mail-center"] .mail-crm-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 16px;align-items:start;width:100%;min-width:0;}
       .view[data-view-panel="mail-center"] .mail-crm-form label{display:grid;gap:6px;min-width:0;font-weight:700;color:#1f2d3d;}
       .view[data-view-panel="mail-center"] .mail-crm-form input,
       .view[data-view-panel="mail-center"] .mail-crm-form select,
       .view[data-view-panel="mail-center"] .mail-crm-form textarea{width:100%;min-width:0;text-align:left!important;direction:ltr!important;}
-      .view[data-view-panel="mail-center"] .mail-crm-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;width:100%;min-width:0;}
+      .view[data-view-panel="mail-center"] .mail-crm-actions{display:grid;grid-template-columns:max-content max-content minmax(260px,1fr);align-items:center;gap:10px;width:100%;min-width:0;}
       .view[data-view-panel="mail-center"] .mail-crm-actions button[disabled]{opacity:.65;cursor:wait;}
-      .view[data-view-panel="mail-center"] #mailSettingsStatus{flex:1 1 280px;}
+      .view[data-view-panel="mail-center"] #mailSettingsStatus{grid-column:auto;}
       #mailFixedSenderNote{direction:ltr!important;text-align:left!important;margin:0 0 4px;}
-      @media(max-width:760px){.view[data-view-panel="mail-center"] .mail-crm-two{grid-template-columns:1fr}.view[data-view-panel="mail-center"] #mailSettingsStatus{flex-basis:100%;}}
+      @media(max-width:1024px){.view[data-view-panel="mail-center"] .panel{max-width:none;}.view[data-view-panel="mail-center"] .mail-crm-actions{grid-template-columns:1fr 1fr;}.view[data-view-panel="mail-center"] #mailSettingsStatus{grid-column:1/-1;}}
+      @media(max-width:760px){.view[data-view-panel="mail-center"] .mail-crm-two{grid-template-columns:1fr}.view[data-view-panel="mail-center"] .mail-crm-actions{grid-template-columns:1fr}.view[data-view-panel="mail-center"] #mailSettingsStatus{grid-column:1/-1;}}
     `;
     document.head.appendChild(style);
   }
@@ -107,14 +127,34 @@
 
   async function mailApi(path, options = {}) {
     const token = await getAccessToken();
-    const response = await fetch(path, {
-      ...options,
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, ...(options.headers || {}) },
-    });
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), MAIL_API_TIMEOUT_MS);
+    let response;
+    try {
+      response = await fetch(path, {
+        ...options,
+        signal: options.signal || controller.signal,
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, ...(options.headers || {}) },
+      });
+    } catch (error) {
+      if (error?.name === "AbortError") {
+        const timeout = new Error("SMTP bağlantısı zaman aşımına uğradı.");
+        timeout.code = "SMTP_TIMEOUT";
+        throw timeout;
+      }
+      throw error;
+    } finally {
+      clearTimeout(timer);
+    }
+
     const text = await response.text();
     let result = {};
     try { result = text ? JSON.parse(text) : {}; } catch (_error) { throw new Error("Sunucudan JSON olarak okunamayan yanıt geldi."); }
-    if (!response.ok || result.ok === false) throw new Error(result.error || `HTTP ${response.status} hatası.`);
+    if (!response.ok || result.ok === false || result.success === false) {
+      const error = new Error(result.message || result.error || `HTTP ${response.status} hatası.`);
+      error.code = result.code || "";
+      throw error;
+    }
     return result;
   }
 
@@ -212,11 +252,14 @@
     event.stopImmediatePropagation();
     const form = $("#mailSettingsForm");
     const to = form?.elements.test_to?.value || DEFAULT_SMTP.test_to;
-    const restore = setButtonLoading(button, "Gönderiliyor...");
+    const restore = setButtonLoading(button, "Test mail gönderiliyor...");
     setMailStatus("Test mail gönderiliyor...");
     try {
-      await mailApi("/api/send-mail", { method: "POST", body: JSON.stringify({ to, subject: "Sidya Global Mail Center test", body: "Mail Center test mesajı başarıyla gönderildi.", source: "crm" }) });
-      setMailStatus(`Test mail gönderildi: ${to}`);
+      const result = await mailApi("/api/send-mail", {
+        method: "POST",
+        body: JSON.stringify({ to, source: "test", test: true }),
+      });
+      setMailStatus(`${result.message || "Test e-postası gönderildi."} Gelen kutusu ve spam klasörünü kontrol edin.`);
     } catch (error) {
       setMailStatus(explainMailError(error), true);
     } finally {
@@ -324,6 +367,7 @@
   }
 
   function init() {
+    forceAdminLtr();
     installMailCenterStyles();
     lockSenderFields();
     bindMailCenterOverrides();
