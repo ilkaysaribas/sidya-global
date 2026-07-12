@@ -4,6 +4,18 @@
   if (window.__sidyaAdminLtrGuard) return;
   window.__sidyaAdminLtrGuard = true;
 
+  function setAttributeIfNeeded(element, name, value) {
+    if (element && element.getAttribute(name) !== value) element.setAttribute(name, value);
+  }
+
+  function addClassIfNeeded(element, name) {
+    if (element && !element.classList.contains(name)) element.classList.add(name);
+  }
+
+  function removeClassIfNeeded(element, name) {
+    if (element && element.classList.contains(name)) element.classList.remove(name);
+  }
+
   function ensureStyle() {
     if (document.getElementById("sidyaAdminLtrGuardStyle")) return;
     var style = document.createElement("style");
@@ -26,20 +38,32 @@
   }
 
   function enforce() {
-    document.documentElement.setAttribute("lang", "tr");
-    document.documentElement.setAttribute("dir", "ltr");
-    document.documentElement.classList.add("admin-ltr-root");
-    document.documentElement.classList.remove("is-rtl", "rtl");
+    setAttributeIfNeeded(document.documentElement, "lang", "tr");
+    setAttributeIfNeeded(document.documentElement, "dir", "ltr");
+    addClassIfNeeded(document.documentElement, "admin-ltr-root");
+    removeClassIfNeeded(document.documentElement, "is-rtl");
+    removeClassIfNeeded(document.documentElement, "rtl");
 
     if (document.body) {
-      document.body.setAttribute("dir", "ltr");
-      document.body.classList.add("admin-ltr-body");
-      document.body.classList.remove("is-rtl", "rtl");
+      setAttributeIfNeeded(document.body, "dir", "ltr");
+      addClassIfNeeded(document.body, "admin-ltr-body");
+      removeClassIfNeeded(document.body, "is-rtl");
+      removeClassIfNeeded(document.body, "rtl");
     }
 
     var shell = document.getElementById("appShell");
-    if (shell) shell.setAttribute("dir", "ltr");
+    if (shell) setAttributeIfNeeded(shell, "dir", "ltr");
     ensureStyle();
+  }
+
+  var scheduled = false;
+  function scheduleEnforce() {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(function () {
+      scheduled = false;
+      enforce();
+    });
   }
 
   enforce();
@@ -47,7 +71,7 @@
   window.addEventListener("load", enforce);
   window.addEventListener("sidya:locale-applied", enforce, true);
 
-  var observer = new MutationObserver(enforce);
+  var observer = new MutationObserver(scheduleEnforce);
   observer.observe(document.documentElement, { attributes: true, attributeFilter: ["dir", "lang", "class"] });
 
   var observeBody = function () {
