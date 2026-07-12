@@ -1065,7 +1065,7 @@ document.querySelector("#paymentForm").addEventListener("submit", safely(recordP
 document.querySelector("#invoiceForm").addEventListener("submit", submitInvoice);
 document.querySelector("#templateForm").addEventListener("submit", safely(saveTemplate));
 if (typeof importCatalog === "function") document.querySelector("#importCatalogButton").addEventListener("click", safely(importCatalog));
-document.querySelector("#openStockCorrection").addEventListener("click", () => { renderInvoiceOptions(); document.querySelector("#stockDialog").showModal(); });
+document.querySelector("#openStockCorrection")?.addEventListener("click", () => { renderInvoiceOptions(); document.querySelector("#stockDialog").showModal(); });
 document.querySelector("#newSaleInvoiceButton").addEventListener("click", () => setInvoiceMode("sale"));
 document.querySelector("#newPurchaseInvoiceButton").addEventListener("click", () => setInvoiceMode("purchase"));
 document.querySelector("#newReturnInvoiceButton").addEventListener("click", () => setInvoiceMode("return"));
@@ -1083,13 +1083,13 @@ document.querySelector("#invoiceType").addEventListener("change", (event) => set
 document.querySelector("#invoiceDetailPrint").addEventListener("click", safely(async () => {
   if (state.activeInvoiceId) await printInvoice(state.activeInvoiceId);
 }));
-document.querySelector("#invoiceForm [name='currency']").addEventListener("change", renderInvoiceLines);
-document.querySelector("#invoiceForm [name='scenario']").addEventListener("change", renderInvoiceLines);
-document.querySelector("#invoiceForm [name='invoice_discount_rate']").addEventListener("input", renderInvoiceLines);
+document.querySelector("#invoiceForm [name='currency']")?.addEventListener("change", renderInvoiceLines);
+document.querySelector("#invoiceForm [name='scenario']")?.addEventListener("change", renderInvoiceLines);
+document.querySelector("#invoiceForm [name='invoice_discount_rate']")?.addEventListener("input", renderInvoiceLines);
 document.querySelector("#invoiceProductSearch").addEventListener("input", renderInvoiceProductPicker);
 document.querySelector("#refreshInvoiceProductsButton").addEventListener("click", safely(refreshInvoiceProducts));
-document.querySelector("#invoiceForm [name='invoice_date']").addEventListener("change", updateInvoiceTermDays);
-document.querySelector("#invoiceForm [name='due_date']").addEventListener("change", updateInvoiceTermDays);
+document.querySelector("#invoiceForm [name='invoice_date']")?.addEventListener("change", updateInvoiceTermDays);
+document.querySelector("#invoiceForm [name='due_date']")?.addEventListener("change", updateInvoiceTermDays);
 document.querySelector("#selectAllCustomers").addEventListener("change", (event) => {
   state.selectedCustomers.clear();
   if (event.target.checked) {
@@ -1300,11 +1300,11 @@ document.addEventListener("click", safely(async (event) => {
   if (deleteOrder) await deleteIncomingOrder(deleteOrder.dataset.orderDelete);
 }));
 
-document.querySelector("#exportCustomersButton").addEventListener("click", () => csvDownload("cari-bakiyeler.csv", [
+document.querySelector("#exportCustomersButton")?.addEventListener("click", () => csvDownload("cari-bakiyeler.csv", [
   ["Cari kod", "Firma", "Para birimi", "Bakiye"],
   ...state.balances.map((item) => [item.code, item.company, item.currency || "USD", item.balance]),
 ]));
-document.querySelector("#exportStockButton").addEventListener("click", () => csvDownload("stok-listesi.csv", [
+document.querySelector("#exportStockButton")?.addEventListener("click", () => csvDownload("stok-listesi.csv", [
  ["Sıra No", "Marka", "Barkod", "Ürün İsmi", "Gramaj", "Koli İçi", "Stok Adet", "Stok Koli", "Minimum Stok", "Adet Alış USD", "Ortalama Alış USD", "Adet Satış USD", "Ortalama Satış USD", "Kâr Endeksi %", "KDV"],
  ...state.products.map((item, index) => {
   const averages = productAveragePrices(item.id);
