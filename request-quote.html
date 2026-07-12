@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sidya Global | Teklif Talebi</title>
+    <meta name="description" content="Sidya Global RFQ ekranı ile ürün, koli adedi, hedef koli fiyatı ve para birimi bazında teklif talebi oluşturun." />
+    <link rel="canonical" href="https://sidyaglobal.com/request-quote" />
+    <link rel="alternate" hreflang="tr" href="https://sidyaglobal.com/request-quote?lang=tr" />
+    <link rel="alternate" hreflang="en" href="https://sidyaglobal.com/request-quote?lang=en" />
+    <link rel="alternate" hreflang="az" href="https://sidyaglobal.com/request-quote?lang=az" />
+    <link rel="alternate" hreflang="ka" href="https://sidyaglobal.com/request-quote?lang=ka" />
+    <link rel="alternate" hreflang="ru" href="https://sidyaglobal.com/request-quote?lang=ru" />
+    <link rel="stylesheet" href="rfq.css?v=20260712-1" />
+  </head>
+  <body class="rfq-page">
+    <div class="rfq-shell">
+      <header class="rfq-topbar">
+        <a class="rfq-brand" href="/"><span>SG</span><strong>Sidya Global</strong></a>
+        <nav aria-label="RFQ navigation">
+          <a href="/">Ana sayfa</a>
+          <a href="/#products">Ürünler</a>
+          <a href="/admin.html">Ticari otomasyon</a>
+          <a href="/request-quote?lang=tr">TR</a>
+          <a href="/request-quote?lang=en">EN</a>
+        </nav>
+      </header>
+
+      <section class="rfq-hero">
+        <p class="rfq-kicker">RFQ / Request for Quotation</p>
+        <h1>Teklif Talebi</h1>
+        <p>Ürünleri seçin, kaç koli istediğinizi ve koli başına hedef fiyatınızı girin. Farklı para birimleri ayrı ayrı hesaplanır ve talep ticari otomasyon paneline düşer.</p>
+      </section>
+
+      <main class="rfq-layout">
+        <div>
+          <form class="rfq-card" id="rfqForm">
+            <p class="rfq-kicker">Müşteri bilgileri</p>
+            <h2>İletişim ve teslimat</h2>
+            <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true" />
+            <div class="rfq-grid">
+              <label>Şirket unvanı<input name="company_name" required /></label>
+              <label>Yetkili adı<input name="contact_name" required /></label>
+              <label>E-posta<input name="email" type="email" required /></label>
+              <label>Telefon<input name="phone" /></label>
+              <label>WhatsApp<input name="whatsapp" /></label>
+              <label>Ülke<input name="country_name" /></label>
+              <label>Şehir<input name="city" /></label>
+              <label>Vergi / kayıt no<input name="registration_number" /></label>
+              <label>Mevcut müşteri no<input name="customer_code" /></label>
+              <label>Tercih edilen dil<select name="preferred_language"><option value="tr">Türkçe</option><option value="en">English</option><option value="az">Azərbaycanca</option><option value="ka">ქართული</option><option value="ru">Русский</option></select></label>
+            </div>
+            <div class="rfq-grid three" style="margin-top:14px">
+              <label>Teslim ülkesi<input name="destination_country" /></label>
+              <label>Şehir / liman<input name="destination_city_or_port" /></label>
+              <label>Incoterm<select name="incoterm"><option>EXW</option><option>FCA</option><option>FOB</option><option>CFR</option><option>CIF</option><option>CPT</option><option>CIP</option><option>DAP</option><option>DDP</option><option>Diğer</option></select></label>
+              <label>Nakliye türü<select name="shipping_method"><option>TIR / Karayolu</option><option>20 FT Konteyner</option><option>40 FT Konteyner</option><option>40 HC Konteyner</option><option>Parsiyel Karayolu</option><option>Deniz Parsiyel</option><option>Hava Kargo</option><option>Müşteri Teslim Alacak</option><option>Henüz Belli Değil</option></select></label>
+              <label>Tahmini satın alma tarihi<input name="expected_purchase_date" type="date" /></label>
+              <label>Ödeme tercihi<input name="payment_preference" /></label>
+              <label>Teklif geçerlilik beklentisi<input name="requested_validity_days" type="number" min="1" step="1" placeholder="Gün" /></label>
+              <label class="rfq-full">Genel açıklama<textarea name="general_note"></textarea></label>
+              <label><input name="urgent" type="checkbox" /> Acil teklif</label>
+            </div>
+
+            <section class="rfq-card" style="padding:0;border:0;box-shadow:none;margin-top:16px">
+              <p class="rfq-kicker">Ürün seçimi</p>
+              <h2>Ürün ara ve RFQ sepetine ekle</h2>
+              <div class="rfq-product-search">
+                <input class="rfq-search" id="rfqProductSearch" type="search" placeholder="Ürün adı, marka, barkod, stok kodu, kategori veya ambalaj miktarı ara" />
+                <div class="rfq-product-results" id="rfqProductResults"></div>
+              </div>
+            </section>
+
+            <section class="rfq-card" style="padding:0;border:0;box-shadow:none;margin-top:16px">
+              <p class="rfq-kicker">RFQ satırları</p>
+              <h2>Seçilen ürünler</h2>
+              <div class="rfq-lines" id="rfqLines"></div>
+            </section>
+
+            <div class="rfq-consents">
+              <label><input name="consent_privacy" type="checkbox" required /> KVKK / gizlilik metnini kabul ediyorum.</label>
+              <label><input name="consent_commercial" type="checkbox" /> Ticari iletişim izni veriyorum.</label>
+              <label><input name="consent_accuracy" type="checkbox" required /> Girdiğim bilgilerin doğru olduğunu onaylıyorum.</label>
+            </div>
+            <button class="rfq-submit" type="submit">Teklif Talebini Gönder</button>
+            <p class="rfq-status" id="rfqStatus" role="status"></p>
+          </form>
+        </div>
+        <aside class="rfq-summary rfq-card">
+          <p class="rfq-kicker">RFQ Özeti</p>
+          <h2>Hesaplamalar</h2>
+          <div id="rfqSummary"></div>
+        </aside>
+      </main>
+    </div>
+    <div class="rfq-mobile-summary"><button type="button" onclick="document.querySelector('.rfq-summary').scrollIntoView({behavior:'smooth'})" id="rfqMobileSummaryText">RFQ Özeti - 0 koli</button></div>
+    <script src="backend-config.js"></script>
+    <script src="/api/backend-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/xlsx.full.min.js"></script>
+    <script src="rfq-currencies.js?v=20260712-1"></script>
+    <script src="catalog-products.generated.js?v=20260614-1"></script>
+    <script src="rfq.js?v=20260712-1"></script>
+  </body>
+</html>
