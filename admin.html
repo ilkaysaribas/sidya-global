@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="tr">
+<html lang="tr" dir="ltr">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,7 +7,7 @@
     <title>Ticari Otomasyon</title>
     <link rel="stylesheet" href="admin.css?v=20260628-1" />
   </head>
-  <body>
+  <body dir="ltr">
     <div class="login-shell" id="loginShell">
       <form class="login-card" id="loginForm">
         <div class="brand-mark">TO</div>
@@ -21,7 +21,7 @@
       </form>
     </div>
 
-    <div class="app-shell" id="appShell" hidden>
+    <div class="app-shell" id="appShell" hidden dir="ltr">
       <aside class="sidebar">
         <div class="sidebar-brand"><span>TO</span><strong>Ticari<br />Otomasyon</strong></div>
         <nav id="mainNav">
@@ -34,7 +34,7 @@
         <button class="signout" id="signOutButton">Çıkış yap</button>
       </aside>
 
-      <main class="main">
+      <main class="main" dir="ltr">
         <header class="topbar">
           <div><p class="eyebrow">YÖNETİM PANELİ</p><h1 id="pageTitle">Genel Bakış</h1></div>
           <div class="topbar-user"><span id="currentUser"></span><button id="receiveSiteDataButton">Bilgi Al</button><button class="primary" id="sendSiteDataButton">Bilgi Gönder</button></div>
@@ -194,7 +194,6 @@
     <script src="/api/backend-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/xlsx.full.min.js"></script>
-    <script src="catalog-products.generated.js?v=20260614-1"></script>
-    <script src="admin.js?v=20260628-1"></script>
+    <script src="admin.js?v=20260712-1"></script>
   </body>
 </html>
