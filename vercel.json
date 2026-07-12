@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/request-quote",
+      "destination": "/request-quote.html"
+    },
+    {
       "source": "/contact.php",
       "destination": "/api/information-message"
     }
