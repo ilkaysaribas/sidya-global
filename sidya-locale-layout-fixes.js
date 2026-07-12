@@ -4,142 +4,251 @@
 
   var SUPPORTED_LOCALES = ["tr", "en", "az", "ka", "ru", "ar"];
   var RTL_LOCALES = { ar: true };
+  var STORAGE_KEYS = ["sidyaLang", "sidyaLocale", "preferredLanguage", "language"];
   var FALLBACK_ORDER = {
     ar: ["ar", "en"],
     tr: ["tr", "en"],
-    en: ["en", "tr"],
+    en: ["en"],
     az: ["az", "en", "tr"],
     ka: ["ka", "en", "tr"],
-    ru: ["ru", "en", "tr"]
+    ru: ["ru", "en", "tr"],
   };
 
-  var AR_STATIC_REPLACEMENTS = {
-    "Ev ve Yaşam": "المنزل والمعيشة",
-    "Temizlik": "مواد التنظيف",
-    "Endüstriyel": "المستلزمات الصناعية",
-    "Gıda Ürünleri": "منتجات غذائية",
-    "Medikal Ürünler": "منتجات طبية",
-    "Kozmetik & Kişisel Bakım": "مستحضرات وعناية شخصية",
-    "Otomotiv": "السيارات",
-    "Hırdavat & Yapı": "البناء والعدد",
-    "Ürünler": "المنتجات",
-    "Süreç": "العملية",
-    "Pazarlar": "الأسواق",
-    "Gümrük": "الجمارك",
-    "Proforma Oluştur": "إنشاء عرض مبدئي",
-    "B2B Portal Girişi": "دخول بوابة B2B",
-    "Lojistik": "اللوجستيات",
-    "Canlı Kur Bilgisi": "أسعار الصرف الحالية",
-    "Kuru yenile": "تحديث الأسعار",
-    "Kaynak": "المصدر",
-    "Güncelleme": "آخر تحديث",
-    "Amerikan Doları": "USD",
-    "Rus Rublesi": "RUB",
-    "Gürcistan Larisi": "GEL",
-    "Azerbaycan Manatı": "AZN",
-    "Suudi Arabistan Riyali": "SAR",
-    "Birleşik Arap Emirlikleri Dirhemi": "AED",
-    "Katar Riyali": "QAR",
-    "Kuveyt Dinarı": "KWD",
-    "Bahreyn Dinarı": "BHD",
-    "Umman Riyali": "OMR"
+  var KEY_FALLBACKS = {
+    ar: {
+      navProducts: "المنتجات",
+      navHome: "المنزل والمعيشة",
+      navCleaning: "التنظيف",
+      navIndustrial: "الصناعي",
+      navProcess: "العملية",
+      navMarkets: "الأسواق",
+      navCustoms: "الجمارك",
+      navProforma: "إنشاء بروفرما",
+      navB2B: "دخول بوابة B2B",
+      installAppCta: "تطبيق",
+      exchangeTitle: "أسعار الصرف الحالية",
+      exchangeLoading: "جار التحميل...",
+      exchangeUpdated: "تم التحديث",
+      exchangeChecked: "تم الفحص",
+      exchangeDataDate: "بيانات السعر",
+      exchangeUnavailable: "تعذر تحميل أسعار الصرف",
+      heroEyebrow: "التنظيف • الصناعي • المنزل والمعيشة • الصحة • العناية الشخصية",
+      heroTitle: "بوابتك الموثوقة إلى المنتجات التركية عالية الجودة",
+      heroCopy: "تساعد Sidya Global المشترين الدوليين على توريد منتجات عالية الجودة من موردين أتراك موثوقين بسرعة وشفافية واحترافية.",
+      heroPrimary: "اطلب عرض سعر",
+      heroSecondary: "عرض المنتجات",
+      metricCountries: "الأسواق المستهدفة",
+      metricCategories: "مجموعات المنتجات",
+      metricQuoteValue: "يوم واحد",
+      metricQuote: "مدة الرد على العرض",
+      supplierSearchKicker: "بحث توريد B2B",
+      supplierSearchTitle: "ابحث عن منتجات من تركيا",
+      supplierSearchPlaceholder: "ابدأ البحث عن المنتجات أو العلامات أو الفئات",
+      productOptionHomeware: "المنزل ونمط الحياة",
+      productOptionCleaning: "منتجات التنظيف",
+      productOptionFood: "منتجات غذائية",
+      productOptionIndustrial: "مستلزمات صناعية",
+      productOptionMedical: "منتجات طبية",
+      productOptionCosmetics: "مستحضرات التجميل والعناية الشخصية",
+      productOptionAutomotive: "السيارات",
+      productOptionHardware: "البناء والعدد",
+      footerText: "موقع عرض تصديري مقره طرابزون",
+    },
+    en: {
+      navProducts: "Products",
+      navHome: "Home & Living",
+      navCleaning: "Cleaning",
+      navIndustrial: "Industrial",
+      navProcess: "Process",
+      navMarkets: "Markets",
+      navCustoms: "Customs",
+      navProforma: "Create Proforma",
+      navB2B: "B2B Portal Login",
+      installAppCta: "App",
+      heroTitle: "Your Trusted Gateway to Reliable Products from Türkiye",
+      heroPrimary: "Get a Quote",
+      heroSecondary: "View Products",
+    },
+    tr: {
+      navProducts: "Ürünler",
+      navHome: "Ev ve Yaşam",
+      navCleaning: "Temizlik",
+      navIndustrial: "Endüstriyel",
+      navProcess: "Süreç",
+      navMarkets: "Pazarlar",
+      navCustoms: "Gümrük",
+      navProforma: "Proforma Oluştur",
+      navB2B: "B2B Portal Giriş",
+      installAppCta: "Uygulama",
+      heroTitle: "Türkiye'den Güvenilir Ürünlere Açılan Kapınız",
+      heroPrimary: "Teklif Al",
+      heroSecondary: "Ürünleri İncele",
+    },
+  };
+
+  var EXACT_REPLACEMENTS = {
+    ar: {
+      "Ürün Bul": "البحث عن منتج",
+      "Lojistik": "اللوجستيات",
+      "Dolar": "USD",
+      "Euro": "EUR",
+      "Dolar/TL": "USD/TRY",
+      "Manat": "AZN",
+      "Ruble": "RUB",
+      "Lari": "GEL",
+      "Ev ve Yaşam": "المنزل والمعيشة",
+      "Temizlik": "التنظيف",
+      "Endüstriyel": "الصناعي",
+      "Gıda Ürünleri": "منتجات غذائية",
+      "Medikal Ürünler": "منتجات طبية",
+      "Kozmetik & Kişisel Bakım": "مستحضرات التجميل والعناية الشخصية",
+      "Otomotiv": "السيارات",
+      "Hırdavat & Yapı": "البناء والعدد",
+      "Proforma Oluştur": "إنشاء بروفرما",
+      "B2B Portal Giriş": "دخول بوابة B2B",
+    },
+    en: {
+      "Ürün Bul": "Find Products",
+      "Lojistik": "Logistics",
+      "Ev ve Yaşam": "Home & Living",
+      "Temizlik": "Cleaning",
+      "Endüstriyel": "Industrial",
+      "Gıda Ürünleri": "Food Products",
+      "Medikal Ürünler": "Medical Products",
+      "Kozmetik & Kişisel Bakım": "Cosmetics & Personal Care",
+      "Otomotiv": "Automotive",
+      "Hırdavat & Yapı": "Construction & Hardware",
+    },
+  };
+
+  var CURRENCY_LABELS = {
+    TRY: "TRY", USD: "USD", EUR: "EUR", GEL: "GEL", RUB: "RUB", AZN: "AZN", GBP: "GBP", CNY: "CNY", AED: "AED", SAR: "SAR", QAR: "QAR", KWD: "KWD", BHD: "BHD", OMR: "OMR", IQD: "IQD", KZT: "KZT", UAH: "UAH", MDL: "MDL", AMD: "AMD", IRR: "IRR",
   };
 
   function normalizeLocale(value) {
-    var raw = String(value || "").trim().replace("_", "-").toLowerCase();
+    var raw = String(value || "").trim();
     if (!raw) return "en";
-    var short = raw.split("-")[0];
-    if (short === "ge") short = "ka";
-    return SUPPORTED_LOCALES.indexOf(short) > -1 ? short : "en";
+    var lowered = raw.replace("_", "-").toLowerCase();
+    if (lowered === "ge") return "ka";
+    var shortCode = lowered.split("-")[0];
+    if (shortCode === "ge") return "ka";
+    return SUPPORTED_LOCALES.indexOf(shortCode) >= 0 ? shortCode : "en";
+  }
+
+  function safeStorageGet(key) {
+    try { return window.localStorage && window.localStorage.getItem(key); } catch (error) { return ""; }
+  }
+
+  function safeStorageSet(locale) {
+    STORAGE_KEYS.forEach(function (key) {
+      try { window.localStorage && window.localStorage.setItem(key, locale); } catch (error) {}
+    });
   }
 
   function readLocale() {
-    var queryLang = "";
-    try { queryLang = new URLSearchParams(window.location.search).get("lang") || ""; } catch (error) {}
-    return normalizeLocale(queryLang || localStorage.getItem("sidyaLang") || document.documentElement.lang || "en");
-  }
-
-  function pickLocalizedValue(item, locale, base) {
-    if (!item) return "";
-    var order = FALLBACK_ORDER[normalizeLocale(locale)] || FALLBACK_ORDER.en;
-    for (var index = 0; index < order.length; index += 1) {
-      var lang = order[index];
-      var direct = item[base + "_" + lang] || item[base + lang.toUpperCase()];
-      if (direct && String(direct).trim()) return String(direct).trim();
-      if (item[base] && typeof item[base] === "object") {
-        var nested = item[base][lang] || item[base][lang.toUpperCase()];
-        if (nested && String(nested).trim()) return String(nested).trim();
-      }
-      if (item.names && item.names[lang] && String(item.names[lang]).trim()) return String(item.names[lang]).trim();
-      if (item.translations && item.translations[lang]) {
-        var translated = item.translations[lang][base] || item.translations[lang].name || item.translations[lang].title;
-        if (translated && String(translated).trim()) return String(translated).trim();
-      }
-      if (item.i18n && item.i18n[lang]) {
-        var i18nValue = item.i18n[lang][base] || item.i18n[lang].name || item.i18n[lang].title;
-        if (i18nValue && String(i18nValue).trim()) return String(i18nValue).trim();
-      }
+    var params = new URLSearchParams(window.location.search);
+    var fromUrl = params.get("lang") || params.get("locale");
+    if (fromUrl) return normalizeLocale(fromUrl);
+    for (var i = 0; i < STORAGE_KEYS.length; i += 1) {
+      var stored = safeStorageGet(STORAGE_KEYS[i]);
+      if (stored) return normalizeLocale(stored);
     }
-    var safe = item[base] || item.name_en || item.title_en || item.label_en || item.id || "";
-    return safe ? String(safe).trim() : "";
+    return normalizeLocale(document.documentElement.getAttribute("lang") || "en");
   }
 
-  window.SIDYA_I18N = window.SIDYA_I18N || {};
-  window.SIDYA_I18N.normalizeLocale = normalizeLocale;
-  window.SIDYA_I18N.getLocalizedText = function (item, locale, field) {
-    return pickLocalizedValue(item, locale, field || "name") || "";
-  };
-  window.getLocalizedText = window.SIDYA_I18N.getLocalizedText;
+  function getDictionary(locale) {
+    var lang = normalizeLocale(locale);
+    var base = {};
+    try {
+      if (typeof content !== "undefined" && content && content[lang]) base = content[lang];
+    } catch (error) {}
+    return Object.assign({}, KEY_FALLBACKS[lang] || {}, base);
+  }
+
+  function firstText(value) {
+    return typeof value === "string" && value.trim() ? value : "";
+  }
+
+  function getLocalizedText(item, locale, baseKey) {
+    if (!item) return "";
+    var lang = normalizeLocale(locale);
+    var base = baseKey || "name";
+    var order = FALLBACK_ORDER[lang] || FALLBACK_ORDER.en;
+    for (var i = 0; i < order.length; i += 1) {
+      var code = order[i];
+      var direct = firstText(item[base + "_" + code]) || firstText(item[base + code.toUpperCase()]);
+      if (direct) return direct;
+      if (item[base] && typeof item[base] === "object") {
+        var nested = firstText(item[base][code]) || firstText(item[base][code.toUpperCase()]);
+        if (nested) return nested;
+      }
+      var fromNames = item.names && typeof item.names === "object" ? firstText(item.names[code]) : "";
+      if (fromNames) return fromNames;
+      var fromTranslations = item.translations && typeof item.translations === "object" ? firstText(item.translations[code]) : "";
+      if (fromTranslations) return fromTranslations;
+      var fromI18n = item.i18n && typeof item.i18n === "object" ? firstText(item.i18n[code]) : "";
+      if (fromI18n) return fromI18n;
+    }
+    return firstText(item[base]) || firstText(item.name_en) || firstText(item.title_en) || firstText(item.label_en) || firstText(item.id);
+  }
+
+  window.SIDYA_I18N = Object.assign({}, window.SIDYA_I18N || {}, {
+    normalizeLocale: normalizeLocale,
+    getLocalizedText: getLocalizedText,
+    getDictionary: getDictionary,
+  });
+  window.getLocalizedText = getLocalizedText;
 
   function ensureStyle() {
-    if (document.getElementById("sidyaLocaleLayoutFixStyle")) return;
+    if (document.getElementById("sidyaLocaleLayoutFixStyles")) return;
     var style = document.createElement("style");
-    style.id = "sidyaLocaleLayoutFixStyle";
+    style.id = "sidyaLocaleLayoutFixStyles";
     style.textContent = [
-      "html,body{max-width:100%;overflow-x:clip}",
-      "body{width:100%}",
-      ".site-header,.exchange-rate-bar{width:100%;max-width:100%;padding-inline:clamp(12px,3.2vw,38px)}",
-      ".site-header{flex-wrap:wrap;align-items:center;row-gap:8px;overflow:visible}",
-      ".brand{min-width:0;flex:0 0 auto}",
-      ".nav-links{min-width:0;flex:1 1 420px;flex-wrap:wrap;justify-content:center;row-gap:4px;text-align:start}",
-      ".header-actions{min-width:0;max-width:100%;flex:1 1 320px;flex-wrap:wrap;justify-content:flex-end;gap:6px;overflow:visible}",
-      ".top-contact-links{min-width:0;flex-wrap:wrap;justify-content:inherit}",
-      ".lang-switch{min-width:0;max-width:100%;display:grid;grid-template-columns:repeat(6,minmax(34px,auto));gap:4px}",
-      ".currency-switch{min-width:0;max-width:100%;flex:0 1 auto}",
-      ".currency-switch select{max-width:92px;min-width:64px;text-overflow:ellipsis}",
-      ".install-app-link{flex:0 0 auto;max-width:100%}",
-      ".products-menu{inset-inline-start:0;left:auto;right:auto;max-width:calc(100vw - 24px);overflow:auto}",
-      "html[dir='rtl'] .products-menu{inset-inline-start:auto;inset-inline-end:0;text-align:start}",
-      ".customs-nav-item .customs-menu{inset-inline-start:0;left:auto;right:auto}",
-      "html[dir='rtl'] .customs-nav-item .customs-menu{inset-inline-start:auto;inset-inline-end:0}",
-      ".exchange-rate-bar{flex-wrap:wrap;align-items:flex-start;overflow:visible}",
-      ".exchange-rate-heading{min-width:min(150px,100%)}",
-      ".exchange-rate-list{min-width:0;max-width:100%;flex:1 1 420px;justify-content:flex-end;overflow:visible}",
-      ".exchange-rate-list span{min-width:0;max-width:100%;white-space:normal;text-align:start;overflow-wrap:anywhere}",
-      ".hero,.hero-inner,.hero-content,.hero-card,.section,.section-inner,main,footer{max-width:100%}",
-      "html[dir='rtl'] .hero,html[dir='rtl'] .hero-content{text-align:start}",
-      "html[dir='rtl'] .hero-actions{justify-content:flex-start}",
-      "html[dir='rtl'] .site-header,html[dir='rtl'] .nav-links,html[dir='rtl'] .header-actions,html[dir='rtl'] .exchange-rate-bar,html[dir='rtl'] .exchange-rate-list{direction:rtl}",
-      "html:not([dir='rtl']) .site-header,html:not([dir='rtl']) .nav-links,html:not([dir='rtl']) .header-actions,html:not([dir='rtl']) .exchange-rate-bar,html:not([dir='rtl']) .exchange-rate-list{direction:ltr}",
-      "@media(max-width:1180px){.site-header{justify-content:center}.brand{flex:1 1 100%;justify-content:center}.nav-links{order:2;flex-basis:100%;justify-content:center}.header-actions{order:3;flex-basis:100%;justify-content:center}}",
-      "@media(max-width:760px){.site-header{padding-inline:12px}.nav-links{gap:8px;font-size:.78rem}.header-actions{display:flex;width:100%;justify-content:center}.top-contact-links{width:100%;justify-content:center}.lang-switch{grid-template-columns:repeat(3,minmax(42px,1fr));width:min(240px,100%)}.currency-switch{width:auto;order:0}.exchange-rate-list{justify-content:flex-start}.products-menu{position:fixed;inset-inline:12px;top:92px;grid-template-columns:1fr;max-height:70vh;min-width:0;width:auto}}",
-      "@media(max-width:420px){.nav-links{justify-content:flex-start;overflow-x:auto;overscroll-behavior-inline:contain;padding-block-end:2px}.nav-links a,.has-dropdown>a{white-space:nowrap}.header-actions{justify-content:flex-start}.top-contact-links{justify-content:flex-start}.exchange-rate-list{display:grid;grid-template-columns:1fr 1fr;width:100%}.exchange-rate-list span{padding-inline:8px}.install-app-link{min-width:0}.products-menu{top:118px}}"
+      "html,body{max-width:100%;overflow-x:clip;}",
+      "body{width:100%;}",
+      "*,*::before,*::after{box-sizing:border-box;}",
+      ".site-header,.exchange-rate-bar,.hero,.install-panel,.products-section,.product-grid,.search-panel,.supplier-search,.proforma-section,.b2b-section,.customs-section,.logistics-section,.contact-section,footer{max-width:100%;}",
+      ".site-header{width:100%;padding-inline:clamp(12px,3vw,32px);gap:12px;flex-wrap:wrap;align-items:center;}",
+      ".brand{min-width:0;flex:0 1 auto;}",
+      ".nav-links{min-width:0;max-width:100%;flex:1 1 420px;display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(8px,1.4vw,18px);}",
+      ".header-actions{min-width:0;max-width:100%;flex:1 1 320px;display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:6px;overflow:visible;}",
+      ".top-contact-links{min-width:0;display:flex;flex-wrap:wrap;gap:6px;}",
+      ".lang-switch{display:grid;grid-template-columns:repeat(6,minmax(0,auto));max-width:100%;gap:4px;}",
+      ".currency-switch,.currency-switch select,#currencySelector{max-width:100%;min-width:0;}",
+      ".products-menu{max-width:min(960px,calc(100vw - 24px));inset-inline-start:auto;inset-inline-end:0;left:auto;right:0;overflow:auto;}",
+      ".exchange-rate-bar{width:100%;padding-inline:clamp(12px,3vw,32px);display:flex;flex-wrap:wrap;gap:10px;align-items:center;}",
+      ".exchange-rate-list{min-width:0;display:flex;flex-wrap:wrap;gap:8px;}",
+      ".exchange-rate-list span{white-space:normal;}",
+      ".hero{width:100%;min-width:0;display:grid;overflow:hidden;}",
+      ".hero-image{width:100%;height:100%;object-fit:cover;}",
+      ".hero-content,.hero-metrics{max-width:min(1180px,calc(100vw - 24px));margin-inline:auto;text-align:start;}",
+      ".hero-content{inset-inline:auto;}",
+      ".hero-actions,.hero-metrics{display:flex;flex-wrap:wrap;}",
+      ".search-panel,.supplier-search,.product-grid,.catalog-grid,.category-grid{min-width:0;max-width:100%;}",
+      "[dir='rtl'] body{text-align:start;}",
+      "[dir='rtl'] .site-header,[dir='rtl'] .exchange-rate-bar,[dir='rtl'] .hero-content,[dir='rtl'] .hero-metrics{direction:rtl;}",
+      "[dir='rtl'] .nav-links,[dir='rtl'] .header-actions,[dir='rtl'] .top-contact-links,[dir='rtl'] .hero-actions{direction:rtl;}",
+      "[dir='rtl'] .products-menu{inset-inline-start:0;inset-inline-end:auto;left:0;right:auto;text-align:start;}",
+      "[dir='rtl'] input,[dir='rtl'] textarea,[dir='rtl'] select{text-align:start;}",
+      "@media (max-width:1180px){.site-header{justify-content:center}.nav-links{order:3;flex-basis:100%;}.header-actions{justify-content:center;flex-basis:100%;}.products-menu{position:absolute;inset-inline-start:50%;inset-inline-end:auto;transform:translateX(-50%);}}",
+      "@media (max-width:760px){.site-header{padding-inline:12px}.brand{flex-basis:100%;justify-content:center}.nav-links{gap:8px}.nav-links a{font-size:12px}.header-actions{flex-basis:100%;}.top-contact-links{justify-content:center}.lang-switch{grid-template-columns:repeat(3,minmax(0,1fr));width:100%;}.lang-option{justify-content:center}.hero-content{max-width:calc(100vw - 24px);padding-inline:0}.hero-metrics{max-width:calc(100vw - 24px);gap:8px}.exchange-rate-heading,.exchange-rate-list{width:100%;justify-content:center}.products-menu{max-width:calc(100vw - 16px);}}",
+      "@media (max-width:420px){.site-header{gap:8px}.nav-links{justify-content:center}.nav-links a,.install-app-link,.top-contact-links a{font-size:11px}.hero-actions a{width:100%;text-align:center}.hero-metrics>div{min-width:0;flex:1 1 100%;}.exchange-rate-list span{flex:1 1 46%;min-width:0;}}",
     ].join("\n");
     document.head.appendChild(style);
   }
 
   function applyDocumentDirection(locale) {
     var lang = normalizeLocale(locale);
-    document.documentElement.lang = lang;
-    document.documentElement.dir = RTL_LOCALES[lang] ? "rtl" : "ltr";
-    if (document.body) document.body.classList.toggle("is-rtl", lang === "ar");
-    try { localStorage.setItem("sidyaLang", lang); } catch (error) {}
-    document.querySelectorAll("[dir]").forEach(function (node) {
-      if (node !== document.documentElement && node.hasAttribute("data-sidya-added-dir")) node.removeAttribute("dir");
-    });
+    var dir = RTL_LOCALES[lang] ? "rtl" : "ltr";
+    document.documentElement.setAttribute("lang", lang);
+    document.documentElement.setAttribute("dir", dir);
+    document.body && document.body.classList.toggle("is-rtl", dir === "rtl");
     document.querySelectorAll(".lang-option").forEach(function (button) {
-      button.classList.toggle("is-active", normalizeLocale(button.dataset.lang || button.textContent) === lang);
+      var buttonLang = normalizeLocale(button.getAttribute("data-lang"));
+      button.classList.toggle("is-active", buttonLang === lang);
+      button.setAttribute("aria-pressed", buttonLang === lang ? "true" : "false");
     });
+    safeStorageSet(lang);
   }
 
   function preserveUrlLocale(locale) {
@@ -150,90 +259,111 @@
     } catch (error) {}
   }
 
-  function localizeCatalogArrays(locale) {
+  function translateDataI18n(locale) {
     var lang = normalizeLocale(locale);
-    [window.catalog, window.CATALOG_PRODUCTS, window.SIDYA_CATALOG_PRODUCTS, window.catalogProducts].forEach(function (list) {
-      if (!Array.isArray(list)) return;
-      list.forEach(function (item) {
-        if (!item || item.__sidyaOriginalName) return;
-        item.__sidyaOriginalName = item.name;
-        item.__sidyaOriginalCategory = item.category || item.sourceCategory;
-      });
-      list.forEach(function (item) {
-        if (!item) return;
-        var localizedName = pickLocalizedValue(item, lang, "name");
-        if (localizedName) item.name = localizedName;
-        var localizedCategory = pickLocalizedValue(item, lang, "category");
-        if (localizedCategory) item.category = localizedCategory;
-      });
+    var dict = getDictionary(lang);
+    var fallback = lang === "ar" ? getDictionary("en") : getDictionary("en");
+    document.querySelectorAll("[data-i18n]").forEach(function (node) {
+      var key = node.getAttribute("data-i18n");
+      var value = firstText(dict[key]) || firstText(fallback[key]);
+      if (!value) return;
+      if (node.tagName === "INPUT" || node.tagName === "TEXTAREA") node.placeholder = value;
+      else node.textContent = value;
     });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(function (node) {
+      var key = node.getAttribute("data-i18n-placeholder");
+      var value = firstText(dict[key]) || firstText(fallback[key]);
+      if (value) node.setAttribute("placeholder", value);
+    });
+    var supplierSearch = document.getElementById("supplierSearchInput");
+    if (supplierSearch) {
+      var placeholder = firstText(dict.supplierSearchPlaceholder) || firstText(fallback.supplierSearchPlaceholder);
+      if (placeholder) supplierSearch.placeholder = placeholder;
+    }
+    if (lang === "tr") {
+      document.title = "Sidya Global | GTIP, Gümrük Belgeleri ve İhracat Ürünleri";
+      var trDescription = document.querySelector("meta[name='description']");
+      if (trDescription) trDescription.setAttribute("content", "Sidya Global, alıcıların Türk ürünlerini GTIP / HS kodu rehberi, gümrük evrak listesi, proforma hazırlığı ve ihracat lojistiği desteğiyle temin etmesine yardımcı olur.");
+    } else if (lang === "ar") {
+      document.title = "Sidya Global | منتجات تركية موثوقة وحلول تصدير";
+      var arDescription = document.querySelector("meta[name='description']");
+      if (arDescription) arDescription.setAttribute("content", "تساعد Sidya Global المشترين على توريد المنتجات التركية مع دعم رموز HS/GTIP والوثائق الجمركية والبروفرما واللوجستيات.");
+    } else if (lang === "en") {
+      document.title = "Sidya Global | GTIP, Customs Documents and Export Product Showcase";
+    }
   }
 
-  function replaceArabicStaticText() {
-    if (normalizeLocale(document.documentElement.lang) !== "ar") return;
-    var keys = Object.keys(AR_STATIC_REPLACEMENTS).sort(function (a, b) { return b.length - a.length; });
-    document.querySelectorAll("a,button,span,strong,h1,h2,h3,h4,p,label,small,option").forEach(function (node) {
-      if (!node || node.children.length) return;
-      var text = String(node.textContent || "").trim();
-      if (!text) return;
-      var replacement = AR_STATIC_REPLACEMENTS[text];
-      if (replacement) {
-        node.textContent = replacement;
-        return;
-      }
-      keys.forEach(function (key) {
-        if (node.textContent && node.textContent.indexOf(key) > -1) {
-          node.textContent = node.textContent.replace(key, AR_STATIC_REPLACEMENTS[key]);
-        }
-      });
+  function replaceExactVisibleText(locale) {
+    var lang = normalizeLocale(locale);
+    var map = EXACT_REPLACEMENTS[lang];
+    if (!map) return;
+    var selector = "a,button,span,strong,p,h1,h2,h3,h4,label,option,li";
+    document.querySelectorAll(selector).forEach(function (node) {
+      if (node.children.length) return;
+      var text = (node.textContent || "").trim();
+      if (!text || !map[text]) return;
+      node.textContent = map[text];
     });
   }
 
   function normalizeCurrencyLabels() {
-    document.querySelectorAll("#currencySelector option").forEach(function (option) {
-      var value = String(option.value || option.textContent || "").trim().toUpperCase();
-      if (/^[A-Z]{3}$/.test(value)) {
-        option.value = value;
-        option.textContent = value;
-      }
+    document.querySelectorAll("#currencySelector option,.currency-switch option").forEach(function (option) {
+      var code = String(option.value || option.textContent || "").trim().toUpperCase();
+      if (CURRENCY_LABELS[code]) option.textContent = CURRENCY_LABELS[code];
     });
+  }
+
+  function localizeKnownArrays(locale) {
+    var lang = normalizeLocale(locale);
+    try {
+      if (typeof catalogProducts !== "undefined" && Array.isArray(catalogProducts)) {
+        catalogProducts.forEach(function (item) {
+          var name = getLocalizedText(item, lang, "name");
+          var title = getLocalizedText(item, lang, "title");
+          if (name) item.displayName = name;
+          if (title) item.displayTitle = title;
+        });
+      }
+    } catch (error) {}
   }
 
   function applyLocale(locale, updateUrl) {
     var lang = normalizeLocale(locale);
     ensureStyle();
     applyDocumentDirection(lang);
-    localizeCatalogArrays(lang);
+    translateDataI18n(lang);
+    replaceExactVisibleText(lang);
     normalizeCurrencyLabels();
-    if (lang === "ar") replaceArabicStaticText();
+    localizeKnownArrays(lang);
     if (updateUrl) preserveUrlLocale(lang);
+    window.dispatchEvent(new CustomEvent("sidya:locale-applied", { detail: { locale: lang, dir: RTL_LOCALES[lang] ? "rtl" : "ltr" } }));
   }
 
-  function bindLanguageClicks() {
-    document.addEventListener("click", function (event) {
-      var button = event.target.closest && event.target.closest(".lang-option");
-      if (!button) return;
-      var lang = normalizeLocale(button.dataset.lang || button.getAttribute("lang") || button.textContent);
-      if (SUPPORTED_LOCALES.indexOf(lang) === -1) return;
-      setTimeout(function () { applyLocale(lang, true); }, 0);
-    }, true);
-  }
+  window.SIDYA_I18N.applyLocale = applyLocale;
+
+  document.addEventListener("click", function (event) {
+    var button = event.target && event.target.closest ? event.target.closest(".lang-option[data-lang]") : null;
+    if (!button) return;
+    var lang = normalizeLocale(button.getAttribute("data-lang"));
+    setTimeout(function () { applyLocale(lang, true); }, 0);
+    setTimeout(function () { applyLocale(lang, true); }, 120);
+  }, true);
 
   function boot() {
     applyLocale(readLocale(), false);
+    setTimeout(function () { applyLocale(readLocale(), false); }, 150);
+    setTimeout(function () { applyLocale(readLocale(), false); }, 600);
   }
 
-  ensureStyle();
-  bindLanguageClicks();
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });
+  else boot();
+
   window.addEventListener("popstate", function () { applyLocale(readLocale(), false); });
-  var pending = false;
-  new MutationObserver(function () {
-    if (pending) return;
-    pending = true;
-    setTimeout(function () {
-      pending = false;
-      applyLocale(readLocale(), false);
-    }, 60);
-  }).observe(document.documentElement, { childList: true, subtree: true });
+
+  var observerTimer = 0;
+  var observer = new MutationObserver(function () {
+    window.clearTimeout(observerTimer);
+    observerTimer = window.setTimeout(function () { applyLocale(readLocale(), false); }, 80);
+  });
+  if (document.documentElement) observer.observe(document.documentElement, { childList: true, subtree: true });
 })();
