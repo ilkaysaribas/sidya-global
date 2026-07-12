@@ -22,6 +22,24 @@ window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
   if (window.__sidyaFeatureExtensionLoader) return;
   window.__sidyaFeatureExtensionLoader = true;
 
+  var isAdminPage = function () {
+    var path = String(location.pathname || "").replace(/\/+$/, "");
+    return path === "/admin" || path === "/admin.html";
+  };
+
+  var forceAdminLtr = function () {
+    if (!isAdminPage()) return;
+    document.documentElement.setAttribute("lang", "tr");
+    document.documentElement.setAttribute("dir", "ltr");
+    document.documentElement.classList.add("admin-ltr-root");
+    document.documentElement.classList.remove("is-rtl", "rtl");
+    if (document.body) {
+      document.body.setAttribute("dir", "ltr");
+      document.body.classList.add("admin-ltr-body");
+      document.body.classList.remove("is-rtl", "rtl");
+    }
+  };
+
   var loadScript = function (id, src) {
     if (document.getElementById(id)) return;
     var script = document.createElement("script");
@@ -32,15 +50,21 @@ window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
   };
 
   var loadExtensions = function () {
+    if (isAdminPage()) {
+      forceAdminLtr();
+      loadScript("sidyaAdminLtrGuard", "admin-ltr-guard.js?v=20260712-1");
+      loadScript("sidyaAdminRfqExtension", "admin-rfq-extension.js?v=20260712-1");
+      return;
+    }
+
     loadScript("sidyaArabicCurrencyExtension", "sidya-arabic-currency-extension.js?v=20260711-1");
     loadScript("sidyaLocaleLayoutFixes", "sidya-locale-layout-fixes.js?v=20260712-2");
     loadScript("sidyaRtlHeroFix", "sidya-rtl-hero-fix.js?v=20260712-2");
     loadScript("sidyaRfqCurrencies", "rfq-currencies.js?v=20260712-1");
     loadScript("sidyaRfqSiteExtension", "rfq-site-extension.js?v=20260712-1");
-    if (location.pathname.endsWith("/admin.html") || location.pathname === "/admin.html") {
-      loadScript("sidyaAdminRfqExtension", "admin-rfq-extension.js?v=20260712-1");
-    }
   };
+
+  forceAdminLtr();
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", loadExtensions);
