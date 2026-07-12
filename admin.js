@@ -1050,8 +1050,8 @@ document.querySelector("#loginForm").addEventListener("submit", safely(async (ev
 }));
 
 document.querySelector("#signOutButton").addEventListener("click", safely(async () => { await client.auth.signOut(); showLogin(); }));
-document.querySelector("#receiveSiteDataButton").addEventListener("click", safely(importCatalog));
-document.querySelector("#sendSiteDataButton").addEventListener("click", safely(publishSiteData));
+if (typeof importCatalog === "function") document.querySelector("#receiveSiteDataButton").addEventListener("click", safely(importCatalog));
+if (typeof publishSiteData === "function") document.querySelector("#sendSiteDataButton").addEventListener("click", safely(publishSiteData));
 document.querySelector("#customerSearch").addEventListener("input", renderCustomers);
 document.querySelector("#productSearch").addEventListener("input", () => { state.productPage = 1; renderProducts(); });
 document.querySelector("#productSort").addEventListener("change", (event) => { state.productSort = event.target.value; state.productPage = 1; renderProducts(); });
@@ -1064,7 +1064,7 @@ document.querySelector("#stockForm").addEventListener("submit", safely(adjustSto
 document.querySelector("#paymentForm").addEventListener("submit", safely(recordPayment));
 document.querySelector("#invoiceForm").addEventListener("submit", submitInvoice);
 document.querySelector("#templateForm").addEventListener("submit", safely(saveTemplate));
-document.querySelector("#importCatalogButton").addEventListener("click", safely(importCatalog));
+if (typeof importCatalog === "function") document.querySelector("#importCatalogButton").addEventListener("click", safely(importCatalog));
 document.querySelector("#openStockCorrection").addEventListener("click", () => { renderInvoiceOptions(); document.querySelector("#stockDialog").showModal(); });
 document.querySelector("#newSaleInvoiceButton").addEventListener("click", () => setInvoiceMode("sale"));
 document.querySelector("#newPurchaseInvoiceButton").addEventListener("click", () => setInvoiceMode("purchase"));
