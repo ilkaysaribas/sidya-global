@@ -98,14 +98,6 @@
       </main>
     </div>
 
-    <div id="rowContextMenu" class="row-context-menu" hidden><div class="row-context-title" id="rowContextTitle">İşlemler</div><div id="rowContextActions" class="row-context-actions"></div></div>
-
-    <dialog id="customerDialog"><form method="dialog" class="dialog-form" id="customerForm">
-      <div class="dialog-heading"><h2>Cari kartı</h2><button type="button" data-close-dialog>×</button></div><input type="hidden" name="id" />
-      <div class="form-grid"><label>Firma unvanı<input name="company" required /></label><label>Yetkili kişi<input name="contact_name" /></label><label>E-posta<input name="email" type="email" /></label><label>Telefon<input name="phone" /></label><label>Ülke<input name="country" /></label><label>Vergi no<input name="tax_number" /></label><label>Vergi dairesi<input name="tax_office" /></label><label>Para birimi<select name="currency"><option>USD</option><option>EUR</option><option>TRY</option><option>GBP</option></select></label><div class="full role-selector"><label><input name="is_buyer" type="checkbox" checked /> Bu cariye satış yapabilirim (alıcı)</label><label><input name="is_seller" type="checkbox" checked /> Bu cariden mal alabilirim (satıcı)</label></div><label class="full">Adres<textarea name="address"></textarea></label><label class="full">Not<textarea name="notes"></textarea></label></div>
-      <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit">Kaydet</button></div>
-    </form></dialog>
-
     <datalist id="vatRates"><option value="0"></option><option value="1"></option><option value="10"></option><option value="20"></option></datalist>
     <script src="backend-config.js"></script>
     <script src="/api/backend-config.js"></script>
@@ -113,7 +105,5 @@
     <script src="assets/xlsx.full.min.js"></script>
     <script src="catalog-products.generated.js?v=20260614-1"></script>
     <script src="admin.js?v=20260628-1"></script>
-    <script src="rfq-currencies.js?v=20260712-1"></script>
-    <script src="admin-rfq-extension.js?v=20260712-1"></script>
   </body>
 </html>
