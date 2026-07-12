@@ -33,6 +33,7 @@ window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
 
   var loadArabicCurrencyExtension = function () {
     loadScript("sidyaArabicCurrencyExtension", "sidya-arabic-currency-extension.js?v=20260711-1");
+    loadScript("sidyaLocaleLayoutFixes", "sidya-locale-layout-fixes.js?v=20260712-1");
   };
 
   if (document.readyState === "loading") {
