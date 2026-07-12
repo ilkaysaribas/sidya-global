@@ -255,7 +255,7 @@
     const restore = setButtonLoading(button, "Test mail gönderiliyor...");
     setMailStatus("Test mail gönderiliyor...");
     try {
-      const result = await mailApi("/api/send-mail", {
+      const result = await mailApi("/api/backend-config?mailCrm=send-mail", {
         method: "POST",
         body: JSON.stringify({ to, source: "test", test: true }),
       });
