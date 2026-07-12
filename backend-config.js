@@ -19,8 +19,8 @@ window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
 })();
 
 (function () {
-  if (window.__sidyaArabicCurrencyExtensionLoader) return;
-  window.__sidyaArabicCurrencyExtensionLoader = true;
+  if (window.__sidyaFeatureExtensionLoader) return;
+  window.__sidyaFeatureExtensionLoader = true;
 
   var loadScript = function (id, src) {
     if (document.getElementById(id)) return;
@@ -31,14 +31,16 @@ window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
     document.head.appendChild(script);
   };
 
-  var loadArabicCurrencyExtension = function () {
+  var loadExtensions = function () {
     loadScript("sidyaArabicCurrencyExtension", "sidya-arabic-currency-extension.js?v=20260711-1");
     loadScript("sidyaLocaleLayoutFixes", "sidya-locale-layout-fixes.js?v=20260712-2");
+    loadScript("sidyaRfqCurrencies", "rfq-currencies.js?v=20260712-1");
+    loadScript("sidyaRfqSiteExtension", "rfq-site-extension.js?v=20260712-1");
   };
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", loadArabicCurrencyExtension);
+    document.addEventListener("DOMContentLoaded", loadExtensions);
   } else {
-    loadArabicCurrencyExtension();
+    loadExtensions();
   }
 })();
