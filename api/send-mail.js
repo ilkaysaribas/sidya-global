@@ -1,4 +1,4 @@
-const { decryptSecret } = require("./smtp-crypto");
+const { decryptSecret } = require("../lib/smtp-crypto");
 
 const DEFAULT_SUPABASE_URL = "https://jhjforyykkxklfarjtjl.supabase.co";
 const FIXED_SENDER_NAME = "Sidya Global Export Department";
