@@ -4,7 +4,7 @@ const {
   parseSmtpEncryptionKey,
   encryptSecret,
   decryptSecret,
-} = require("../api/smtp-crypto");
+} = require("../lib/smtp-crypto");
 
 const key = crypto.randomBytes(32);
 const hex = key.toString("hex");
