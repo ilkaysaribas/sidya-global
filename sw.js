@@ -1,4 +1,4 @@
-const CACHE_NAME = "sidya-global-v94";
+const CACHE_NAME = "sidya-global-v95";
 
 const SHELL_ASSETS = [
   "./",
@@ -14,6 +14,7 @@ const SHELL_ASSETS = [
   "./rfq.js?v=20260712-1",
   "./sidya-arabic-currency-extension.js?v=20260711-1",
   "./sidya-locale-layout-fixes.js?v=20260712-2",
+  "./sidya-rtl-hero-fix.js?v=20260712-1",
   "./assets/xlsx.full.min.js",
   "./manifest.webmanifest",
   "./assets/app-icon.svg",
@@ -121,7 +122,8 @@ self.addEventListener("fetch", (event) => {
     url.pathname === "/rfq-site-extension.js" ||
     url.pathname === "/admin-rfq-extension.js" ||
     url.pathname === "/sidya-arabic-currency-extension.js" ||
-    url.pathname === "/sidya-locale-layout-fixes.js"
+    url.pathname === "/sidya-locale-layout-fixes.js" ||
+    url.pathname === "/sidya-rtl-hero-fix.js"
   ) {
     event.respondWith(
       fetch(request, { cache: "no-store" })
