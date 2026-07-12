@@ -6,6 +6,7 @@ const {
 
 const PROJECT_REF = "jhjforyykkxklfarjtjl";
 const DEFAULT_SUPABASE_URL = "https://jhjforyykkxklfarjtjl.supabase.co";
+const DEFAULT_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_obANQZIOM1xpMIBsJPZcoA__6TGFYBc";
 const FIXED_SENDER_NAME = "Sidya Global Export Department";
 const FIXED_SENDER_EMAIL = "export@sidyaglobal.com";
 const SMTP_TIMEOUT_MS = 15_000;
@@ -453,7 +454,7 @@ async function handleMailCrm(req, res, action) {
 
 function sendBackendScript(res) {
   const publicUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || DEFAULT_SUPABASE_URL;
-  const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim() || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() || "";
+  const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim() || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() || DEFAULT_SUPABASE_PUBLISHABLE_KEY;
   const storageBucket = process.env.SUPABASE_STORAGE_BUCKET?.trim() || "b2b-documents";
   const build = { sha: (process.env.VERCEL_GIT_COMMIT_SHA || "local").slice(0, 7), environment: process.env.VERCEL_ENV || "development" };
   const config = { supabaseUrl: publicUrl, supabasePublishableKey, supabaseAnonKey: supabasePublishableKey, storageBucket, configured: Boolean(publicUrl && supabasePublishableKey) };
