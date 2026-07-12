@@ -46,7 +46,7 @@
   async function api(path, options = {}) {
     const response = await fetch(path, { ...options, headers: { "Content-Type": "application/json", Authorization: `Bearer ${await token()}`, ...(options.headers || {}) } });
     const result = await response.json().catch(() => ({}));
-    if (!response.ok || result.ok === false) throw new Error(result.error || "İşlem başarısız.");
+    if (!response.ok || result.ok === false || result.success === false) throw new Error(result.message || result.error || "İşlem başarısız.");
     return result;
   }
 
@@ -97,7 +97,7 @@
     const form = $("#mailSettingsForm");
     const to = form?.elements.test_to?.value || "export@sidyaglobal.com";
     try {
-      await api("/api/send-mail", { method: "POST", body: JSON.stringify({ to, subject: "Sidya Global Mail Center test", body: "Mail Center test mesajı başarıyla gönderildi." }) });
+      await api("/api/backend-config?mailCrm=send-mail", { method: "POST", body: JSON.stringify({ to, source: "test", test: true }) });
       $("#mailSettingsStatus").textContent = "Test mail gönderildi.";
     } catch (error) { $("#mailSettingsStatus").textContent = error.message; }
   }
@@ -214,7 +214,7 @@ Sidya Global Export</textarea></label><div class="mail-crm-actions"><button clas
     const form = event.currentTarget;
     const payload = Object.fromEntries(new FormData(form).entries());
     try {
-      await api("/api/send-mail", { method: "POST", body: JSON.stringify({ to: selectedCustomer.email, subject: payload.subject, body: payload.body, customerId: selectedCustomer.id, type: payload.subject.toLowerCase().includes("teklif") ? "quote" : "email" }) });
+      await api("/api/backend-config?mailCrm=send-mail", { method: "POST", body: JSON.stringify({ to: selectedCustomer.email, subject: payload.subject, body: payload.body, customerId: selectedCustomer.id, type: payload.subject.toLowerCase().includes("teklif") ? "quote" : "email" }) });
       setStatus("Mail gönderildi ve müşteri geçmişine işlendi.");
       await loadInteractions(selectedCustomer.id);
       await loadCustomers();
