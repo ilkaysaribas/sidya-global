@@ -1,3 +1,6 @@
+Exit code: 0
+Wall time: 4.7 seconds
+Output:
 (function () {
   if (window.__sidyaLocaleLayoutFixes) return;
   window.__sidyaLocaleLayoutFixes = true;
@@ -16,43 +19,43 @@
 
   var KEY_FALLBACKS = {
     ar: {
-      navProducts: "المنتجات",
-      navHome: "المنزل والمعيشة",
-      navCleaning: "التنظيف",
-      navIndustrial: "الصناعي",
-      navProcess: "العملية",
-      navMarkets: "الأسواق",
-      navCustoms: "الجمارك",
-      navProforma: "إنشاء بروفرما",
-      navB2B: "دخول بوابة B2B",
-      installAppCta: "تطبيق",
-      exchangeTitle: "أسعار الصرف الحالية",
-      exchangeLoading: "جار التحميل...",
-      exchangeUpdated: "تم التحديث",
-      exchangeChecked: "تم الفحص",
-      exchangeDataDate: "بيانات السعر",
-      exchangeUnavailable: "تعذر تحميل أسعار الصرف",
-      heroEyebrow: "التنظيف • الصناعي • المنزل والمعيشة • الصحة • العناية الشخصية",
-      heroTitle: "بوابتك الموثوقة إلى المنتجات التركية عالية الجودة",
-      heroCopy: "تساعد Sidya Global المشترين الدوليين على توريد منتجات عالية الجودة من موردين أتراك موثوقين بسرعة وشفافية واحترافية.",
-      heroPrimary: "اطلب عرض سعر",
-      heroSecondary: "عرض المنتجات",
-      metricCountries: "الأسواق المستهدفة",
-      metricCategories: "مجموعات المنتجات",
-      metricQuoteValue: "يوم واحد",
-      metricQuote: "مدة الرد على العرض",
-      supplierSearchKicker: "بحث توريد B2B",
-      supplierSearchTitle: "ابحث عن منتجات من تركيا",
-      supplierSearchPlaceholder: "ابدأ البحث عن المنتجات أو العلامات أو الفئات",
-      productOptionHomeware: "المنزل ونمط الحياة",
-      productOptionCleaning: "منتجات التنظيف",
-      productOptionFood: "منتجات غذائية",
-      productOptionIndustrial: "مستلزمات صناعية",
-      productOptionMedical: "منتجات طبية",
-      productOptionCosmetics: "مستحضرات التجميل والعناية الشخصية",
-      productOptionAutomotive: "السيارات",
-      productOptionHardware: "البناء والعدد",
-      footerText: "موقع عرض تصديري مقره طرابزون",
+      navProducts: "Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª",
+      navHome: "Ø§Ù„Ù…Ù†Ø²Ù„ ÙˆØ§Ù„Ù…Ø¹ÙŠØ´Ø©",
+      navCleaning: "Ø§Ù„ØªÙ†Ø¸ÙŠÙ",
+      navIndustrial: "Ø§Ù„ØµÙ†Ø§Ø¹ÙŠ",
+      navProcess: "Ø§Ù„Ø¹Ù…Ù„ÙŠØ©",
+      navMarkets: "Ø§Ù„Ø£Ø³ÙˆØ§Ù‚",
+      navCustoms: "Ø§Ù„Ø¬Ù…Ø§Ø±Ùƒ",
+      navProforma: "Ø¥Ù†Ø´Ø§Ø¡ Ø¨Ø±ÙˆÙØ±Ù…Ø§",
+      navB2B: "Ø¯Ø®ÙˆÙ„ Ø¨ÙˆØ§Ø¨Ø© B2B",
+      installAppCta: "ØªØ·Ø¨ÙŠÙ‚",
+      exchangeTitle: "Ø£Ø³Ø¹Ø§Ø± Ø§Ù„ØµØ±Ù Ø§Ù„Ø­Ø§Ù„ÙŠØ©",
+      exchangeLoading: "Ø¬Ø§Ø± Ø§Ù„ØªØ­Ù…ÙŠÙ„...",
+      exchangeUpdated: "ØªÙ… Ø§Ù„ØªØ­Ø¯ÙŠØ«",
+      exchangeChecked: "ØªÙ… Ø§Ù„ÙØ­Øµ",
+      exchangeDataDate: "Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø³Ø¹Ø±",
+      exchangeUnavailable: "ØªØ¹Ø°Ø± ØªØ­Ù…ÙŠÙ„ Ø£Ø³Ø¹Ø§Ø± Ø§Ù„ØµØ±Ù",
+      heroEyebrow: "Ø§Ù„ØªÙ†Ø¸ÙŠÙ â€¢ Ø§Ù„ØµÙ†Ø§Ø¹ÙŠ â€¢ Ø§Ù„Ù…Ù†Ø²Ù„ ÙˆØ§Ù„Ù…Ø¹ÙŠØ´Ø© â€¢ Ø§Ù„ØµØ­Ø© â€¢ Ø§Ù„Ø¹Ù†Ø§ÙŠØ© Ø§Ù„Ø´Ø®ØµÙŠØ©",
+      heroTitle: "Ø¨ÙˆØ§Ø¨ØªÙƒ Ø§Ù„Ù…ÙˆØ«ÙˆÙ‚Ø© Ø¥Ù„Ù‰ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„ØªØ±ÙƒÙŠØ© Ø¹Ø§Ù„ÙŠØ© Ø§Ù„Ø¬ÙˆØ¯Ø©",
+      heroCopy: "ØªØ³Ø§Ø¹Ø¯ Sidya Global Ø§Ù„Ù…Ø´ØªØ±ÙŠÙ† Ø§Ù„Ø¯ÙˆÙ„ÙŠÙŠÙ† Ø¹Ù„Ù‰ ØªÙˆØ±ÙŠØ¯ Ù…Ù†ØªØ¬Ø§Øª Ø¹Ø§Ù„ÙŠØ© Ø§Ù„Ø¬ÙˆØ¯Ø© Ù…Ù† Ù…ÙˆØ±Ø¯ÙŠÙ† Ø£ØªØ±Ø§Ùƒ Ù…ÙˆØ«ÙˆÙ‚ÙŠÙ† Ø¨Ø³Ø±Ø¹Ø© ÙˆØ´ÙØ§ÙÙŠØ© ÙˆØ§Ø­ØªØ±Ø§ÙÙŠØ©.",
+      heroPrimary: "Ø§Ø·Ù„Ø¨ Ø¹Ø±Ø¶ Ø³Ø¹Ø±",
+      heroSecondary: "Ø¹Ø±Ø¶ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª",
+      metricCountries: "Ø§Ù„Ø£Ø³ÙˆØ§Ù‚ Ø§Ù„Ù…Ø³ØªÙ‡Ø¯ÙØ©",
+      metricCategories: "Ù…Ø¬Ù…ÙˆØ¹Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª",
+      metricQuoteValue: "ÙŠÙˆÙ… ÙˆØ§Ø­Ø¯",
+      metricQuote: "Ù…Ø¯Ø© Ø§Ù„Ø±Ø¯ Ø¹Ù„Ù‰ Ø§Ù„Ø¹Ø±Ø¶",
+      supplierSearchKicker: "Ø¨Ø­Ø« ØªÙˆØ±ÙŠØ¯ B2B",
+      supplierSearchTitle: "Ø§Ø¨Ø­Ø« Ø¹Ù† Ù…Ù†ØªØ¬Ø§Øª Ù…Ù† ØªØ±ÙƒÙŠØ§",
+      supplierSearchPlaceholder: "Ø§Ø¨Ø¯Ø£ Ø§Ù„Ø¨Ø­Ø« Ø¹Ù† Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø£Ùˆ Ø§Ù„Ø¹Ù„Ø§Ù…Ø§Øª Ø£Ùˆ Ø§Ù„ÙØ¦Ø§Øª",
+      productOptionHomeware: "Ø§Ù„Ù…Ù†Ø²Ù„ ÙˆÙ†Ù…Ø· Ø§Ù„Ø­ÙŠØ§Ø©",
+      productOptionCleaning: "Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„ØªÙ†Ø¸ÙŠÙ",
+      productOptionFood: "Ù…Ù†ØªØ¬Ø§Øª ØºØ°Ø§Ø¦ÙŠØ©",
+      productOptionIndustrial: "Ù…Ø³ØªÙ„Ø²Ù…Ø§Øª ØµÙ†Ø§Ø¹ÙŠØ©",
+      productOptionMedical: "Ù…Ù†ØªØ¬Ø§Øª Ø·Ø¨ÙŠØ©",
+      productOptionCosmetics: "Ù…Ø³ØªØ­Ø¶Ø±Ø§Øª Ø§Ù„ØªØ¬Ù…ÙŠÙ„ ÙˆØ§Ù„Ø¹Ù†Ø§ÙŠØ© Ø§Ù„Ø´Ø®ØµÙŠØ©",
+      productOptionAutomotive: "Ø§Ù„Ø³ÙŠØ§Ø±Ø§Øª",
+      productOptionHardware: "Ø§Ù„Ø¨Ù†Ø§Ø¡ ÙˆØ§Ù„Ø¹Ø¯Ø¯",
+      footerText: "Ù…ÙˆÙ‚Ø¹ Ø¹Ø±Ø¶ ØªØµØ¯ÙŠØ±ÙŠ Ù…Ù‚Ø±Ù‡ Ø·Ø±Ø§Ø¨Ø²ÙˆÙ†",
     },
     en: {
       navProducts: "Products",
@@ -65,59 +68,59 @@
       navProforma: "Create Proforma",
       navB2B: "B2B Portal Login",
       installAppCta: "App",
-      heroTitle: "Your Trusted Gateway to Reliable Products from Türkiye",
+      heroTitle: "Your Trusted Gateway to Reliable Products from TÃ¼rkiye",
       heroPrimary: "Get a Quote",
       heroSecondary: "View Products",
     },
     tr: {
-      navProducts: "Ürünler",
-      navHome: "Ev ve Yaşam",
+      navProducts: "ÃœrÃ¼nler",
+      navHome: "Ev ve YaÅŸam",
       navCleaning: "Temizlik",
-      navIndustrial: "Endüstriyel",
-      navProcess: "Süreç",
+      navIndustrial: "EndÃ¼striyel",
+      navProcess: "SÃ¼reÃ§",
       navMarkets: "Pazarlar",
-      navCustoms: "Gümrük",
-      navProforma: "Proforma Oluştur",
-      navB2B: "B2B Portal Giriş",
+      navCustoms: "GÃ¼mrÃ¼k",
+      navProforma: "Proforma OluÅŸtur",
+      navB2B: "B2B Portal GiriÅŸ",
       installAppCta: "Uygulama",
-      heroTitle: "Türkiye'den Güvenilir Ürünlere Açılan Kapınız",
+      heroTitle: "TÃ¼rkiye'den GÃ¼venilir ÃœrÃ¼nlere AÃ§Ä±lan KapÄ±nÄ±z",
       heroPrimary: "Teklif Al",
-      heroSecondary: "Ürünleri İncele",
+      heroSecondary: "ÃœrÃ¼nleri Ä°ncele",
     },
   };
 
   var EXACT_REPLACEMENTS = {
     ar: {
-      "Ürün Bul": "البحث عن منتج",
-      "Lojistik": "اللوجستيات",
+      "ÃœrÃ¼n Bul": "Ø§Ù„Ø¨Ø­Ø« Ø¹Ù† Ù…Ù†ØªØ¬",
+      "Lojistik": "Ø§Ù„Ù„ÙˆØ¬Ø³ØªÙŠØ§Øª",
       "Dolar": "USD",
       "Euro": "EUR",
       "Dolar/TL": "USD/TRY",
       "Manat": "AZN",
       "Ruble": "RUB",
       "Lari": "GEL",
-      "Ev ve Yaşam": "المنزل والمعيشة",
-      "Temizlik": "التنظيف",
-      "Endüstriyel": "الصناعي",
-      "Gıda Ürünleri": "منتجات غذائية",
-      "Medikal Ürünler": "منتجات طبية",
-      "Kozmetik & Kişisel Bakım": "مستحضرات التجميل والعناية الشخصية",
-      "Otomotiv": "السيارات",
-      "Hırdavat & Yapı": "البناء والعدد",
-      "Proforma Oluştur": "إنشاء بروفرما",
-      "B2B Portal Giriş": "دخول بوابة B2B",
+      "Ev ve YaÅŸam": "Ø§Ù„Ù…Ù†Ø²Ù„ ÙˆØ§Ù„Ù…Ø¹ÙŠØ´Ø©",
+      "Temizlik": "Ø§Ù„ØªÙ†Ø¸ÙŠÙ",
+      "EndÃ¼striyel": "Ø§Ù„ØµÙ†Ø§Ø¹ÙŠ",
+      "GÄ±da ÃœrÃ¼nleri": "Ù…Ù†ØªØ¬Ø§Øª ØºØ°Ø§Ø¦ÙŠØ©",
+      "Medikal ÃœrÃ¼nler": "Ù…Ù†ØªØ¬Ø§Øª Ø·Ø¨ÙŠØ©",
+      "Kozmetik & KiÅŸisel BakÄ±m": "Ù…Ø³ØªØ­Ø¶Ø±Ø§Øª Ø§Ù„ØªØ¬Ù…ÙŠÙ„ ÙˆØ§Ù„Ø¹Ù†Ø§ÙŠØ© Ø§Ù„Ø´Ø®ØµÙŠØ©",
+      "Otomotiv": "Ø§Ù„Ø³ÙŠØ§Ø±Ø§Øª",
+      "HÄ±rdavat & YapÄ±": "Ø§Ù„Ø¨Ù†Ø§Ø¡ ÙˆØ§Ù„Ø¹Ø¯Ø¯",
+      "Proforma OluÅŸtur": "Ø¥Ù†Ø´Ø§Ø¡ Ø¨Ø±ÙˆÙØ±Ù…Ø§",
+      "B2B Portal GiriÅŸ": "Ø¯Ø®ÙˆÙ„ Ø¨ÙˆØ§Ø¨Ø© B2B",
     },
     en: {
-      "Ürün Bul": "Find Products",
+      "ÃœrÃ¼n Bul": "Find Products",
       "Lojistik": "Logistics",
-      "Ev ve Yaşam": "Home & Living",
+      "Ev ve YaÅŸam": "Home & Living",
       "Temizlik": "Cleaning",
-      "Endüstriyel": "Industrial",
-      "Gıda Ürünleri": "Food Products",
-      "Medikal Ürünler": "Medical Products",
-      "Kozmetik & Kişisel Bakım": "Cosmetics & Personal Care",
+      "EndÃ¼striyel": "Industrial",
+      "GÄ±da ÃœrÃ¼nleri": "Food Products",
+      "Medikal ÃœrÃ¼nler": "Medical Products",
+      "Kozmetik & KiÅŸisel BakÄ±m": "Cosmetics & Personal Care",
       "Otomotiv": "Automotive",
-      "Hırdavat & Yapı": "Construction & Hardware",
+      "HÄ±rdavat & YapÄ±": "Construction & Hardware",
     },
   };
 
@@ -281,13 +284,13 @@
       if (placeholder) supplierSearch.placeholder = placeholder;
     }
     if (lang === "tr") {
-      document.title = "Sidya Global | GTIP, Gümrük Belgeleri ve İhracat Ürünleri";
+      document.title = "Sidya Global | GTIP, GÃ¼mrÃ¼k Belgeleri ve Ä°hracat ÃœrÃ¼nleri";
       var trDescription = document.querySelector("meta[name='description']");
-      if (trDescription) trDescription.setAttribute("content", "Sidya Global, alıcıların Türk ürünlerini GTIP / HS kodu rehberi, gümrük evrak listesi, proforma hazırlığı ve ihracat lojistiği desteğiyle temin etmesine yardımcı olur.");
+      if (trDescription) trDescription.setAttribute("content", "Sidya Global, alÄ±cÄ±larÄ±n TÃ¼rk Ã¼rÃ¼nlerini GTIP / HS kodu rehberi, gÃ¼mrÃ¼k evrak listesi, proforma hazÄ±rlÄ±ÄŸÄ± ve ihracat lojistiÄŸi desteÄŸiyle temin etmesine yardÄ±mcÄ± olur.");
     } else if (lang === "ar") {
-      document.title = "Sidya Global | منتجات تركية موثوقة وحلول تصدير";
+      document.title = "Sidya Global | Ù…Ù†ØªØ¬Ø§Øª ØªØ±ÙƒÙŠØ© Ù…ÙˆØ«ÙˆÙ‚Ø© ÙˆØ­Ù„ÙˆÙ„ ØªØµØ¯ÙŠØ±";
       var arDescription = document.querySelector("meta[name='description']");
-      if (arDescription) arDescription.setAttribute("content", "تساعد Sidya Global المشترين على توريد المنتجات التركية مع دعم رموز HS/GTIP والوثائق الجمركية والبروفرما واللوجستيات.");
+      if (arDescription) arDescription.setAttribute("content", "ØªØ³Ø§Ø¹Ø¯ Sidya Global Ø§Ù„Ù…Ø´ØªØ±ÙŠÙ† Ø¹Ù„Ù‰ ØªÙˆØ±ÙŠØ¯ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„ØªØ±ÙƒÙŠØ© Ù…Ø¹ Ø¯Ø¹Ù… Ø±Ù…ÙˆØ² HS/GTIP ÙˆØ§Ù„ÙˆØ«Ø§Ø¦Ù‚ Ø§Ù„Ø¬Ù…Ø±ÙƒÙŠØ© ÙˆØ§Ù„Ø¨Ø±ÙˆÙØ±Ù…Ø§ ÙˆØ§Ù„Ù„ÙˆØ¬Ø³ØªÙŠØ§Øª.");
     } else if (lang === "en") {
       document.title = "Sidya Global | GTIP, Customs Documents and Export Product Showcase";
     }
@@ -360,10 +363,5 @@
 
   window.addEventListener("popstate", function () { applyLocale(readLocale(), false); });
 
-  var observerTimer = 0;
-  var observer = new MutationObserver(function () {
-    window.clearTimeout(observerTimer);
-    observerTimer = window.setTimeout(function () { applyLocale(readLocale(), false); }, 80);
-  });
-  if (document.documentElement) observer.observe(document.documentElement, { childList: true, subtree: true });
 })();
+

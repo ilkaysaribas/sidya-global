@@ -1,27 +1,30 @@
+Exit code: 0
+Wall time: 4.7 seconds
+Output:
 (function (root, factory) {
   var value = factory();
   if (typeof module === "object" && module.exports) module.exports = value;
   root.SIDYA_RFQ_CURRENCIES = value;
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   var currencies = [
-    ["TRY", "Turkish Lira", "₺", 2, true, 10],
+    ["TRY", "Turkish Lira", "â‚º", 2, true, 10],
     ["USD", "US Dollar", "$", 2, true, 20],
-    ["EUR", "Euro", "€", 2, true, 30],
-    ["GEL", "Georgian Lari", "₾", 2, true, 40],
-    ["RUB", "Russian Ruble", "₽", 2, true, 50],
-    ["AZN", "Azerbaijani Manat", "₼", 2, true, 60],
-    ["GBP", "British Pound", "£", 2, true, 70],
-    ["CNY", "Chinese Yuan", "¥", 2, true, 80],
-    ["AED", "UAE Dirham", "د.إ", 2, true, 90],
-    ["SAR", "Saudi Riyal", "﷼", 2, true, 100],
-    ["QAR", "Qatari Riyal", "ر.ق", 2, true, 110],
-    ["KWD", "Kuwaiti Dinar", "د.ك", 3, true, 120],
-    ["IQD", "Iraqi Dinar", "ع.د", 0, true, 130],
-    ["KZT", "Kazakhstani Tenge", "₸", 2, true, 140],
-    ["UAH", "Ukrainian Hryvnia", "₴", 2, true, 150],
+    ["EUR", "Euro", "â‚¬", 2, true, 30],
+    ["GEL", "Georgian Lari", "â‚¾", 2, true, 40],
+    ["RUB", "Russian Ruble", "â‚½", 2, true, 50],
+    ["AZN", "Azerbaijani Manat", "â‚¼", 2, true, 60],
+    ["GBP", "British Pound", "Â£", 2, true, 70],
+    ["CNY", "Chinese Yuan", "Â¥", 2, true, 80],
+    ["AED", "UAE Dirham", "Ø¯.Ø¥", 2, true, 90],
+    ["SAR", "Saudi Riyal", "ï·¼", 2, true, 100],
+    ["QAR", "Qatari Riyal", "Ø±.Ù‚", 2, true, 110],
+    ["KWD", "Kuwaiti Dinar", "Ø¯.Ùƒ", 3, true, 120],
+    ["IQD", "Iraqi Dinar", "Ø¹.Ø¯", 0, true, 130],
+    ["KZT", "Kazakhstani Tenge", "â‚¸", 2, true, 140],
+    ["UAH", "Ukrainian Hryvnia", "â‚´", 2, true, 150],
     ["MDL", "Moldovan Leu", "L", 2, true, 160],
-    ["AMD", "Armenian Dram", "֏", 2, true, 170],
-    ["IRR", "Iranian Rial", "﷼", 0, true, 180]
+    ["AMD", "Armenian Dram", "Ö", 2, true, 170],
+    ["IRR", "Iranian Rial", "ï·¼", 0, true, 180]
   ].map(function (row) {
     return {
       currency_code: row[0],
@@ -40,12 +43,15 @@
     return acc;
   }, {});
   function normalizeCurrency(value, fallback) {
-    var code = String(value || fallback || "USD").trim().toUpperCase();
-    if (code === "TL" || code === "TRL" || code === "₺") code = "TRY";
-    return byCode[code] ? code : String(fallback || "USD").toUpperCase();
+    var hasExplicitFallback = arguments.length > 1;
+    var safeFallback = hasExplicitFallback ? String(fallback || "").trim().toUpperCase() : "USD";
+    var code = String(value || safeFallback).trim().toUpperCase();
+    if (code === "TL" || code === "TRL" || code === "â‚º") code = "TRY";
+    return byCode[code] ? code : safeFallback;
   }
   function activeCurrencies() {
     return currencies.filter(function (item) { return item.active; }).sort(function (a, b) { return a.display_order - b.display_order; });
   }
   return { currencies: currencies, byCode: byCode, normalizeCurrency: normalizeCurrency, activeCurrencies: activeCurrencies };
 });
+

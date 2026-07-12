@@ -1,17 +1,20 @@
+Exit code: 0
+Wall time: 4.2 seconds
+Output:
 const TCMB_URL = "https://www.tcmb.gov.tr/kurlar/today.xml";
 const NBG_URL = "https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/en/json";
 
 const wantedCurrencies = {
-  USD: "Amerikan Doları",
+  USD: "Amerikan DolarÄ±",
   EUR: "Euro",
-  GEL: "Gürcistan Larisi",
+  GEL: "GÃ¼rcistan Larisi",
   RUB: "Rus Rublesi",
-  AZN: "Azerbaycan Manatı",
+  AZN: "Azerbaycan ManatÄ±",
   SAR: "Suudi Arabistan Riyali",
-  AED: "Birleşik Arap Emirlikleri Dirhemi",
+  AED: "BirleÅŸik Arap Emirlikleri Dirhemi",
   QAR: "Katar Riyali",
-  KWD: "Kuveyt Dinarı",
-  BHD: "Bahreyn Dinarı",
+  KWD: "Kuveyt DinarÄ±",
+  BHD: "Bahreyn DinarÄ±",
   OMR: "Umman Riyali",
 };
 
@@ -190,7 +193,7 @@ const readCachedPayload = async () => {
     const cached = template?.[CACHE_KEY];
     if (!cached?.rates) return null;
     validateRates(cached.rates);
-    return { ...cached, warning: "Son geçerli kur gösteriliyor" };
+    return { ...cached, warning: "Son geÃ§erli kur gÃ¶steriliyor" };
   } catch (error) {
     console.warn("Exchange rate cache read failed", error.message || error);
     return null;
@@ -277,12 +280,16 @@ const buildPayloadFromXml = async (xml) => {
 };
 
 module.exports = async function handler(request, response) {
-  response.setHeader("Cache-Control", "no-store, max-age=0");
+  response.setHeader("Cache-Control", "s-maxage=1800, stale-while-revalidate=86400");
 
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
     const tcmbResponse = await fetch(TCMB_URL, {
       headers: { "User-Agent": "SidyaGlobal/1.0" },
+      signal: controller.signal,
     });
+    clearTimeout(timeout);
 
     if (!tcmbResponse.ok) {
       throw new Error(`TCMB responded with ${tcmbResponse.status}`);
@@ -313,3 +320,4 @@ module.exports = async function handler(request, response) {
     });
   }
 };
+

@@ -1,3 +1,6 @@
+Exit code: 0
+Wall time: 4.5 seconds
+Output:
 window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
   supabaseUrl: "",
   supabaseAnonKey: "",
@@ -54,15 +57,7 @@ window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
       forceAdminLtr();
       loadScript("sidyaAdminLtrGuard", "admin-ltr-guard.js?v=20260712-1");
       loadScript("sidyaAdminRfqExtension", "admin-rfq-extension.js?v=20260712-1");
-      return;
     }
-
-    loadScript("sidyaArabicCurrencyExtension", "sidya-arabic-currency-extension.js?v=20260711-1");
-    loadScript("sidyaLocaleLayoutFixes", "sidya-locale-layout-fixes.js?v=20260712-2");
-    loadScript("sidyaRtlHeroFix", "sidya-rtl-hero-fix.js?v=20260712-2");
-    loadScript("sidyaRfqCurrencies", "rfq-currencies.js?v=20260712-1");
-    loadScript("sidyaRfqSiteExtension", "rfq-site-extension.js?v=20260712-1");
-    loadScript("sidyaProformaCoreFix", "sidya-proforma-core-fix.js?v=20260712-2");
   };
 
   forceAdminLtr();
@@ -73,3 +68,4 @@ window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
     loadExtensions();
   }
 })();
+

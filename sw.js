@@ -1,21 +1,19 @@
-const CACHE_NAME = "sidya-global-v99";
+Exit code: 0
+Wall time: 4.6 seconds
+Output:
+const CACHE_NAME = "sidya-global-v100";
 
 const SHELL_ASSETS = [
   "./",
   "./index.html",
-  "./request-quote.html",
   "./offline.html",
   "./styles.css?v=20260613-4",
   "./rfq.css?v=20260712-1",
   "./catalog-products.generated.js?v=20260614-1",
-  "./script.js?v=20260621-1",
+  "./script.js?v=20260712-1",
   "./rfq-currencies.js?v=20260712-1",
-  "./rfq-site-extension.js?v=20260712-1",
-  "./rfq.js?v=20260712-1",
-  "./sidya-arabic-currency-extension.js?v=20260711-1",
-  "./sidya-locale-layout-fixes.js?v=20260712-2",
-  "./sidya-rtl-hero-fix.js?v=20260712-2",
-  "./sidya-proforma-core-fix.js?v=20260712-2",
+  "./sidya-locale-layout-fixes.js?v=20260712-1",
+  "./sidya-proforma-core-fix.js?v=20260712-1",
   "./admin-ltr-guard.js?v=20260712-1",
   "./assets/xlsx.full.min.js",
   "./manifest.webmanifest",
@@ -161,3 +159,4 @@ self.addEventListener("fetch", (event) => {
     }),
   );
 });
+

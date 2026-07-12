@@ -1,3 +1,6 @@
+Exit code: 0
+Wall time: 4.5 seconds
+Output:
 (function () {
   if (window.__sidyaProformaCoreFix) return;
   window.__sidyaProformaCoreFix = true;
@@ -7,11 +10,11 @@
   var RTL = { ar: true, fa: true, ur: true, he: true };
   var PRODUCT_LABELS = {
     tr: {
-      navFind: "Ürün Bul", navLogistics: "Lojistik", navProforma: "Proforma Oluştur",
+      navFind: "ÃœrÃ¼n Bul", navLogistics: "Lojistik", navProforma: "Proforma OluÅŸtur",
       quote: "Teklif Ver", add: "Proformaya Ekle", whatsapp: "WhatsApp ile Sor",
-      related: "İlgili firmalar / Kataloglar", price: "Satış fiyatı", target: "Teklif fiyatınız", qty: "Koli", currency: "Para birimi",
-      panel: "Proforma Özeti", empty: "Henüz ürün eklenmedi.", totalCartons: "Toplam koli", totalPallets: "Tahmini palet", totalKg: "Tahmini kg", productTotal: "Ürün toplamı", invalid: "Sıfırdan büyük bir fiyat girin.", ratesError: "Kur bilgisi şu anda alınamıyor.", ratesLoading: "Güncel TCMB kurları yükleniyor...",
-      productsTitle: "Öne çıkan ürün grupları", supplierTitle: "Türkiye'den Ürün Bul", supplierCopy: "Ürün adı yazarak kategori, marka, minimum sipariş ve yükleme notlarını görün."
+      related: "Ä°lgili firmalar / Kataloglar", price: "SatÄ±ÅŸ fiyatÄ±", target: "Teklif fiyatÄ±nÄ±z", qty: "Koli", currency: "Para birimi",
+      panel: "Proforma Ã–zeti", empty: "HenÃ¼z Ã¼rÃ¼n eklenmedi.", totalCartons: "Toplam koli", totalPallets: "Tahmini palet", totalKg: "Tahmini kg", productTotal: "ÃœrÃ¼n toplamÄ±", invalid: "SÄ±fÄ±rdan bÃ¼yÃ¼k bir fiyat girin.", ratesError: "Kur bilgisi ÅŸu anda alÄ±namÄ±yor.", ratesLoading: "GÃ¼ncel TCMB kurlarÄ± yÃ¼kleniyor...",
+      productsTitle: "Ã–ne Ã§Ä±kan Ã¼rÃ¼n gruplarÄ±", supplierTitle: "TÃ¼rkiye'den ÃœrÃ¼n Bul", supplierCopy: "ÃœrÃ¼n adÄ± yazarak kategori, marka, minimum sipariÅŸ ve yÃ¼kleme notlarÄ±nÄ± gÃ¶rÃ¼n."
     },
     en: {
       navFind: "Find Products", navLogistics: "Logistics", navProforma: "Create Proforma",
@@ -21,22 +24,22 @@
       productsTitle: "Featured product groups", supplierTitle: "Find Products from Turkiye", supplierCopy: "Type a product name to see matching categories, brands, minimum order and loading notes."
     },
     ar: {
-      navFind: "البحث عن منتج", navLogistics: "اللوجستيات", navProforma: "إنشاء بروفرما",
-      quote: "قدّم سعراً", add: "أضف إلى البروفرما", whatsapp: "اسأل عبر واتساب",
-      related: "الشركات والكتالوجات ذات الصلة", price: "سعر البيع", target: "سعر عرضك", qty: "كراتين", currency: "العملة",
-      panel: "ملخص البروفرما", empty: "لم تتم إضافة منتجات بعد.", totalCartons: "إجمالي الكراتين", totalPallets: "المنصات التقديرية", totalKg: "الوزن التقديري", productTotal: "إجمالي المنتجات", invalid: "أدخل سعراً أكبر من صفر.", ratesError: "لا يمكن جلب أسعار الصرف حالياً.", ratesLoading: "جار تحميل أسعار TCMB الحالية...",
-      productsTitle: "مجموعات المنتجات المميزة", supplierTitle: "ابحث عن منتجات من تركيا", supplierCopy: "اكتب اسم المنتج لعرض الفئات والعلامات والحد الأدنى للطلب وملاحظات التحميل."
+      navFind: "Ø§Ù„Ø¨Ø­Ø« Ø¹Ù† Ù…Ù†ØªØ¬", navLogistics: "Ø§Ù„Ù„ÙˆØ¬Ø³ØªÙŠØ§Øª", navProforma: "Ø¥Ù†Ø´Ø§Ø¡ Ø¨Ø±ÙˆÙØ±Ù…Ø§",
+      quote: "Ù‚Ø¯Ù‘Ù… Ø³Ø¹Ø±Ø§Ù‹", add: "Ø£Ø¶Ù Ø¥Ù„Ù‰ Ø§Ù„Ø¨Ø±ÙˆÙØ±Ù…Ø§", whatsapp: "Ø§Ø³Ø£Ù„ Ø¹Ø¨Ø± ÙˆØ§ØªØ³Ø§Ø¨",
+      related: "Ø§Ù„Ø´Ø±ÙƒØ§Øª ÙˆØ§Ù„ÙƒØªØ§Ù„ÙˆØ¬Ø§Øª Ø°Ø§Øª Ø§Ù„ØµÙ„Ø©", price: "Ø³Ø¹Ø± Ø§Ù„Ø¨ÙŠØ¹", target: "Ø³Ø¹Ø± Ø¹Ø±Ø¶Ùƒ", qty: "ÙƒØ±Ø§ØªÙŠÙ†", currency: "Ø§Ù„Ø¹Ù…Ù„Ø©",
+      panel: "Ù…Ù„Ø®Øµ Ø§Ù„Ø¨Ø±ÙˆÙØ±Ù…Ø§", empty: "Ù„Ù… ØªØªÙ… Ø¥Ø¶Ø§ÙØ© Ù…Ù†ØªØ¬Ø§Øª Ø¨Ø¹Ø¯.", totalCartons: "Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„ÙƒØ±Ø§ØªÙŠÙ†", totalPallets: "Ø§Ù„Ù…Ù†ØµØ§Øª Ø§Ù„ØªÙ‚Ø¯ÙŠØ±ÙŠØ©", totalKg: "Ø§Ù„ÙˆØ²Ù† Ø§Ù„ØªÙ‚Ø¯ÙŠØ±ÙŠ", productTotal: "Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª", invalid: "Ø£Ø¯Ø®Ù„ Ø³Ø¹Ø±Ø§Ù‹ Ø£ÙƒØ¨Ø± Ù…Ù† ØµÙØ±.", ratesError: "Ù„Ø§ ÙŠÙ…ÙƒÙ† Ø¬Ù„Ø¨ Ø£Ø³Ø¹Ø§Ø± Ø§Ù„ØµØ±Ù Ø­Ø§Ù„ÙŠØ§Ù‹.", ratesLoading: "Ø¬Ø§Ø± ØªØ­Ù…ÙŠÙ„ Ø£Ø³Ø¹Ø§Ø± TCMB Ø§Ù„Ø­Ø§Ù„ÙŠØ©...",
+      productsTitle: "Ù…Ø¬Ù…ÙˆØ¹Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…Ù…ÙŠØ²Ø©", supplierTitle: "Ø§Ø¨Ø­Ø« Ø¹Ù† Ù…Ù†ØªØ¬Ø§Øª Ù…Ù† ØªØ±ÙƒÙŠØ§", supplierCopy: "Ø§ÙƒØªØ¨ Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬ Ù„Ø¹Ø±Ø¶ Ø§Ù„ÙØ¦Ø§Øª ÙˆØ§Ù„Ø¹Ù„Ø§Ù…Ø§Øª ÙˆØ§Ù„Ø­Ø¯ Ø§Ù„Ø£Ø¯Ù†Ù‰ Ù„Ù„Ø·Ù„Ø¨ ÙˆÙ…Ù„Ø§Ø­Ø¸Ø§Øª Ø§Ù„ØªØ­Ù…ÙŠÙ„."
     }
   };
   var CATEGORY_TEXT = {
-    "home-products": { tr: ["Ev ve Yaşam Ürünleri", "Seramik, mutfak gereçleri, dekoratif ürünler ve ev yaşam ürünleri."], en: ["Home and Lifestyle", "Ceramics, kitchenware, decorative products and curated home goods."], ar: ["منتجات المنزل والمعيشة", "السيراميك وأدوات المطبخ والمنتجات الزخرفية والسلع المنزلية."] },
-    "cleaning-products": { tr: ["Temizlik Ürünleri", "Deterjan, hijyen, kişisel bakım ve ev temizlik ürünlerinde güvenilir marka tedariki."], en: ["Cleaning Products", "Detergents, hygiene, personal care and home cleaning products from trusted brands."], ar: ["منتجات التنظيف", "توريد موثوق للمنظفات ومنتجات النظافة والعناية الشخصية وتنظيف المنزل."] },
-    "food-products": { tr: ["Gıda Ürünleri", "Paketli gıda, sos, salça, atıştırmalık ve market ürünleri."], en: ["Food Products", "Packaged food, sauces, tomato paste, snacks and grocery products."], ar: ["منتجات غذائية", "أغذية معبأة وصلصات ومعجون طماطم ووجبات خفيفة ومنتجات بقالة."] },
-    "industrial-products": { tr: ["Endüstriyel Sarf", "Sarf malzemeleri, temizlik sarfı, ambalaj ve operasyon destek ürünleri."], en: ["Industrial Supplies", "Consumables, cleaning supplies, packaging and operational materials."], ar: ["مستلزمات صناعية", "مواد استهلاكية ومستلزمات تنظيف وتغليف ومواد تشغيل."] },
-    "medical-products": { tr: ["Medikal Ürünler", "Sağlık, hijyen ve medikal ürün katalogları için tedarik seçenekleri."], en: ["Medical Products", "Healthcare, hygiene and medical product catalog sourcing options."], ar: ["منتجات طبية", "خيارات توريد لمنتجات الرعاية الصحية والنظافة والكتالوجات الطبية."] },
-    "cosmetics-products": { tr: ["Kozmetik ve Kişisel Bakım", "Cilt bakımı, saç bakımı, ağız bakım, güzellik ve kişisel bakım ürünlerinde toptan tedarik."], en: ["Cosmetics and Personal Care", "Skin care, hair care, oral care, beauty and personal care products for retail and wholesale channels."], ar: ["مستحضرات التجميل والعناية الشخصية", "توريد للعناية بالبشرة والشعر والفم ومنتجات الجمال والعناية الشخصية."] },
-    "automotive-products": { tr: ["Otomotiv", "Yedek parça, bakım ürünleri, oto kimyasalları, aksesuar ve ihracata uygun otomotiv ürünleri."], en: ["Automotive", "Spare parts, maintenance products, fluids, accessories and export-ready automotive supply options."], ar: ["السيارات", "قطع غيار ومنتجات صيانة وسوائل وإكسسوارات وخيارات توريد جاهزة للتصدير."] },
-    "hardware-products": { tr: ["Yapı Hırdavat", "El aletleri, bağlantı elemanları, yapı malzemeleri, tamir ve hırdavat ürünleri."], en: ["Construction and Hardware", "Hand tools, fasteners, building supplies, repair materials and hardware product sourcing."], ar: ["البناء والعدد", "أدوات يدوية ومثبتات ومواد بناء ومنتجات إصلاح وعدد."] }
+    "home-products": { tr: ["Ev ve YaÅŸam ÃœrÃ¼nleri", "Seramik, mutfak gereÃ§leri, dekoratif Ã¼rÃ¼nler ve ev yaÅŸam Ã¼rÃ¼nleri."], en: ["Home and Lifestyle", "Ceramics, kitchenware, decorative products and curated home goods."], ar: ["Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…Ù†Ø²Ù„ ÙˆØ§Ù„Ù…Ø¹ÙŠØ´Ø©", "Ø§Ù„Ø³ÙŠØ±Ø§Ù…ÙŠÙƒ ÙˆØ£Ø¯ÙˆØ§Øª Ø§Ù„Ù…Ø·Ø¨Ø® ÙˆØ§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ø²Ø®Ø±ÙÙŠØ© ÙˆØ§Ù„Ø³Ù„Ø¹ Ø§Ù„Ù…Ù†Ø²Ù„ÙŠØ©."] },
+    "cleaning-products": { tr: ["Temizlik ÃœrÃ¼nleri", "Deterjan, hijyen, kiÅŸisel bakÄ±m ve ev temizlik Ã¼rÃ¼nlerinde gÃ¼venilir marka tedariki."], en: ["Cleaning Products", "Detergents, hygiene, personal care and home cleaning products from trusted brands."], ar: ["Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„ØªÙ†Ø¸ÙŠÙ", "ØªÙˆØ±ÙŠØ¯ Ù…ÙˆØ«ÙˆÙ‚ Ù„Ù„Ù…Ù†Ø¸ÙØ§Øª ÙˆÙ…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù†Ø¸Ø§ÙØ© ÙˆØ§Ù„Ø¹Ù†Ø§ÙŠØ© Ø§Ù„Ø´Ø®ØµÙŠØ© ÙˆØªÙ†Ø¸ÙŠÙ Ø§Ù„Ù…Ù†Ø²Ù„."] },
+    "food-products": { tr: ["GÄ±da ÃœrÃ¼nleri", "Paketli gÄ±da, sos, salÃ§a, atÄ±ÅŸtÄ±rmalÄ±k ve market Ã¼rÃ¼nleri."], en: ["Food Products", "Packaged food, sauces, tomato paste, snacks and grocery products."], ar: ["Ù…Ù†ØªØ¬Ø§Øª ØºØ°Ø§Ø¦ÙŠØ©", "Ø£ØºØ°ÙŠØ© Ù…Ø¹Ø¨Ø£Ø© ÙˆØµÙ„ØµØ§Øª ÙˆÙ…Ø¹Ø¬ÙˆÙ† Ø·Ù…Ø§Ø·Ù… ÙˆÙˆØ¬Ø¨Ø§Øª Ø®ÙÙŠÙØ© ÙˆÙ…Ù†ØªØ¬Ø§Øª Ø¨Ù‚Ø§Ù„Ø©."] },
+    "industrial-products": { tr: ["EndÃ¼striyel Sarf", "Sarf malzemeleri, temizlik sarfÄ±, ambalaj ve operasyon destek Ã¼rÃ¼nleri."], en: ["Industrial Supplies", "Consumables, cleaning supplies, packaging and operational materials."], ar: ["Ù…Ø³ØªÙ„Ø²Ù…Ø§Øª ØµÙ†Ø§Ø¹ÙŠØ©", "Ù…ÙˆØ§Ø¯ Ø§Ø³ØªÙ‡Ù„Ø§ÙƒÙŠØ© ÙˆÙ…Ø³ØªÙ„Ø²Ù…Ø§Øª ØªÙ†Ø¸ÙŠÙ ÙˆØªØºÙ„ÙŠÙ ÙˆÙ…ÙˆØ§Ø¯ ØªØ´ØºÙŠÙ„."] },
+    "medical-products": { tr: ["Medikal ÃœrÃ¼nler", "SaÄŸlÄ±k, hijyen ve medikal Ã¼rÃ¼n kataloglarÄ± iÃ§in tedarik seÃ§enekleri."], en: ["Medical Products", "Healthcare, hygiene and medical product catalog sourcing options."], ar: ["Ù…Ù†ØªØ¬Ø§Øª Ø·Ø¨ÙŠØ©", "Ø®ÙŠØ§Ø±Ø§Øª ØªÙˆØ±ÙŠØ¯ Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ø±Ø¹Ø§ÙŠØ© Ø§Ù„ØµØ­ÙŠØ© ÙˆØ§Ù„Ù†Ø¸Ø§ÙØ© ÙˆØ§Ù„ÙƒØªØ§Ù„ÙˆØ¬Ø§Øª Ø§Ù„Ø·Ø¨ÙŠØ©."] },
+    "cosmetics-products": { tr: ["Kozmetik ve KiÅŸisel BakÄ±m", "Cilt bakÄ±mÄ±, saÃ§ bakÄ±mÄ±, aÄŸÄ±z bakÄ±m, gÃ¼zellik ve kiÅŸisel bakÄ±m Ã¼rÃ¼nlerinde toptan tedarik."], en: ["Cosmetics and Personal Care", "Skin care, hair care, oral care, beauty and personal care products for retail and wholesale channels."], ar: ["Ù…Ø³ØªØ­Ø¶Ø±Ø§Øª Ø§Ù„ØªØ¬Ù…ÙŠÙ„ ÙˆØ§Ù„Ø¹Ù†Ø§ÙŠØ© Ø§Ù„Ø´Ø®ØµÙŠØ©", "ØªÙˆØ±ÙŠØ¯ Ù„Ù„Ø¹Ù†Ø§ÙŠØ© Ø¨Ø§Ù„Ø¨Ø´Ø±Ø© ÙˆØ§Ù„Ø´Ø¹Ø± ÙˆØ§Ù„ÙÙ… ÙˆÙ…Ù†ØªØ¬Ø§Øª Ø§Ù„Ø¬Ù…Ø§Ù„ ÙˆØ§Ù„Ø¹Ù†Ø§ÙŠØ© Ø§Ù„Ø´Ø®ØµÙŠØ©."] },
+    "automotive-products": { tr: ["Otomotiv", "Yedek parÃ§a, bakÄ±m Ã¼rÃ¼nleri, oto kimyasallarÄ±, aksesuar ve ihracata uygun otomotiv Ã¼rÃ¼nleri."], en: ["Automotive", "Spare parts, maintenance products, fluids, accessories and export-ready automotive supply options."], ar: ["Ø§Ù„Ø³ÙŠØ§Ø±Ø§Øª", "Ù‚Ø·Ø¹ ØºÙŠØ§Ø± ÙˆÙ…Ù†ØªØ¬Ø§Øª ØµÙŠØ§Ù†Ø© ÙˆØ³ÙˆØ§Ø¦Ù„ ÙˆØ¥ÙƒØ³Ø³ÙˆØ§Ø±Ø§Øª ÙˆØ®ÙŠØ§Ø±Ø§Øª ØªÙˆØ±ÙŠØ¯ Ø¬Ø§Ù‡Ø²Ø© Ù„Ù„ØªØµØ¯ÙŠØ±."] },
+    "hardware-products": { tr: ["YapÄ± HÄ±rdavat", "El aletleri, baÄŸlantÄ± elemanlarÄ±, yapÄ± malzemeleri, tamir ve hÄ±rdavat Ã¼rÃ¼nleri."], en: ["Construction and Hardware", "Hand tools, fasteners, building supplies, repair materials and hardware product sourcing."], ar: ["Ø§Ù„Ø¨Ù†Ø§Ø¡ ÙˆØ§Ù„Ø¹Ø¯Ø¯", "Ø£Ø¯ÙˆØ§Øª ÙŠØ¯ÙˆÙŠØ© ÙˆÙ…Ø«Ø¨ØªØ§Øª ÙˆÙ…ÙˆØ§Ø¯ Ø¨Ù†Ø§Ø¡ ÙˆÙ…Ù†ØªØ¬Ø§Øª Ø¥ØµÙ„Ø§Ø­ ÙˆØ¹Ø¯Ø¯."] }
   };
 
   function locale() {
@@ -67,7 +70,7 @@
   }
   function rowProduct(row) {
     var title = row.querySelector("strong")?.textContent?.trim() || row.querySelector("h3")?.textContent?.trim() || "Sidya Global product";
-    var brand = row.querySelector(".proforma-brand-logo")?.getAttribute("alt")?.replace(/\s*logo\s*$/i, "") || row.querySelector("span")?.textContent?.split("·")?.[0]?.trim() || "Sidya Global";
+    var brand = row.querySelector(".proforma-brand-logo")?.getAttribute("alt")?.replace(/\s*logo\s*$/i, "") || row.querySelector("span")?.textContent?.split("Â·")?.[0]?.trim() || "Sidya Global";
     var qtyInput = row.querySelector("input[type='number']");
     var qty = Math.max(parseInt(qtyInput?.value || "1", 10) || 1, 1);
     var priceText = row.querySelector("dl")?.textContent || "";
@@ -101,7 +104,7 @@
       ".site-header{overflow:visible!important;z-index:80}.nav-item{position:static}.has-dropdown>.products-menu{position:fixed!important;top:calc(var(--sidya-header-bottom,48px));left:clamp(12px,2vw,24px)!important;right:clamp(12px,2vw,24px)!important;inset-inline:auto!important;width:auto!important;min-width:0!important;max-width:none!important;max-height:min(72vh,620px);overflow:auto;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));transform:translateY(0)!important;z-index:120}",
       "html[dir='rtl'] .has-dropdown>.products-menu{direction:rtl;text-align:start}.has-dropdown:not(:hover):not(:focus-within)>.products-menu:not(.is-open){opacity:0;pointer-events:none}.has-dropdown:hover>.products-menu,.has-dropdown:focus-within>.products-menu,.has-dropdown>.products-menu.is-open{opacity:1;pointer-events:auto}",
       ".section-heading{max-width:1180px;margin-inline:auto;text-align:start!important;display:grid;gap:8px}.section-heading>p{max-width:680px;margin-inline:0 auto!important}html[dir='rtl'] .section-heading>p{margin-inline:auto 0!important}.supplier-search-box{margin-inline:auto auto;width:min(880px,100%)}@media(min-width:900px){.supplier-search-box{margin-inline:0 auto}html[dir='rtl'] .supplier-search-box{margin-inline:auto 0}}",
-      ".related-companies>strong{display:none!important}.related-companies{display:grid;gap:8px;position:relative;overflow:visible!important}.related-companies-toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:36px;padding:8px 10px;border:1px solid rgba(23,23,23,.12);border-radius:8px;background:#fff;color:#171717;font-weight:900;cursor:pointer}.related-companies-toggle::after{content:'⌄';transition:transform .16s ease}.related-companies.is-open .related-companies-toggle::after{transform:rotate(180deg)}.related-companies-panel{display:none!important;position:static!important;max-height:260px;overflow:auto}.related-companies.is-open .related-companies-panel{display:grid!important;gap:6px}.product-card{overflow:visible}.sidya-rfq-card-actions{position:relative;z-index:1}",
+      ".related-companies>strong{display:none!important}.related-companies{display:grid;gap:8px;position:relative;overflow:visible!important}.related-companies-toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:36px;padding:8px 10px;border:1px solid rgba(23,23,23,.12);border-radius:8px;background:#fff;color:#171717;font-weight:900;cursor:pointer}.related-companies-toggle::after{content:'âŒ„';transition:transform .16s ease}.related-companies.is-open .related-companies-toggle::after{transform:rotate(180deg)}.related-companies-panel{display:none!important;position:static!important;max-height:260px;overflow:auto}.related-companies.is-open .related-companies-panel{display:grid!important;gap:6px}.product-card{overflow:visible}.sidya-rfq-card-actions{position:relative;z-index:1}",
       ".sidya-live-proforma-dock{position:fixed;top:calc(var(--sidya-header-bottom,96px) + 14px);right:14px;z-index:70;width:min(360px,calc(100vw - 28px));max-height:calc(100vh - var(--sidya-header-bottom,96px) - 28px);display:grid;grid-template-rows:auto minmax(0,1fr) auto;border:1px solid rgba(23,23,23,.14);border-radius:8px;background:#fff;box-shadow:0 18px 42px rgba(0,0,0,.18);overflow:hidden}.sidya-live-proforma-dock.is-empty{display:none}.sidya-dock-header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;background:#242424;color:#fff}.sidya-dock-header strong{font-size:.95rem}.sidya-dock-toggle{border:0;background:rgba(255,255,255,.14);color:#fff;border-radius:999px;min-height:30px;padding:0 10px;cursor:pointer}.sidya-dock-lines{display:grid;gap:8px;padding:10px;overflow:auto}.sidya-dock-line{display:grid;gap:7px;padding:10px;border:1px solid rgba(23,23,23,.1);border-radius:8px;background:#f8f8f8}.sidya-dock-line strong{font-size:.86rem}.sidya-dock-controls{display:grid;grid-template-columns:70px 1fr 92px 32px;gap:6px;align-items:center}.sidya-dock-controls input,.sidya-dock-controls select{min-width:0;height:34px;border:1px solid rgba(23,23,23,.18);border-radius:7px;padding:0 8px}.sidya-dock-remove{height:34px;border:0;border-radius:7px;background:#3d3d3d;color:#fff;cursor:pointer}.sidya-dock-totals{display:grid;gap:6px;padding:12px 14px;border-top:1px solid rgba(23,23,23,.1);background:#fff}.sidya-dock-totals span{display:flex;justify-content:space-between;gap:8px;font-size:.82rem}.sidya-offer-inline{display:grid;grid-template-columns:minmax(0,1fr)110px auto;gap:8px;margin-top:8px;padding:8px;border:1px solid rgba(196,160,90,.42);border-radius:8px;background:#fffaf0}.sidya-offer-inline input,.sidya-offer-inline select{min-height:34px;border:1px solid rgba(23,23,23,.18);border-radius:7px;padding:0 8px}.sidya-offer-inline button{border:0;border-radius:7px;background:#242424;color:#fff;font-weight:850;padding:0 10px;cursor:pointer}.sidya-field-error{color:#b42318;font-size:.78rem}.exchange-rate-list{min-width:0;max-width:100%;overflow-x:auto;scrollbar-width:thin}.exchange-rate-list span{white-space:nowrap;flex:0 0 auto}",
       "html[dir='rtl'] .sidya-live-proforma-dock{right:auto;left:14px;direction:rtl;text-align:start}@media(max-width:920px){.sidya-live-proforma-dock{top:auto;left:10px!important;right:10px!important;bottom:10px;width:auto;max-height:58vh}.sidya-live-proforma-dock.is-collapsed{grid-template-rows:auto}.sidya-live-proforma-dock.is-collapsed .sidya-dock-lines,.sidya-live-proforma-dock.is-collapsed .sidya-dock-totals{display:none}.site-header{flex-wrap:wrap}.nav-links{overflow-x:auto;max-width:100%;justify-content:flex-start}.header-actions{max-width:100%;flex-wrap:wrap}}",
       "@media(max-width:560px){.sidya-dock-controls{grid-template-columns:64px 1fr 76px 32px}.sidya-offer-inline{grid-template-columns:1fr 90px}.sidya-offer-inline button{grid-column:1/-1;min-height:34px}.products-menu{grid-template-columns:1fr!important}}"
@@ -121,7 +124,7 @@
     document.documentElement.lang = lang;
     document.documentElement.dir = dir();
     var l = labels();
-    var navFind = Array.from(document.querySelectorAll(".nav-links>a")).find(function (a) { return /Ürün Bul|Find Products|البحث/.test(a.textContent || ""); });
+    var navFind = Array.from(document.querySelectorAll(".nav-links>a")).find(function (a) { return /ÃœrÃ¼n Bul|Find Products|Ø§Ù„Ø¨Ø­Ø«/.test(a.textContent || ""); });
     if (navFind) navFind.textContent = l.navFind;
     var logistics = document.getElementById("openLogisticsCenter");
     if (logistics) logistics.textContent = l.navLogistics;
@@ -183,7 +186,7 @@
     dock = document.createElement("aside");
     dock.id = "sidyaLiveProformaDock";
     dock.className = "sidya-live-proforma-dock is-empty";
-    dock.innerHTML = '<div class="sidya-dock-header"><strong></strong><button class="sidya-dock-toggle" type="button">−</button></div><div class="sidya-dock-lines"></div><div class="sidya-dock-totals"></div>';
+    dock.innerHTML = '<div class="sidya-dock-header"><strong></strong><button class="sidya-dock-toggle" type="button">âˆ’</button></div><div class="sidya-dock-lines"></div><div class="sidya-dock-totals"></div>';
     document.body.appendChild(dock);
     dock.querySelector(".sidya-dock-toggle").addEventListener("click", function () { dock.classList.toggle("is-collapsed"); });
     dock.addEventListener("input", function (event) {
@@ -214,12 +217,12 @@
     dock.querySelector(".sidya-dock-lines").innerHTML = items.length ? items.map(function (item) {
       var unit = Number(item.offerPrice || item.unitPrice || 0);
       var total = unit * Number(item.qty || 0);
-      return '<article class="sidya-dock-line" data-cart-id="' + item.id + '"><strong>' + item.title + '</strong><small>' + item.brand + '</small><div class="sidya-dock-controls"><input data-cart-qty type="number" min="1" step="1" value="' + Number(item.qty || 1) + '" aria-label="' + l.qty + '"><input data-cart-offer type="number" min="0" step="0.0001" value="' + Number(item.offerPrice || 0) + '" placeholder="' + l.target + '" aria-label="' + l.target + '"><select data-cart-currency aria-label="' + l.currency + '">' + ["USD", "EUR", "TRY", "GEL", "RUB", "AZN", "GBP", "AED", "SAR", "QAR", "KWD"].map(function (c) { return '<option value="' + c + '"' + ((item.currency || "USD") === c ? " selected" : "") + '>' + c + '</option>'; }).join("") + '</select><button type="button" class="sidya-dock-remove" aria-label="Remove">×</button></div><small>' + money(total, item.currency || "USD") + '</small></article>';
+      return '<article class="sidya-dock-line" data-cart-id="' + item.id + '"><strong>' + item.title + '</strong><small>' + item.brand + '</small><div class="sidya-dock-controls"><input data-cart-qty type="number" min="1" step="1" value="' + Number(item.qty || 1) + '" aria-label="' + l.qty + '"><input data-cart-offer type="number" min="0" step="0.0001" value="' + Number(item.offerPrice || 0) + '" placeholder="' + l.target + '" aria-label="' + l.target + '"><select data-cart-currency aria-label="' + l.currency + '">' + ["USD", "EUR", "TRY", "GEL", "RUB", "AZN", "GBP", "AED", "SAR", "QAR", "KWD"].map(function (c) { return '<option value="' + c + '"' + ((item.currency || "USD") === c ? " selected" : "") + '>' + c + '</option>'; }).join("") + '</select><button type="button" class="sidya-dock-remove" aria-label="Remove">Ã—</button></div><small>' + money(total, item.currency || "USD") + '</small></article>';
     }).join("") : '<p class="proforma-empty">' + l.empty + '</p>';
     var totals = new Map();
     var totalCartons = 0;
     items.forEach(function (item) { var q = Number(item.qty || 0); totalCartons += q; var unit = Number(item.offerPrice || item.unitPrice || 0); if (unit > 0) totals.set(item.currency || "USD", (totals.get(item.currency || "USD") || 0) + unit * q); });
-    dock.querySelector(".sidya-dock-totals").innerHTML = '<span><b>' + l.totalCartons + '</b><strong>' + formatNumber(totalCartons, 0) + '</strong></span><span><b>' + l.totalPallets + '</b><strong>' + formatNumber(totalCartons / 60, 2) + '</strong></span><span><b>' + l.totalKg + '</b><strong>' + formatNumber(totalCartons * 10, 0) + ' kg</strong></span><span><b>' + l.productTotal + '</b><strong>' + ([].slice.call(totals.entries()).map(function (entry) { return money(entry[1], entry[0]); }).join(' · ') || '-') + '</strong></span>';
+    dock.querySelector(".sidya-dock-totals").innerHTML = '<span><b>' + l.totalCartons + '</b><strong>' + formatNumber(totalCartons, 0) + '</strong></span><span><b>' + l.totalPallets + '</b><strong>' + formatNumber(totalCartons / 60, 2) + '</strong></span><span><b>' + l.totalKg + '</b><strong>' + formatNumber(totalCartons * 10, 0) + ' kg</strong></span><span><b>' + l.productTotal + '</b><strong>' + ([].slice.call(totals.entries()).map(function (entry) { return money(entry[1], entry[0]); }).join(' Â· ') || '-') + '</strong></span>';
   }
 
   function openInlineOffer(row) {
@@ -297,7 +300,7 @@
       var rates = normalizeExchangePayload(payload);
       if (!rates.length) throw new Error("empty rates");
       list.innerHTML = rates.map(function (rate) { return '<span>' + (rate.code || rate.label) + '/TRY <strong>' + formatNumber(rate.value, 4) + ' TL</strong></span>'; }).join("");
-      updated.textContent = (locale() === "tr" ? "Güncellendi" : locale() === "ar" ? "تم التحديث" : "Updated") + ": " + new Date(payload.updatedAt || payload.fetched_at || Date.now()).toLocaleString(locale() === "tr" ? "tr-TR" : "en-GB") + " · " + (payload.source || "TCMB");
+      updated.textContent = (locale() === "tr" ? "GÃ¼ncellendi" : locale() === "ar" ? "ØªÙ… Ø§Ù„ØªØ­Ø¯ÙŠØ«" : "Updated") + ": " + new Date(payload.updatedAt || payload.fetched_at || Date.now()).toLocaleString(locale() === "tr" ? "tr-TR" : "en-GB") + " Â· " + (payload.source || "TCMB");
     } catch (error) {
       updated.textContent = labels().ratesError;
       list.innerHTML = '<span>USD/TRY <strong>-</strong></span><span>EUR/TRY <strong>-</strong></span>';
@@ -321,6 +324,6 @@
   window.addEventListener("resize", setHeaderMetric);
   window.addEventListener("sidya:locale-applied", function () { setTimeout(function () { applyLocaleIsolation(); normalizeActions(); setupRelatedAccordions(); renderDock(); loadRates(); }, 0); });
   document.addEventListener("click", function (event) { if (event.target.closest(".lang-option")) setTimeout(function () { applyLocaleIsolation(); normalizeActions(); setupRelatedAccordions(); renderDock(); loadRates(); }, 160); }, true);
-  new MutationObserver(function () { clearTimeout(window.__sidyaCoreFixTimer); window.__sidyaCoreFixTimer = setTimeout(function () { boot(); }, 120); }).observe(document.documentElement, { childList: true, subtree: true });
   setTimeout(loadRates, 250);
 })();
+

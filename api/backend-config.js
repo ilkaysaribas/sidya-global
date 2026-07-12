@@ -1,8 +1,11 @@
+Exit code: 0
+Wall time: 4.9 seconds
+Output:
 const {
   encryptSecret,
   decryptSecret,
   smtpEncryptionKeyStatus,
-} = require("./smtp-crypto");
+} = require("../lib/smtp-crypto");
 
 const PROJECT_REF = "jhjforyykkxklfarjtjl";
 const DEFAULT_SUPABASE_URL = "https://jhjforyykkxklfarjtjl.supabase.co";
@@ -33,7 +36,7 @@ function rateLimit(req, key, limit = 30, windowMs = 60_000) {
   current.count += 1;
   rateBuckets.set(id, current);
   if (current.count > limit) {
-    const error = new Error("Çok fazla istek. Lütfen biraz sonra tekrar deneyin.");
+    const error = new Error("Ã‡ok fazla istek. LÃ¼tfen biraz sonra tekrar deneyin.");
     error.statusCode = 429;
     error.code = "RATE_LIMITED";
     throw error;
@@ -61,7 +64,7 @@ async function rest(path, options = {}) {
   let data = text;
   try { data = text ? JSON.parse(text) : null; } catch (_error) {}
   if (!response.ok) {
-    const error = new Error("Supabase REST isteği başarısız.");
+    const error = new Error("Supabase REST isteÄŸi baÅŸarÄ±sÄ±z.");
     error.statusCode = response.status;
     error.code = "SUPABASE_REST_FAILED";
     error.safeDetails = data;
@@ -73,7 +76,7 @@ async function rest(path, options = {}) {
 async function assertAdmin(req) {
   const token = stripBearer(req.headers.authorization);
   if (!token) {
-    const error = new Error("Admin oturumu bulunamadı.");
+    const error = new Error("Admin oturumu bulunamadÄ±.");
     error.statusCode = 401;
     error.code = "ADMIN_SESSION_MISSING";
     throw error;
@@ -87,7 +90,7 @@ async function assertAdmin(req) {
   }
   const response = await fetch(`${supabaseUrl()}/auth/v1/user`, { headers: { apikey: key, Authorization: `Bearer ${token}` } });
   if (!response.ok) {
-    const error = new Error("Admin oturumu doğrulanamadı.");
+    const error = new Error("Admin oturumu doÄŸrulanamadÄ±.");
     error.statusCode = 401;
     error.code = "ADMIN_SESSION_INVALID";
     throw error;
@@ -95,7 +98,7 @@ async function assertAdmin(req) {
   const user = await response.json();
   const admins = await rest(`admin_users?user_id=eq.${encodeURIComponent(user.id)}&select=user_id`);
   if (!Array.isArray(admins) || !admins.length) {
-    const error = new Error("Bu işlem için admin yetkisi gerekli.");
+    const error = new Error("Bu iÅŸlem iÃ§in admin yetkisi gerekli.");
     error.statusCode = 403;
     error.code = "ADMIN_REQUIRED";
     throw error;
@@ -141,7 +144,7 @@ async function logMail({ recipient, subject, status, errorMessage = "", source =
 }
 
 function timeoutError() {
-  const error = new Error("SMTP bağlantısı zaman aşımına uğradı. Host, port ve SSL ayarını kontrol edin.");
+  const error = new Error("SMTP baÄŸlantÄ±sÄ± zaman aÅŸÄ±mÄ±na uÄŸradÄ±. Host, port ve SSL ayarÄ±nÄ± kontrol edin.");
   error.statusCode = 504;
   error.code = "SMTP_TIMEOUT";
   return error;
@@ -160,27 +163,27 @@ function smtpErrorInfo(error) {
   const command = String(error?.command || "").toUpperCase();
   const responseCode = Number(error?.responseCode || 0);
   const message = String(error?.message || "");
-  if (code === "SMTP_TIMEOUT" || /timeout|timed out/i.test(message)) return { code: "SMTP_TIMEOUT", message: "SMTP bağlantısı zaman aşımına uğradı." };
-  if (code === "EAUTH" || responseCode === 534 || responseCode === 535) return { code: "SMTP_AUTH_FAILED", message: "SMTP kimlik doğrulaması başarısız. API token geçersiz veya yetkisiz." };
-  if (command === "MAIL FROM" || responseCode === 550 || responseCode === 553) return { code: "SMTP_SENDER_REJECTED", message: "Gönderen adresi veya gönderen domaini SMTP sağlayıcısı tarafından kabul edilmedi. Cloudflare Email Sending tarafında export@sidyaglobal.com göndereni/domaini yetkilendirilmiş olmalı." };
-  if (code === "EENVELOPE" || command === "RCPT TO") return { code: "SMTP_ENVELOPE_FAILED", message: "Alıcı adresi veya gönderim zarfı SMTP sunucusu tarafından reddedildi." };
-  if (["ECONNECTION", "ETIMEDOUT", "ESOCKET", "ECONNREFUSED", "ENOTFOUND"].includes(code)) return { code: "SMTP_CONNECTION_FAILED", message: "SMTP sunucusuna bağlantı kurulamadı. Host, port ve SSL ayarını kontrol edin." };
-  if (/tls|ssl|certificate|handshake/i.test(message)) return { code: "SMTP_TLS_FAILED", message: "TLS/SSL bağlantısı kurulamadı. Port 465 ve SSL ayarını kontrol edin." };
-  return { code: code || "SMTP_SEND_FAILED", message: "E-posta gönderilemedi. Mail Center SMTP ayarlarını kontrol edin." };
+  if (code === "SMTP_TIMEOUT" || /timeout|timed out/i.test(message)) return { code: "SMTP_TIMEOUT", message: "SMTP baÄŸlantÄ±sÄ± zaman aÅŸÄ±mÄ±na uÄŸradÄ±." };
+  if (code === "EAUTH" || responseCode === 534 || responseCode === 535) return { code: "SMTP_AUTH_FAILED", message: "SMTP kimlik doÄŸrulamasÄ± baÅŸarÄ±sÄ±z. API token geÃ§ersiz veya yetkisiz." };
+  if (command === "MAIL FROM" || responseCode === 550 || responseCode === 553) return { code: "SMTP_SENDER_REJECTED", message: "GÃ¶nderen adresi veya gÃ¶nderen domaini SMTP saÄŸlayÄ±cÄ±sÄ± tarafÄ±ndan kabul edilmedi. Cloudflare Email Sending tarafÄ±nda export@sidyaglobal.com gÃ¶ndereni/domaini yetkilendirilmiÅŸ olmalÄ±." };
+  if (code === "EENVELOPE" || command === "RCPT TO") return { code: "SMTP_ENVELOPE_FAILED", message: "AlÄ±cÄ± adresi veya gÃ¶nderim zarfÄ± SMTP sunucusu tarafÄ±ndan reddedildi." };
+  if (["ECONNECTION", "ETIMEDOUT", "ESOCKET", "ECONNREFUSED", "ENOTFOUND"].includes(code)) return { code: "SMTP_CONNECTION_FAILED", message: "SMTP sunucusuna baÄŸlantÄ± kurulamadÄ±. Host, port ve SSL ayarÄ±nÄ± kontrol edin." };
+  if (/tls|ssl|certificate|handshake/i.test(message)) return { code: "SMTP_TLS_FAILED", message: "TLS/SSL baÄŸlantÄ±sÄ± kurulamadÄ±. Port 465 ve SSL ayarÄ±nÄ± kontrol edin." };
+  return { code: code || "SMTP_SEND_FAILED", message: "E-posta gÃ¶nderilemedi. Mail Center SMTP ayarlarÄ±nÄ± kontrol edin." };
 }
 
 async function sendSmtpMail({ to, subject, body, source = "crm" }) {
   const nodemailer = require("nodemailer");
   const settings = await loadMailSettings();
   if (!settings.host || !settings.user || !settings.pass) {
-    const message = "SMTP ayarları eksik. Mail Center ayarlarını kaydedin veya Vercel env SMTP değerlerini tanımlayın.";
+    const message = "SMTP ayarlarÄ± eksik. Mail Center ayarlarÄ±nÄ± kaydedin veya Vercel env SMTP deÄŸerlerini tanÄ±mlayÄ±n.";
     await logMail({ recipient: to, subject, status: "failed", errorMessage: message, source });
     const error = new Error(message);
     error.statusCode = 400;
     error.code = "SMTP_CONFIG_MISSING";
     throw error;
   }
-  console.info("SMTP bağlantısı başlatıldı", { host: settings.host, port: settings.port, secure: settings.secure, source });
+  console.info("SMTP baÄŸlantÄ±sÄ± baÅŸlatÄ±ldÄ±", { host: settings.host, port: settings.port, secure: settings.secure, source });
   const transporter = nodemailer.createTransport({
     host: settings.host,
     port: settings.port,
@@ -251,7 +254,7 @@ notify pgrst, 'reload schema';
 async function runManagementSql(query) {
   const accessToken = stripBearer(readEnv("SUPABASE_ACCESS_TOKEN"));
   if (!accessToken || !accessToken.startsWith("sbp_")) {
-    const error = new Error("SUPABASE_ACCESS_TOKEN eksik veya Supabase personal access token değil.");
+    const error = new Error("SUPABASE_ACCESS_TOKEN eksik veya Supabase personal access token deÄŸil.");
     error.statusCode = 501;
     throw error;
   }
@@ -337,7 +340,7 @@ async function handleMailCrm(req, res, action) {
         to: FIXED_SENDER_EMAIL,
         subject: `Sidya Global talep - ${payload.company_name || payload.contact_name || payload.email}`.slice(0, 300),
         source: "contact_form",
-        body: [`Firma: ${payload.company_name || "-"}`, `Yetkili: ${payload.contact_name || "-"}`, `E-posta: ${payload.email}`, `Telefon: ${payload.phone || "-"}`, `WhatsApp: ${payload.whatsapp || "-"}`, `Ülke: ${payload.country || "-"}`, `Ürün: ${payload.interested_products || "-"}`, "", payload.notes || ""].join("\n"),
+        body: [`Firma: ${payload.company_name || "-"}`, `Yetkili: ${payload.contact_name || "-"}`, `E-posta: ${payload.email}`, `Telefon: ${payload.phone || "-"}`, `WhatsApp: ${payload.whatsapp || "-"}`, `Ãœlke: ${payload.country || "-"}`, `ÃœrÃ¼n: ${payload.interested_products || "-"}`, "", payload.notes || ""].join("\n"),
       });
       mailSent = true;
     } catch (error) {
@@ -394,12 +397,12 @@ async function handleMailCrm(req, res, action) {
       };
       if (!payload.smtp_host) return json(res, 400, { ok: false, error: "SMTP host gerekli." });
       if (!payload.smtp_user) return json(res, 400, { ok: false, error: "SMTP user gerekli." });
-      if (payload.smtp_port < 1 || payload.smtp_port > 65535) return json(res, 400, { ok: false, error: "SMTP port geçersiz." });
+      if (payload.smtp_port < 1 || payload.smtp_port > 65535) return json(res, 400, { ok: false, error: "SMTP port geÃ§ersiz." });
       if (String(body.smtp_password || "").trim()) payload.smtp_password = encryptSecret(String(body.smtp_password).trim());
       else if (String(current.smtp_password || "").startsWith("enc:v1:")) payload.smtp_password = current.smtp_password;
-      else if (!readEnv("SMTP_PASSWORD", "MAIL_PASSWORD")) return json(res, 400, { ok: false, error: "SMTP şifresi gerekli. Mevcut şifre yoksa yeni şifre girin." });
+      else if (!readEnv("SMTP_PASSWORD", "MAIL_PASSWORD")) return json(res, 400, { ok: false, error: "SMTP ÅŸifresi gerekli. Mevcut ÅŸifre yoksa yeni ÅŸifre girin." });
       await rest("mail_settings?on_conflict=id", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" }, body: JSON.stringify(payload) });
-      return json(res, 200, { ok: true, message: "Mail ayarları kaydedildi." });
+      return json(res, 200, { ok: true, message: "Mail ayarlarÄ± kaydedildi." });
     }
   }
 
@@ -410,14 +413,14 @@ async function handleMailCrm(req, res, action) {
     const source = ["contact_form", "quote", "crm", "order", "test"].includes(body.source) ? body.source : (body.type === "quote" ? "quote" : "crm");
     const isTest = source === "test" || body.test === true;
     const subject = String(isTest ? "Sidya Global SMTP Test" : (body.subject || "")).trim().slice(0, 300);
-    const mailBody = String(isTest ? "Sidya Global Mail Center SMTP bağlantısı başarıyla çalışmaktadır." : (body.body || "")).slice(0, 20000);
-    if (!to || !subject) return json(res, 400, { ok: false, success: false, message: "Alıcı ve konu gerekli.", error: "Alıcı ve konu gerekli.", code: "VALIDATION_ERROR" });
+    const mailBody = String(isTest ? "Sidya Global Mail Center SMTP baÄŸlantÄ±sÄ± baÅŸarÄ±yla Ã§alÄ±ÅŸmaktadÄ±r." : (body.body || "")).slice(0, 20000);
+    if (!to || !subject) return json(res, 400, { ok: false, success: false, message: "AlÄ±cÄ± ve konu gerekli.", error: "AlÄ±cÄ± ve konu gerekli.", code: "VALIDATION_ERROR" });
     const result = await sendSmtpMail({ to, subject, body: mailBody, source });
     if (body.customerId) {
       await rest("crm_interactions", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ customer_id: body.customerId, type: body.type || (source === "quote" ? "quote" : "email"), direction: "outbound", subject, body: mailBody }) });
       await rest(`crm_customers?id=eq.${encodeURIComponent(body.customerId)}`, { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ last_contact_at: new Date().toISOString() }) });
     }
-    return json(res, 200, { ok: true, success: true, message: isTest ? "Test e-postası gönderildi." : "Mail gönderildi.", messageId: result.messageId || "", sender: `${FIXED_SENDER_NAME} <${FIXED_SENDER_EMAIL}>` });
+    return json(res, 200, { ok: true, success: true, message: isTest ? "Test e-postasÄ± gÃ¶nderildi." : "Mail gÃ¶nderildi.", messageId: result.messageId || "", sender: `${FIXED_SENDER_NAME} <${FIXED_SENDER_EMAIL}>` });
   }
 
   if (action === "crm-center") {
@@ -436,7 +439,7 @@ async function handleMailCrm(req, res, action) {
     if (req.method === "PATCH" && crmAction === "customer") {
       const body = parseBody(req);
       const id = String(body.id || "");
-      if (!id) return json(res, 400, { ok: false, error: "Müşteri id gerekli." });
+      if (!id) return json(res, 400, { ok: false, error: "MÃ¼ÅŸteri id gerekli." });
       const rows = await rest(`crm_customers?id=eq.${encodeURIComponent(id)}`, { method: "PATCH", headers: { Prefer: "return=representation" }, body: JSON.stringify(cleanCustomer(body)) });
       return json(res, 200, { ok: true, customer: Array.isArray(rows) ? rows[0] : rows });
     }
@@ -448,24 +451,27 @@ async function handleMailCrm(req, res, action) {
     }
   }
 
-  return json(res, 404, { ok: false, error: "Mail CRM action bulunamadı." });
+  return json(res, 404, { ok: false, error: "Mail CRM action bulunamadÄ±." });
 }
 
 function sendBackendScript(res) {
   const publicUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || DEFAULT_SUPABASE_URL;
   const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim() || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() || "";
   const storageBucket = process.env.SUPABASE_STORAGE_BUCKET?.trim() || "b2b-documents";
+  const build = { sha: (process.env.VERCEL_GIT_COMMIT_SHA || "local").slice(0, 7), environment: process.env.VERCEL_ENV || "development" };
   const config = { supabaseUrl: publicUrl, supabasePublishableKey, supabaseAnonKey: supabasePublishableKey, storageBucket, configured: Boolean(publicUrl && supabasePublishableKey) };
   res.setHeader("Content-Type", "application/javascript; charset=utf-8");
   res.setHeader("Cache-Control", "no-store, max-age=0");
   res.status(200).send(`
     window.SIDYA_BACKEND = ${JSON.stringify(config)};
+    window.SIDYA_BUILD = ${JSON.stringify(build)};
     (function(){
       if (window.__sidyaAdminFixLoader) return;
       window.__sidyaAdminFixLoader = true;
       function appReady(){ var shell = document.getElementById("appShell"); return !!(shell && !shell.hidden); }
       function appendScript(id, src){ if (document.getElementById(id)) return; var script = document.createElement("script"); script.id = id; script.src = src; script.defer = true; document.head.appendChild(script); }
-      function loadSiteEnhancements(){ if (document.getElementById("quoteForm")) { appendScript("sidyaMailCrmRouteShimScript", "/mail-crm-route-shim.js?v=20260711-1"); appendScript("sidyaSiteMailCrmScript", "/site-mail-crm.js?v=20260711-1"); } }
+      function renderBuildInfo(){ var node = document.getElementById("buildInfo"); if (node) node.textContent = "Build: " + window.SIDYA_BUILD.sha + " Â· Environment: " + window.SIDYA_BUILD.environment; }
+      function loadSiteEnhancements(){ renderBuildInfo(); if (document.getElementById("quoteForm")) { appendScript("sidyaMailCrmRouteShimScript", "/mail-crm-route-shim.js?v=20260711-1"); appendScript("sidyaSiteMailCrmScript", "/site-mail-crm.js?v=20260711-1"); } }
       function loadFixes(){ loadSiteEnhancements(); if (!appReady()) return; appendScript("sidyaMailCrmRouteShimScript", "/mail-crm-route-shim.js?v=20260711-1"); appendScript("sidyaAdminPanelFixesScript", "/admin-panel-fixes.js?v=20260705-2"); appendScript("sidyaAdminRateFixScript", "/admin-rate-fix.js?v=20260706-2"); appendScript("sidyaAdminProfitFixScript", "/admin-profit-fix.js?v=20260705-1"); appendScript("sidyaAdminProfitTableV4Script", "/admin-profit-table-v4.js?v=20260706-1"); appendScript("sidyaInfoActionsScript", "/admin-info-actions.js?v=20260706-1"); appendScript("sidyaMailCrmAdminScript", "/admin-mail-crm.js?v=20260711-1"); appendScript("sidyaMailSmtpFixScript", "/admin-mail-smtp-fix.js?v=20260712-2"); }
       var timer = setInterval(function(){ loadFixes(); if (appReady() && document.getElementById("sidyaAdminProfitTableV4Script") && document.getElementById("sidyaInfoActionsScript") && document.getElementById("sidyaMailCrmAdminScript")) clearInterval(timer); }, 500);
       document.addEventListener("DOMContentLoaded", loadFixes); window.addEventListener("load", loadFixes);
@@ -482,3 +488,4 @@ module.exports = async (req, res) => {
     return json(res, error.statusCode || 500, { ok: false, success: false, message: error.message, error: error.message, code: error.code || "SERVER_ERROR", details: error.safeDetails || null });
   }
 };
+
