@@ -1,7 +1,3 @@
-Exit code: 0
-Wall time: 4.8 seconds
-Total output lines: 4060
-Output:
 const content = {
   en: {
     navProducts: "Products",

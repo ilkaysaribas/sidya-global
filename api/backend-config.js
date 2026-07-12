@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 4.9 seconds
-Output:
 const {
   encryptSecret,
   decryptSecret,

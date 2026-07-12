@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 4.7 seconds
-Output:
 (function () {
   if (window.__sidyaLocaleLayoutFixes) return;
   window.__sidyaLocaleLayoutFixes = true;

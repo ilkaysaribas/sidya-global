@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 4.5 seconds
-Output:
 window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
   supabaseUrl: "",
   supabaseAnonKey: "",

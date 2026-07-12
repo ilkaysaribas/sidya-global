@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 4.7 seconds
-Output:
 (function (root, factory) {
   var value = factory();
   if (typeof module === "object" && module.exports) module.exports = value;

@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 4.2 seconds
-Output:
 const TCMB_URL = "https://www.tcmb.gov.tr/kurlar/today.xml";
 const NBG_URL = "https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/en/json";
 

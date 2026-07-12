@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 4.8 seconds
-Output:
 # Sidya Global production architecture
 
 ## Canonical production path

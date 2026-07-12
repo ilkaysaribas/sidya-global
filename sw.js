@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 4.6 seconds
-Output:
 const CACHE_NAME = "sidya-global-v100";
 
 const SHELL_ASSETS = [

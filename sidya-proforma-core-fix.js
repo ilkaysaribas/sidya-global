@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 4.5 seconds
-Output:
 (function () {
   if (window.__sidyaProformaCoreFix) return;
   window.__sidyaProformaCoreFix = true;
