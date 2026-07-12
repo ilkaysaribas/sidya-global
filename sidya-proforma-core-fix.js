@@ -291,7 +291,7 @@
     var controller = new AbortController();
     var timer = setTimeout(function () { controller.abort(); }, 9000);
     try {
-      var res = await fetch("/api/exchange-rates-live?t=" + Date.now(), { cache: "no-store", signal: controller.signal });
+      var res = await fetch("/api/exchange-rates?t=" + Date.now(), { cache: "no-store", signal: controller.signal });
       if (!res.ok) throw new Error("HTTP " + res.status);
       var payload = await res.json();
       var rates = normalizeExchangePayload(payload);
