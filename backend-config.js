@@ -62,6 +62,7 @@ window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
     loadScript("sidyaRtlHeroFix", "sidya-rtl-hero-fix.js?v=20260712-2");
     loadScript("sidyaRfqCurrencies", "rfq-currencies.js?v=20260712-1");
     loadScript("sidyaRfqSiteExtension", "rfq-site-extension.js?v=20260712-1");
+    loadScript("sidyaProformaCoreFix", "sidya-proforma-core-fix.js?v=20260712-1");
   };
 
   forceAdminLtr();
