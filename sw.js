@@ -1,12 +1,17 @@
-const CACHE_NAME = "sidya-global-v93";
+const CACHE_NAME = "sidya-global-v94";
 
 const SHELL_ASSETS = [
   "./",
   "./index.html",
+  "./request-quote.html",
   "./offline.html",
   "./styles.css?v=20260613-4",
+  "./rfq.css?v=20260712-1",
   "./catalog-products.generated.js?v=20260614-1",
   "./script.js?v=20260621-1",
+  "./rfq-currencies.js?v=20260712-1",
+  "./rfq-site-extension.js?v=20260712-1",
+  "./rfq.js?v=20260712-1",
   "./sidya-arabic-currency-extension.js?v=20260711-1",
   "./sidya-locale-layout-fixes.js?v=20260712-2",
   "./assets/xlsx.full.min.js",
@@ -91,7 +96,7 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (request.mode === "navigate") {
-    const navigationRequest = url.pathname === "/admin.html"
+    const navigationRequest = url.pathname === "/admin.html" || url.pathname === "/request-quote"
       ? new Request(request, { cache: "no-store" })
       : request;
     event.respondWith(
@@ -110,6 +115,11 @@ self.addEventListener("fetch", (event) => {
     url.pathname === "/catalog-products.generated.js" ||
     url.pathname === "/admin.js" ||
     url.pathname === "/admin.css" ||
+    url.pathname === "/rfq.js" ||
+    url.pathname === "/rfq.css" ||
+    url.pathname === "/rfq-currencies.js" ||
+    url.pathname === "/rfq-site-extension.js" ||
+    url.pathname === "/admin-rfq-extension.js" ||
     url.pathname === "/sidya-arabic-currency-extension.js" ||
     url.pathname === "/sidya-locale-layout-fixes.js"
   ) {
