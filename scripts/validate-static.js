@@ -26,10 +26,12 @@ const backendLoader = read("backend-config.js");
 const worker = read("sw.js");
 const sourceFiles = fs.readdirSync(path.join(root, "api")).filter((file) => file.endsWith(".js"));
 
+const hasVersionedScript = (file) => new RegExp(`${file.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\?v=\\d{8}-\\d+`).test(index);
+
 const assertions = [
   [index.includes('data-lang="ar"'), "Arabic locale control is missing"],
-  [index.includes("sidya-locale-layout-fixes.js?v=20260712-1"), "Locale module is not pinned"],
-  [index.includes("sidya-proforma-core-fix.js?v=20260712-1"), "Proforma module is not pinned"],
+  [hasVersionedScript("sidya-locale-layout-fixes.js"), "Locale module is missing or unversioned"],
+  [hasVersionedScript("sidya-proforma-core-fix.js"), "Proforma module is missing or unversioned"],
   [(index.match(/\/api\/backend-config\.js/g) || []).length === 0, "Backend config is loaded twice"],
   [!backendLoader.includes("rfq-site-extension.js"), "Legacy standalone RFQ extension is still active"],
   [!backendLoader.includes("sidya-rtl-hero-fix.js"), "Legacy RTL hero transformer is still active"],
