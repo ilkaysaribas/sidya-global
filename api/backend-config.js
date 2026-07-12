@@ -8,6 +8,7 @@ const PROJECT_REF = "jhjforyykkxklfarjtjl";
 const DEFAULT_SUPABASE_URL = "https://jhjforyykkxklfarjtjl.supabase.co";
 const FIXED_SENDER_NAME = "Sidya Global Export Department";
 const FIXED_SENDER_EMAIL = "export@sidyaglobal.com";
+const SMTP_TIMEOUT_MS = 15_000;
 const rateBuckets = new Map();
 
 const readEnv = (...names) => names.map((name) => String(process.env[name] || "").trim()).find(Boolean) || "";
@@ -34,6 +35,7 @@ function rateLimit(req, key, limit = 30, windowMs = 60_000) {
   if (current.count > limit) {
     const error = new Error("Çok fazla istek. Lütfen biraz sonra tekrar deneyin.");
     error.statusCode = 429;
+    error.code = "RATE_LIMITED";
     throw error;
   }
 }
@@ -43,6 +45,7 @@ async function rest(path, options = {}) {
   if (!key) {
     const error = new Error("SUPABASE_SERVICE_ROLE_KEY eksik.");
     error.statusCode = 501;
+    error.code = "SERVER_CONFIG_MISSING";
     throw error;
   }
   const response = await fetch(`${supabaseUrl()}/rest/v1/${path}`, {
@@ -60,6 +63,7 @@ async function rest(path, options = {}) {
   if (!response.ok) {
     const error = new Error("Supabase REST isteği başarısız.");
     error.statusCode = response.status;
+    error.code = "SUPABASE_REST_FAILED";
     error.safeDetails = data;
     throw error;
   }
@@ -71,18 +75,21 @@ async function assertAdmin(req) {
   if (!token) {
     const error = new Error("Admin oturumu bulunamadı.");
     error.statusCode = 401;
+    error.code = "ADMIN_SESSION_MISSING";
     throw error;
   }
   const key = serviceKey();
   if (!key) {
     const error = new Error("SUPABASE_SERVICE_ROLE_KEY eksik.");
     error.statusCode = 501;
+    error.code = "SERVER_CONFIG_MISSING";
     throw error;
   }
   const response = await fetch(`${supabaseUrl()}/auth/v1/user`, { headers: { apikey: key, Authorization: `Bearer ${token}` } });
   if (!response.ok) {
     const error = new Error("Admin oturumu doğrulanamadı.");
     error.statusCode = 401;
+    error.code = "ADMIN_SESSION_INVALID";
     throw error;
   }
   const user = await response.json();
@@ -90,6 +97,7 @@ async function assertAdmin(req) {
   if (!Array.isArray(admins) || !admins.length) {
     const error = new Error("Bu işlem için admin yetkisi gerekli.");
     error.statusCode = 403;
+    error.code = "ADMIN_REQUIRED";
     throw error;
   }
   return user;
@@ -108,11 +116,14 @@ async function loadMailSettings() {
   const row = await readMailSettingsRow();
   const envPassword = readEnv("SMTP_PASSWORD", "MAIL_PASSWORD");
   const encryptedPass = envPassword ? "" : decryptSecret(row.smtp_password);
+  const rawPort = readEnv("SMTP_PORT", "MAIL_PORT") || row.smtp_port || 465;
+  const port = Number(rawPort) || 465;
+  const rawSecure = readEnv("SMTP_SECURE", "MAIL_SECURE") || row.smtp_secure;
   return {
-    host: readEnv("SMTP_HOST", "MAIL_HOST") || row.smtp_host || "",
-    port: Number(readEnv("SMTP_PORT", "MAIL_PORT") || row.smtp_port || 587),
-    secure: String(readEnv("SMTP_SECURE", "MAIL_SECURE") || row.smtp_secure || "").toLowerCase() === "true" || Number(readEnv("SMTP_PORT", "MAIL_PORT") || row.smtp_port) === 465,
-    user: readEnv("SMTP_USER", "MAIL_USER") || row.smtp_user || "",
+    host: readEnv("SMTP_HOST", "MAIL_HOST") || row.smtp_host || "smtp.mx.cloudflare.net",
+    port,
+    secure: String(rawSecure || "").toLowerCase() === "true" || port === 465,
+    user: readEnv("SMTP_USER", "MAIL_USER") || row.smtp_user || "api_token",
     pass: envPassword || encryptedPass || "",
     senderName: FIXED_SENDER_NAME,
     senderEmail: FIXED_SENDER_EMAIL,
@@ -124,9 +135,38 @@ async function logMail({ recipient, subject, status, errorMessage = "", source =
     await rest("mail_logs", {
       method: "POST",
       headers: { Prefer: "return=minimal" },
-      body: JSON.stringify({ recipient, subject, status, error_message: errorMessage || null, source, sent_at: new Date().toISOString() }),
+      body: JSON.stringify({ recipient, subject, status, error_message: errorMessage ? String(errorMessage).slice(0, 500) : null, source, sent_at: new Date().toISOString() }),
     });
   } catch (_error) {}
+}
+
+function timeoutError() {
+  const error = new Error("SMTP bağlantısı zaman aşımına uğradı. Host, port ve SSL ayarını kontrol edin.");
+  error.statusCode = 504;
+  error.code = "SMTP_TIMEOUT";
+  return error;
+}
+
+function withTimeout(promise, ms) {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(timeoutError()), ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
+
+function smtpErrorInfo(error) {
+  const code = String(error?.code || "").toUpperCase();
+  const command = String(error?.command || "").toUpperCase();
+  const responseCode = Number(error?.responseCode || 0);
+  const message = String(error?.message || "");
+  if (code === "SMTP_TIMEOUT" || /timeout|timed out/i.test(message)) return { code: "SMTP_TIMEOUT", message: "SMTP bağlantısı zaman aşımına uğradı." };
+  if (code === "EAUTH" || responseCode === 534 || responseCode === 535) return { code: "SMTP_AUTH_FAILED", message: "SMTP kimlik doğrulaması başarısız. API token geçersiz veya yetkisiz." };
+  if (command === "MAIL FROM" || responseCode === 550 || responseCode === 553) return { code: "SMTP_SENDER_REJECTED", message: "Gönderen adresi veya gönderen domaini SMTP sağlayıcısı tarafından kabul edilmedi. Cloudflare Email Sending tarafında export@sidyaglobal.com göndereni/domaini yetkilendirilmiş olmalı." };
+  if (code === "EENVELOPE" || command === "RCPT TO") return { code: "SMTP_ENVELOPE_FAILED", message: "Alıcı adresi veya gönderim zarfı SMTP sunucusu tarafından reddedildi." };
+  if (["ECONNECTION", "ETIMEDOUT", "ESOCKET", "ECONNREFUSED", "ENOTFOUND"].includes(code)) return { code: "SMTP_CONNECTION_FAILED", message: "SMTP sunucusuna bağlantı kurulamadı. Host, port ve SSL ayarını kontrol edin." };
+  if (/tls|ssl|certificate|handshake/i.test(message)) return { code: "SMTP_TLS_FAILED", message: "TLS/SSL bağlantısı kurulamadı. Port 465 ve SSL ayarını kontrol edin." };
+  return { code: code || "SMTP_SEND_FAILED", message: "E-posta gönderilemedi. Mail Center SMTP ayarlarını kontrol edin." };
 }
 
 async function sendSmtpMail({ to, subject, body, source = "crm" }) {
@@ -137,25 +177,40 @@ async function sendSmtpMail({ to, subject, body, source = "crm" }) {
     await logMail({ recipient: to, subject, status: "failed", errorMessage: message, source });
     const error = new Error(message);
     error.statusCode = 400;
+    error.code = "SMTP_CONFIG_MISSING";
     throw error;
   }
-  const transporter = nodemailer.createTransport({ host: settings.host, port: settings.port, secure: settings.secure, auth: { user: settings.user, pass: settings.pass } });
+  console.info("SMTP bağlantısı başlatıldı", { host: settings.host, port: settings.port, secure: settings.secure, source });
+  const transporter = nodemailer.createTransport({
+    host: settings.host,
+    port: settings.port,
+    secure: settings.secure,
+    auth: { user: settings.user, pass: settings.pass },
+    connectionTimeout: SMTP_TIMEOUT_MS,
+    greetingTimeout: SMTP_TIMEOUT_MS,
+    socketTimeout: SMTP_TIMEOUT_MS,
+    dnsTimeout: 10_000,
+    tls: { minVersion: "TLSv1.2" },
+  });
   try {
-    const result = await transporter.sendMail({
+    const result = await withTimeout(transporter.sendMail({
       from: `"${FIXED_SENDER_NAME}" <${FIXED_SENDER_EMAIL}>`,
       replyTo: FIXED_SENDER_EMAIL,
       to,
       subject,
       text: body || "",
       html: String(body || "").replace(/\n/g, "<br>"),
-    });
+    }), SMTP_TIMEOUT_MS);
+    console.info("SMTP mesaj kabul edildi", { messageId: result?.messageId || "", response: result?.response || "", source });
     await logMail({ recipient: to, subject, status: "sent", source });
-    return result;
+    return result || {};
   } catch (error) {
-    console.error("SMTP send failed", { code: error.code || "", command: error.command || "", responseCode: error.responseCode || "", source });
-    await logMail({ recipient: to, subject, status: "failed", errorMessage: error.message, source });
-    const safe = new Error(`Mail gönderilemedi. SMTP hata kodu: ${error.code || error.responseCode || "bilinmiyor"}. Mail Center ayarlarını kontrol edin.`);
-    safe.statusCode = 502;
+    const info = smtpErrorInfo(error);
+    console.error("SMTP send failed", { code: info.code, smtpCode: error?.code || "", command: error?.command || "", responseCode: error?.responseCode || "", source });
+    await logMail({ recipient: to, subject, status: "failed", errorMessage: info.message, source });
+    const safe = new Error(info.message);
+    safe.statusCode = info.code === "SMTP_TIMEOUT" ? 504 : 502;
+    safe.code = info.code;
     throw safe;
   }
 }
@@ -349,18 +404,20 @@ async function handleMailCrm(req, res, action) {
   }
 
   if (action === "send-mail") {
-    if (req.method !== "POST") return json(res, 405, { ok: false, error: "Method not allowed" });
+    if (req.method !== "POST") return json(res, 405, { ok: false, success: false, message: "Method not allowed", error: "Method not allowed", code: "METHOD_NOT_ALLOWED" });
     const body = parseBody(req);
     const to = String(body.to || "").trim().slice(0, 320);
-    const subject = String(body.subject || "").trim().slice(0, 300);
-    if (!to || !subject) return json(res, 400, { ok: false, error: "Alıcı ve konu gerekli." });
-    const source = ["contact_form", "quote", "crm", "order"].includes(body.source) ? body.source : (body.type === "quote" ? "quote" : "crm");
-    await sendSmtpMail({ to, subject, body: String(body.body || "").slice(0, 20000), source });
+    const source = ["contact_form", "quote", "crm", "order", "test"].includes(body.source) ? body.source : (body.type === "quote" ? "quote" : "crm");
+    const isTest = source === "test" || body.test === true;
+    const subject = String(isTest ? "Sidya Global SMTP Test" : (body.subject || "")).trim().slice(0, 300);
+    const mailBody = String(isTest ? "Sidya Global Mail Center SMTP bağlantısı başarıyla çalışmaktadır." : (body.body || "")).slice(0, 20000);
+    if (!to || !subject) return json(res, 400, { ok: false, success: false, message: "Alıcı ve konu gerekli.", error: "Alıcı ve konu gerekli.", code: "VALIDATION_ERROR" });
+    const result = await sendSmtpMail({ to, subject, body: mailBody, source });
     if (body.customerId) {
-      await rest("crm_interactions", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ customer_id: body.customerId, type: body.type || (source === "quote" ? "quote" : "email"), direction: "outbound", subject, body: String(body.body || "").slice(0, 20000) }) });
+      await rest("crm_interactions", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ customer_id: body.customerId, type: body.type || (source === "quote" ? "quote" : "email"), direction: "outbound", subject, body: mailBody }) });
       await rest(`crm_customers?id=eq.${encodeURIComponent(body.customerId)}`, { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ last_contact_at: new Date().toISOString() }) });
     }
-    return json(res, 200, { ok: true, message: "Mail gönderildi.", sender: `${FIXED_SENDER_NAME} <${FIXED_SENDER_EMAIL}>` });
+    return json(res, 200, { ok: true, success: true, message: isTest ? "Test e-postası gönderildi." : "Mail gönderildi.", messageId: result.messageId || "", sender: `${FIXED_SENDER_NAME} <${FIXED_SENDER_EMAIL}>` });
   }
 
   if (action === "crm-center") {
@@ -409,7 +466,7 @@ function sendBackendScript(res) {
       function appReady(){ var shell = document.getElementById("appShell"); return !!(shell && !shell.hidden); }
       function appendScript(id, src){ if (document.getElementById(id)) return; var script = document.createElement("script"); script.id = id; script.src = src; script.defer = true; document.head.appendChild(script); }
       function loadSiteEnhancements(){ if (document.getElementById("quoteForm")) { appendScript("sidyaMailCrmRouteShimScript", "/mail-crm-route-shim.js?v=20260711-1"); appendScript("sidyaSiteMailCrmScript", "/site-mail-crm.js?v=20260711-1"); } }
-      function loadFixes(){ loadSiteEnhancements(); if (!appReady()) return; appendScript("sidyaMailCrmRouteShimScript", "/mail-crm-route-shim.js?v=20260711-1"); appendScript("sidyaAdminPanelFixesScript", "/admin-panel-fixes.js?v=20260705-2"); appendScript("sidyaAdminRateFixScript", "/admin-rate-fix.js?v=20260706-2"); appendScript("sidyaAdminProfitFixScript", "/admin-profit-fix.js?v=20260705-1"); appendScript("sidyaAdminProfitTableV4Script", "/admin-profit-table-v4.js?v=20260706-1"); appendScript("sidyaInfoActionsScript", "/admin-info-actions.js?v=20260706-1"); appendScript("sidyaMailCrmAdminScript", "/admin-mail-crm.js?v=20260711-1"); appendScript("sidyaMailSmtpFixScript", "/admin-mail-smtp-fix.js?v=20260711-1"); }
+      function loadFixes(){ loadSiteEnhancements(); if (!appReady()) return; appendScript("sidyaMailCrmRouteShimScript", "/mail-crm-route-shim.js?v=20260711-1"); appendScript("sidyaAdminPanelFixesScript", "/admin-panel-fixes.js?v=20260705-2"); appendScript("sidyaAdminRateFixScript", "/admin-rate-fix.js?v=20260706-2"); appendScript("sidyaAdminProfitFixScript", "/admin-profit-fix.js?v=20260705-1"); appendScript("sidyaAdminProfitTableV4Script", "/admin-profit-table-v4.js?v=20260706-1"); appendScript("sidyaInfoActionsScript", "/admin-info-actions.js?v=20260706-1"); appendScript("sidyaMailCrmAdminScript", "/admin-mail-crm.js?v=20260711-1"); appendScript("sidyaMailSmtpFixScript", "/admin-mail-smtp-fix.js?v=20260712-2"); }
       var timer = setInterval(function(){ loadFixes(); if (appReady() && document.getElementById("sidyaAdminProfitTableV4Script") && document.getElementById("sidyaInfoActionsScript") && document.getElementById("sidyaMailCrmAdminScript")) clearInterval(timer); }, 500);
       document.addEventListener("DOMContentLoaded", loadFixes); window.addEventListener("load", loadFixes);
     })();
@@ -422,6 +479,6 @@ module.exports = async (req, res) => {
     if (action) return await handleMailCrm(req, res, action);
     return sendBackendScript(res);
   } catch (error) {
-    return json(res, error.statusCode || 500, { ok: false, error: error.message, details: error.safeDetails || null });
+    return json(res, error.statusCode || 500, { ok: false, success: false, message: error.message, error: error.message, code: error.code || "SERVER_ERROR", details: error.safeDetails || null });
   }
 };
