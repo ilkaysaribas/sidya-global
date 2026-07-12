@@ -11,6 +11,16 @@
     <link rel="alternate" hreflang="az" href="https://sidyaglobal.com/request-quote?lang=az" />
     <link rel="alternate" hreflang="ka" href="https://sidyaglobal.com/request-quote?lang=ka" />
     <link rel="alternate" hreflang="ru" href="https://sidyaglobal.com/request-quote?lang=ru" />
+    <link rel="alternate" hreflang="ar" href="https://sidyaglobal.com/request-quote?lang=ar" />
+    <script>
+      (function () {
+        var lang = new URLSearchParams(location.search).get("lang") || localStorage.getItem("sidyaLang") || "tr";
+        lang = String(lang).toLowerCase().split("-")[0];
+        if (!["tr", "en", "az", "ka", "ru", "ar"].includes(lang)) lang = "tr";
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      })();
+    </script>
     <link rel="stylesheet" href="rfq.css?v=20260712-1" />
   </head>
   <body class="rfq-page">
@@ -23,6 +33,7 @@
           <a href="/admin.html">Ticari otomasyon</a>
           <a href="/request-quote?lang=tr">TR</a>
           <a href="/request-quote?lang=en">EN</a>
+          <a href="/request-quote?lang=ar">AR</a>
         </nav>
       </header>
 
@@ -48,7 +59,7 @@
               <label>Şehir<input name="city" /></label>
               <label>Vergi / kayıt no<input name="registration_number" /></label>
               <label>Mevcut müşteri no<input name="customer_code" /></label>
-              <label>Tercih edilen dil<select name="preferred_language"><option value="tr">Türkçe</option><option value="en">English</option><option value="az">Azərbaycanca</option><option value="ka">ქართული</option><option value="ru">Русский</option></select></label>
+              <label>Tercih edilen dil<select name="preferred_language"><option value="tr">Türkçe</option><option value="en">English</option><option value="az">Azərbaycanca</option><option value="ka">ქართული</option><option value="ru">Русский</option><option value="ar">العربية</option></select></label>
             </div>
             <div class="rfq-grid three" style="margin-top:14px">
               <label>Teslim ülkesi<input name="destination_country" /></label>
