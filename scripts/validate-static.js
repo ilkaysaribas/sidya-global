@@ -39,7 +39,7 @@ const assertions = [
   [(index.match(/\/api\/backend-config\.js/g) || []).length === 0, "Backend config is loaded twice"],
   [!backendLoader.includes("rfq-site-extension.js"), "Legacy standalone RFQ extension is still active"],
   [!backendLoader.includes("sidya-rtl-hero-fix.js"), "Legacy RTL hero transformer is still active"],
-  [worker.includes("sidya-global-v100"), "Service worker cache version was not advanced"],
+  [worker.includes("sidya-global-v101"), "Service worker cache version was not advanced"],
   [sourceFiles.length <= 12, `Vercel Hobby function limit exceeded: ${sourceFiles.length}/12`],
 ];
 
