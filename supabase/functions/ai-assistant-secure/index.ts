@@ -6,6 +6,9 @@ Deno.serve(async(req)=>{
   if(req.method==="OPTIONS")return new Response(null,{status:204,headers:cors});
   try{
     const url=Deno.env.get("SUPABASE_URL")||"";const key=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")||"";
+    const supplied=String(req.headers.get("apikey")||"");
+    const anon=Deno.env.get("SUPABASE_ANON_KEY")||"";
+    if(!supplied||![anon,key,"sb_publishable_obANQZIOM1xpMIBsJPZcoA__6TGFYBc"].includes(supplied))throw new Error("Yetkisiz istek.");
     const supabase=createClient(url,key,{auth:{persistSession:false}});
     const item=await req.json();const action=clean(item.action,30);
     if(action==="upload"){
