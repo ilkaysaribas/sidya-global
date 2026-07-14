@@ -31,7 +31,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260715-3" />
+    <link rel="stylesheet" href="styles.css?v=20260715-4" />
     <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
     <script type="application/ld+json">
       {
@@ -336,19 +336,10 @@
       <section class="section products-section" id="products" aria-labelledby="products-title">
         <div class="site-container">
           <div class="section-heading products-section-heading">
-            <p class="section-kicker" data-i18n="productsKicker">PRODUCT CATALOG</p>
-            <h2 id="products-title" data-i18n="productsTitle">Products Available for International Supply</h2>
-            <p data-i18n="productsCopy">Browse individual products currently published for international buyers.</p>
+            <p class="section-kicker" data-i18n="productsKicker">Catalog</p>
+            <h2 id="products-title" data-i18n="productsTitle">Featured product groups</h2>
           </div>
-          <div class="catalog-product-toolbar">
-            <label for="productCatalogSearch" data-i18n="catalogSearchLabel">Search the product catalog</label>
-            <input id="productCatalogSearch" type="search" data-i18n-placeholder="catalogSearchPlaceholder" placeholder="Search by product, brand, or category" autocomplete="off" />
-            <span id="productCatalogCount" role="status" aria-live="polite"></span>
-          </div>
-          <div class="product-grid published-product-grid" id="productGrid" aria-live="polite">
-            <p class="catalog-product-state" data-i18n="catalogLoading">Loading catalog products...</p>
-          </div>
-          <button class="catalog-load-more" type="button" id="catalogLoadMore" data-i18n="catalogLoadMore" hidden>Show more products</button>
+          <div class="product-grid" id="productGrid"></div>
         </div>
       </section>
 
@@ -930,7 +921,7 @@
     </script>
     <script src="assets/xlsx.full.min.js"></script>
     <script src="catalog-products.generated.js?v=20260614-1"></script>
-    <script src="script.js?v=20260715-3"></script>
+    <script src="script.js?v=20260715-4"></script>
     <script src="sidya-locale-layout-fixes.js?v=20260715-1"></script>
     <script src="sidya-proforma-core-fix.js?v=20260712-1"></script>
   </body>

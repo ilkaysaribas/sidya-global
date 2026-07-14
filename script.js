@@ -60,19 +60,8 @@ const content = {
     trustTwo: "FOB, CIF & EXW Delivery Options",
     trustThree: "Professional Proforma Preparation",
     trustFour: "Multi-Language Catalog Support",
-    productsKicker: "PRODUCT CATALOG",
-    productsTitle: "Products Available for International Supply",
-    productsCopy: "Browse all active products available for international supply.",
-    catalogSearchLabel: "Search the product catalog",
-    catalogSearchPlaceholder: "Search by product, brand, or category",
-    catalogLoading: "Loading catalog products...",
-    catalogEmpty: "No catalog product matches this search.",
-    catalogUnavailable: "Catalog products could not be loaded. Please try again shortly.",
-    catalogProductCount: "{count} products",
-    catalogLoadMore: "Show more products",
-    catalogAddProforma: "Add to Proforma",
-    catalogUnitsPerCarton: "Units / carton",
-    catalogKgPerCarton: "Kg / carton",
+    productsKicker: "Catalog",
+    productsTitle: "Featured product groups",
     supplierSearchKicker: "B2B PRODUCT SEARCH",
     supplierSearchTitle: "Find Products from Türkiye",
     supplierSearchCopy: "Search by product name, category, brand, minimum order quantity, and loading notes.",
@@ -436,19 +425,8 @@ const content = {
     trustTwo: "FOB, CIF ve EXW teslim opsiyonları",
     trustThree: "Şeffaf proforma hazırlığı",
     trustFour: "Çok dilli katalog desteği",
-    productsKicker: "ÜRÜN KATALOĞU",
-    productsTitle: "Uluslararası Tedarike Açık Ürünler",
-    productsCopy: "Uluslararası alıcılar için yayınlanan ürünleri tek tek inceleyin.",
-    catalogSearchLabel: "Ürün kataloğunda ara",
-    catalogSearchPlaceholder: "Ürün, marka veya kategori ara",
-    catalogLoading: "Yayınlanan ürünler yükleniyor...",
-    catalogEmpty: "Bu aramayla eşleşen yayınlanmış ürün bulunamadı.",
-    catalogUnavailable: "Yayınlanan ürünler yüklenemedi. Lütfen kısa süre sonra tekrar deneyin.",
-    catalogProductCount: "{count} ürün",
-    catalogLoadMore: "Daha fazla ürün göster",
-    catalogAddProforma: "Proformaya Ekle",
-    catalogUnitsPerCarton: "Koli içi adet",
-    catalogKgPerCarton: "Koli kg",
+    productsKicker: "Katalog",
+    productsTitle: "Öne çıkan ürün grupları",
     supplierSearchKicker: "B2B Tedarik Arama",
     supplierSearchTitle: "Türkiye'den Ürün Bul",
     supplierSearchCopy: "Ürün adını yazın; uygun kategori, marka, minimum sipariş ve yükleme bilgileri tek ekranda listelensin.",
@@ -2150,75 +2128,35 @@ const addProformaLineWithQuantity = (productId, quantity) => {
   renderProformaOrder();
 };
 
-const publishedCatalogUi = {
-  state: "loading",
-  totalCount: 0,
-  requestId: 0,
-};
-
-let publishedHomepageProducts = [];
-
-const escapeCatalogText = (value) =>
-  String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
-const getPublishedHomepageProducts = () => publishedHomepageProducts;
-
 const renderProducts = () => {
   const grid = document.querySelector("#productGrid");
-  const count = document.querySelector("#productCatalogCount");
-  const loadMore = document.querySelector("#catalogLoadMore");
   if (!grid) return;
-
-  const productsForHomepage = getPublishedHomepageProducts();
-  const total = Math.max(Number(publishedCatalogUi.totalCount || 0), productsForHomepage.length);
-  if (count) count.textContent = t("catalogProductCount").replace("{count}", String(total));
-
-  if (!productsForHomepage.length) {
-    const message = publishedCatalogUi.state === "loading"
-      ? t("catalogLoading")
-      : publishedCatalogUi.state === "error"
-        ? t("catalogUnavailable")
-        : t("catalogEmpty");
-    grid.innerHTML = `<p class="catalog-product-state">${escapeCatalogText(message)}</p>`;
-    if (loadMore) loadMore.hidden = true;
-    return;
-  }
-
-  grid.innerHTML = productsForHomepage
+  const localizedProducts = products[currentLang] || products.en || products.tr || [];
+  grid.innerHTML = localizedProducts
     .map((product) => {
-      const name = getProductName(product);
-      const brand = product.brand || "Sidya Global";
-      const sourceCategory = product.sourceCategory || getCategoryTitle(product.category);
-      const unitsPerCarton = Math.max(Number(product.unitsPerCarton || 1), 1);
-      const kgPerCarton = Number(product.kgPerCarton || 0);
-      return `<article class="catalog-product-card">
-        <div class="catalog-product-visual">
-          <img src="${escapeCatalogText(getBrandLogo(product))}" alt="${escapeCatalogText(brand)}" loading="lazy" />
-        </div>
-        <div class="catalog-product-content">
-          <span class="catalog-product-brand">${escapeCatalogText(brand)}</span>
-          <h3>${escapeCatalogText(name)}</h3>
-          <p class="catalog-product-category">${escapeCatalogText(sourceCategory || product.liter || "")}</p>
-          <dl class="catalog-product-facts">
-            <div><dt>${escapeCatalogText(t("catalogUnitsPerCarton"))}</dt><dd>${escapeCatalogText(unitsPerCarton)}</dd></div>
-            ${kgPerCarton > 0 ? `<div><dt>${escapeCatalogText(t("catalogKgPerCarton"))}</dt><dd>${escapeCatalogText(kgPerCarton.toFixed(2))}</dd></div>` : ""}
-          </dl>
-          <button class="catalog-product-proforma" type="button" data-catalog-product-id="${escapeCatalogText(product.id)}">${escapeCatalogText(t("catalogAddProforma"))}</button>
-        </div>
-      </article>`;
+      const related = productPartners[product.id] || [];
+      const trade = productTradeDetails[product.id];
+      const relatedMarkup = related.length
+        ? `<div class="related-companies"><strong tabindex="0">${t("relatedCompanies")}</strong><div>${related
+            .map(
+              (company) =>
+                `<span class="related-company"><a class="site-action" href="${company.site}" target="_blank" rel="noopener"><img src="${company.logo}" alt="" aria-hidden="true" /><span>${company.name}</span></a>${[
+                  company.catalog ? `<a class="catalog-action" href="${company.catalog}" target="_blank" rel="noopener">${t("sampleCatalogCta")}</a>` : "",
+                  ...(company.catalogs || []).map((catalog) => `<a class="catalog-action" href="${catalog.href}" target="_blank" rel="noopener">${catalog.label}</a>`),
+                ].join("")}</span>`,
+            )
+            .join("")}</div></div>`
+        : "";
+      const tradeMarkup = trade
+        ? `<div class="trade-details">
+            <a class="product-quote-button" href="#catalog-proforma" data-category-id="${product.id}" data-product-option="${trade.optionValue}" data-product-title="${product.title}">${t("tradeQuoteCta")}</a>
+          </div>`
+        : "";
+      return `<article class="product-card product-card-${product.id}" id="${product.id}"><div><div class="product-card-media"><img src="${productCategoryImages[product.id] || "assets/app-icon.svg"}" alt="" loading="lazy" /><span class="product-icon" aria-hidden="true">${product.icon}</span></div><h3>${product.title}</h3><p>${product.copy}</p></div><div class="product-meta">${product.meta
+        .map((item) => `<span>${item}</span>`)
+        .join("")}</div>${tradeMarkup}${relatedMarkup}</article>`;
     })
     .join("");
-
-  if (loadMore) {
-    loadMore.hidden = productsForHomepage.length >= total;
-    loadMore.disabled = publishedCatalogUi.state === "loading";
-    loadMore.textContent = publishedCatalogUi.state === "loading" ? t("catalogLoading") : t("catalogLoadMore");
-  }
 };
 
 const renderMarkets = () => {
@@ -2292,7 +2230,10 @@ const productMatchesSearch = (product, query) => {
   });
 };
 
-const getMatchingCatalogProducts = (query) => productCatalog.filter((product) => productMatchesSearch(product, query));
+const getMatchingCatalogProducts = (query) => {
+  const matches = productCatalog.filter((product) => productMatchesSearch(product, query));
+  return normalizeSearchText(query) ? matches.slice(0, 250) : matches.slice(0, 100);
+};
 
 const getLocalizedText = (value) => {
   if (!value || typeof value === "string") return value || "";
@@ -3248,27 +3189,6 @@ supplierSearchInput?.addEventListener("input", () => {
   renderSupplierSearchResults(supplierSearchInput.value);
 });
 
-let productCatalogSearchTimer;
-document.querySelector("#productCatalogSearch")?.addEventListener("input", () => {
-  window.clearTimeout(productCatalogSearchTimer);
-  publishedCatalogUi.state = "loading";
-  renderProducts();
-  productCatalogSearchTimer = window.setTimeout(() => {
-    loadPublishedCatalogPrices({ reset: true });
-  }, 250);
-});
-document.querySelector("#catalogLoadMore")?.addEventListener("click", () => {
-  loadPublishedCatalogPrices({ reset: false });
-});
-document.querySelector("#productGrid")?.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-catalog-product-id]");
-  if (!button) return;
-  addProformaLineWithQuantity(button.dataset.catalogProductId, 1);
-  returnCatalogProformaCategory = null;
-  returnCatalogProformaTitle = "";
-  openMainProformaPanel({ focusSummary: true });
-});
-
 document.querySelector("#gtipSearchInput")?.addEventListener("input", renderGtipGuide);
 document.querySelector("#calculateFuel")?.addEventListener("click", calculateFuelCost);
 ["#fuelFrom", "#fuelTo", "#fuelLoad", "#fuelConsumption", "#fuelPrice"].forEach((selector) => {
@@ -3587,48 +3507,43 @@ const upsertPublicCatalogProduct = (row) => {
   return product;
 };
 
-const loadPublishedCatalogPrices = async ({ reset = false } = {}) => {
-  const requestId = ++publishedCatalogUi.requestId;
-  if (reset) {
-    publishedHomepageProducts = [];
-    publishedCatalogUi.totalCount = 0;
-  }
-  publishedCatalogUi.state = "loading";
-  renderProducts();
-  try {
+let publicCatalogLoadPromise;
+
+const loadPublishedCatalogPrices = async () => {
+  if (publicCatalogLoadPromise) return publicCatalogLoadPromise;
+  publicCatalogLoadPromise = (async () => {
     const isReady = await waitForBackendConfig();
     const db = isReady ? getSupabaseClient() : null;
     if (!db) throw new Error("Supabase public configuration was not ready.");
 
-    const search = document.querySelector("#productCatalogSearch")?.value.trim() || null;
-    const offset = reset ? 0 : publishedHomepageProducts.length;
-    const { data, error } = await db.rpc("get_public_catalog_products", {
-      p_search: search,
-      p_limit: 48,
-      p_offset: offset,
-    });
-    if (error) throw error;
-    if (requestId !== publishedCatalogUi.requestId) return;
+    const pageSize = 250;
+    let offset = 0;
+    let totalCount = Number.POSITIVE_INFINITY;
 
-    const incoming = (data || []).map(upsertPublicCatalogProduct);
-    const productsById = new Map((reset ? [] : publishedHomepageProducts).map((product) => [product.id, product]));
-    incoming.forEach((product) => productsById.set(product.id, product));
-    publishedHomepageProducts = [...productsById.values()];
-    publishedCatalogUi.totalCount = Number(
-      data?.[0]?.total_count ?? (reset ? incoming.length : publishedCatalogUi.totalCount),
-    );
-    publishedCatalogUi.state = "ready";
-    renderProducts();
+    while (offset < totalCount) {
+      const { data, error } = await db.rpc("get_public_catalog_products", {
+        p_search: null,
+        p_limit: pageSize,
+        p_offset: offset,
+      });
+      if (error) throw error;
+      const rows = data || [];
+      rows.forEach(upsertPublicCatalogProduct);
+      if (rows.length) totalCount = Number(rows[0].total_count || rows.length);
+      offset += rows.length;
+      if (!rows.length || rows.length < pageSize) break;
+    }
+
     if (!document.querySelector("#proforma")?.hidden) renderProformaProducts();
     if (activeCatalogProformaCategory) renderCatalogProformaProducts();
     renderProformaOrder();
-  } catch (error) {
-    if (requestId !== publishedCatalogUi.requestId) return;
-    publishedCatalogUi.state = "error";
-    console.error("[catalog] Catalog products could not be loaded.", error);
-    renderProducts();
-  }
+  })().catch((error) => {
+    publicCatalogLoadPromise = null;
+    console.error("[catalog] Proforma catalog could not be loaded.", error);
+  });
+  return publicCatalogLoadPromise;
 };
+
 
 const setB2BAuthStatus = (message) => {
   const status = document.querySelector("#b2bAuthStatus");

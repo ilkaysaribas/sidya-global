@@ -19,37 +19,41 @@ const check = (condition, message) => {
 
 check(/<html\s+lang=["']en["']/.test(index), "Homepage must start in English.");
 check(index.includes('class="site-container hero-layout"'), "Hero must use the shared container.");
-check(index.includes('class="site-container">\n          <div class="section-heading products-section-heading"'), "Product section must use the shared container.");
-check(index.includes('id="productCatalogSearch"'), "Published product search is missing.");
-check(index.includes("script.js?v=20260715-3"), "Homepage script cache key is stale.");
-check(index.includes("styles.css?v=20260715-3"), "Homepage stylesheet cache key is stale.");
+check(index.includes('class="site-container">\n          <div class="section-heading products-section-heading"'), "Category section must use the shared container.");
+check(index.includes('id="productGrid"'), "Homepage category grid is missing.");
+check(!index.includes('id="productCatalogSearch"'), "Individual product search must not appear on the homepage.");
+check(!index.includes('id="catalogLoadMore"'), "Individual product pagination must not appear on the homepage.");
+check(index.includes("script.js?v=20260715-4"), "Homepage script cache key is stale.");
+check(index.includes("styles.css?v=20260715-4"), "Homepage stylesheet cache key is stale.");
 
 const renderStart = script.indexOf("const renderProducts = () => {");
 const renderEnd = script.indexOf("\nconst renderMarkets =", renderStart);
-check(renderStart >= 0 && renderEnd > renderStart, "Product renderer could not be located.");
+check(renderStart >= 0 && renderEnd > renderStart, "Category renderer could not be located.");
 const renderSource = script.slice(renderStart, renderEnd);
-check(renderSource.includes("getPublishedHomepageProducts"), "Homepage must render published products.");
-check(!renderSource.includes("products[currentLang]"), "Homepage still renders category definitions instead of products.");
-check(renderSource.includes("catalog-product-card"), "Individual product cards are not rendered.");
-check(script.includes("await waitForBackendConfig()"), "Published catalog must wait for dynamic backend configuration.");
-check(script.includes('db.rpc("get_public_catalog_products"'), "Homepage catalog is not connected to the safe public RPC.");
-check(!script.includes('db.from("site_catalog_prices")'), "Homepage still uses the 92-row published price table.");
-check(script.includes("p_limit: 48"), "Catalog pagination must request 48 products at a time.");
-check(script.includes("publishedCatalogUi.totalCount"), "Catalog must expose the complete active product count.");
-check(script.includes('publishedCatalogUi.state = "ready";'), "Product grid is not refreshed after catalog loading.");
-check(script.includes("loadPublishedCatalogPrices({ reset: true })"), "Catalog search must restart server-side pagination.");
-check(script.includes('publishedCatalogUi.state = "error";'), "Catalog loading errors need a visible fallback.");
-check(script.includes('data-catalog-product-id'), "Product cards must connect to the proforma flow.");
+check(renderSource.includes("products[currentLang]"), "Homepage must render the original product categories.");
+check(renderSource.includes("product-card product-card-"), "Original category cards are not rendered.");
+check(renderSource.includes("related-companies"), "Catalog and supplier links are missing from category cards.");
+check(renderSource.includes("sampleCatalogCta"), "Original catalog links are not rendered.");
+check(!renderSource.includes("catalog-product-card"), "Individual products are still rendered on the homepage.");
 
-check(styles.includes('html[dir="ltr"] .hero-content'), "LTR hero alignment guard is missing.");
-check(styles.includes("text-align: left !important"), "LTR content must be forced to the left.");
-check(styles.includes('html[dir="rtl"] .hero-content'), "RTL alignment guard is missing.");
+check(script.includes('db.rpc("get_public_catalog_products"'), "Proforma is not connected to the safe full catalog RPC.");
+check(!script.includes('db.from("site_catalog_prices")'), "The obsolete 92-row price source is still queried.");
+check(script.includes("const pageSize = 250"), "Full catalog pagination is missing.");
+check(script.includes("while (offset < totalCount)"), "Proforma must load every catalog page.");
+check(script.includes("rows.forEach(upsertPublicCatalogProduct)"), "Full catalog rows are not added to the proforma selector.");
+check(script.includes("matches.slice(0, 100)"), "Default proforma rendering must stay bounded.");
+check(script.includes("matches.slice(0, 250)"), "Proforma search result rendering must stay bounded.");
+check(!script.includes("productCatalogSearchTimer"), "Homepage product search handler is still active.");
+check(!script.includes("publishedHomepageProducts"), "Homepage product state is still active.");
+
+check(styles.includes("Homepage categories restored"), "Restored category layout styles are missing.");
+check(styles.includes('html[dir="ltr"] main :where('), "LTR alignment guard is missing.");
+check(styles.includes("text-align: left !important"), "LTR content must be forced left.");
+check(styles.includes('html[dir="rtl"] main :where('), "RTL alignment guard is missing.");
 check(styles.includes("text-align: right !important"), "RTL content must remain right aligned.");
-check(styles.includes(".catalog-product-card"), "Product card styles are missing.");
-check(styles.includes("@media (max-width: 768px)"), "Mobile product layout is missing.");
-check(worker.includes('sidya-global-v103'), "Service worker cache version must be v103.");
-check(worker.includes("script.js?v=20260715-3"), "Service worker caches an old homepage script.");
-check(worker.includes("styles.css?v=20260715-3"), "Service worker caches an old stylesheet.");
+check(worker.includes("sidya-global-v104"), "Service worker cache version must be v104.");
+check(worker.includes("script.js?v=20260715-4"), "Service worker caches an old homepage script.");
+check(worker.includes("styles.css?v=20260715-4"), "Service worker caches an old stylesheet.");
 check(worker.includes('url.pathname === "/script.js"'), "Homepage script must use network-first cache handling.");
 check(worker.includes('url.pathname === "/styles.css"'), "Homepage stylesheet must use network-first cache handling.");
 
