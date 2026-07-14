@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 require("./validate-static");
+require("./test-homepage");
 
 const root = path.resolve(__dirname, "..");
 const output = path.join(root, "public");

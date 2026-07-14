@@ -60,8 +60,19 @@ const content = {
     trustTwo: "FOB, CIF & EXW Delivery Options",
     trustThree: "Professional Proforma Preparation",
     trustFour: "Multi-Language Catalog Support",
-    productsKicker: "Catalog",
-    productsTitle: "Featured product groups",
+    productsKicker: "PRODUCT CATALOG",
+    productsTitle: "Products Available for International Supply",
+    productsCopy: "Browse individual products currently published for international buyers.",
+    catalogSearchLabel: "Search the product catalog",
+    catalogSearchPlaceholder: "Search by product, brand, or category",
+    catalogLoading: "Loading published products...",
+    catalogEmpty: "No published product matches this search.",
+    catalogUnavailable: "Published products could not be loaded. Please try again shortly.",
+    catalogProductCount: "{count} products",
+    catalogLoadMore: "Show more products",
+    catalogAddProforma: "Add to Proforma",
+    catalogUnitsPerCarton: "Units / carton",
+    catalogKgPerCarton: "Kg / carton",
     supplierSearchKicker: "B2B PRODUCT SEARCH",
     supplierSearchTitle: "Find Products from Türkiye",
     supplierSearchCopy: "Search by product name, category, brand, minimum order quantity, and loading notes.",
@@ -425,8 +436,19 @@ const content = {
     trustTwo: "FOB, CIF ve EXW teslim opsiyonları",
     trustThree: "Şeffaf proforma hazırlığı",
     trustFour: "Çok dilli katalog desteği",
-    productsKicker: "Katalog",
-    productsTitle: "Öne çıkan ürün grupları",
+    productsKicker: "ÜRÜN KATALOĞU",
+    productsTitle: "Uluslararası Tedarike Açık Ürünler",
+    productsCopy: "Uluslararası alıcılar için yayınlanan ürünleri tek tek inceleyin.",
+    catalogSearchLabel: "Ürün kataloğunda ara",
+    catalogSearchPlaceholder: "Ürün, marka veya kategori ara",
+    catalogLoading: "Yayınlanan ürünler yükleniyor...",
+    catalogEmpty: "Bu aramayla eşleşen yayınlanmış ürün bulunamadı.",
+    catalogUnavailable: "Yayınlanan ürünler yüklenemedi. Lütfen kısa süre sonra tekrar deneyin.",
+    catalogProductCount: "{count} ürün",
+    catalogLoadMore: "Daha fazla ürün göster",
+    catalogAddProforma: "Proformaya Ekle",
+    catalogUnitsPerCarton: "Koli içi adet",
+    catalogKgPerCarton: "Koli kg",
     supplierSearchKicker: "B2B Tedarik Arama",
     supplierSearchTitle: "Türkiye'den Ürün Bul",
     supplierSearchCopy: "Ürün adını yazın; uygun kategori, marka, minimum sipariş ve yükleme bilgileri tek ekranda listelensin.",
@@ -2128,35 +2150,81 @@ const addProformaLineWithQuantity = (productId, quantity) => {
   renderProformaOrder();
 };
 
+const publishedCatalogUi = {
+  state: "loading",
+  visibleCount: 12,
+};
+
+const escapeCatalogText = (value) =>
+  String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+const getPublishedHomepageProducts = (query = "") => {
+  const normalizedQuery = normalizeSearchText(query);
+  return productCatalog
+    .filter((product) => Number(product.salePrice || 0) > 0 && !String(product.id || "").startsWith("partner-"))
+    .filter((product) => !normalizedQuery || productMatchesSearch(product, normalizedQuery))
+    .sort((a, b) => {
+      const brandOrder = String(a.brand || "").localeCompare(String(b.brand || ""), currentLang);
+      return brandOrder || getProductName(a).localeCompare(getProductName(b), currentLang);
+    });
+};
+
 const renderProducts = () => {
   const grid = document.querySelector("#productGrid");
+  const search = document.querySelector("#productCatalogSearch");
+  const count = document.querySelector("#productCatalogCount");
+  const loadMore = document.querySelector("#catalogLoadMore");
   if (!grid) return;
-  const localizedProducts = products[currentLang] || products.en || products.tr || [];
-  grid.innerHTML = localizedProducts
+
+  const productsForHomepage = getPublishedHomepageProducts(search?.value || "");
+  if (count) count.textContent = t("catalogProductCount").replace("{count}", String(productsForHomepage.length));
+
+  if (!productsForHomepage.length) {
+    const message = publishedCatalogUi.state === "loading"
+      ? t("catalogLoading")
+      : publishedCatalogUi.state === "error"
+        ? t("catalogUnavailable")
+        : t("catalogEmpty");
+    grid.innerHTML = `<p class="catalog-product-state">${escapeCatalogText(message)}</p>`;
+    if (loadMore) loadMore.hidden = true;
+    return;
+  }
+
+  const visibleProducts = productsForHomepage.slice(0, publishedCatalogUi.visibleCount);
+  grid.innerHTML = visibleProducts
     .map((product) => {
-      const related = productPartners[product.id] || [];
-      const trade = productTradeDetails[product.id];
-      const relatedMarkup = related.length
-        ? `<div class="related-companies"><strong tabindex="0">${t("relatedCompanies")}</strong><div>${related
-            .map(
-              (company) =>
-                `<span class="related-company"><a class="site-action" href="${company.site}" target="_blank" rel="noopener"><img src="${company.logo}" alt="" aria-hidden="true" /><span>${company.name}</span></a>${[
-                  company.catalog ? `<a class="catalog-action" href="${company.catalog}" target="_blank" rel="noopener">${t("sampleCatalogCta")}</a>` : "",
-                  ...(company.catalogs || []).map((catalog) => `<a class="catalog-action" href="${catalog.href}" target="_blank" rel="noopener">${catalog.label}</a>`),
-                ].join("")}</span>`,
-            )
-            .join("")}</div></div>`
-        : "";
-      const tradeMarkup = trade
-        ? `<div class="trade-details">
-            <a class="product-quote-button" href="#catalog-proforma" data-category-id="${product.id}" data-product-option="${trade.optionValue}" data-product-title="${product.title}">${t("tradeQuoteCta")}</a>
-          </div>`
-        : "";
-      return `<article class="product-card product-card-${product.id}" id="${product.id}"><div><div class="product-card-media"><img src="${productCategoryImages[product.id] || "assets/app-icon.svg"}" alt="" loading="lazy" /><span class="product-icon" aria-hidden="true">${product.icon}</span></div><h3>${product.title}</h3><p>${product.copy}</p></div><div class="product-meta">${product.meta
-        .map((item) => `<span>${item}</span>`)
-        .join("")}</div>${tradeMarkup}${relatedMarkup}</article>`;
+      const name = getProductName(product);
+      const brand = product.brand || "Sidya Global";
+      const sourceCategory = product.sourceCategory || getCategoryTitle(product.category);
+      const unitsPerCarton = Math.max(Number(product.unitsPerCarton || 1), 1);
+      const kgPerCarton = Number(product.kgPerCarton || 0);
+      return `<article class="catalog-product-card">
+        <div class="catalog-product-visual">
+          <img src="${escapeCatalogText(getBrandLogo(product))}" alt="${escapeCatalogText(brand)}" loading="lazy" />
+        </div>
+        <div class="catalog-product-content">
+          <span class="catalog-product-brand">${escapeCatalogText(brand)}</span>
+          <h3>${escapeCatalogText(name)}</h3>
+          <p class="catalog-product-category">${escapeCatalogText(sourceCategory || product.liter || "")}</p>
+          <dl class="catalog-product-facts">
+            <div><dt>${escapeCatalogText(t("catalogUnitsPerCarton"))}</dt><dd>${escapeCatalogText(unitsPerCarton)}</dd></div>
+            ${kgPerCarton > 0 ? `<div><dt>${escapeCatalogText(t("catalogKgPerCarton"))}</dt><dd>${escapeCatalogText(kgPerCarton.toFixed(2))}</dd></div>` : ""}
+          </dl>
+          <button class="catalog-product-proforma" type="button" data-catalog-product-id="${escapeCatalogText(product.id)}">${escapeCatalogText(t("catalogAddProforma"))}</button>
+        </div>
+      </article>`;
     })
     .join("");
+
+  if (loadMore) {
+    loadMore.hidden = visibleProducts.length >= productsForHomepage.length;
+    loadMore.textContent = t("catalogLoadMore");
+  }
 };
 
 const renderMarkets = () => {
@@ -2203,6 +2271,8 @@ const getProductSearchText = (product) =>
       product.brand,
       product.liter,
       product.barcode,
+      product.sourceCategory,
+      product.category,
       product.description,
       ...(product.keywords || []),
       ...Object.values(product.names || {}),
@@ -3183,6 +3253,24 @@ supplierSearchForm?.addEventListener("submit", (event) => {
 supplierSearchInput?.addEventListener("input", () => {
   renderSupplierSearchResults(supplierSearchInput.value);
 });
+
+document.querySelector("#productCatalogSearch")?.addEventListener("input", () => {
+  publishedCatalogUi.visibleCount = 12;
+  renderProducts();
+});
+document.querySelector("#catalogLoadMore")?.addEventListener("click", () => {
+  publishedCatalogUi.visibleCount += 12;
+  renderProducts();
+});
+document.querySelector("#productGrid")?.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-catalog-product-id]");
+  if (!button) return;
+  addProformaLineWithQuantity(button.dataset.catalogProductId, 1);
+  returnCatalogProformaCategory = null;
+  returnCatalogProformaTitle = "";
+  openMainProformaPanel({ focusSummary: true });
+});
+
 document.querySelector("#gtipSearchInput")?.addEventListener("input", renderGtipGuide);
 document.querySelector("#calculateFuel")?.addEventListener("click", calculateFuelCost);
 ["#fuelFrom", "#fuelTo", "#fuelLoad", "#fuelConsumption", "#fuelPrice"].forEach((selector) => {
@@ -3443,34 +3531,75 @@ const formatPublishedPrice = (product, cartons = null) => {
   }).format(amount);
 };
 
+const waitForBackendConfig = async (timeoutMs = 8000) => {
+  const startedAt = Date.now();
+  while (Date.now() - startedAt < timeoutMs) {
+    if (isBackendConfigured()) return true;
+    await new Promise((resolve) => window.setTimeout(resolve, 100));
+  }
+  return false;
+};
+
+const inferPublishedProductCategory = (row) => {
+  const text = normalizeSearchText([row.brand, row.category, row.name].filter(Boolean).join(" "));
+  if (/(medikal|medical|saglik|health)/.test(text)) return "medical-products";
+  if (/(kozmetik|cosmetic|sampuan|shampoo|kisisel bakim|personal care)/.test(text)) return "cosmetics-products";
+  if (/(gida|food|salca|sos|ketchup|atistirmalik)/.test(text)) return "food-products";
+  if (/(otomotiv|automotive|yedek parca|motor)/.test(text)) return "automotive-products";
+  if (/(hirdavat|hardware|yapi|building|tool)/.test(text)) return "hardware-products";
+  if (/(ev yasam|home living|mutfak|kitchen|seramik)/.test(text)) return "home-products";
+  if (/(endustri|industrial|sarf|ambalaj|packaging)/.test(text)) return "industrial-products";
+  return "cleaning-products";
+};
+
 const loadPublishedCatalogPrices = async () => {
-  const db = getSupabaseClient();
-  if (!db) return;
-  const { data, error } = await db.from("site_catalog_prices").select("*").eq("active", true);
-  if (error || !data?.length) return;
-  data.forEach((row) => {
-    const existing = productCatalog.find((product) => product.id === row.catalog_id || product.id === row.publish_key || (row.barcode && product.barcode === row.barcode));
-    const values = {
-      salePrice: Number(row.sale_price || 0),
-      priceCurrency: row.currency || "USD",
-      barcode: row.barcode || existing?.barcode,
-      unitsPerCarton: Number(row.units_per_carton || existing?.unitsPerCarton || 1),
-      cartonsPerPallet: Number(row.cartons_per_pallet || existing?.cartonsPerPallet || 0) || existing?.cartonsPerPallet,
-      kgPerCarton: Number(row.kg_per_carton || existing?.kgPerCarton || 0) || existing?.kgPerCarton,
-    };
-    if (existing) Object.assign(existing, values);
-    else productCatalog.push({
-      id: row.catalog_id || row.publish_key,
-      brand: row.brand || "Sidya Global",
-      names: { tr: row.name, en: row.name },
-      liter: row.grammage || "",
-      category: row.category || "cleaning-products",
-      ...values,
+  publishedCatalogUi.state = "loading";
+  renderProducts();
+  try {
+    const isReady = await waitForBackendConfig();
+    const db = isReady ? getSupabaseClient() : null;
+    if (!db) throw new Error("Supabase public configuration was not ready.");
+
+    const { data, error } = await db.from("site_catalog_prices").select("*").eq("active", true);
+    if (error) throw error;
+
+    (data || []).forEach((row) => {
+      const existing = productCatalog.find((product) =>
+        product.id === row.catalog_id ||
+        product.id === row.publish_key ||
+        (row.barcode && product.barcode === row.barcode),
+      );
+      const inferredCategory = inferPublishedProductCategory(row);
+      const values = {
+        salePrice: Number(row.sale_price || 0),
+        priceCurrency: row.currency || "USD",
+        barcode: row.barcode || existing?.barcode,
+        sourceCategory: row.category || existing?.sourceCategory || "",
+        category: String(existing?.category || "").endsWith("-products") ? existing.category : inferredCategory,
+        unitsPerCarton: Number(row.units_per_carton || existing?.unitsPerCarton || 1),
+        cartonsPerPallet: Number(row.cartons_per_pallet || existing?.cartonsPerPallet || 0) || existing?.cartonsPerPallet,
+        kgPerCarton: Number(row.kg_per_carton || existing?.kgPerCarton || 0) || existing?.kgPerCarton,
+      };
+      if (existing) Object.assign(existing, values);
+      else productCatalog.push({
+        id: row.catalog_id || row.publish_key,
+        brand: row.brand || "Sidya Global",
+        names: { tr: row.name, en: row.name },
+        liter: row.grammage || "",
+        ...values,
+      });
     });
-  });
-  if (!document.querySelector("#proforma")?.hidden) renderProformaProducts();
-  if (activeCatalogProformaCategory) renderCatalogProformaProducts();
-  renderProformaOrder();
+
+    publishedCatalogUi.state = "ready";
+    renderProducts();
+    if (!document.querySelector("#proforma")?.hidden) renderProformaProducts();
+    if (activeCatalogProformaCategory) renderCatalogProformaProducts();
+    renderProformaOrder();
+  } catch (error) {
+    publishedCatalogUi.state = "error";
+    console.error("[catalog] Published products could not be loaded.", error);
+    renderProducts();
+  }
 };
 
 const setB2BAuthStatus = (message) => {
