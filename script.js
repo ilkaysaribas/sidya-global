@@ -1,6 +1,8 @@
 const content = {
   en: {
     navProducts: "Products",
+    navFindProducts: "Find Products",
+    navLogistics: "Logistics",
     navHome: "Home & Living",
     navCleaning: "Cleaning",
     navIndustrial: "Industrial",
@@ -29,27 +31,42 @@ const content = {
     exchangeChecked: "Checked",
     exchangeDataDate: "TCMB data",
     exchangeUnavailable: "Rates could not be loaded",
-    heroEyebrow: "Cleaning • Industrial • Home & Living • Health • Personal Care",
-    heroTitle: "Your Trusted Gateway to Reliable Products from Türkiye",
+    logisticsCenterKicker: "Logistics Center",
+    logisticsCenterTitle: "Border gates, ports, and air cargo tracking center",
+    logisticsCenterCopy: "Track logistics through live official sources in a focused workspace.",
+    logisticsChecking: "Checking live sources...",
+    logisticsTabGates: "Border Gates",
+    logisticsTabPorts: "Ports",
+    logisticsTabAir: "Air Cargo",
+    logisticsVesselKicker: "Live Vessel Tracking",
+    logisticsPortsTitle: "Ports in Türkiye and destination countries",
+    logisticsAirKicker: "Live Air Cargo Tracking",
+    logisticsAirTitle: "Cargo tracking links",
+    logisticsSourceReachable: "Live source reachable",
+    logisticsOfficialSource: "Official source link",
+    logisticsLastChecked: "Live sources last checked",
+    logisticsCheckFailed: "Live source checks are currently unavailable; official links remain available.",
+    heroEyebrow: "CLEANING · INDUSTRIAL · HOME & LIVING · HEALTH · PERSONAL CARE",
+    heroTitle: "Access Reliable Products from Türkiye",
     heroCopy:
-      "Sidya Global helps international buyers source quality products from trusted Turkish suppliers — quickly, transparently, and professionally.",
-    heroPrimary: "Get a Quote",
+      "Sidya Global helps international buyers source high-quality Turkish products quickly, transparently, and professionally.",
+    heroPrimary: "Request a Quote",
     heroSecondary: "View Products",
     metricCountries: "Target markets",
     metricCategories: "Product groups",
     metricQuoteValue: "1 day",
     metricQuote: "Quote turnaround",
-    trustOne: "Trusted Turkish supplier network",
-    trustTwo: "FOB, CIF and EXW delivery options",
-    trustThree: "Transparent proforma preparation",
-    trustFour: "Multilingual catalog support",
+    trustOne: "Reliable Turkish Supply Network",
+    trustTwo: "FOB, CIF & EXW Delivery Options",
+    trustThree: "Professional Proforma Preparation",
+    trustFour: "Multi-Language Catalog Support",
     productsKicker: "Catalog",
     productsTitle: "Featured product groups",
-    supplierSearchKicker: "B2B Supply Search",
+    supplierSearchKicker: "B2B PRODUCT SEARCH",
     supplierSearchTitle: "Find Products from Türkiye",
-    supplierSearchCopy: "Type a product name to see matching categories, brands, minimum order and loading notes.",
-    supplierSearchLabel: "Buyer product search",
-    supplierSearchPlaceholder: "Start searching products, brands or categories",
+    supplierSearchCopy: "Search by product name, category, brand, minimum order quantity, and loading notes.",
+    supplierSearchLabel: "Search products",
+    supplierSearchPlaceholder: "Search by product, brand, or category",
     supplierNoResultsTitle: "No matching supplier found",
     supplierNoResultsCopy: "Try another product name or send a custom request from the quote form.",
     supplierContactForm: "Contact",
@@ -86,6 +103,9 @@ const content = {
     proformaOrderCopy: "Open the product selector, search by brand or product name, enter carton quantity and add items to the proforma total.",
     proformaOpenProducts: "Create Proforma Order",
     proformaSearchLabel: "Search product",
+    proformaSearchPlaceholder: "Search products",
+    proformaPricePerCarton: "Price / carton",
+    proformaTotalAmount: "Product total",
     proformaNoSearchResults: "No catalog product matches this search.",
     proformaTransportTitle: "Select loading type",
     proformaTransportTruck: "TIR",
@@ -120,15 +140,15 @@ const content = {
     catalogProformaViewSummary: "View proforma total",
     catalogProformaAdded: "Added to proforma total.",
     catalogProformaPartnerType: "Category request",
-    b2bKicker: "B2B export portal",
-    b2bTitle: "Buyer registration, document intake and export compliance flow.",
-    b2bCopy: "Register buyers, collect required documents and follow the export path from proforma to customs clearance.",
+    b2bKicker: "B2B TRADE PORTAL",
+    b2bTitle: "From Buyer Registration to Export Compliance",
+    b2bCopy: "Register as a buyer, submit the required documents, and track your export journey from proforma preparation to customs clearance.",
     b2bEntryTitle: "Register as a buyer",
     b2bEntryCopy: "Open the buyer registration screen to enter company details, tax information and upload required documents.",
     b2bRegisterCta: "Buyer Register",
-    guestProformaTitle: "Create proforma without registration",
-    guestProformaCopy: "Open the proforma order screen directly, select products and calculate carton, pallet and kg totals.",
-    guestProformaCta: "Create Proforma Order",
+    guestProformaTitle: "Create Proforma Without Registration",
+    guestProformaCopy: "Select products and calculate carton, pallet, kilogram, and order totals without creating an account.",
+    guestProformaCta: "Create Proforma Without Registration",
     b2bRegisterTitle: "Buyer registration",
     b2bRegisterCopy: "Sign in if you already have an account, or create a new buyer account from the registration form below.",
     b2bNewRegistrationTitle: "New buyer registration",
@@ -346,6 +366,8 @@ const content = {
   },
   tr: {
     navProducts: "Ürünler",
+    navFindProducts: "Ürün Bul",
+    navLogistics: "Lojistik",
     navHome: "Ev ve Yaşam",
     navCleaning: "Temizlik",
     navIndustrial: "Endüstriyel",
@@ -374,6 +396,21 @@ const content = {
     exchangeChecked: "Kontrol",
     exchangeDataDate: "TCMB veri",
     exchangeUnavailable: "Kur bilgileri alınamadı",
+    logisticsCenterKicker: "Lojistik Merkezi",
+    logisticsCenterTitle: "Kapılar, limanlar ve uçak kargo takip merkezi",
+    logisticsCenterCopy: "Canlı resmi kaynaklara yönlenen odaklı lojistik takip ekranı.",
+    logisticsChecking: "Canlı kaynaklar kontrol ediliyor...",
+    logisticsTabGates: "Kapılar",
+    logisticsTabPorts: "Limanlar",
+    logisticsTabAir: "Uçak Kargo",
+    logisticsVesselKicker: "Canlı Gemi Takibi",
+    logisticsPortsTitle: "Türkiye ve hedef ülke limanları",
+    logisticsAirKicker: "Canlı Uçak Kargo Takibi",
+    logisticsAirTitle: "Kargo takip bağlantıları",
+    logisticsSourceReachable: "Canlı kaynağa erişiliyor",
+    logisticsOfficialSource: "Resmi kaynak bağlantısı",
+    logisticsLastChecked: "Canlı kaynak son kontrol",
+    logisticsCheckFailed: "Canlı kaynak kontrolü yapılamadı; resmi bağlantılar kullanılabilir.",
     heroEyebrow: "Temizlik • Endüstriyel • Ev ve Yaşam • Sağlık • Kişisel Bakım",
     heroTitle: "Türkiye'den Güvenilir Ürünlere Açılan Kapınız",
     heroCopy:
@@ -431,6 +468,9 @@ const content = {
     proformaOrderCopy: "Ürün seçiciyi açın, marka veya ürün adıyla arayın, koli miktarını girin ve kalemi proforma toplamına ekleyin.",
     proformaOpenProducts: "Proforma Sipariş Oluştur",
     proformaSearchLabel: "Ürün ara",
+    proformaSearchPlaceholder: "Ürün ara",
+    proformaPricePerCarton: "Fiyat / koli",
+    proformaTotalAmount: "Ürün toplamı",
     proformaNoSearchResults: "Bu aramayla eşleşen katalog ürünü bulunamadı.",
     proformaTransportTitle: "Yükleme şeklini seçin",
     proformaTransportTruck: "TIR",
@@ -2358,7 +2398,7 @@ const renderLogisticsCenter = () => {
       .map(
         (gate) => {
           const source = logisticsSourceStatus.get(gate.sourceId);
-          const sourceText = source?.ok ? `Canlı kaynak erişiliyor (${source.status})` : "Resmi kaynak bağlantısı";
+          const sourceText = source?.ok ? `${t("logisticsSourceReachable")} (${source.status})` : t("logisticsOfficialSource");
           return `<article class="border-gate-card">
           <h3 class="gate-title"><span>${gate.flag}</span>${gate.name}</h3>
           <strong class="density-pill density-${gate.density}">${gate.density === "red" ? "Yoğun" : gate.density === "yellow" ? "Orta" : "Rahat"}</strong>
@@ -2414,9 +2454,9 @@ const fetchLogisticsStatus = async () => {
     const data = await response.json();
     logisticsSourceStatus = new Map((data.sources || []).map((source) => [source.id, source]));
     const updatedAt = data.updatedAt ? new Date(data.updatedAt).toLocaleString("tr-TR") : "";
-    if (updatedNode) updatedNode.textContent = `Canlı kaynak son kontrol: ${updatedAt}`;
+    if (updatedNode) updatedNode.textContent = `${t("logisticsLastChecked")}: ${updatedAt}`;
   } catch (error) {
-    if (updatedNode) updatedNode.textContent = "Canlı kaynak kontrolü yapılamadı; resmi bağlantılar kullanılabilir.";
+    if (updatedNode) updatedNode.textContent = t("logisticsCheckFailed");
   }
   renderLogisticsCenter();
 };
@@ -2594,7 +2634,7 @@ const renderProformaProducts = () => {
           <div><dt>${t("proformaUnitsPerCarton")}</dt><dd>${formatNumberValue(unitsPerCarton)}</dd></div>
           <div><dt>${t("proformaCartonsPerPallet")}</dt><dd>${formatNumberValue(cartonsPerPallet)}</dd></div>
           <div><dt>${t("proformaKgPerCarton")}</dt><dd>${formatNumberValue(kgPerCarton, 2)}</dd></div>
-          ${cartonPrice ? `<div><dt>Fiyat / koli</dt><dd>${cartonPrice}</dd></div>` : ""}
+          ${cartonPrice ? `<div><dt>${t("proformaPricePerCarton")}</dt><dd>${cartonPrice}</dd></div>` : ""}
         </dl>
         <label>
           <span>${t("proformaCartonQty")}</span>
@@ -2646,7 +2686,7 @@ const renderCatalogProformaProducts = () => {
           <div><dt>${t("proformaUnitsPerCarton")}</dt><dd>${formatNumberValue(unitsPerCarton)}</dd></div>
           <div><dt>${t("proformaCartonsPerPallet")}</dt><dd>${formatNumberValue(cartonsPerPallet)}</dd></div>
           <div><dt>${t("proformaKgPerCarton")}</dt><dd>${formatNumberValue(kgPerCarton, 2)}</dd></div>
-          ${cartonPrice ? `<div><dt>Fiyat / koli</dt><dd>${cartonPrice}</dd></div>` : ""}
+          ${cartonPrice ? `<div><dt>${t("proformaPricePerCarton")}</dt><dd>${cartonPrice}</dd></div>` : ""}
         </dl>
         <label>
           <span>${t("proformaCartonQty")}</span>
