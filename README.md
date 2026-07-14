@@ -42,3 +42,25 @@ Never expose the service-role key in browser code or commit secret values. The `
 5. Verify the production URL in Turkish, English, and Arabic.
 6. Check proforma, exchange-rate API, Supabase requests, browser console, and responsive layouts.
 7. Confirm the footer build SHA matches the deployed GitHub commit.
+
+## Sidya AI Assistant
+
+The production site loads the assistant lazily through `/api/backend-config.js`. The public browser never receives the OpenAI key or Supabase service-role key.
+
+- UI: `sidya-ai-assistant.js` and `sidya-ai-assistant.css`
+- Server API: `api/ai-assistant.js`
+- Admin view: `admin-ai-assistant.js`
+- Database migration: `supabase/ai-assistant-leads.sql`
+- Storage bucket: private `ai-assistant-attachments`
+- Notification recipient: `export@sidyaglobal.com`
+- Supported languages: Turkish, English, Arabic, Russian, Georgian and Azerbaijani
+- AI provider: OpenAI Responses API when `OPENAI_API_KEY` is set; safe multilingual knowledge fallback otherwise
+- Mail provider: the existing Mail Center / Nodemailer SMTP configuration
+
+Required server variables:
+
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `OPENAI_API_KEY` and optional `OPENAI_MODEL`
+- Existing SMTP variables or encrypted Mail Center settings
+
+The API applies per-IP rate limits, honeypot and elapsed-time spam checks, server-side validation and sanitization. Lead tables have RLS enabled and no anonymous grants; public submissions pass only through the server API.

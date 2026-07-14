@@ -467,17 +467,17 @@ function sendBackendScript(res) {
       if (window.__sidyaAdminFixLoader) return;
       window.__sidyaAdminFixLoader = true;
       function appReady(){ var shell = document.getElementById("appShell"); return !!(shell && !shell.hidden); }
-      function appendScript(id, src){ if (document.getElementById(id)) return; var script = document.createElement("script"); script.id = id; script.src = src; script.defer = true; document.head.appendChild(script); }
+      function appendScript(id, src){ if (document.getElementById(id)) return; var script = document.createElement("script"); script.id = id; script.src = src; script.defer = true; document.head.appendChild(script); }\n      function appendStyle(id, href){ if (document.getElementById(id)) return; var link = document.createElement("link"); link.id = id; link.rel = "stylesheet"; link.href = href; document.head.appendChild(link); }
       function renderBuildInfo(){ var node = document.getElementById("buildInfo"); if (node) node.textContent = "Build: " + window.SIDYA_BUILD.sha + " · Environment: " + window.SIDYA_BUILD.environment; }
-      function loadSiteEnhancements(){ renderBuildInfo(); if (document.getElementById("quoteForm")) { appendScript("sidyaMailCrmRouteShimScript", "/mail-crm-route-shim.js?v=20260711-1"); appendScript("sidyaSiteMailCrmScript", "/site-mail-crm.js?v=20260711-1"); } }
-      function loadFixes(){ loadSiteEnhancements(); if (!appReady()) return; appendScript("sidyaMailCrmRouteShimScript", "/mail-crm-route-shim.js?v=20260711-1"); appendScript("sidyaAdminPanelFixesScript", "/admin-panel-fixes.js?v=20260705-2"); appendScript("sidyaAdminRateFixScript", "/admin-rate-fix.js?v=20260706-2"); appendScript("sidyaAdminProfitFixScript", "/admin-profit-fix.js?v=20260705-1"); appendScript("sidyaAdminProfitTableV4Script", "/admin-profit-table-v4.js?v=20260706-1"); appendScript("sidyaInfoActionsScript", "/admin-info-actions.js?v=20260706-1"); appendScript("sidyaMailCrmAdminScript", "/admin-mail-crm.js?v=20260711-1"); appendScript("sidyaMailSmtpFixScript", "/admin-mail-smtp-fix.js?v=20260712-2"); }
+      function loadSiteEnhancements(){ renderBuildInfo(); if (!/\\/admin(?:\\.html)?$/.test(location.pathname)) { appendStyle("sidyaAiAssistantStyles", "/sidya-ai-assistant.css?v=20260714-1"); appendScript("sidyaAiAssistantScript", "/sidya-ai-assistant.js?v=20260714-1"); } if (document.getElementById("quoteForm")) { appendScript("sidyaMailCrmRouteShimScript", "/mail-crm-route-shim.js?v=20260711-1"); appendScript("sidyaSiteMailCrmScript", "/site-mail-crm.js?v=20260711-1"); } }
+      function loadFixes(){ loadSiteEnhancements(); if (!appReady()) return; appendScript("sidyaMailCrmRouteShimScript", "/mail-crm-route-shim.js?v=20260711-1"); appendScript("sidyaAdminPanelFixesScript", "/admin-panel-fixes.js?v=20260705-2"); appendScript("sidyaAdminRateFixScript", "/admin-rate-fix.js?v=20260706-2"); appendScript("sidyaAdminProfitFixScript", "/admin-profit-fix.js?v=20260705-1"); appendScript("sidyaAdminProfitTableV4Script", "/admin-profit-table-v4.js?v=20260706-1"); appendScript("sidyaInfoActionsScript", "/admin-info-actions.js?v=20260706-1"); appendScript("sidyaMailCrmAdminScript", "/admin-mail-crm.js?v=20260711-1"); appendScript("sidyaMailSmtpFixScript", "/admin-mail-smtp-fix.js?v=20260712-2"); appendScript("sidyaAiAdminScript", "/admin-ai-assistant.js?v=20260714-1"); }
       var timer = setInterval(function(){ loadFixes(); if (appReady() && document.getElementById("sidyaAdminProfitTableV4Script") && document.getElementById("sidyaInfoActionsScript") && document.getElementById("sidyaMailCrmAdminScript")) clearInterval(timer); }, 500);
       document.addEventListener("DOMContentLoaded", loadFixes); window.addEventListener("load", loadFixes);
     })();
   `);
 }
 
-module.exports = async (req, res) => {
+const backendHandler = async (req, res) => {
   try {
     const action = req.query.mailCrm;
     if (action) return await handleMailCrm(req, res, action);
@@ -486,3 +486,5 @@ module.exports = async (req, res) => {
     return json(res, error.statusCode || 500, { ok: false, success: false, message: error.message, error: error.message, code: error.code || "SERVER_ERROR", details: error.safeDetails || null });
   }
 };
+backendHandler._internal = { rest, assertAdmin, sendSmtpMail, serviceKey, supabaseUrl, rateLimit, parseBody, clientIp };
+module.exports = backendHandler;

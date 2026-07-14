@@ -11,7 +11,7 @@ const requiredFiles = [
   "sidya-locale-layout-fixes.js",
   "sidya-proforma-core-fix.js",
   "api/backend-config.js",
-  "api/exchange-rates.js",
+  "api/exchange-rates.js",\n  "api/ai-assistant.js",\n  "sidya-ai-assistant.js",\n  "sidya-ai-assistant.css",\n  "admin-ai-assistant.js",
   "lib/smtp-crypto.js",
   "sw.js",
 ];
