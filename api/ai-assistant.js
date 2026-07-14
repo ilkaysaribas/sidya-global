@@ -269,8 +269,16 @@ function crmLead(row) {
   };
 }
 async function adminData(req) {
-  await assertAdmin(req);
   const action = clean(req.query.action || "list", 40);
+  if (!serviceKey()) {
+    return edgeCall({
+      action: "admin-" + action,
+      method: req.method,
+      query: req.query || {},
+      payload: req.method === "GET" ? {} : body(req)
+    }, req.headers.authorization);
+  }
+  await assertAdmin(req);
   if (req.method === "GET" && action === "list") {
     const [aiLeads, crmRows] = await Promise.all([
       rest("ai_assistant_leads?select=*&order=created_at.desc&limit=500"),
