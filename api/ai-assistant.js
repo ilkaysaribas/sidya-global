@@ -2,6 +2,7 @@ const backend = require("./backend-config");
 const { rest, assertAdmin, sendSmtpMail, serviceKey, supabaseUrl } = backend._internal || {};
 
 const RECEIVER = "export@sidyaglobal.com";
+const PUBLIC_KEY = String(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "sb_publishable_obANQZIOM1xpMIBsJPZcoA__6TGFYBc").trim();
 const BUCKET = "ai-assistant-attachments";
 const MAX_FILE_SIZE = 3 * 1024 * 1024;
 const ALLOWED_MIME = new Set([
@@ -174,16 +175,41 @@ function mailText(item) {
     item.conversation_summary || "-",
   ].join("\n");
 }
+async function publicRpc(name, payload) {
+  const response = await fetch(supabaseUrl() + "/rest/v1/rpc/" + name, {
+    method: "POST",
+    headers: { apikey: PUBLIC_KEY, Authorization: "Bearer " + PUBLIC_KEY, "Content-Type": "application/json" },
+    body: JSON.stringify({ payload })
+  });
+  const data = await response.json().catch(() => null);
+  if (!response.ok) throw new Error(data?.message || data?.error || "Supabase RPC isteği başarısız.");
+  return data;
+}
+async function edgeCall(payload, authorization) {
+  const response = await fetch(supabaseUrl() + "/functions/v1/ai-assistant-secure", {
+    method: "POST",
+    headers: { apikey: PUBLIC_KEY, Authorization: authorization || ("Bearer " + PUBLIC_KEY), "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.ok === false) throw new Error(data.error || "Güvenli dosya işlemi başarısız.");
+  return data;
+}
 async function insertEvent(payload) {
   try {
-    await rest("ai_assistant_events", {
-      method: "POST",
-      headers: { Prefer: "return=minimal" },
-      body: JSON.stringify(payload),
-    });
+    if (serviceKey()) {
+      await rest("ai_assistant_events", {
+        method: "POST",
+        headers: { Prefer: "return=minimal" },
+        body: JSON.stringify(payload),
+      });
+    } else {
+      await publicRpc("record_ai_assistant_event", payload);
+    }
   } catch (_) {}
 }
 async function uploadFile(item) {
+  if (!serviceKey()) return (await edgeCall({ action: "upload", lead_id: item.lead_id, session_id: item.session_id, file: item.file })).file;
   const file = item.file || {};
   const mime = clean(file.type, 160);
   const name = clean(file.name, 180).replace(/[^a-zA-Z0-9._-]/g, "_");
@@ -337,7 +363,8 @@ module.exports = async (req, res) => {
     if (action === "health" && req.method === "GET") {
       return json(res, 200, {
         ok: true,
-        databaseConfigured: Boolean(serviceKey()),
+        databaseConfigured: true,
+        databaseMode: serviceKey() ? "service_role" : "controlled_rpc",
         aiConfigured: Boolean(process.env.OPENAI_API_KEY),
         smtpEnvironmentConfigured: Boolean(process.env.SMTP_PASSWORD || process.env.MAIL_PASSWORD),
         storageBucket: BUCKET
@@ -396,12 +423,17 @@ module.exports = async (req, res) => {
       item.contact_captured = true;
       delete item.website;
       delete item.elapsed_ms;
-      const rows = await rest("ai_assistant_leads", {
-        method: "POST",
-        headers: { Prefer: "return=representation" },
-        body: JSON.stringify(item),
-      });
-      const lead = rows?.[0];
+      let lead;
+      if (serviceKey()) {
+        const rows = await rest("ai_assistant_leads", {
+          method: "POST",
+          headers: { Prefer: "return=representation" },
+          body: JSON.stringify(item),
+        });
+        lead = rows?.[0];
+      } else {
+        lead = await publicRpc("submit_ai_assistant_lead", item);
+      }
       if (!lead) throw new Error("Talep kaydedilemedi.");
       let mailSent = false;
       try {
