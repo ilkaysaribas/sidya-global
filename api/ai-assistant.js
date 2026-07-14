@@ -334,6 +334,15 @@ module.exports = async (req, res) => {
     if (!rest || !serviceKey || !supabaseUrl) throw new Error("Sunucu bağlantısı yapılandırılmamış.");
     if (req.method === "OPTIONS") return res.status(204).end();
     const action = clean(req.query.action || "", 40);
+    if (action === "health" && req.method === "GET") {
+      return json(res, 200, {
+        ok: true,
+        databaseConfigured: Boolean(serviceKey()),
+        aiConfigured: Boolean(process.env.OPENAI_API_KEY),
+        smtpEnvironmentConfigured: Boolean(process.env.SMTP_PASSWORD || process.env.MAIL_PASSWORD),
+        storageBucket: BUCKET
+      });
+    }
     if (action.startsWith("admin") || action === "note" || action === "file-url") {
       limit(req, "ai-admin", 120, 60_000);
       const mapped = action.startsWith("admin-") ? action.slice(6) : action;

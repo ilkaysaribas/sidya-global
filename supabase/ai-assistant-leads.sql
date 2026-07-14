@@ -54,11 +54,11 @@ revoke all on public.ai_assistant_leads,public.ai_assistant_files,public.ai_assi
 grant select,update on public.ai_assistant_leads to authenticated;
 grant select on public.ai_assistant_files,public.ai_assistant_events to authenticated;
 grant select,insert on public.ai_assistant_notes to authenticated;
-create policy "admins read ai leads" on public.ai_assistant_leads for select to authenticated using(public.is_admin());
-create policy "admins update ai leads" on public.ai_assistant_leads for update to authenticated using(public.is_admin()) with check(public.is_admin());
-create policy "admins read ai files" on public.ai_assistant_files for select to authenticated using(public.is_admin());
-create policy "admins manage ai notes" on public.ai_assistant_notes for all to authenticated using(public.is_admin()) with check(public.is_admin());
-create policy "admins read ai events" on public.ai_assistant_events for select to authenticated using(public.is_admin());
+drop policy if exists "admins read ai leads" on public.ai_assistant_leads;\ncreate policy "admins read ai leads" on public.ai_assistant_leads for select to authenticated using(public.is_admin());
+drop policy if exists "admins update ai leads" on public.ai_assistant_leads;\ncreate policy "admins update ai leads" on public.ai_assistant_leads for update to authenticated using(public.is_admin()) with check(public.is_admin());
+drop policy if exists "admins read ai files" on public.ai_assistant_files;\ncreate policy "admins read ai files" on public.ai_assistant_files for select to authenticated using(public.is_admin());
+drop policy if exists "admins manage ai notes" on public.ai_assistant_notes;\ncreate policy "admins manage ai notes" on public.ai_assistant_notes for all to authenticated using(public.is_admin()) with check(public.is_admin());
+drop policy if exists "admins read ai events" on public.ai_assistant_events;\ncreate policy "admins read ai events" on public.ai_assistant_events for select to authenticated using(public.is_admin());
 insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types) values(
  'ai-assistant-attachments','ai-assistant-attachments',false,10485760,
  array['application/pdf','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document','image/jpeg','image/png','image/webp']
