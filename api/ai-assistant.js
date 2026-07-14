@@ -212,15 +212,56 @@ async function uploadFile(item) {
   });
   return { name, size: bytes.length };
 }
+function crmLead(row) {
+  const rawStatus = clean(row.status || "lead", 40);
+  const leadStatus = rawStatus === "quoted" ? "quote_preparing" : (["won","lost"].includes(rawStatus) ? rawStatus : (rawStatus === "lead" ? "new" : "contacted"));
+  return {
+    id: "crm:" + row.id,
+    lead_number: "CRM-" + String(row.id || "").slice(0, 6).toUpperCase(),
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+    language: "tr",
+    lead_type: String(row.source || "").includes("quote") ? "quote" : "contact",
+    lead_status: leadStatus,
+    priority: "normal",
+    source: String(row.source || "").includes("quote") ? "quote_form" : "contact_form",
+    full_name: row.contact_name,
+    company_name: row.company_name,
+    country: row.country,
+    email: row.email,
+    phone: row.phone,
+    whatsapp: row.whatsapp,
+    product_name: row.interested_products,
+    message: row.notes,
+    conversation_summary: row.notes,
+    conversation_json: [],
+    last_contacted_at: row.last_contact_at,
+    assigned_to: null,
+    converted_to_quote: rawStatus === "quoted",
+    duration_seconds: 0,
+    consent_given: true
+  };
+}
 async function adminData(req) {
   await assertAdmin(req);
   const action = clean(req.query.action || "list", 40);
   if (req.method === "GET" && action === "list") {
-    const leads = await rest("ai_assistant_leads?select=*&order=created_at.desc&limit=500");
-    return { ok: true, leads: leads || [] };
+    const [aiLeads, crmRows] = await Promise.all([
+      rest("ai_assistant_leads?select=*&order=created_at.desc&limit=500"),
+      rest("crm_customers?select=*&order=created_at.desc&limit=500").catch(() => [])
+    ]);
+    return { ok: true, leads: (aiLeads || []).concat((crmRows || []).map(crmLead)).sort((a,b) => String(b.created_at || "").localeCompare(String(a.created_at || ""))) };
   }
   if (req.method === "GET" && action === "detail") {
     const id = clean(req.query.id, 80);
+    if (id.startsWith("crm:")) {
+      const crmId = id.slice(4);
+      const [rows, interactions] = await Promise.all([
+        rest("crm_customers?id=eq." + encodeURIComponent(crmId) + "&select=*"),
+        rest("crm_interactions?customer_id=eq." + encodeURIComponent(crmId) + "&select=*&order=created_at.desc").catch(() => [])
+      ]);
+      return { ok: true, lead: rows?.[0] ? crmLead(rows[0]) : null, files: [], notes: (interactions || []).filter(x => x.type === "note").map(x => ({ note: x.body, created_at: x.created_at })) };
+    }
     const [leads, files, notes] = await Promise.all([
       rest("ai_assistant_leads?id=eq." + encodeURIComponent(id) + "&select=*"),
       rest("ai_assistant_files?lead_id=eq." + encodeURIComponent(id) + "&select=*&order=created_at"),
@@ -230,6 +271,15 @@ async function adminData(req) {
   }
   if (req.method === "PATCH" && action === "update") {
     const item = body(req);
+    if (String(item.id || "").startsWith("crm:")) {
+      const statusMap = { new: "lead", contacted: "follow_up_1", quote_preparing: "quoted", won: "won", lost: "lost" };
+      const crmId = clean(item.id, 90).slice(4);
+      const rows = await rest("crm_customers?id=eq." + encodeURIComponent(crmId), {
+        method: "PATCH", headers: { Prefer: "return=representation" },
+        body: JSON.stringify({ status: statusMap[item.lead_status] || "lead", last_contact_at: item.last_contacted_at || null })
+      });
+      return { ok: true, lead: rows?.[0] ? crmLead(rows[0]) : null };
+    }
     const allowed = {
       lead_status: clean(item.lead_status, 40),
       priority: clean(item.priority, 20),
@@ -248,6 +298,14 @@ async function adminData(req) {
     const item = body(req);
     const note = clean(item.note, 10000);
     if (!note) throw new Error("Not boş olamaz.");
+    if (String(item.lead_id || "").startsWith("crm:")) {
+      const crmId = clean(item.lead_id, 90).slice(4);
+      const rows = await rest("crm_interactions", {
+        method: "POST", headers: { Prefer: "return=representation" },
+        body: JSON.stringify({ customer_id: crmId, type: "note", direction: "internal", subject: "AI Asistan ekranı notu", body: note })
+      });
+      return { ok: true, note: rows?.[0] || null };
+    }
     const rows = await rest("ai_assistant_notes", {
       method: "POST",
       headers: { Prefer: "return=representation" },
