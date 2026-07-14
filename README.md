@@ -10,7 +10,7 @@
 - Framework preset: Other / static site with Vercel Functions
 - Install command: `npm ci`
 - Build command: `npm run build`
-- Output directory: repository root
+- Output directory: `public`
 
 The historical Vercel project `sidya-global-web` must not be used for production. Do not attach production domains or Git auto-deployments to it.
 
@@ -24,7 +24,7 @@ Public browser configuration:
 
 Server-only configuration:
 
-- `SUPABASE_SERVICE_ROLE_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY` (recommended; controlled RPC + Edge fallback keeps assistant lead/file writes working when absent)
 - `SUPABASE_ACCESS_TOKEN`
 - `MIGRATION_ADMIN_KEY`
 - `SMTP_ENCRYPTION_KEY`
@@ -60,7 +60,9 @@ The production site loads the assistant lazily through `/api/backend-config.js`.
 Required server variables:
 
 - `SUPABASE_SERVICE_ROLE_KEY`
-- `OPENAI_API_KEY` and optional `OPENAI_MODEL`
+- `OPENAI_API_KEY` and optional `OPENAI_MODEL` (required for generative answers; the safe knowledge fallback works without it)
 - Existing SMTP variables or encrypted Mail Center settings
 
 The API applies per-IP rate limits, honeypot and elapsed-time spam checks, server-side validation and sanitization. Lead tables have RLS enabled and no anonymous grants; public submissions pass only through the server API.
+
+Production readiness note: automatic notification email requires the existing Mail Center SMTP password and `SMTP_ENCRYPTION_KEY` to be available in the canonical Vercel project. The assistant returns `mailSent: false` without exposing an error to the visitor when mail is not configured.
