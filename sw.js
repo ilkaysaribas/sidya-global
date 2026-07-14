@@ -1,13 +1,13 @@
-const CACHE_NAME = "sidya-global-v102";
+const CACHE_NAME = "sidya-global-v103";
 
 const SHELL_ASSETS = [
   "./",
   "./index.html",
   "./offline.html",
-  "./styles.css?v=20260715-2",
+  "./styles.css?v=20260715-3",
   "./rfq.css?v=20260712-1",
   "./catalog-products.generated.js?v=20260614-1",
-  "./script.js?v=20260715-2",
+  "./script.js?v=20260715-3",
   "./rfq-currencies.js?v=20260712-1",
   "./sidya-locale-layout-fixes.js?v=20260715-1",
   "./sidya-proforma-core-fix.js?v=20260712-1",
@@ -110,6 +110,8 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (
+    url.pathname === "/script.js" ||
+    url.pathname === "/styles.css" ||
     url.pathname === "/catalog-products.generated.js" ||
     url.pathname === "/admin.js" ||
     url.pathname === "/admin.css" ||

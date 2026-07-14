@@ -5262,3 +5262,39 @@ html[dir="rtl"] .catalog-product-card {
     width: 64px;
   }
 }
+
+
+/* Homepage v3: deterministic LTR/RTL alignment after legacy section rules. */
+html[dir="ltr"] main :where(.hero-content, .hero-content > *, .section-heading, .section-heading > *, .supplier-search-heading, .supplier-search-heading > *, .supplier-search-box, .b2b-section-heading, .b2b-section-heading > *, .b2b-entry-card, .b2b-entry-card > *, .catalog-product-toolbar, .catalog-product-card, .catalog-product-content, .catalog-product-content > *) {
+  text-align: left !important;
+}
+
+html[dir="rtl"] main :where(.hero-content, .hero-content > *, .section-heading, .section-heading > *, .supplier-search-heading, .supplier-search-heading > *, .supplier-search-box, .b2b-section-heading, .b2b-section-heading > *, .b2b-entry-card, .b2b-entry-card > *, .catalog-product-toolbar, .catalog-product-card, .catalog-product-content, .catalog-product-content > *) {
+  text-align: right !important;
+}
+
+main :where(.hero-content, .section-heading, .supplier-search-heading, .supplier-search-box, .b2b-section-heading, .b2b-entry-card, .catalog-product-toolbar, .catalog-product-content) {
+  justify-content: flex-start;
+  justify-items: start;
+  align-items: flex-start;
+  margin-inline-start: 0 !important;
+  margin-inline-end: auto !important;
+}
+
+html[dir="rtl"] main :where(.hero-content, .section-heading, .supplier-search-heading, .supplier-search-box, .b2b-section-heading, .b2b-entry-card, .catalog-product-toolbar, .catalog-product-content) {
+  margin-inline-start: auto !important;
+  margin-inline-end: 0 !important;
+}
+
+.hero-actions,
+.supplier-search-form,
+.b2b-entry-actions {
+  justify-content: flex-start !important;
+}
+
+.catalog-product-state {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin: 0;
+  text-align: start;
+}

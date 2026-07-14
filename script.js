@@ -62,12 +62,12 @@ const content = {
     trustFour: "Multi-Language Catalog Support",
     productsKicker: "PRODUCT CATALOG",
     productsTitle: "Products Available for International Supply",
-    productsCopy: "Browse individual products currently published for international buyers.",
+    productsCopy: "Browse all active products available for international supply.",
     catalogSearchLabel: "Search the product catalog",
     catalogSearchPlaceholder: "Search by product, brand, or category",
-    catalogLoading: "Loading published products...",
-    catalogEmpty: "No published product matches this search.",
-    catalogUnavailable: "Published products could not be loaded. Please try again shortly.",
+    catalogLoading: "Loading catalog products...",
+    catalogEmpty: "No catalog product matches this search.",
+    catalogUnavailable: "Catalog products could not be loaded. Please try again shortly.",
     catalogProductCount: "{count} products",
     catalogLoadMore: "Show more products",
     catalogAddProforma: "Add to Proforma",
@@ -2152,8 +2152,11 @@ const addProformaLineWithQuantity = (productId, quantity) => {
 
 const publishedCatalogUi = {
   state: "loading",
-  visibleCount: 12,
+  totalCount: 0,
+  requestId: 0,
 };
+
+let publishedHomepageProducts = [];
 
 const escapeCatalogText = (value) =>
   String(value ?? "")
@@ -2163,26 +2166,17 @@ const escapeCatalogText = (value) =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 
-const getPublishedHomepageProducts = (query = "") => {
-  const normalizedQuery = normalizeSearchText(query);
-  return productCatalog
-    .filter((product) => Number(product.salePrice || 0) > 0 && !String(product.id || "").startsWith("partner-"))
-    .filter((product) => !normalizedQuery || productMatchesSearch(product, normalizedQuery))
-    .sort((a, b) => {
-      const brandOrder = String(a.brand || "").localeCompare(String(b.brand || ""), currentLang);
-      return brandOrder || getProductName(a).localeCompare(getProductName(b), currentLang);
-    });
-};
+const getPublishedHomepageProducts = () => publishedHomepageProducts;
 
 const renderProducts = () => {
   const grid = document.querySelector("#productGrid");
-  const search = document.querySelector("#productCatalogSearch");
   const count = document.querySelector("#productCatalogCount");
   const loadMore = document.querySelector("#catalogLoadMore");
   if (!grid) return;
 
-  const productsForHomepage = getPublishedHomepageProducts(search?.value || "");
-  if (count) count.textContent = t("catalogProductCount").replace("{count}", String(productsForHomepage.length));
+  const productsForHomepage = getPublishedHomepageProducts();
+  const total = Math.max(Number(publishedCatalogUi.totalCount || 0), productsForHomepage.length);
+  if (count) count.textContent = t("catalogProductCount").replace("{count}", String(total));
 
   if (!productsForHomepage.length) {
     const message = publishedCatalogUi.state === "loading"
@@ -2195,8 +2189,7 @@ const renderProducts = () => {
     return;
   }
 
-  const visibleProducts = productsForHomepage.slice(0, publishedCatalogUi.visibleCount);
-  grid.innerHTML = visibleProducts
+  grid.innerHTML = productsForHomepage
     .map((product) => {
       const name = getProductName(product);
       const brand = product.brand || "Sidya Global";
@@ -2222,8 +2215,9 @@ const renderProducts = () => {
     .join("");
 
   if (loadMore) {
-    loadMore.hidden = visibleProducts.length >= productsForHomepage.length;
-    loadMore.textContent = t("catalogLoadMore");
+    loadMore.hidden = productsForHomepage.length >= total;
+    loadMore.disabled = publishedCatalogUi.state === "loading";
+    loadMore.textContent = publishedCatalogUi.state === "loading" ? t("catalogLoading") : t("catalogLoadMore");
   }
 };
 
@@ -3254,13 +3248,17 @@ supplierSearchInput?.addEventListener("input", () => {
   renderSupplierSearchResults(supplierSearchInput.value);
 });
 
+let productCatalogSearchTimer;
 document.querySelector("#productCatalogSearch")?.addEventListener("input", () => {
-  publishedCatalogUi.visibleCount = 12;
+  window.clearTimeout(productCatalogSearchTimer);
+  publishedCatalogUi.state = "loading";
   renderProducts();
+  productCatalogSearchTimer = window.setTimeout(() => {
+    loadPublishedCatalogPrices({ reset: true });
+  }, 250);
 });
 document.querySelector("#catalogLoadMore")?.addEventListener("click", () => {
-  publishedCatalogUi.visibleCount += 12;
-  renderProducts();
+  loadPublishedCatalogPrices({ reset: false });
 });
 document.querySelector("#productGrid")?.addEventListener("click", (event) => {
   const button = event.target.closest("[data-catalog-product-id]");
@@ -3552,7 +3550,49 @@ const inferPublishedProductCategory = (row) => {
   return "cleaning-products";
 };
 
-const loadPublishedCatalogPrices = async () => {
+const upsertPublicCatalogProduct = (row) => {
+  const existing = productCatalog.find((product) =>
+    product.id === row.catalog_id ||
+    product.databaseId === row.product_id ||
+    (row.barcode && product.barcode === row.barcode),
+  );
+  const inferredCategory = inferPublishedProductCategory(row);
+  const values = {
+    databaseId: row.product_id,
+    sku: row.sku || existing?.sku || "",
+    salePrice: Number(row.sale_price || 0),
+    priceCurrency: row.currency || "USD",
+    barcode: row.barcode || existing?.barcode || "",
+    sourceCategory: row.category || existing?.sourceCategory || "",
+    category: String(existing?.category || "").endsWith("-products") ? existing.category : inferredCategory,
+    unitsPerCarton: Math.max(Number(row.units_per_carton || existing?.unitsPerCarton || 1), 1),
+    kgPerCarton: Number(row.kg_per_carton || existing?.kgPerCarton || 0),
+  };
+  if (existing) {
+    Object.assign(existing, values, {
+      brand: row.brand || existing.brand || "Sidya Global",
+      names: { tr: row.name || getProductName(existing), en: row.name || getProductName(existing) },
+      liter: row.grammage || existing.liter || "",
+    });
+    return existing;
+  }
+  const product = {
+    id: row.catalog_id || row.product_id,
+    brand: row.brand || "Sidya Global",
+    names: { tr: row.name, en: row.name },
+    liter: row.grammage || "",
+    ...values,
+  };
+  productCatalog.push(product);
+  return product;
+};
+
+const loadPublishedCatalogPrices = async ({ reset = false } = {}) => {
+  const requestId = ++publishedCatalogUi.requestId;
+  if (reset) {
+    publishedHomepageProducts = [];
+    publishedCatalogUi.totalCount = 0;
+  }
   publishedCatalogUi.state = "loading";
   renderProducts();
   try {
@@ -3560,44 +3600,32 @@ const loadPublishedCatalogPrices = async () => {
     const db = isReady ? getSupabaseClient() : null;
     if (!db) throw new Error("Supabase public configuration was not ready.");
 
-    const { data, error } = await db.from("site_catalog_prices").select("*").eq("active", true);
-    if (error) throw error;
-
-    (data || []).forEach((row) => {
-      const existing = productCatalog.find((product) =>
-        product.id === row.catalog_id ||
-        product.id === row.publish_key ||
-        (row.barcode && product.barcode === row.barcode),
-      );
-      const inferredCategory = inferPublishedProductCategory(row);
-      const values = {
-        salePrice: Number(row.sale_price || 0),
-        priceCurrency: row.currency || "USD",
-        barcode: row.barcode || existing?.barcode,
-        sourceCategory: row.category || existing?.sourceCategory || "",
-        category: String(existing?.category || "").endsWith("-products") ? existing.category : inferredCategory,
-        unitsPerCarton: Number(row.units_per_carton || existing?.unitsPerCarton || 1),
-        cartonsPerPallet: Number(row.cartons_per_pallet || existing?.cartonsPerPallet || 0) || existing?.cartonsPerPallet,
-        kgPerCarton: Number(row.kg_per_carton || existing?.kgPerCarton || 0) || existing?.kgPerCarton,
-      };
-      if (existing) Object.assign(existing, values);
-      else productCatalog.push({
-        id: row.catalog_id || row.publish_key,
-        brand: row.brand || "Sidya Global",
-        names: { tr: row.name, en: row.name },
-        liter: row.grammage || "",
-        ...values,
-      });
+    const search = document.querySelector("#productCatalogSearch")?.value.trim() || null;
+    const offset = reset ? 0 : publishedHomepageProducts.length;
+    const { data, error } = await db.rpc("get_public_catalog_products", {
+      p_search: search,
+      p_limit: 48,
+      p_offset: offset,
     });
+    if (error) throw error;
+    if (requestId !== publishedCatalogUi.requestId) return;
 
+    const incoming = (data || []).map(upsertPublicCatalogProduct);
+    const productsById = new Map((reset ? [] : publishedHomepageProducts).map((product) => [product.id, product]));
+    incoming.forEach((product) => productsById.set(product.id, product));
+    publishedHomepageProducts = [...productsById.values()];
+    publishedCatalogUi.totalCount = Number(
+      data?.[0]?.total_count ?? (reset ? incoming.length : publishedCatalogUi.totalCount),
+    );
     publishedCatalogUi.state = "ready";
     renderProducts();
     if (!document.querySelector("#proforma")?.hidden) renderProformaProducts();
     if (activeCatalogProformaCategory) renderCatalogProformaProducts();
     renderProformaOrder();
   } catch (error) {
+    if (requestId !== publishedCatalogUi.requestId) return;
     publishedCatalogUi.state = "error";
-    console.error("[catalog] Published products could not be loaded.", error);
+    console.error("[catalog] Catalog products could not be loaded.", error);
     renderProducts();
   }
 };
