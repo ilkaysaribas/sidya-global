@@ -366,12 +366,22 @@
     }
   }
 
+  function loadEInvoiceReadiness() {
+    if (document.getElementById("sidyaAdminEInvoiceScript")) return;
+    const script = document.createElement("script");
+    script.id = "sidyaAdminEInvoiceScript";
+    script.src = "/admin-einvoice.js?v=20260715-1";
+    script.defer = true;
+    document.head.appendChild(script);
+  }
+
   function init() {
     forceAdminLtr();
     installMailCenterStyles();
     lockSenderFields();
     bindMailCenterOverrides();
     refreshMailSettingsStatus();
+    loadEInvoiceReadiness();
   }
 
   setInterval(init, 700);
