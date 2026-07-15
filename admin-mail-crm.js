@@ -114,7 +114,7 @@
     const status = $("#mailSettingsStatus");
     if (!form) return;
     try {
-      const result = await api("/api/mail-settings");
+      const result = await api("/api/backend-config?mailCrm=mail-settings");
       const s = result.settings || {};
       form.elements.smtp_host.value = s.smtp_host || "smtp.mx.cloudflare.net";
       form.elements.smtp_port.value = s.smtp_port || 465;
@@ -141,7 +141,7 @@
     try {
       setButtonLoading(button, true, "Kaydediliyor...");
       if (status) status.textContent = "Ayarlar kaydediliyor...";
-      await api("/api/mail-settings", { method: "POST", body: JSON.stringify(payload) });
+      await api("/api/backend-config?mailCrm=mail-settings", { method: "POST", body: JSON.stringify(payload) });
       if (status) status.textContent = "Ayarlar kaydedildi.";
       form.elements.smtp_password.value = "";
       await loadMailSettings();
