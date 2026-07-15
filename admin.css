@@ -316,3 +316,11 @@ button.danger:hover { background: #fee4e2; }
   .statement-metrics { grid-template-columns: 1fr 1fr; }
   .invoice-footer { grid-template-columns: 1fr; }
 }
+
+.admin-rate-snapshot { display:flex; flex-wrap:wrap; gap:7px; padding:10px; border:1px solid var(--line); border-radius:9px; background:#f5f8fa; }
+.admin-rate-snapshot span { padding:5px 8px; border-radius:999px; background:#fff; font-size:11px; font-weight:800; }
+.invoice-lines-table .readonly-price { min-width:100px; color:var(--navy); font-weight:800; white-space:nowrap; }
+.invoice-lines-table .requested-price-input { min-width:110px; }
+.order-price-difference.is-discount { color:#087462; font-weight:800; }
+.order-price-difference.is-increase { color:#b42318; font-weight:800; }
+@media (max-width: 900px) { .invoice-lines-table { overflow-x:auto; } }

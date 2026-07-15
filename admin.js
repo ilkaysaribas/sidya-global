@@ -87,27 +87,17 @@ const normalizeCurrency = (value, fallback = "USD") => {
 
 const exchangeRate = (currency) => {
   const code = normalizeCurrency(currency);
-  if (code === "USD") return 1;
   return Number(state.exchangeRates[code] || 0) || 1;
 };
 
 const convertToUsd = (amount, currency) => {
   const value = Number(String(amount || 0).replace(",", "."));
-  const code = normalizeCurrency(currency);
-  if (code === "USD") return value;
-  if (code === "EUR") return value / Math.max(Number(state.exchangeRates.EUR || 0.92), 0.0001);
-  if (code === "TRY") return value / Math.max(Number(state.exchangeRates.TRY || 32), 0.0001);
-  if (code === "RUB") return value / Math.max(Number(state.exchangeRates.RUB || 90), 0.0001);
-  if (code === "GEL") return value / Math.max(Number(state.exchangeRates.GEL || 2.7), 0.0001);
-  return value;
+  return value * exchangeRate(currency) / exchangeRate("USD");
 };
 
-const convertFromUsd = (usd, currency) => {
-  const code = normalizeCurrency(currency);
-  const value = Number(usd || 0);
-  if (code === "USD") return value;
-  return value * exchangeRate(code);
-};
+const convertFromUsd = (usd, currency) => Number(usd || 0) * exchangeRate("USD") / exchangeRate(currency);
+const convertCurrency = (amount, fromCurrency, toCurrency) =>
+  Number(amount || 0) * exchangeRate(fromCurrency) / exchangeRate(toCurrency);
 
 const formatCurrencyGroups = (items) => {
   const totals = new Map();
@@ -143,22 +133,33 @@ const showApp = (session) => {
   document.querySelector("#currentUser").textContent = session.user.email;
 };
 
+const renderAdminOrderRates = () => {
+  const node = document.querySelector("#adminOrderRates");
+  if (!node) return;
+  node.innerHTML = ["USD", "EUR", "RUB", "TRY"].map((code) => `<span>${code}/TRY <strong>${number(exchangeRate(code))}</strong></span>`).join("");
+};
+
 const loadAdminExchangeRates = async () => {
   try {
     const res = await fetch("/api/exchange-rates", { cache: "no-store" });
     if (!res.ok) throw new Error("Kur API yanıt vermedi");
     const data = await res.json();
-    const rates = data.rates || data;
+    const raw = Array.isArray(data.rates)
+      ? Object.fromEntries(data.rates.map((rate) => [rate.code, rate.value]))
+      : (data.rates || data);
     state.exchangeRates = {
-      USD: 1,
-      TRY: Number(rates.TRY || rates.USDTRY || state.exchangeRates.TRY || 32),
-      EUR: Number(rates.EUR || rates.USDEUR || state.exchangeRates.EUR || 0.92),
-      RUB: Number(rates.RUB || rates.USDRUB || state.exchangeRates.RUB || 90),
-      GEL: Number(rates.GEL || rates.USDGEL || state.exchangeRates.GEL || 2.7),
+      TRY: 1,
+      USD: Number(raw.USD || raw.USDTRY || 1),
+      EUR: Number(raw.EUR || raw.EURTRY || 1),
+      RUB: Number(raw.RUB || raw.RUBTRY || 1),
+      GEL: Number(raw.GEL || raw.GELTRY || 1),
     };
-    state.exchangeUpdatedAt = data.updated_at || new Date().toISOString();
+    state.exchangeUpdatedAt = data.date || data.updatedAt || new Date().toISOString();
+    renderAdminOrderRates();
+    renderInvoiceLines();
   } catch (error) {
-    console.warn("Kur alınamadı, varsayılan kurlar kullanılacak", error);
+    console.warn("Kur alınamadı, son geçerli kurlar kullanılacak", error);
+    renderAdminOrderRates();
   }
 };
 
@@ -341,16 +342,22 @@ const renderInvoiceOptions = () => {
 
 const invoiceLineCalc = (line) => {
   const qty = Number(line.quantity || 0);
-  const unitPrice = Number(line.unit_price || 0);
-  const d1 = Number(line.discount_1 || 0);
-  const d2 = Number(line.discount_2 || 0);
-  const d3 = Number(line.discount_3 || 0);
-  const taxRate = Number(line.tax_rate || 0);
-  let net = qty * unitPrice;
-  const discounts = [d1, d2, d3].reduce((amount, rate) => amount * (1 - rate / 100), net);
-  const discountTotal = net - discounts;
-  const tax = discounts * taxRate / 100;
-  return { subtotal: net, discount: discountTotal, net: discounts, tax, total: discounts + tax };
+  const calculate = (price) => {
+    const d1 = Number(line.discount_1 || 0);
+    const d2 = Number(line.discount_2 || 0);
+    const d3 = Number(line.discount_3 || 0);
+    const taxRate = Number(line.tax_rate || 0);
+    const subtotal = qty * Number(price || 0);
+    const net = [d1, d2, d3].reduce((amount, rate) => amount * (1 - rate / 100), subtotal);
+    const discount = subtotal - net;
+    const tax = net * taxRate / 100;
+    return { subtotal, discount, net, tax, total: net + tax };
+  };
+  const current = calculate(line.current_unit_price ?? line.unit_price);
+  const requested = calculate(line.requested_unit_price ?? line.unit_price);
+  const priceDifference = requested.subtotal - current.subtotal;
+  const discountPercentage = current.subtotal > 0 ? ((current.subtotal - requested.subtotal) / current.subtotal) * 100 : 0;
+  return { ...requested, current, requested, priceDifference, discountPercentage };
 };
 
 const renderInvoiceProductPicker = () => {
@@ -358,7 +365,6 @@ const renderInvoiceProductPicker = () => {
   if (!tbody) return;
   const term = document.querySelector("#invoiceProductSearch").value.trim().toLocaleLowerCase("tr");
   const invoiceType = document.querySelector("#invoiceForm").elements.invoice_type.value;
-  const invoiceCurrency = document.querySelector("#invoiceForm").elements.currency.value || "USD";
   const sorted = state.products.filter((item) => [item.name, item.brand, item.barcode, item.sku].some((value) => String(value || "").toLocaleLowerCase("tr").includes(term))).sort((a, b) => {
     const field = state.invoiceProductSort.field;
     const direction = state.invoiceProductSort.direction;
@@ -366,24 +372,48 @@ const renderInvoiceProductPicker = () => {
     const av = read(a); const bv = read(b);
     if (typeof av === "number" || typeof bv === "number") return direction === "desc" ? Number(bv) - Number(av) : Number(av) - Number(bv);
     return direction === "desc" ? String(bv).localeCompare(String(av), "tr") : String(av).localeCompare(String(bv), "tr");
-  }).slice(0, 100);
-  tbody.innerHTML = sorted.length ? sorted.map((item) => `<tr data-picker-row="${item.id}"><td>${escapeHtml(item.barcode || item.sku || "-")}</td><td><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.brand || "")}</small></td><td>${number(item.stock_quantity || 0)}</td><td><input data-picker-qty type="number" min="0.001" step="0.001" value="1" /></td><td><input data-picker-price type="number" step="0.0001" value="${productUnitPrice(item, invoiceType)}" /></td><td><select data-picker-currency><option ${invoiceCurrency === "USD" ? "selected" : ""}>USD</option><option ${invoiceCurrency === "EUR" ? "selected" : ""}>EUR</option><option ${invoiceCurrency === "TRY" ? "selected" : ""}>TRY</option><option ${invoiceCurrency === "RUB" ? "selected" : ""}>RUB</option><option ${invoiceCurrency === "GEL" ? "selected" : ""}>GEL</option></select></td><td><select data-picker-unit><option value="adet">Adet</option><option value="koli">Koli</option></select></td><td><button data-add-invoice-product="${item.id}">Ekle</button></td></tr>`).join("") : '<tr><td colspan="8" class="empty">Ürün bulunamadı.</td></tr>';
+  });
+  tbody.innerHTML = sorted.length ? sorted.map((item) => {
+    const currency = normalizeCurrency(item.currency || "USD");
+    return `<tr data-picker-row="${item.id}"><td>${escapeHtml(item.barcode || item.sku || "-")}</td><td><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.brand || "")}</small></td><td>${number(item.stock_quantity || 0)}</td><td><input data-picker-qty type="number" min="0.001" step="0.001" value="1" /></td><td><input data-picker-price type="number" step="0.0001" value="${productUnitPrice(item, invoiceType)}" readonly aria-label="Mevcut birim fiyat" /></td><td><select data-picker-currency disabled><option selected>${currency}</option></select></td><td><select data-picker-unit><option value="adet">Adet</option><option value="koli">Koli</option></select></td><td><button data-add-invoice-product="${item.id}">Ekle</button></td></tr>`;
+  }).join("") : '<tr><td colspan="8" class="empty">Ürün bulunamadı.</td></tr>';
 };
 
 const renderInvoiceLines = () => {
   const tbody = document.querySelector("#invoiceLineRows");
   if (!tbody) return;
-  let subtotal = 0, discount = 0, tax = 0, total = 0;
+  const currentGroups = [];
+  const requestedGroups = [];
+  const currentTaxes = [];
+  const requestedTaxes = [];
+  let currentUsd = 0;
+  let requestedUsd = 0;
   tbody.innerHTML = state.invoiceLines.length ? state.invoiceLines.map((line, index) => {
     const calc = invoiceLineCalc(line);
-    subtotal += calc.subtotal; discount += calc.discount; tax += calc.tax; total += calc.total;
-    return `<tr><td>${index + 1}</td><td>${escapeHtml(line.barcode || "-")}</td><td>${escapeHtml(line.description)}</td><td>${number(line.available_stock || 0)}</td><td><input data-line-index="${index}" data-line-field="quantity" type="number" step="0.001" value="${line.quantity}" /></td><td><select data-line-index="${index}" data-line-field="selected_unit"><option value="adet" ${line.selected_unit === "adet" ? "selected" : ""}>Adet</option><option value="koli" ${line.selected_unit === "koli" ? "selected" : ""}>Koli</option></select><small>${number(line.stock_quantity)} adet stok etkisi</small></td><td><input data-line-index="${index}" data-line-field="unit_price" type="number" step="0.0001" value="${line.unit_price}" /></td><td><select data-line-index="${index}" data-line-field="currency"><option ${line.currency === "USD" ? "selected" : ""}>USD</option><option ${line.currency === "EUR" ? "selected" : ""}>EUR</option><option ${line.currency === "TRY" ? "selected" : ""}>TRY</option><option ${line.currency === "RUB" ? "selected" : ""}>RUB</option><option ${line.currency === "GEL" ? "selected" : ""}>GEL</option></select></td><td><input data-line-index="${index}" data-line-field="discount_1" type="number" step="0.01" value="${line.discount_1}" /></td><td><input data-line-index="${index}" data-line-field="discount_2" type="number" step="0.01" value="${line.discount_2}" /></td><td><input data-line-index="${index}" data-line-field="discount_3" type="number" step="0.01" value="${line.discount_3}" /></td><td><input data-line-index="${index}" data-line-field="tax_rate" type="number" step="0.01" value="${line.tax_rate}" /></td><td>${money(calc.tax, line.currency)}</td><td><strong>${money(calc.total, line.currency)}</strong></td><td><button data-remove-line="${index}">Sil</button></td></tr>`;
-  }).join("") : '<tr><td colspan="15" class="empty">Henüz satır yok.</td></tr>';
-  document.querySelector("#invoiceSubtotal").textContent = money(subtotal, document.querySelector("#invoiceForm").elements.currency.value || "USD");
-  document.querySelector("#invoiceDiscountTotal").textContent = money(discount, document.querySelector("#invoiceForm").elements.currency.value || "USD");
-  document.querySelector("#invoiceTaxTotal").textContent = money(tax, document.querySelector("#invoiceForm").elements.currency.value || "USD");
-  document.querySelector("#invoiceGrandTotal").textContent = money(total, document.querySelector("#invoiceForm").elements.currency.value || "USD");
+    const currency = normalizeCurrency(line.currency || "USD");
+    currentGroups.push({ currency, amount: calc.current.subtotal });
+    requestedGroups.push({ currency, amount: calc.requested.subtotal });
+    currentTaxes.push({ currency, amount: calc.current.tax });
+    requestedTaxes.push({ currency, amount: calc.requested.tax });
+    currentUsd += convertToUsd(calc.current.subtotal, currency);
+    requestedUsd += convertToUsd(calc.requested.subtotal, currency);
+    const diffClass = calc.priceDifference < 0 ? "is-discount" : calc.priceDifference > 0 ? "is-increase" : "";
+    return `<tr><td>${index + 1}</td><td class="line-barcode">${escapeHtml(line.product_code || line.barcode || "-")}</td><td class="line-product">${escapeHtml(line.description)}</td><td>${number(line.available_stock || 0)}</td><td><input data-line-index="${index}" data-line-field="quantity" type="number" min="0.001" step="0.001" value="${line.quantity}" /></td><td><select data-line-index="${index}" data-line-field="selected_unit"><option value="adet" ${line.selected_unit === "adet" ? "selected" : ""}>Adet</option><option value="koli" ${line.selected_unit === "koli" ? "selected" : ""}>Koli</option></select><small>${number(line.stock_quantity)} adet stok etkisi</small></td><td class="readonly-price">${money(line.current_unit_price, currency)}</td><td><input class="requested-price-input" data-line-index="${index}" data-line-field="requested_unit_price" type="number" min="0" step="0.0001" value="${line.requested_unit_price}" /></td><td>${currency}</td><td>${money(calc.current.subtotal, currency)}</td><td><strong>${money(calc.requested.subtotal, currency)}</strong></td><td class="order-price-difference ${diffClass}">${money(calc.priceDifference, currency)}<small>%${number(calc.discountPercentage)}</small></td><td><input data-line-index="${index}" data-line-field="discount_1" type="number" step="0.01" value="${line.discount_1}" /></td><td><input data-line-index="${index}" data-line-field="discount_2" type="number" step="0.01" value="${line.discount_2}" /></td><td><input data-line-index="${index}" data-line-field="discount_3" type="number" step="0.01" value="${line.discount_3}" /></td><td><input data-line-index="${index}" data-line-field="tax_rate" type="number" step="0.01" value="${line.tax_rate}" /></td><td><button data-remove-line="${index}">Sil</button></td></tr>`;
+  }).join("") : '<tr><td colspan="17" class="empty">Henüz satır yok.</td></tr>';
+  const currentTotalText = formatCurrencyGroups(currentGroups);
+  const requestedTotalText = formatCurrencyGroups(requestedGroups);
+  const currentTaxText = formatCurrencyGroups(currentTaxes);
+  const requestedTaxText = formatCurrencyGroups(requestedTaxes);
+  const averageDiscount = currentUsd > 0 ? ((currentUsd - requestedUsd) / currentUsd) * 100 : 0;
+  document.querySelector("#invoiceCurrentSubtotal").textContent = currentTotalText;
+  document.querySelector("#invoiceSubtotal").textContent = requestedTotalText;
+  document.querySelector("#invoicePriceDifference").textContent = money(requestedUsd - currentUsd, "USD");
+  document.querySelector("#invoiceAverageDiscount").textContent = `%${number(averageDiscount)}`;
+  document.querySelector("#invoiceDiscountTotal").textContent = formatCurrencyGroups(state.invoiceLines.map((line) => ({ currency: line.currency, amount: invoiceLineCalc(line).requested.discount })));
+  document.querySelector("#invoiceTaxTotal").textContent = `${currentTaxText} / ${requestedTaxText}`;
+  document.querySelector("#invoiceGrandTotal").textContent = `${formatCurrencyGroups(state.invoiceLines.map((line) => ({ currency: line.currency, amount: invoiceLineCalc(line).current.total })))} / ${formatCurrencyGroups(state.invoiceLines.map((line) => ({ currency: line.currency, amount: invoiceLineCalc(line).requested.total })))}`;
   document.querySelector("#invoiceVatBreakdown").innerHTML = "";
+  renderAdminOrderRates();
 };
 
 const renderReports = () => {
@@ -612,12 +642,13 @@ const saveInvoice = async (event) => {
   const currency = values.currency || "USD";
   const linePayloads = state.invoiceLines.map((line) => {
     const calc = invoiceLineCalc(line);
-    return { ...line, quantity: Number(line.stock_quantity || line.quantity || 0), unit_price: Number(line.unit_price || 0), line_subtotal: calc.subtotal, line_discount: calc.discount, line_tax: calc.tax, line_total: calc.total };
+    return { ...line, quantity: Number(line.quantity || 0), stock_quantity: Number(line.stock_quantity || line.quantity || 0), unit_price: Number(line.requested_unit_price ?? line.unit_price ?? 0), current_unit_price: Number(line.current_unit_price ?? line.unit_price ?? 0), requested_unit_price: Number(line.requested_unit_price ?? line.unit_price ?? 0), current_total: calc.current.subtotal, requested_total: calc.requested.subtotal, exchange_rate: exchangeRate(line.currency || currency), exchange_rate_date: state.exchangeUpdatedAt ? String(state.exchangeUpdatedAt).slice(0, 10) : today(), price_difference: calc.priceDifference, discount_percentage: calc.discountPercentage, line_subtotal: calc.requested.subtotal, line_discount: calc.requested.discount, line_tax: calc.requested.tax, line_total: calc.requested.total };
   });
-  const subtotal = linePayloads.reduce((sum, line) => sum + Number(line.line_subtotal || 0), 0);
-  const totalDiscount = linePayloads.reduce((sum, line) => sum + Number(line.line_discount || 0), 0);
-  const taxTotal = linePayloads.reduce((sum, line) => sum + Number(line.line_tax || 0), 0);
-  const grandTotal = linePayloads.reduce((sum, line) => sum + Number(line.line_total || 0), 0);
+  const subtotal = linePayloads.reduce((sum, line) => sum + convertCurrency(line.line_subtotal, line.currency || currency, currency), 0);
+  const currentSubtotal = linePayloads.reduce((sum, line) => sum + convertCurrency(line.current_total, line.currency || currency, currency), 0);
+  const totalDiscount = linePayloads.reduce((sum, line) => sum + convertCurrency(line.line_discount, line.currency || currency, currency), 0);
+  const taxTotal = linePayloads.reduce((sum, line) => sum + convertCurrency(line.line_tax, line.currency || currency, currency), 0);
+  const grandTotal = linePayloads.reduce((sum, line) => sum + convertCurrency(line.line_total, line.currency || currency, currency), 0);
   const invoiceNo = values.document_number || `INV-${today().replaceAll("-", "")}-${String(state.invoices.length + 1).padStart(3, "0")}`;
   const invoiceData = {
     customer_id: values.customer_id || null,
@@ -627,13 +658,14 @@ const saveInvoice = async (event) => {
     invoice_date: values.invoice_date || today(),
     due_date: values.due_date || null,
     currency,
+    exchange_rate: exchangeRate(currency),
     subtotal,
     total_discount: totalDiscount,
     tax_total: taxTotal,
     grand_total: grandTotal,
     notes: values.notes || null,
     status: "posted",
-    draft_data: { document_number: invoiceNo, payment_note: state.settings?.invoice_template?.payment_note || "" },
+    draft_data: { document_number: invoiceNo, payment_note: state.settings?.invoice_template?.payment_note || "", price_summary: { current_subtotal: currentSubtotal, requested_subtotal: subtotal, price_difference: subtotal - currentSubtotal, average_discount_percentage: currentSubtotal > 0 ? ((currentSubtotal - subtotal) / currentSubtotal) * 100 : 0, exchange_rates: state.exchangeRates, exchange_rate_date: state.exchangeUpdatedAt } },
     updated_at: new Date().toISOString(),
   };
   let invoice;
@@ -652,6 +684,16 @@ const saveInvoice = async (event) => {
     quantity: line.quantity,
     unit: line.selected_unit || "adet",
     unit_price: line.unit_price,
+    current_unit_price: line.current_unit_price,
+    requested_unit_price: line.requested_unit_price,
+    current_total: line.current_total,
+    requested_total: line.requested_total,
+    exchange_rate: line.exchange_rate,
+    exchange_rate_date: line.exchange_rate_date,
+    price_difference: line.price_difference,
+    discount_percentage: line.discount_percentage,
+    stock_quantity: line.stock_quantity,
+    units_per_carton: Number(line.units_per_carton || 1),
     currency: line.currency || currency,
     discount_1: Number(line.discount_1 || 0),
     discount_2: Number(line.discount_2 || 0),
@@ -691,8 +733,11 @@ const addInvoiceLine = (button) => {
     selected_unit: selectedUnit,
     stock_quantity: stockQty,
     units_per_carton: Number(product.units_per_carton || 1),
+    current_unit_price: Number(row.querySelector("[data-picker-price]").value || 0),
+    requested_unit_price: Number(row.querySelector("[data-picker-price]").value || 0),
     unit_price: Number(row.querySelector("[data-picker-price]").value || 0),
-    currency: row.querySelector("[data-picker-currency]").value,
+    currency: normalizeCurrency(product.currency || row.querySelector("[data-picker-currency]").value),
+    product_code: product.sku || product.barcode || "",
     discount_1: 0,
     discount_2: 0,
     discount_3: 0,
@@ -724,7 +769,11 @@ const setInvoiceMode = (type, order = null) => {
     form.elements.customer_id.value = customer?.id || "";
     (order.items || []).forEach((line) => {
       const product = state.products.find((item) => item.id === line.product_id || item.sku === line.sku || item.name === line.product);
-      if (product) state.invoiceLines.push({ product_id: product.id, barcode: product.barcode || product.sku || "", description: `${product.brand || ""} ${product.name}`.trim(), available_stock: Number(product.stock_quantity || 0), quantity: Number(line.cartons || line.quantity || 1), selected_unit: "koli", stock_quantity: stockQuantityFor(line.cartons || line.quantity || 1, "koli", product.units_per_carton), units_per_carton: Number(product.units_per_carton || 1), unit_price: productUnitPrice(product, "sale", "koli"), currency: "USD", discount_1: 0, discount_2: 0, discount_3: 0, tax_rate: form.elements.scenario.value === "export" ? 0 : Number(product.vat_rate || 20) });
+      if (product) {
+        const currentPrice = Number(line.currentUnitPrice ?? line.current_unit_price ?? productUnitPrice(product, "sale", line.unit || "koli"));
+        const requestedPrice = Number(line.requestedUnitPrice ?? line.requested_unit_price ?? currentPrice);
+        state.invoiceLines.push({ product_id: product.id, barcode: product.barcode || product.sku || "", product_code: product.sku || product.barcode || "", description: `${product.brand || ""} ${product.name}`.trim(), available_stock: Number(product.stock_quantity || 0), quantity: Number(line.cartons || line.quantity || 1), selected_unit: line.unit || "koli", stock_quantity: stockQuantityFor(line.cartons || line.quantity || 1, line.unit || "koli", product.units_per_carton), units_per_carton: Number(product.units_per_carton || 1), current_unit_price: currentPrice, requested_unit_price: requestedPrice, unit_price: requestedPrice, currency: normalizeCurrency(line.currency || product.currency || "USD"), discount_1: 0, discount_2: 0, discount_3: 0, tax_rate: form.elements.scenario.value === "export" ? 0 : Number(product.vat_rate || 20) });
+      }
     });
   }
   renderInvoiceProductPicker();
@@ -748,7 +797,7 @@ const editInvoice = async (invoiceId) => {
   const items = await query(client.from("invoice_items").select("*").eq("invoice_id", invoiceId));
   state.invoiceLines = items.map((item) => {
     const product = state.products.find((p) => p.id === item.product_id) || {};
-    return { product_id: item.product_id, barcode: item.barcode || product.barcode || product.sku || "", description: item.description, available_stock: Number(product.stock_quantity || 0), quantity: Number(item.quantity || 0), selected_unit: item.unit || "adet", stock_quantity: Number(item.quantity || 0), units_per_carton: Number(product.units_per_carton || 1), unit_price: Number(item.unit_price || 0), currency: item.currency || invoice.currency || "USD", discount_1: Number(item.discount_1 || 0), discount_2: Number(item.discount_2 || 0), discount_3: Number(item.discount_3 || 0), tax_rate: Number(item.tax_rate || 0) };
+    return { product_id: item.product_id, barcode: item.barcode || product.barcode || product.sku || "", product_code: item.product_code || product.sku || product.barcode || "", description: item.description, available_stock: Number(product.stock_quantity || 0), quantity: Number(item.quantity || 0), selected_unit: item.unit || "adet", stock_quantity: Number(item.stock_quantity || item.quantity || 0), units_per_carton: Number(item.units_per_carton || product.units_per_carton || 1), current_unit_price: Number(item.current_unit_price ?? item.unit_price ?? 0), requested_unit_price: Number(item.requested_unit_price ?? item.unit_price ?? 0), unit_price: Number(item.requested_unit_price ?? item.unit_price ?? 0), currency: item.currency || invoice.currency || "USD", discount_1: Number(item.discount_1 || 0), discount_2: Number(item.discount_2 || 0), discount_3: Number(item.discount_3 || 0), tax_rate: Number(item.tax_rate || 0) };
   });
   renderInvoiceLines();
 };
@@ -776,7 +825,16 @@ const openInvoiceDetail = async (invoiceId) => {
   document.querySelector("#invoiceDetailCustomer").textContent = customer?.company || "-";
   document.querySelector("#invoiceDetailCurrency").textContent = invoice.currency || "USD";
   document.querySelector("#invoiceDetailScenario").textContent = invoice.scenario || "-";
-  document.querySelector("#invoiceDetailRows").innerHTML = items.map((item, index) => `<tr><td>${index + 1}</td><td>${escapeHtml(item.barcode || item.products?.barcode || item.products?.sku || "-")}</td><td>${escapeHtml(item.description)}</td><td>${escapeHtml(item.unit || "adet")}</td><td>${number(item.quantity)}</td><td>${money(item.unit_price, item.currency || invoice.currency)}</td><td>${money(item.line_subtotal, item.currency || invoice.currency)}</td><td>${money(item.line_tax, item.currency || invoice.currency)}</td><td>%${number(item.discount_1)}</td><td>%${number(item.discount_2)}</td><td>%${number(item.discount_3)}</td><td>${escapeHtml(item.notes || "-")}</td></tr>`).join("");
+  document.querySelector("#invoiceDetailRows").innerHTML = items.map((item, index) => {
+    const currency = item.currency || invoice.currency || "USD";
+    const currentPrice = Number(item.current_unit_price ?? item.unit_price ?? 0);
+    const requestedPrice = Number(item.requested_unit_price ?? item.unit_price ?? 0);
+    const currentTotal = Number(item.current_total ?? currentPrice * Number(item.quantity || 0));
+    const requestedTotal = Number(item.requested_total ?? item.line_subtotal ?? requestedPrice * Number(item.quantity || 0));
+    const difference = Number(item.price_difference ?? requestedTotal - currentTotal);
+    const discount = Number(item.discount_percentage ?? (currentTotal > 0 ? ((currentTotal - requestedTotal) / currentTotal) * 100 : 0));
+    return `<tr><td>${index + 1}</td><td>${escapeHtml(item.product_code || item.barcode || item.products?.barcode || item.products?.sku || "-")}</td><td>${escapeHtml(item.description)}</td><td>${escapeHtml(item.unit || "adet")}</td><td>${number(item.quantity)}</td><td>${money(currentPrice, currency)}</td><td>${money(requestedPrice, currency)}</td><td>${money(currentTotal, currency)}</td><td>${money(requestedTotal, currency)}</td><td>${money(difference, currency)} · %${number(discount)}</td><td>${money(item.line_tax, currency)}</td><td>${escapeHtml(item.notes || "-")}</td></tr>`;
+  }).join("");
   document.querySelector("#invoiceDetailNote").textContent = invoice.notes || "-";
   document.querySelector("#invoiceDetailSubtotal").textContent = money(invoice.subtotal, invoice.currency);
   document.querySelector("#invoiceDetailDiscount").textContent = money(invoice.total_discount, invoice.currency);
@@ -1066,6 +1124,7 @@ document.querySelector("#invoiceForm").addEventListener("submit", submitInvoice)
 document.querySelector("#templateForm").addEventListener("submit", safely(saveTemplate));
 if (typeof importCatalog === "function") document.querySelector("#importCatalogButton").addEventListener("click", safely(importCatalog));
 document.querySelector("#openStockCorrection")?.addEventListener("click", () => { renderInvoiceOptions(); document.querySelector("#stockDialog").showModal(); });
+document.querySelector("#newOrderButton")?.addEventListener("click", () => setInvoiceMode("sale"));
 document.querySelector("#newSaleInvoiceButton").addEventListener("click", () => setInvoiceMode("sale"));
 document.querySelector("#newPurchaseInvoiceButton").addEventListener("click", () => setInvoiceMode("purchase"));
 document.querySelector("#newReturnInvoiceButton").addEventListener("click", () => setInvoiceMode("return"));
@@ -1205,12 +1264,15 @@ document.addEventListener("change", (event) => {
     const previousUnit = line.selected_unit;
     line.selected_unit = field.value;
     if (previousUnit !== line.selected_unit) {
-      line.unit_price = previousUnit === "adet"
-        ? Number(line.unit_price) * Math.max(Number(line.units_per_carton), 1)
-        : Number(line.unit_price) / Math.max(Number(line.units_per_carton), 1);
+      const factor = Math.max(Number(line.units_per_carton), 1);
+      const convertPrice = (value) => previousUnit === "adet" ? Number(value) * factor : Number(value) / factor;
+      line.current_unit_price = convertPrice(line.current_unit_price);
+      line.requested_unit_price = convertPrice(line.requested_unit_price);
+      line.unit_price = line.requested_unit_price;
     }
   } else {
     line[field.dataset.lineField] = Number(field.value || 0);
+    if (field.dataset.lineField === "requested_unit_price") line.unit_price = line.requested_unit_price;
   }
   line.stock_quantity = stockQuantityFor(line.quantity, line.selected_unit, line.units_per_carton);
   renderInvoiceLines();

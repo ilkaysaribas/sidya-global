@@ -105,6 +105,20 @@ const content = {
     proformaSearchLabel: "Search product",
     proformaSearchPlaceholder: "Search products",
     proformaPricePerCarton: "Price / carton",
+    orderCurrentUnitPrice: "Current unit price",
+    orderRequestedUnitPrice: "Requested unit price",
+    orderCurrentTotal: "Current total",
+    orderRequestedTotal: "Requested total",
+    orderPriceDifference: "Price difference",
+    orderDiscountRate: "Requested discount",
+    orderCurrentSubtotal: "Current price total",
+    orderRequestedSubtotal: "Requested price total",
+    orderAverageDiscount: "Average requested discount",
+    orderTaxTotal: "VAT (current / requested)",
+    orderGrandTotals: "Grand total (current / requested)",
+    orderExchangeRates: "Current exchange rates",
+    orderRateUnavailable: "Exchange rates are temporarily unavailable.",
+    orderRequestedPriceInvalid: "Enter a valid requested price.",
     proformaTotalAmount: "Product total",
     proformaNoSearchResults: "No catalog product matches this search.",
     proformaTransportTitle: "Select loading type",
@@ -470,6 +484,20 @@ const content = {
     proformaSearchLabel: "Ürün ara",
     proformaSearchPlaceholder: "Ürün ara",
     proformaPricePerCarton: "Fiyat / koli",
+    orderCurrentUnitPrice: "Mevcut birim fiyat",
+    orderRequestedUnitPrice: "Talep edilen birim fiyat",
+    orderCurrentTotal: "Mevcut toplam",
+    orderRequestedTotal: "Talep edilen toplam",
+    orderPriceDifference: "Fiyat farkı",
+    orderDiscountRate: "Talep indirimi",
+    orderCurrentSubtotal: "Mevcut fiyat toplamı",
+    orderRequestedSubtotal: "Talep edilen fiyat toplamı",
+    orderAverageDiscount: "Ortalama talep indirimi",
+    orderTaxTotal: "KDV (mevcut / talep)",
+    orderGrandTotals: "Genel toplam (mevcut / talep)",
+    orderExchangeRates: "Güncel döviz kurları",
+    orderRateUnavailable: "Döviz kurları geçici olarak alınamadı.",
+    orderRequestedPriceInvalid: "Geçerli bir talep fiyatı girin.",
     proformaTotalAmount: "Ürün toplamı",
     proformaNoSearchResults: "Bu aramayla eşleşen katalog ürünü bulunamadı.",
     proformaTransportTitle: "Yükleme şeklini seçin",
@@ -1427,6 +1455,7 @@ catalogOrderSeeds.forEach((product) => {
 });
 
 const proformaOrder = new Map();
+const proformaRequestedPrices = new Map();
 const productCategoryImages = {
   "home-products": "assets/category-home-crop.png",
   "cleaning-products": "assets/category-cleaning-crop.png",
@@ -2548,6 +2577,45 @@ const renderCustomsDesk = () => {
 
 let exchangeRatesData = null;
 
+const normalizeExchangePayload = (payload = {}) => {
+  const rateList = Array.isArray(payload.rates)
+    ? payload.rates
+    : Array.isArray(payload.rateList)
+      ? payload.rateList
+      : Object.entries(payload.rates || {}).map(([code, value]) => ({ code, label: `${code}/TRY`, value }));
+  const rateMap = { TRY: 1 };
+  rateList.forEach((rate) => {
+    if (rate?.code && Number(rate.value) > 0) rateMap[String(rate.code).toUpperCase()] = Number(rate.value);
+  });
+  return { ...payload, rates: rateList, rateMap };
+};
+
+const getTryRate = (currency) => Number(exchangeRatesData?.rateMap?.[String(currency || "USD").toUpperCase()] || (currency === "TRY" ? 1 : 0)) || 1;
+const convertOrderAmount = (amount, fromCurrency, toCurrency = "USD") =>
+  Number(amount || 0) * getTryRate(fromCurrency) / getTryRate(toCurrency);
+const getCurrentCartonPrice = (product) => {
+  const unitPrice = Number(product?.salePrice || 0);
+  return unitPrice > 0 ? unitPrice * Math.max(Number(product?.unitsPerCarton || 1), 1) : 0;
+};
+const getRequestedCartonPrice = (product) => {
+  const stored = Number(proformaRequestedPrices.get(product.id));
+  return Number.isFinite(stored) && stored >= 0 ? stored : getCurrentCartonPrice(product);
+};
+const formatOrderMoney = (amount, currency) => new Intl.NumberFormat(currentLang === "tr" ? "tr-TR" : "en-US", {
+  style: "currency", currency: currency || "USD", maximumFractionDigits: 2,
+}).format(Number(amount || 0));
+const formatCurrencyTotals = (totals) => [...totals.entries()]
+  .map(([currency, amount]) => formatOrderMoney(amount, currency)).join(" · ") || "-";
+const renderProformaExchangeRates = () => {
+  const list = document.querySelector("#proformaExchangeRates");
+  const dateNode = document.querySelector("#proformaExchangeDate");
+  if (!list || !dateNode) return;
+  const wanted = ["USD", "EUR", "RUB", "TRY"];
+  const available = wanted.filter((code) => code === "TRY" || exchangeRatesData?.rateMap?.[code]);
+  list.innerHTML = available.map((code) => `<span><b>${code}/TRY</b> ${formatTryRate(getTryRate(code))}</span>`).join("") || t("orderRateUnavailable");
+  dateNode.textContent = exchangeRatesData?.date || exchangeRatesData?.updatedAt?.slice(0, 10) || "-";
+};
+
 const renderExchangeRates = () => {
   const list = document.querySelector("#exchangeRateList");
   const updated = document.querySelector("#exchangeUpdated");
@@ -2603,10 +2671,13 @@ const loadExchangeRates = async () => {
   try {
     const response = await fetch("/api/exchange-rates", { cache: "no-store", signal: controller.signal });
     if (!response.ok) throw new Error("Exchange API failed");
-    exchangeRatesData = await response.json();
+    exchangeRatesData = normalizeExchangePayload(await response.json());
     renderExchangeRates();
+    renderProformaExchangeRates();
+    renderProformaOrder();
   } catch (error) {
     updated.textContent = t("exchangeUnavailable");
+    renderProformaExchangeRates();
   } finally {
     window.clearTimeout(timeout);
   }
@@ -2729,6 +2800,10 @@ const closeCatalogProformaModal = () => {
 const addProformaLine = (productId) => {
   const quantityInput = document.querySelector(`[data-qty-for="${productId}"]`);
   const quantity = Math.max(Number(quantityInput?.value) || 1, 1);
+  const product = productCatalog.find((item) => item.id === productId);
+  if (product && !proformaRequestedPrices.has(productId)) {
+    proformaRequestedPrices.set(productId, getCurrentCartonPrice(product));
+  }
   addProformaLineWithQuantity(productId, quantity);
 };
 
@@ -2737,6 +2812,7 @@ const updateProformaQuantity = (productId, delta) => {
   const next = current + delta;
   if (next <= 0) {
     proformaOrder.delete(productId);
+    proformaRequestedPrices.delete(productId);
   } else {
     proformaOrder.set(productId, next);
   }
@@ -2805,6 +2881,8 @@ const renderProformaOrder = () => {
   empty.hidden = entries.length > 0;
   lines.innerHTML = entries
     .map(({ product, cartons }, index) => {
+      const currentUnitPrice = getCurrentCartonPrice(product);
+      const requestedUnitPrice = getRequestedCartonPrice(product);
       const cartonsPerPallet = getCartonsPerPallet(product);
       const kgPerCarton = getKgPerCarton(product);
       const pallets = cartonsPerPallet === null ? null : cartons / cartonsPerPallet;
@@ -2816,11 +2894,24 @@ const renderProformaOrder = () => {
         weight === null ? null : formatWeight(weight),
         linePrice || null,
       ].filter(Boolean);
+      const currentTotal = cartons * currentUnitPrice;
+      const requestedTotal = cartons * requestedUnitPrice;
+      const priceDifference = requestedTotal - currentTotal;
+      const discountPercentage = currentTotal > 0 ? ((currentTotal - requestedTotal) / currentTotal) * 100 : 0;
+      const currency = product.priceCurrency || "USD";
       return `<article class="proforma-line">
         <span class="proforma-line-index">${index + 1}</span>
         <div>
           <strong>${getProductName(product)}</strong>
           <span>${lineMeta.join(" · ")}</span>
+        </div>
+        <div class="proforma-price-comparison">
+          <label><span>${t("orderCurrentUnitPrice")}</span><output>${formatOrderMoney(currentUnitPrice, currency)}</output></label>
+          <label><span>${t("orderRequestedUnitPrice")}</span><span class="proforma-requested-input"><input type="number" min="0" step="0.0001" value="${requestedUnitPrice.toFixed(4)}" data-requested-price-for="${product.id}" aria-label="${t("orderRequestedUnitPrice")}" /><b>${currency}</b></span></label>
+          <span><small>${t("orderCurrentTotal")}</small><strong>${formatOrderMoney(currentTotal, currency)}</strong></span>
+          <span><small>${t("orderRequestedTotal")}</small><strong>${formatOrderMoney(requestedTotal, currency)}</strong></span>
+          <span class="${priceDifference < 0 ? "is-discount" : priceDifference > 0 ? "is-increase" : ""}"><small>${t("orderPriceDifference")}</small><strong>${formatOrderMoney(priceDifference, currency)}</strong></span>
+          <span><small>${t("orderDiscountRate")}</small><strong>%${discountPercentage.toFixed(2)}</strong></span>
         </div>
         <div class="proforma-line-actions">
           <button type="button" class="proforma-qty-button" data-product-id="${product.id}" data-delta="-1" aria-label="Decrease">−</button>
@@ -2841,17 +2932,40 @@ const renderProformaOrder = () => {
     const kgPerCarton = getKgPerCarton(entry.product);
     return kgPerCarton === null ? sum : sum + entry.cartons * kgPerCarton;
   }, 0);
-  const totalsByCurrency = new Map();
+  const currentTotalsByCurrency = new Map();
+  const requestedTotalsByCurrency = new Map();
+  const currentTaxByCurrency = new Map();
+  const requestedTaxByCurrency = new Map();
+  let convertedCurrent = 0;
+  let convertedRequested = 0;
   entries.forEach(({ product, cartons }) => {
-    const unitPrice = Number(product.salePrice || 0);
-    if (!(unitPrice > 0)) return;
+    const currentUnitPrice = getCurrentCartonPrice(product);
+    const requestedUnitPrice = getRequestedCartonPrice(product);
     const currency = product.priceCurrency || "USD";
-    totalsByCurrency.set(currency, (totalsByCurrency.get(currency) || 0) + unitPrice * Math.max(Number(product.unitsPerCarton || 1), 1) * cartons);
+    const currentTotal = currentUnitPrice * cartons;
+    const requestedTotal = requestedUnitPrice * cartons;
+    const vatRate = Math.max(Number(product.vatRate || 0), 0);
+    currentTotalsByCurrency.set(currency, (currentTotalsByCurrency.get(currency) || 0) + currentTotal);
+    requestedTotalsByCurrency.set(currency, (requestedTotalsByCurrency.get(currency) || 0) + requestedTotal);
+    currentTaxByCurrency.set(currency, (currentTaxByCurrency.get(currency) || 0) + currentTotal * vatRate / 100);
+    requestedTaxByCurrency.set(currency, (requestedTaxByCurrency.get(currency) || 0) + requestedTotal * vatRate / 100);
+    convertedCurrent += convertOrderAmount(currentTotal, currency, "USD");
+    convertedRequested += convertOrderAmount(requestedTotal, currency, "USD");
   });
+  const differenceByCurrency = new Map([...new Set([...currentTotalsByCurrency.keys(), ...requestedTotalsByCurrency.keys()])]
+    .map((currency) => [currency, (requestedTotalsByCurrency.get(currency) || 0) - (currentTotalsByCurrency.get(currency) || 0)]));
+  const grandCurrent = new Map([...currentTotalsByCurrency].map(([currency, value]) => [currency, value + (currentTaxByCurrency.get(currency) || 0)]));
+  const grandRequested = new Map([...requestedTotalsByCurrency].map(([currency, value]) => [currency, value + (requestedTaxByCurrency.get(currency) || 0)]));
+  const averageDiscount = convertedCurrent > 0 ? ((convertedCurrent - convertedRequested) / convertedCurrent) * 100 : 0;
   document.querySelector("#proformaTotalCartons").textContent = totalCartons.toLocaleString("en-US");
   document.querySelector("#proformaTotalPallets").textContent = totalPallets ? totalPallets.toFixed(2) : "-";
   document.querySelector("#proformaTotalWeight").textContent = formatWeight(totalWeight);
-  document.querySelector("#proformaTotalAmount").textContent = [...totalsByCurrency.entries()].map(([currency, amount]) => new Intl.NumberFormat(currentLang === "tr" ? "tr-TR" : "en-US", { style: "currency", currency, maximumFractionDigits: 2 }).format(amount)).join(" · ") || "-";
+  document.querySelector("#proformaTotalAmount").textContent = formatCurrencyTotals(currentTotalsByCurrency);
+  document.querySelector("#proformaRequestedTotalAmount").textContent = formatCurrencyTotals(requestedTotalsByCurrency);
+  document.querySelector("#proformaPriceDifference").textContent = formatCurrencyTotals(differenceByCurrency);
+  document.querySelector("#proformaAverageDiscount").textContent = `%${averageDiscount.toFixed(2)}`;
+  document.querySelector("#proformaTaxTotals").textContent = `${formatCurrencyTotals(currentTaxByCurrency)} / ${formatCurrencyTotals(requestedTaxByCurrency)}`;
+  document.querySelector("#proformaGrandTotals").textContent = `${formatCurrencyTotals(grandCurrent)} / ${formatCurrencyTotals(grandRequested)}`;
   renderLoadMeters(entries, totalWeight);
 };
 
@@ -2860,6 +2974,11 @@ const buildProformaRows = () =>
     const cartonsPerPallet = getCartonsPerPallet(product);
     const unitsPerCarton = getUnitsPerCarton(product);
     const kgPerCarton = getKgPerCarton(product);
+    const currentUnitPrice = getCurrentCartonPrice(product);
+    const requestedUnitPrice = getRequestedCartonPrice(product);
+    const currentTotal = currentUnitPrice * cartons;
+    const requestedTotal = requestedUnitPrice * cartons;
+    const currency = product.priceCurrency || "USD";
     return {
       no: index + 1,
       productId: product.id,
@@ -2874,9 +2993,18 @@ const buildProformaRows = () =>
       pallets: cartonsPerPallet === null ? null : cartons / cartonsPerPallet,
       kgPerCarton,
       totalWeight: kgPerCarton === null ? null : cartons * kgPerCarton,
-      unitPrice: Number(product.salePrice || 0) || null,
-      currency: product.priceCurrency || "USD",
-      lineTotal: Number(product.salePrice || 0) > 0 ? Number(product.salePrice) * Math.max(Number(unitsPerCarton || 1), 1) * cartons : null,
+      unit: "koli",
+      unitPrice: currentUnitPrice,
+      currentUnitPrice,
+      requestedUnitPrice,
+      currency,
+      lineTotal: currentTotal,
+      currentTotal,
+      requestedTotal,
+      priceDifference: requestedTotal - currentTotal,
+      discountPercentage: currentTotal > 0 ? ((currentTotal - requestedTotal) / currentTotal) * 100 : 0,
+      exchangeRate: getTryRate(currency),
+      exchangeRateDate: exchangeRatesData?.date || new Date().toISOString().slice(0, 10),
       transport: selectedProformaTransport,
       containerRoute: selectedProformaTransport === "container" ? selectedContainerRoute : "",
     };
@@ -3688,6 +3816,16 @@ const recordProformaOrderHistory = async (rows) => {
         brand: row.brand,
         product: row.product,
         cartons: row.cartons,
+        unit: row.unit,
+        currency: row.currency,
+        currentUnitPrice: row.currentUnitPrice,
+        requestedUnitPrice: row.requestedUnitPrice,
+        currentTotal: row.currentTotal,
+        requestedTotal: row.requestedTotal,
+        exchangeRate: row.exchangeRate,
+        exchangeRateDate: row.exchangeRateDate,
+        priceDifference: row.priceDifference,
+        discountPercentage: row.discountPercentage,
       })),
     };
 
@@ -3706,6 +3844,8 @@ const recordProformaOrderHistory = async (rows) => {
           containerRoute: order.containerRoute,
           totalPallets: order.totalPallets,
           totalWeight: order.totalWeight,
+          mainCurrency: "USD",
+          exchangeRateSnapshot: exchangeRatesData || {},
           items: rows,
         }),
       });
@@ -3881,6 +4021,7 @@ const repeatCustomerOrder = (orderId) => {
   }
 
   proformaOrder.clear();
+  proformaRequestedPrices.clear();
   order.items.forEach((item) => {
     const product =
       productCatalog.find((entry) => entry.id === item.productId) ||
@@ -3890,7 +4031,10 @@ const repeatCustomerOrder = (orderId) => {
           normalizeCatalogName(entry.brand) === normalizeCatalogName(item.brand) &&
           normalizeCatalogName(getProductName(entry)) === normalizeCatalogName(item.product),
       );
-    if (product) proformaOrder.set(product.id, Math.max(Number(item.cartons) || 1, 1));
+    if (product) {
+      proformaOrder.set(product.id, Math.max(Number(item.cartons) || 1, 1));
+      proformaRequestedPrices.set(product.id, Number(item.requestedUnitPrice ?? item.currentUnitPrice ?? getCurrentCartonPrice(product)));
+    }
   });
 
   setProformaTransport(order.transport, order.containerRoute);
@@ -4157,6 +4301,16 @@ document.querySelector("#proformaOrderLines")?.addEventListener("click", (event)
   const removeButton = event.target.closest(".proforma-remove-button");
   if (!removeButton) return;
   proformaOrder.delete(removeButton.dataset.productId);
+  proformaRequestedPrices.delete(removeButton.dataset.productId);
+  renderProformaOrder();
+});
+document.querySelector("#proformaOrderLines")?.addEventListener("change", (event) => {
+  const input = event.target.closest("[data-requested-price-for]");
+  if (!input) return;
+  const value = Number(input.value);
+  input.setCustomValidity(Number.isFinite(value) && value >= 0 ? "" : t("orderRequestedPriceInvalid"));
+  if (!input.reportValidity()) return;
+  proformaRequestedPrices.set(input.dataset.requestedPriceFor, value);
   renderProformaOrder();
 });
 document.querySelector("#downloadProformaExcel")?.addEventListener("click", downloadProformaExcel);
@@ -4169,3 +4323,9 @@ refreshB2BSession();
 fetchLogisticsStatus();
 loadExchangeRates();
 loadPublishedCatalogPrices();
+
+
+// legacy request-quote route integration: the former standalone RFQ URL now opens the integrated order screen.
+if (new URLSearchParams(window.location.search).get("open") === "proforma") {
+  window.addEventListener("DOMContentLoaded", () => window.setTimeout(() => openMainProformaPanel({ focusSummary: false }), 0), { once: true });
+}

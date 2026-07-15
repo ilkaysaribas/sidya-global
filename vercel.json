@@ -2,10 +2,6 @@
   "outputDirectory": "public",
   "rewrites": [
     {
-      "source": "/request-quote",
-      "destination": "/request-quote.html"
-    },
-    {
       "source": "/contact.php",
       "destination": "/api/information-message"
     }
@@ -43,6 +39,18 @@
           "value": "off"
         }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/request-quote",
+      "destination": "/?open=proforma",
+      "permanent": false
+    },
+    {
+      "source": "/request-quote.html",
+      "destination": "/?open=proforma",
+      "permanent": false
     }
   ]
 }

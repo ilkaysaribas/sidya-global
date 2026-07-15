@@ -37,9 +37,11 @@ const assertions = [
   [hasVersionedScript("sidya-locale-layout-fixes.js"), "Locale module is missing or unversioned"],
   [hasVersionedScript("sidya-proforma-core-fix.js"), "Proforma module is missing or unversioned"],
   [(index.match(/\/api\/backend-config\.js/g) || []).length === 0, "Backend config is loaded twice"],
-  [!backendLoader.includes("rfq-site-extension.js"), "Legacy standalone RFQ extension is still active"],
+  [!backendLoader.includes("rfq-site-extension.js") && !backendLoader.includes("admin-rfq-extension.js"), "Legacy standalone RFQ extension is still active"],
+  [index.includes("proformaRequestedTotalAmount") && index.includes("proformaExchangeRates"), "Integrated requested-price summary is missing"],
+  [read("script.js").includes("requestedUnitPrice") && read("api/site-order.js").includes("site_order_items"), "Requested prices are not persisted through the order API"],
   [!backendLoader.includes("sidya-rtl-hero-fix.js"), "Legacy RTL hero transformer is still active"],
-  [worker.includes("sidya-global-v104"), "Service worker cache version was not advanced"],
+  [worker.includes("sidya-global-v105"), "Service worker cache version was not advanced"],
   [sourceFiles.length <= 12, `Vercel Hobby function limit exceeded: ${sourceFiles.length}/12`],
 ];
 

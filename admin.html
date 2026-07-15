@@ -60,7 +60,7 @@
 
         <section class="view" data-view-panel="orders">
           <div class="panel">
-            <div class="panel-heading"><div><p class="eyebrow">WEB SİTESİ</p><h2>Gelen siparişler</h2></div></div>
+            <div class="panel-heading"><div><p class="eyebrow">WEB SİTESİ</p><h2>Gelen siparişler</h2></div><div class="button-row"><button id="newOrderButton">Sipariş Oluştur</button><button class="primary" id="refreshOrdersButton">Yenile</button></div></div>
             <p class="helper">Sitede proforma indirildiğinde veya paylaşıldığında sipariş buraya düşer. Siparişi seçip satış faturası taslağına aktarabilirsiniz.</p>
             <div class="table-wrap"><table><thead><tr><th>Sipariş no</th><th>Tarih</th><th>Alıcı</th><th>Ürün</th><th>Koli</th><th>Durum</th><th></th></tr></thead><tbody id="orderRows"></tbody></table></div>
           </div>
@@ -175,9 +175,9 @@
           <tbody id="invoiceProductRows"></tbody>
         </table></div>
       </div>
-      <div class="invoice-lines-heading"><h3>Fatura satırları</h3><span>Koli seçilirse koli içi adet otomatik olarak stoğa işlenir.</span></div>
-      <div class="table-wrap invoice-lines-table"><table><thead><tr><th>#</th><th>Barkod</th><th>Ürün</th><th>Stok</th><th>Miktar</th><th>Birim</th><th>Birim fiyat</th><th>Para birimi</th><th>İsk. 1</th><th>İsk. 2</th><th>İsk. 3</th><th>KDV %</th><th>KDV tutarı</th><th>KDV dahil toplam</th><th></th></tr></thead><tbody id="invoiceLineRows"></tbody></table></div>
-      <div class="invoice-footer"><label class="invoice-description">Açıklama<textarea name="notes" rows="5" placeholder="Faturaya ait açıklamayı yazın"></textarea></label><div class="invoice-summary"><span>Ara toplam <strong id="invoiceSubtotal">0</strong></span><span>İskonto <strong id="invoiceDiscountTotal">0</strong></span><div id="invoiceVatBreakdown" class="invoice-vat-breakdown"></div><span>Toplam KDV <strong id="invoiceTaxTotal">0</strong></span><span class="invoice-grand-total">Genel toplam <strong id="invoiceGrandTotal">0</strong></span></div></div>
+      <div class="invoice-lines-heading"><div><h3>Sipariş / fatura satırları</h3><span>Mevcut fiyat ürün kartından otomatik gelir; talep fiyatı düzenlenebilir.</span></div><div id="adminOrderRates" class="admin-rate-snapshot" aria-label="Güncel döviz kurları"></div></div>
+      <div class="table-wrap invoice-lines-table"><table><thead><tr><th>#</th><th>Stok kodu / Barkod</th><th>Ürün</th><th>Stok</th><th>Miktar</th><th>Birim</th><th>Mevcut birim fiyat</th><th>Talep edilen birim fiyat</th><th>Para birimi</th><th>Mevcut toplam</th><th>Talep edilen toplam</th><th>Fark / İndirim</th><th>İsk. 1</th><th>İsk. 2</th><th>İsk. 3</th><th>KDV %</th><th></th></tr></thead><tbody id="invoiceLineRows"></tbody></table></div>
+      <div class="invoice-footer"><label class="invoice-description">Açıklama<textarea name="notes" rows="5" placeholder="Sipariş veya faturaya ait açıklamayı yazın"></textarea></label><div class="invoice-summary"><span>Mevcut fiyat toplamı <strong id="invoiceCurrentSubtotal">0</strong></span><span>Talep edilen fiyat toplamı <strong id="invoiceSubtotal">0</strong></span><span>Toplam fiyat farkı <strong id="invoicePriceDifference">0</strong></span><span>Ortalama talep indirimi <strong id="invoiceAverageDiscount">%0</strong></span><span>İskonto <strong id="invoiceDiscountTotal">0</strong></span><div id="invoiceVatBreakdown" class="invoice-vat-breakdown"></div><span>KDV (mevcut / talep) <strong id="invoiceTaxTotal">0</strong></span><span class="invoice-grand-total">Genel toplam (mevcut / talep) <strong id="invoiceGrandTotal">0</strong></span></div></div>
       <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit" id="saveInvoiceButton">Faturayı kaydet</button></div>
     </form></dialog>
 
@@ -185,7 +185,7 @@
       <div class="invoice-detail-toolbar"><button type="button" data-close-dialog>← Fatura listesine dön</button><div class="button-row"><button type="button" id="invoiceDetailPrint">Yazdır / PDF</button><button type="button" data-close-dialog>×</button></div></div>
       <div class="invoice-detail-title"><div><p class="eyebrow">FATURA KAYDI</p><h2 id="invoiceDetailHeading">Fatura</h2></div><span class="badge" id="invoiceDetailStatus">Kayıtlı</span></div>
       <div class="invoice-detail-meta"><div><span>Fatura tipi</span><strong id="invoiceDetailType">-</strong></div><div><span>Fatura tarihi</span><strong id="invoiceDetailDate">-</strong></div><div><span>Fatura numarası</span><strong id="invoiceDetailNumber">-</strong></div><div><span>Vade tarihi</span><strong id="invoiceDetailDueDate">-</strong></div><div class="wide"><span>Cari hesap</span><strong id="invoiceDetailCustomer">-</strong></div><div><span>Para birimi</span><strong id="invoiceDetailCurrency">-</strong></div><div><span>Senaryo</span><strong id="invoiceDetailScenario">-</strong></div></div>
-      <div class="table-wrap invoice-detail-lines"><table><thead><tr><th>#</th><th>Stok kodu / Barkod</th><th>Stok cinsi</th><th>Birim</th><th>Miktar</th><th>Birim fiyat</th><th>Tutar</th><th>KDV</th><th>İsk. 1</th><th>İsk. 2</th><th>İsk. 3</th><th>Açıklama</th></tr></thead><tbody id="invoiceDetailRows"></tbody></table></div>
+      <div class="table-wrap invoice-detail-lines"><table><thead><tr><th>#</th><th>Stok kodu / Barkod</th><th>Stok cinsi</th><th>Birim</th><th>Miktar</th><th>Mevcut fiyat</th><th>Talep fiyatı</th><th>Mevcut toplam</th><th>Talep toplamı</th><th>Fark / İndirim</th><th>KDV</th><th>Açıklama</th></tr></thead><tbody id="invoiceDetailRows"></tbody></table></div>
       <div class="invoice-detail-footer"><div class="invoice-detail-note"><span>Açıklama</span><p id="invoiceDetailNote">-</p></div><div class="invoice-detail-totals"><p><span>Mal / Hizmet Toplamı</span><strong id="invoiceDetailSubtotal">0</strong></p><p><span>Toplam iskonto</span><strong id="invoiceDetailDiscount">0</strong></p><p><span>KDV</span><strong id="invoiceDetailTax">0</strong></p><p class="grand"><span>Ödenecek Genel Toplam</span><strong id="invoiceDetailGrandTotal">0</strong></p></div></div>
     </div></dialog>
 

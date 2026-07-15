@@ -53,7 +53,6 @@ window.SIDYA_BACKEND = window.SIDYA_BACKEND || {
     if (isAdminPage()) {
       forceAdminLtr();
       loadScript("sidyaAdminLtrGuard", "admin-ltr-guard.js?v=20260712-2");
-      loadScript("sidyaAdminRfqExtension", "admin-rfq-extension.js?v=20260712-1");
     }
   };
 

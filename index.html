@@ -383,6 +383,13 @@
               </div>
             </fieldset>
             <button class="proforma-open-button" type="button" id="openProformaProducts" data-i18n="proformaOpenProducts">Create Proforma Order</button>
+            <section class="proforma-rate-snapshot" aria-labelledby="proforma-rate-title">
+              <div>
+                <strong id="proforma-rate-title" data-i18n="orderExchangeRates">Current exchange rates</strong>
+                <small id="proformaExchangeDate">-</small>
+              </div>
+              <div id="proformaExchangeRates" class="proforma-rate-list" aria-live="polite">-</div>
+            </section>
             <div class="proforma-product-panel" id="proformaProductPanel" hidden>
               <label class="proforma-search-label">
                 <span data-i18n="proformaSearchLabel">Search product</span>
@@ -409,8 +416,28 @@
               <strong id="proformaTotalWeight">0 kg</strong>
             </div>
             <div class="proforma-total-row">
-              <span data-i18n="proformaTotalAmount">Product total</span>
+              <span data-i18n="orderCurrentSubtotal">Current price total</span>
               <strong id="proformaTotalAmount">-</strong>
+            </div>
+            <div class="proforma-total-row">
+              <span data-i18n="orderRequestedSubtotal">Requested price total</span>
+              <strong id="proformaRequestedTotalAmount">-</strong>
+            </div>
+            <div class="proforma-total-row">
+              <span data-i18n="orderPriceDifference">Total price difference</span>
+              <strong id="proformaPriceDifference">-</strong>
+            </div>
+            <div class="proforma-total-row">
+              <span data-i18n="orderAverageDiscount">Average requested discount</span>
+              <strong id="proformaAverageDiscount">-</strong>
+            </div>
+            <div class="proforma-total-row">
+              <span data-i18n="orderTaxTotal">VAT</span>
+              <strong id="proformaTaxTotals">-</strong>
+            </div>
+            <div class="proforma-total-row proforma-grand-total-row">
+              <span data-i18n="orderGrandTotals">Grand total (current / requested)</span>
+              <strong id="proformaGrandTotals">-</strong>
             </div>
             <div class="proforma-actions">
               <button class="proforma-quote-link" type="button" id="downloadProformaExcel" data-i18n="proformaExcelCta">Download Excel</button>

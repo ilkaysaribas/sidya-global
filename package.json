@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "lint": "node scripts/validate-static.js",
-    "typecheck": "node --check script.js && node --check backend-config.js && node --check sidya-locale-layout-fixes.js && node --check sidya-proforma-core-fix.js && node --check api/exchange-rates.js && node --check api/ai-assistant.js && node --check sidya-ai-assistant.js && node --check admin-ai-assistant.js",
+    "typecheck": "node --check script.js && node --check backend-config.js && node --check sidya-locale-layout-fixes.js && node --check sidya-proforma-core-fix.js && node --check api/exchange-rates.js && node --check api/ai-assistant.js && node --check sidya-ai-assistant.js && node --check admin-ai-assistant.js && node --check admin.js && node --check api/site-order.js",
     "build": "node scripts/build-static.js",
-    "test": "node scripts/test-homepage.js && node scripts/test-smtp-crypto.js && node scripts/test-rfq-rules.js",
+    "test": "node scripts/test-homepage.js && node scripts/test-smtp-crypto.js && node scripts/test-rfq-rules.js && node scripts/test-order-pricing.js",
     "test:homepage": "node scripts/test-homepage.js"
   },
   "dependencies": {

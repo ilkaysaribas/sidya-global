@@ -5050,3 +5050,51 @@ html[dir="rtl"] .products-section-heading {
 .b2b-entry-actions {
   justify-content: flex-start !important;
 }
+
+.proforma-rate-snapshot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f7f8f8;
+}
+.proforma-rate-snapshot > div:first-child { display: grid; gap: 3px; }
+.proforma-rate-snapshot small { color: var(--muted); }
+.proforma-rate-list { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 7px; }
+.proforma-rate-list span { padding: 5px 8px; border-radius: 999px; background: #fff; font-size: .72rem; }
+.proforma-price-comparison {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+.proforma-price-comparison > label,
+.proforma-price-comparison > span {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 7px;
+  border: 1px solid rgba(21, 21, 21, .1);
+  border-radius: 7px;
+  background: #fff;
+}
+.proforma-price-comparison small,
+.proforma-price-comparison label > span:first-child { color: var(--muted); font-size: .68rem; font-weight: 800; }
+.proforma-price-comparison output,
+.proforma-price-comparison strong { color: #151515; font-size: .82rem; font-weight: 900; }
+.proforma-price-comparison .is-discount strong { color: #087462; }
+.proforma-price-comparison .is-increase strong { color: #b42318; }
+.proforma-requested-input { display: grid !important; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px; }
+.proforma-requested-input input { width: 100%; min-width: 0; height: 34px; border: 1px solid var(--line); border-radius: 6px; padding: 0 7px; font: inherit; }
+.proforma-grand-total-row { background: #eef4f5; }
+html[dir="rtl"] .proforma-price-comparison,
+html[dir="rtl"] .proforma-rate-snapshot { direction: rtl; text-align: right; }
+@media (max-width: 760px) {
+  .proforma-rate-snapshot { align-items: stretch; flex-direction: column; }
+  .proforma-rate-list { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; }
+  .proforma-price-comparison { grid-template-columns: 1fr; }
+}

@@ -24,6 +24,11 @@ const parseBody = async (req) => {
 
 const cleanText = (value, max = 240) => String(value || "").replace(/[<>]/g, "").trim().slice(0, max);
 const cleanNumber = (value) => Math.max(0, Number(value) || 0);
+const isUuid = (value) => /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(value || ""));
+const cleanCurrency = (value) => {
+  const code = cleanText(value || "USD", 3).toUpperCase();
+  return /^[A-Z]{3}$/.test(code) ? code : "USD";
+};
 const parseIntCartons = (value) => {
   if (!/^\d+$/.test(String(value || ""))) throw Object.assign(new Error("Koli adedi yalnızca pozitif tam sayı olabilir."), { statusCode: 400 });
   const number = Number(value);
@@ -202,15 +207,49 @@ module.exports = async (req, res) => {
       return;
     }
 
-    const items = sourceItems.map((item) => ({
-      productId: cleanText(item.productId, 120),
-      barcode: cleanText(item.barcode, 80),
-      brand: cleanText(item.brand, 120),
-      product: cleanText(item.product || item.name, 300),
-      cartons: cleanNumber(item.cartons),
-      unitsPerCarton: cleanNumber(item.unitsPerCarton),
-      kgPerCarton: cleanNumber(item.kgPerCarton),
-    })).filter((item) => item.product && item.cartons > 0);
+    const productIds = [...new Set(sourceItems.map((item) => cleanText(item.productId, 120)).filter(isUuid))];
+    const productRows = productIds.length
+      ? await supabaseRequest(`/rest/v1/products?id=in.(${productIds.join(",")})&select=id,name,sku,barcode,unit,units_per_carton,sale_price,currency,vat_rate`, { method: "GET" }, serviceRoleKey)
+      : [];
+    const productMap = new Map((productRows || []).map((product) => [product.id, product]));
+    const snapshotRateMap = body.exchangeRateSnapshot?.rateMap || {};
+    const exchangeDate = cleanText(body.exchangeRateSnapshot?.date || new Date().toISOString().slice(0, 10), 10);
+    const items = sourceItems.map((item) => {
+      const productId = cleanText(item.productId, 120);
+      const productRow = productMap.get(productId);
+      const cartons = cleanNumber(item.cartons);
+      const unitsPerCarton = productRow ? Math.max(cleanNumber(productRow.units_per_carton), 1) : Math.max(cleanNumber(item.unitsPerCarton), 1);
+      const currentUnitPrice = productRow ? cleanNumber(productRow.sale_price) * unitsPerCarton : 0;
+      const requestedCandidate = item.requestedUnitPrice ?? item.requested_unit_price;
+      const requestedUnitPrice = requestedCandidate === undefined || requestedCandidate === null || requestedCandidate === ""
+        ? currentUnitPrice
+        : cleanNumber(requestedCandidate);
+      const currency = cleanCurrency(productRow?.currency || item.currency);
+      const currentTotal = Number((cartons * currentUnitPrice).toFixed(4));
+      const requestedTotal = Number((cartons * requestedUnitPrice).toFixed(4));
+      return {
+        productId: isUuid(productId) ? productId : null,
+        productCode: cleanText(productRow?.sku || item.productCode || item.barcode, 80),
+        barcode: cleanText(productRow?.barcode || item.barcode, 80),
+        brand: cleanText(item.brand, 120),
+        product: cleanText(productRow?.name || item.product || item.name, 300),
+        cartons,
+        quantity: cartons,
+        unit: cleanText(item.unit || "koli", 20),
+        unitsPerCarton,
+        kgPerCarton: cleanNumber(item.kgPerCarton),
+        currentUnitPrice,
+        requestedUnitPrice,
+        currentTotal,
+        requestedTotal,
+        currency,
+        exchangeRate: cleanNumber(snapshotRateMap[currency] || item.exchangeRate || (currency === "TRY" ? 1 : 0)) || 1,
+        exchangeRateDate: exchangeDate,
+        priceDifference: Number((requestedTotal - currentTotal).toFixed(4)),
+        discountPercentage: currentTotal > 0 ? Number((((currentTotal - requestedTotal) / currentTotal) * 100).toFixed(4)) : 0,
+        vatRate: cleanNumber(productRow?.vat_rate),
+      };
+    }).filter((item) => item.product && item.cartons > 0);
 
     if (!items.length) {
       res.status(400).json({ error: "Geçerli sipariş satırı bulunmuyor." });
@@ -219,6 +258,17 @@ module.exports = async (req, res) => {
 
     const now = new Date();
     const orderNo = cleanText(body.orderNo, 80) || `WEB-${now.toISOString().replace(/\D/g, "").slice(0, 17)}`;
+    const mainCurrency = cleanCurrency(body.mainCurrency || "USD");
+    const mainRate = cleanNumber((body.exchangeRateSnapshot?.rateMap || {})[mainCurrency]) || 1;
+    const toMain = (amount, item) => Number(amount || 0) * Number(item.exchangeRate || 1) / mainRate;
+    const currentSubtotal = items.reduce((sum, item) => sum + toMain(item.currentTotal, item), 0);
+    const requestedSubtotal = items.reduce((sum, item) => sum + toMain(item.requestedTotal, item), 0);
+    const safeSnapshot = {
+      base: "TRY",
+      date: items[0]?.exchangeRateDate || now.toISOString().slice(0, 10),
+      rates: Object.fromEntries([...new Set(items.map((item) => item.currency))].map((currency) => [currency, items.find((item) => item.currency === currency)?.exchangeRate || 1])),
+      mainCurrency,
+    };
     const payload = {
       order_no: orderNo,
       auth_user_id: body.authUserId || null,
@@ -226,7 +276,14 @@ module.exports = async (req, res) => {
       customer_name: cleanText(body.customerName, 160) || null,
       customer_email: cleanText(body.customerEmail, 240) || null,
       customer_phone: cleanText(body.customerPhone, 80) || null,
-      currency: "USD",
+      currency: mainCurrency,
+      main_currency: mainCurrency,
+      exchange_rate_snapshot: safeSnapshot,
+      exchange_rate_date: safeSnapshot.date,
+      current_subtotal: Number(currentSubtotal.toFixed(4)),
+      requested_subtotal: Number(requestedSubtotal.toFixed(4)),
+      price_difference: Number((requestedSubtotal - currentSubtotal).toFixed(4)),
+      average_discount_percentage: currentSubtotal > 0 ? Number((((currentSubtotal - requestedSubtotal) / currentSubtotal) * 100).toFixed(4)) : 0,
       transport: cleanText(body.transport, 40) || null,
       container_route: cleanText(body.containerRoute, 40) || null,
       items,
@@ -242,7 +299,36 @@ module.exports = async (req, res) => {
       body: JSON.stringify(payload),
     }, serviceRoleKey);
 
-    res.status(200).json({ ok: true, orderId: data[0]?.id, orderNo });
+    const orderId = data[0]?.id;
+    if (!orderId) throw Object.assign(new Error("Sipariş kaydı oluşturulamadı."), { statusCode: 500 });
+    await supabaseRequest(`/rest/v1/site_order_items?order_id=eq.${encodeURIComponent(orderId)}`, {
+      method: "DELETE",
+      headers: { Prefer: "return=minimal" },
+    }, serviceRoleKey);
+    const normalizedItems = items.map((item) => ({
+      order_id: orderId,
+      product_id: item.productId,
+      product_name: item.product,
+      product_code: item.productCode || item.barcode || null,
+      quantity: item.quantity,
+      unit: item.unit,
+      currency: item.currency,
+      current_unit_price: item.currentUnitPrice,
+      requested_unit_price: item.requestedUnitPrice,
+      current_total: item.currentTotal,
+      requested_total: item.requestedTotal,
+      exchange_rate: item.exchangeRate,
+      exchange_rate_date: item.exchangeRateDate,
+      price_difference: item.priceDifference,
+      discount_percentage: item.discountPercentage,
+    }));
+    await supabaseRequest("/rest/v1/site_order_items", {
+      method: "POST",
+      headers: { Prefer: "return=minimal" },
+      body: JSON.stringify(normalizedItems),
+    }, serviceRoleKey);
+
+    res.status(200).json({ ok: true, orderId, orderNo, currentSubtotal: payload.current_subtotal, requestedSubtotal: payload.requested_subtotal });
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message || "Sipariş aktarılamadı." });
   }

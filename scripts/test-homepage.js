@@ -19,7 +19,7 @@ const check = (condition, message) => {
 
 check(/<html\s+lang=["']en["']/.test(index), "Homepage must start in English.");
 check(index.includes('class="site-container hero-layout"'), "Hero must use the shared container.");
-check(index.includes('class="site-container">\n          <div class="section-heading products-section-heading"'), "Category section must use the shared container.");
+check(/class="site-container">\s*<div class="section-heading products-section-heading"/.test(index), "Category section must use the shared container.");
 check(index.includes('id="productGrid"'), "Homepage category grid is missing.");
 check(!index.includes('id="productCatalogSearch"'), "Individual product search must not appear on the homepage.");
 check(!index.includes('id="catalogLoadMore"'), "Individual product pagination must not appear on the homepage.");
@@ -51,7 +51,7 @@ check(styles.includes('html[dir="ltr"] main :where('), "LTR alignment guard is m
 check(styles.includes("text-align: left !important"), "LTR content must be forced left.");
 check(styles.includes('html[dir="rtl"] main :where('), "RTL alignment guard is missing.");
 check(styles.includes("text-align: right !important"), "RTL content must remain right aligned.");
-check(worker.includes("sidya-global-v104"), "Service worker cache version must be v104.");
+check(worker.includes("sidya-global-v105"), "Service worker cache version must be v104.");
 check(worker.includes("script.js?v=20260715-4"), "Service worker caches an old homepage script.");
 check(worker.includes("styles.css?v=20260715-4"), "Service worker caches an old stylesheet.");
 check(worker.includes('url.pathname === "/script.js"'), "Homepage script must use network-first cache handling.");
