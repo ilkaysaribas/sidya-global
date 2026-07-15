@@ -391,7 +391,7 @@ ${lines}
       await loadData();
     } catch (error) {
       console.warn("e-Fatura tabloları hazır değil", error);
-      setLocal("e-Fatura tabloları henüz kurulmamış. /api/e-invoice-migration?run=sidya-mail-crm-run-20260706 endpoint'i veya supabase/e-invoice-readiness.sql çalıştırılmalı.", true);
+      setLocal("e-Fatura tabloları henüz kurulmamış. /api/mail-crm-migration?run=sidya-mail-crm-run-20260706&scope=einvoice endpoint'i veya supabase/e-invoice-readiness.sql çalıştırılmalı.", true);
     }
   }
 
