@@ -1,6 +1,6 @@
 const PROJECT_REF = "jhjforyykkxklfarjtjl";
 const LEGACY_MIGRATION_TOKEN = "sidya-mail-crm-run-20260706";
-const runEInvoiceMigration = require("./e-invoice-migration");
+const runEInvoiceMigration = require("../lib/e-invoice-migration");
 
 const readEnv = (...names) => names.map((name) => String(process.env[name] || "").trim()).find(Boolean) || "";
 const stripBearer = (value) => String(value || "").trim().replace(/^Bearer\s+/i, "").replace(/^['\"]|['\"]$/g, "").trim();
