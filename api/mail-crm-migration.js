@@ -1,5 +1,6 @@
 const PROJECT_REF = "jhjforyykkxklfarjtjl";
 const LEGACY_MIGRATION_TOKEN = "sidya-mail-crm-run-20260706";
+const runEInvoiceMigration = require("./e-invoice-migration");
 
 const readEnv = (...names) => names.map((name) => String(process.env[name] || "").trim()).find(Boolean) || "";
 const stripBearer = (value) => String(value || "").trim().replace(/^Bearer\s+/i, "").replace(/^['\"]|['\"]$/g, "").trim();
@@ -243,6 +244,11 @@ module.exports = async (req, res) => {
   try {
     if (req.method === "OPTIONS") return res.status(204).end();
     if (!["GET", "POST"].includes(req.method)) return json(res, 405, { ok: false, error: "Method not allowed" });
+
+    const scope = String(req.query.scope || "").trim().toLowerCase();
+    if (scope === "einvoice" || scope === "e-invoice") {
+      return runEInvoiceMigration(req, res);
+    }
 
     const token = req.query.run || req.query.verify || req.headers["x-migration-token"];
     const envToken = readEnv("MIGRATION_ADMIN_KEY");
