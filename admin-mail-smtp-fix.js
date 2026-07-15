@@ -367,10 +367,18 @@
   }
 
   function loadEInvoiceReadiness() {
+    if (!document.getElementById("sidyaAdminCriticalGuardsScript")) {
+      const guard = document.createElement("script");
+      guard.id = "sidyaAdminCriticalGuardsScript";
+      guard.src = "/admin-critical-action-guards.js?v=20260715-1";
+      guard.async = false;
+      document.head.appendChild(guard);
+    }
     if (document.getElementById("sidyaAdminEInvoiceScript")) return;
     const script = document.createElement("script");
     script.id = "sidyaAdminEInvoiceScript";
     script.src = "/admin-einvoice.js?v=20260715-1";
+    script.async = false;
     script.defer = true;
     document.head.appendChild(script);
   }
