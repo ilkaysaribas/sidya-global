@@ -1,11 +1,15 @@
 (function(){
   "use strict";
-  if(window.__sidyaRateFixV4)return;
-  window.__sidyaRateFixV4=true;
+  if(window.__sidyaRateFixV5)return;
+  window.__sidyaRateFixV5=true;
+  window.__sidyaRateFixV4=false;
   window.__sidyaRateFixV3=false;
 
   var STORAGE_KEY='sidya-admin-valid-exchange-rates';
   var CODES=['USD','EUR','RUB','GEL'];
+  var lastPayload=null;
+  var rendering=false;
+  var observer=null;
 
   function app(){var s=document.getElementById('appShell');return !!(s&&!s.hidden)}
   function num(v){var n=Number(String(v==null?'':v).replace(/\s/g,'').replace(',','.'));return isFinite(n)&&n>0?n:0}
@@ -64,6 +68,38 @@
     };
   }
 
+  function formatTime(value){
+    var d=value?new Date(value):new Date();
+    if(!isFinite(d.getTime()))d=new Date();
+    return d.toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  }
+
+  function expectedText(payload){
+    if(!payload||!validRates(payload.rates))return '';
+    return ['USD '+money(payload.rates.USD),'EUR '+money(payload.rates.EUR),'RUB '+money(payload.rates.RUB),'GEL '+money(payload.rates.GEL)].join('|');
+  }
+
+  function stripLooksCorrect(el,payload){
+    if(!el||!payload||!validRates(payload.rates))return false;
+    var text=el.textContent||'';
+    return CODES.every(function(code){return text.indexOf(code+' '+money(payload.rates[code]))>-1});
+  }
+
+  function findAnchor(){
+    return document.getElementById('globalStatus')||document.querySelector('.admin-header')||document.querySelector('.topbar')||document.querySelector('.main');
+  }
+
+  function ensureStrip(){
+    var el=document.getElementById('exchangeRateStrip');
+    var anchor=findAnchor();
+    if(!el&&anchor&&anchor.parentNode){
+      el=document.createElement('section');
+      el.id='exchangeRateStrip';
+      anchor.parentNode.insertBefore(el,anchor.nextSibling);
+    }
+    return el;
+  }
+
   function updateProfitRateInputs(payload){
     var form=document.getElementById('profitTopForm');
     if(!form||!payload||!validRates(payload.rates))return;
@@ -76,20 +112,15 @@
     if(meta)meta.textContent='Kur kaynağı: '+(payload.source||'TCMB')+' · Güncelleme: '+formatTime(payload.updatedAt)+(payload.warning?' · '+payload.warning:'');
   }
 
-  function formatTime(value){
-    var d=value?new Date(value):new Date();
-    if(!isFinite(d.getTime()))d=new Date();
-    return d.toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-  }
-
   function render(payload){
-    var el=document.getElementById('exchangeRateStrip');
-    var anchor=document.getElementById('globalStatus')||document.querySelector('.admin-header')||document.querySelector('.topbar');
-    if(!el&&anchor){el=document.createElement('section');el.id='exchangeRateStrip';anchor.parentNode.insertBefore(el,anchor.nextSibling)}
+    var el=ensureStrip();
     if(!el)return;
+    rendering=true;
     el.className='exchange-rate-strip';
+    el.setAttribute('data-sidya-rate-fix','v5');
     if(!payload||!validRates(payload.rates)){
       el.innerHTML='<b>Canlı Kur Bilgisi</b><span>TCMB kuru alınamadı</span><button id="refreshExchangeRatesButton" type="button">Kuru yenile</button>';
+      rendering=false;
       return;
     }
     el.innerHTML='<b>Canlı Kur Bilgisi</b>'+
@@ -101,30 +132,62 @@
       '<span>Güncelleme: '+formatTime(payload.updatedAt)+'</span>'+
       (payload.warning?'<span>Son geçerli kur gösteriliyor</span>':'')+
       '<button id="refreshExchangeRatesButton" type="button">Kuru yenile</button>';
+    rendering=false;
+  }
+
+  function publish(payload){
+    if(!payload||!validRates(payload.rates))return;
+    lastPayload=payload;
+    writeCache(payload);
+    window.SIDYA_ADMIN_EXCHANGE_RATES=payload.rates;
+    window.SIDYA_ADMIN_EXCHANGE_PAYLOAD=payload;
+    render(payload);
+    updateProfitRateInputs(payload);
+    try{window.dispatchEvent(new CustomEvent('sidya:exchange-rates-ready',{detail:payload}))}catch(e){}
   }
 
   async function load(){
     if(!app())return;
     try{
-      var res=await fetch('/api/exchange-rates?adminStrip='+Date.now(),{cache:'no-store',headers:{Accept:'application/json'}});
+      var res=await fetch('/api/exchange-rates?adminStripV5='+Date.now(),{cache:'no-store',headers:{Accept:'application/json'}});
       if(!res.ok)throw new Error('Kur API '+res.status);
       var data=await res.json();
-      var payload=normalizePayload(data);
-      writeCache(payload);
-      window.SIDYA_ADMIN_EXCHANGE_RATES=payload.rates;
-      render(payload);
-      updateProfitRateInputs(payload);
+      publish(normalizePayload(data));
     }catch(error){
       console.warn('Canlı kur bilgisi alınamadı.',error);
       var cached=readCache();
-      if(cached){cached.warning='TCMB kuru alınamadı. Son geçerli kur gösteriliyor.';render(cached);updateProfitRateInputs(cached);return;}
+      if(cached){cached.warning='TCMB kuru alınamadı. Son geçerli kur gösteriliyor.';publish(cached);return;}
       render(null);
     }
   }
 
+  function installObserver(){
+    if(observer)return;
+    observer=new MutationObserver(function(){
+      if(rendering||!lastPayload||!validRates(lastPayload.rates))return;
+      var el=document.getElementById('exchangeRateStrip');
+      if(!stripLooksCorrect(el,lastPayload))setTimeout(function(){render(lastPayload);updateProfitRateInputs(lastPayload)},0);
+    });
+    observer.observe(document.documentElement,{childList:true,subtree:true,characterData:true});
+  }
+
   document.addEventListener('click',function(event){
-    if(event.target&&event.target.closest&&event.target.closest('#refreshExchangeRatesButton'))setTimeout(load,50);
+    if(event.target&&event.target.closest&&event.target.closest('#refreshExchangeRatesButton')){
+      event.preventDefault();
+      event.stopPropagation();
+      setTimeout(load,20);
+    }
   },true);
-  var timer=setInterval(function(){if(app()){clearInterval(timer);load();setInterval(load,1800000)}},500);
-  document.addEventListener('DOMContentLoaded',load);
+
+  document.addEventListener('DOMContentLoaded',function(){installObserver();load()});
+  window.addEventListener('load',function(){installObserver();load()});
+
+  var boot=setInterval(function(){
+    if(app()){
+      load();
+      installObserver();
+    }
+  },1000);
+  setTimeout(function(){clearInterval(boot)},90000);
+  setInterval(function(){if(app())load()},1800000);
 })();
