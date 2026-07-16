@@ -1,7 +1,8 @@
 (function(){
   "use strict";
-  if(window.__sidyaRateFixV3)return;
-  window.__sidyaRateFixV3=true;
+  if(window.__sidyaRateFixV4)return;
+  window.__sidyaRateFixV4=true;
+  window.__sidyaRateFixV3=false;
 
   var STORAGE_KEY='sidya-admin-valid-exchange-rates';
   var CODES=['USD','EUR','RUB','GEL'];
