@@ -2011,12 +2011,53 @@ h2 {
   pointer-events: none;
 }
 
+
+
 .proforma-product-list {
   display: grid;
   gap: 10px;
   max-height: 420px;
   overflow: auto;
   padding-right: 4px;
+}
+
+.proforma-product-pagination {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 -8px 24px rgba(16, 42, 67, 0.08);
+}
+
+.proforma-product-pagination strong {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.proforma-product-pagination button {
+  min-height: 38px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: #151515;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+@media (max-width: 560px) {
+  .proforma-product-pagination {
+    align-items: stretch;
+    flex-direction: column;
+  }
 }
 
 .proforma-product-row {

@@ -41,8 +41,9 @@ check(!script.includes('db.from("site_catalog_prices")'), "The obsolete 92-row p
 check(script.includes("const pageSize = 250"), "Full catalog pagination is missing.");
 check(script.includes("while (offset < totalCount)"), "Proforma must load every catalog page.");
 check(script.includes("rows.forEach(upsertPublicCatalogProduct)"), "Full catalog rows are not added to the proforma selector.");
-check(script.includes("matches.slice(0, 100)"), "Default proforma rendering must stay bounded.");
-check(script.includes("matches.slice(0, 250)"), "Proforma search result rendering must stay bounded.");
+check(script.includes("PROFORMA_PRODUCT_PAGE_SIZE = 100"), "Default proforma rendering must stay bounded.");
+check(script.includes("data-proforma-load-more"), "Full proforma catalog needs a load-more control.");
+check(script.includes("filteredProductCount"), "Proforma must expose the total matching product count.");
 check(!script.includes("productCatalogSearchTimer"), "Homepage product search handler is still active.");
 check(!script.includes("publishedHomepageProducts"), "Homepage product state is still active.");
 

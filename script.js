@@ -2260,8 +2260,7 @@ const productMatchesSearch = (product, query) => {
 };
 
 const getMatchingCatalogProducts = (query) => {
-  const matches = productCatalog.filter((product) => productMatchesSearch(product, query));
-  return normalizeSearchText(query) ? matches.slice(0, 250) : matches.slice(0, 100);
+  return productCatalog.filter((product) => productMatchesSearch(product, query));
 };
 
 const getLocalizedText = (value) => {
@@ -2683,16 +2682,32 @@ const loadExchangeRates = async () => {
   }
 };
 
-const renderProformaProducts = () => {
+const PROFORMA_PRODUCT_PAGE_SIZE = 100;
+let proformaVisibleProductCount = PROFORMA_PRODUCT_PAGE_SIZE;
+const proformaPaginationTranslations = {
+  en: { count: "Showing {shown} of {total} products", more: "Load more products" },
+  tr: { count: "{total} \u00fcr\u00fcn\u00fcn {shown} tanesi g\u00f6steriliyor", more: "Daha fazla \u00fcr\u00fcn y\u00fckle" },
+  ar: { count: "\u064a\u062a\u0645 \u0639\u0631\u0636 {shown} \u0645\u0646 \u0623\u0635\u0644 {total} \u0645\u0646\u062a\u062c", more: "\u0639\u0631\u0636 \u0645\u0632\u064a\u062f \u0645\u0646 \u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a" },
+};
+
+const renderProformaProducts = ({ preserveScroll = false } = {}) => {
   const list = document.querySelector("#proformaProductList");
   const search = document.querySelector("#proformaSearch");
   if (!list) return;
+  const previousScrollTop = preserveScroll ? list.scrollTop : 0;
   const query = search?.value || "";
   const filteredProducts = getMatchingCatalogProducts(query);
   if (!filteredProducts.length) {
     list.innerHTML = `<p class="proforma-empty">${t("proformaNoSearchResults")}</p>`;
     return;
   }
+  const filteredProductCount = filteredProducts.length;
+  const paginationCopy = proformaPaginationTranslations[currentLang] || proformaPaginationTranslations.en;
+  const countLabel = paginationCopy.count
+    .replace("{shown}", String(Math.min(proformaVisibleProductCount, filteredProductCount)))
+    .replace("{total}", String(filteredProductCount));
+  filteredProducts.splice(proformaVisibleProductCount);
+  const visibleProducts = filteredProducts;
   list.innerHTML = filteredProducts
     .map((product, index) => {
       const cartonsPerPallet = getCartonsPerPallet(product);
@@ -2719,7 +2734,13 @@ const renderProformaProducts = () => {
         <button type="button" class="proforma-add-button" data-product-id="${product.id}">${t("proformaAddLine")}</button>
       </article>`;
     })
-    .join("");
+    .join("") + `<div class="proforma-product-pagination" role="status">
+      <strong>${countLabel}</strong>
+      ${visibleProducts.length < filteredProductCount
+        ? `<button type="button" data-proforma-load-more>${paginationCopy.more}</button>`
+        : ""}
+    </div>`;
+  if (preserveScroll) list.scrollTop = previousScrollTop;
 };
 
 const renderCatalogProformaProducts = () => {
@@ -4280,6 +4301,9 @@ document.querySelector("#openProformaProducts")?.addEventListener("click", () =>
     document.querySelector("#proformaSearch")?.focus();
   }
 });
+document.querySelector("#proformaSearch")?.addEventListener("input", () => {
+  proformaVisibleProductCount = PROFORMA_PRODUCT_PAGE_SIZE;
+});
 document.querySelector("#proformaSearch")?.addEventListener("input", renderProformaProducts);
 document.querySelectorAll('input[name="proformaTransport"]').forEach((input) => {
   input.addEventListener("change", () => setProformaTransport(input.value));
@@ -4288,6 +4312,11 @@ document.querySelectorAll('input[name="proformaContainerRoute"]').forEach((input
   input.addEventListener("change", () => setProformaTransport("container", input.value));
 });
 document.querySelector("#proformaProductList")?.addEventListener("click", (event) => {
+  if (event.target.closest("[data-proforma-load-more]")) {
+    proformaVisibleProductCount += PROFORMA_PRODUCT_PAGE_SIZE;
+    renderProformaProducts({ preserveScroll: true });
+    return;
+  }
   const button = event.target.closest(".proforma-add-button");
   if (!button) return;
   addProformaLine(button.dataset.productId);
