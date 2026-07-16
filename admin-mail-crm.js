@@ -4,12 +4,16 @@
 
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+  const PROJECT_REF = "jhjforyykkxklfarjtjl";
+  const DEFAULT_AUTH_KEY = `sb-${PROJECT_REF}-auth-token`;
   const fmtDate = (value) => value ? new Date(value).toLocaleString("tr-TR") : "-";
   const isoDate = (value) => value ? new Date(value).toISOString().slice(0, 10) : "";
   const today = () => new Date().toISOString().slice(0, 10);
   const addDays = (days) => new Date(Date.now() + days * 86400000).toISOString().slice(0, 10);
+  const escapeHtml = (value) => String(value ?? "").replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char]));
   let customers = [];
   let selectedCustomer = null;
+  let bound = false;
 
   function setStatus(message, isError = false) {
     const el = $("#globalStatus");
@@ -30,36 +34,52 @@
     if (button.dataset.originalText) button.textContent = button.dataset.originalText;
   }
 
+  function isSchemaErrorMessage(message) {
+    return /PGRST205|does not exist|schema cache|relation .* does not exist|42P01|404|mail_settings|crm_customers|crm_interactions/i.test(String(message || ""));
+  }
+
   function installStyles() {
     if ($("#sidyaMailCrmStyles")) return;
     const style = document.createElement("style");
     style.id = "sidyaMailCrmStyles";
     style.textContent = `
-      .mail-crm-grid{display:grid;grid-template-columns:minmax(320px,420px) minmax(0,1fr);gap:18px;align-items:start;direction:ltr}.mail-crm-form{display:grid;gap:12px;direction:ltr;text-align:left}.mail-crm-form label{display:grid;gap:6px;font-weight:700;color:#1f2d3d;text-align:left}.mail-crm-form input,.mail-crm-form select,.mail-crm-form textarea{width:100%;min-width:0;border:1px solid #d8e1ec;border-radius:8px;padding:10px;background:#fff;text-align:left;direction:ltr}.mail-crm-form textarea{min-height:92px}.mail-crm-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.mail-crm-actions button[disabled]{opacity:.65;cursor:wait}.mail-crm-list{display:grid;gap:8px;max-height:620px;overflow:auto}.mail-crm-card{border:1px solid #d8e1ec;border-radius:8px;padding:12px;background:#fff;text-align:left;display:grid;gap:4px}.mail-crm-card:hover,.mail-crm-card.is-active{border-color:#137c96;background:#f0fbff}.mail-crm-card strong{font-size:14px}.mail-crm-card span{font-size:12px;color:#5d6b7a}.mail-crm-detail{display:grid;gap:14px;direction:ltr;text-align:left}.mail-crm-detail-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.mail-crm-badges{display:flex;gap:8px;flex-wrap:wrap}.mail-crm-badge{border:1px solid #d8e1ec;border-radius:999px;padding:5px 9px;background:#f8fafc;font-size:12px}.mail-crm-badge.due{border-color:#f59e0b;background:#fffbeb;color:#92400e}.mail-crm-interactions{display:grid;gap:8px;max-height:320px;overflow:auto}.mail-crm-interaction{border-left:3px solid #137c96;background:#f8fafc;padding:10px;border-radius:6px}.mail-crm-interaction small{color:#64748b}.mail-crm-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mail-crm-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}.mail-crm-metrics article{border:1px solid #d8e1ec;border-radius:8px;background:#fff;padding:12px}.mail-crm-metrics span{display:block;color:#64748b;font-size:12px}.mail-crm-metrics strong{font-size:22px}.mail-crm-empty{padding:20px;border:1px dashed #cbd5e1;border-radius:8px;color:#64748b;background:#f8fafc}.mail-crm-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.mail-crm-toolbar input,.mail-crm-toolbar select{border:1px solid #d8e1ec;border-radius:8px;padding:10px;background:#fff}.mail-crm-toolbar input{min-width:260px}.mail-crm-warning{border:1px solid #fca5a5;background:#fff1f2;color:#991b1b;border-radius:8px;padding:12px;margin-bottom:12px}#mainNav [data-view='mail-center'],#mainNav [data-view='crm-center']{position:relative}@media(max-width:900px){.mail-crm-grid,.mail-crm-two{grid-template-columns:1fr}.mail-crm-metrics{grid-template-columns:1fr}.mail-crm-toolbar input{min-width:0;width:100%}}
+      html,body,#appShell,.admin-layout,.main{direction:ltr!important}.mail-crm-grid{display:grid;grid-template-columns:minmax(320px,420px) minmax(0,1fr);gap:18px;align-items:start;direction:ltr}.mail-crm-form{display:grid;gap:12px;direction:ltr;text-align:left}.mail-crm-form label{display:grid;gap:6px;font-weight:700;color:#1f2d3d;text-align:left}.mail-crm-form input,.mail-crm-form select,.mail-crm-form textarea{width:100%;min-width:0;border:1px solid #d8e1ec;border-radius:8px;padding:10px;background:#fff;text-align:left;direction:ltr}.mail-crm-form textarea{min-height:92px}.mail-crm-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.mail-crm-actions button[disabled]{opacity:.65;cursor:wait}.mail-crm-list{display:grid;gap:8px;max-height:620px;overflow:auto}.mail-crm-card{border:1px solid #d8e1ec;border-radius:8px;padding:12px;background:#fff;text-align:left;display:grid;gap:4px}.mail-crm-card:hover,.mail-crm-card.is-active{border-color:#137c96;background:#f0fbff}.mail-crm-card strong{font-size:14px}.mail-crm-card span{font-size:12px;color:#5d6b7a}.mail-crm-detail{display:grid;gap:14px;direction:ltr;text-align:left}.mail-crm-detail-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.mail-crm-badges{display:flex;gap:8px;flex-wrap:wrap}.mail-crm-badge{border:1px solid #d8e1ec;border-radius:999px;padding:5px 9px;background:#f8fafc;font-size:12px}.mail-crm-badge.due{border-color:#f59e0b;background:#fffbeb;color:#92400e}.mail-crm-interactions{display:grid;gap:8px;max-height:320px;overflow:auto}.mail-crm-interaction{border-left:3px solid #137c96;background:#f8fafc;padding:10px;border-radius:6px}.mail-crm-interaction small{color:#64748b}.mail-crm-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mail-crm-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}.mail-crm-metrics article{border:1px solid #d8e1ec;border-radius:8px;background:#fff;padding:12px}.mail-crm-metrics span{display:block;color:#64748b;font-size:12px}.mail-crm-metrics strong{font-size:22px}.mail-crm-empty{padding:20px;border:1px dashed #cbd5e1;border-radius:8px;color:#64748b;background:#f8fafc}.mail-crm-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.mail-crm-toolbar input,.mail-crm-toolbar select{border:1px solid #d8e1ec;border-radius:8px;padding:10px;background:#fff}.mail-crm-toolbar input{min-width:260px}.mail-crm-warning{border:1px solid #fca5a5;background:#fff1f2;color:#991b1b;border-radius:8px;padding:12px;margin-bottom:12px}#mainNav [data-view='mail-center'],#mainNav [data-view='crm-center']{position:relative}@media(max-width:900px){.mail-crm-grid,.mail-crm-two{grid-template-columns:1fr}.mail-crm-metrics{grid-template-columns:1fr}.mail-crm-toolbar input{min-width:0;width:100%}}
     `;
     document.head.appendChild(style);
   }
 
   function getClient() {
     const cfg = window.SIDYA_BACKEND || {};
-    const key = cfg.supabaseAnonKey || cfg.supabasePublishableKey;
+    const key = cfg.supabasePublishableKey || cfg.supabaseAnonKey;
     if (!window.supabase || !cfg.supabaseUrl || !key) return null;
     if (window.__sidyaSupabaseClient) return window.__sidyaSupabaseClient;
     if (window.sidyaSupabaseClient) {
       window.__sidyaSupabaseClient = window.sidyaSupabaseClient;
       return window.__sidyaSupabaseClient;
     }
-    window.__sidyaSupabaseClient = window.supabase.createClient(cfg.supabaseUrl, key, { auth: { storageKey: "sidya-admin-auth" } });
+    window.__sidyaSupabaseClient = window.supabase.createClient(cfg.supabaseUrl, key);
     window.sidyaSupabaseClient = window.__sidyaSupabaseClient;
     return window.__sidyaSupabaseClient;
+  }
+
+  function tokenFromStorage() {
+    try {
+      const raw = localStorage.getItem(DEFAULT_AUTH_KEY);
+      if (!raw) return "";
+      const parsed = JSON.parse(raw);
+      return parsed?.access_token || parsed?.currentSession?.access_token || "";
+    } catch (_error) {
+      return "";
+    }
   }
 
   async function token() {
     const client = getClient();
     if (!client) throw new Error("Supabase bağlantısı bulunamadı.");
     const { data } = await client.auth.getSession();
-    if (!data?.session?.access_token) throw new Error("Admin oturumu bulunamadı.");
-    return data.session.access_token;
+    const accessToken = data?.session?.access_token || tokenFromStorage();
+    if (!accessToken) throw new Error("Admin oturumu bulunamadı. Lütfen çıkış yapıp tekrar giriş yapın.");
+    return accessToken;
   }
 
   async function api(path, options = {}) {
@@ -73,7 +93,6 @@
       console.error("CRM API network error", { path, message: error?.message || String(error) });
       throw new Error("Sunucuya ulaşılamadı. İnternet bağlantısını veya canlı API durumunu kontrol edin.");
     }
-
     const text = await response.text();
     let result = {};
     try {
@@ -82,7 +101,6 @@
       console.error("CRM API invalid JSON", { path, status: response.status, body: text.slice(0, 500), message: error?.message || String(error) });
       throw new Error("Sunucudan geçersiz yanıt geldi. İşlem sonucu okunamadı.");
     }
-
     if (!response.ok || result.ok === false || result.success === false) {
       const message = result.message || result.error || `İşlem başarısız. HTTP ${response.status}`;
       console.error("CRM API failed", { path, status: response.status, code: result.code || "", message, details: result.details || null });
@@ -175,10 +193,10 @@
     const now = new Date();
     const due = customers.filter((c) => c.next_follow_up_at && new Date(c.next_follow_up_at) <= now).length;
     const todayCount = customers.filter((c) => String(c.last_contact_at || "").slice(0, 10) === today()).length;
-    $("#crmMetricTotal") && ($("#crmMetricTotal").textContent = customers.length);
-    $("#crmMetricDue") && ($("#crmMetricDue").textContent = due);
-    $("#crmMetricToday") && ($("#crmMetricToday").textContent = todayCount);
-    $("#crmFollowCount") && ($("#crmFollowCount").textContent = due);
+    if ($("#crmMetricTotal")) $("#crmMetricTotal").textContent = customers.length;
+    if ($("#crmMetricDue")) $("#crmMetricDue").textContent = due;
+    if ($("#crmMetricToday")) $("#crmMetricToday").textContent = todayCount;
+    if ($("#crmFollowCount")) $("#crmFollowCount").textContent = due;
   }
 
   function filteredCustomers() {
@@ -194,7 +212,10 @@
     const list = $("#crmCustomerList");
     if (!list) return;
     const rows = filteredCustomers();
-    if (!rows.length) { list.innerHTML = '<div class="mail-crm-empty">CRM müşterisi bulunamadı.</div>'; return; }
+    if (!rows.length) {
+      list.innerHTML = '<div class="mail-crm-empty">CRM müşterisi bulunamadı.</div>';
+      return;
+    }
     list.innerHTML = rows.map((c) => {
       const due = c.next_follow_up_at && new Date(c.next_follow_up_at) <= new Date();
       return `<button class="mail-crm-card ${selectedCustomer?.id === c.id ? "is-active" : ""}" data-crm-customer="${c.id}"><strong>${escapeHtml(c.company_name || c.contact_name || c.email || "İsimsiz müşteri")}</strong><span>${escapeHtml(c.email || "-")} • ${escapeHtml(c.country || "-")}</span><span>${escapeHtml(c.status || "lead")} • Takip: ${fmtDate(c.next_follow_up_at)}</span>${due ? '<span class="mail-crm-badge due">Follow-up zamanı</span>' : ""}</button>`;
@@ -202,24 +223,22 @@
   }
 
   async function loadCustomers() {
+    const warning = $("#crmSchemaWarning");
     try {
       const result = await api("/api/crm-center?action=customers");
       customers = result.customers || [];
-      $("#crmSchemaWarning") && ($("#crmSchemaWarning").hidden = true);
+      if (warning) warning.hidden = true;
+      setStatus("");
       renderMetrics();
       renderCustomerList();
     } catch (error) {
       customers = [];
       renderMetrics();
       renderCustomerList();
-      if ($("#crmSchemaWarning")) $("#crmSchemaWarning").hidden = false;
+      if (warning) warning.hidden = !isSchemaErrorMessage(error.message);
       setStatus(error.message, true);
       console.error("CRM customers load failed", error);
     }
-  }
-
-  function escapeHtml(value) {
-    return String(value ?? "").replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char]));
   }
 
   async function openCustomer(id) {
@@ -227,18 +246,14 @@
     renderCustomerList();
     if (!selectedCustomer) return;
     const detail = $("#crmDetail");
+    if (!detail) return;
     detail.innerHTML = detailTemplate(selectedCustomer);
     bindDetailEvents();
     await loadInteractions(id);
   }
 
   function detailTemplate(c) {
-    return `<div class="mail-crm-detail-head"><div><p class="eyebrow">MÜŞTERİ KARTI</p><h2>${escapeHtml(c.company_name || c.contact_name || c.email)}</h2><div class="mail-crm-badges"><span class="mail-crm-badge">${escapeHtml(c.email || "-")}</span><span class="mail-crm-badge">${escapeHtml(c.phone || c.whatsapp || "-")}</span><span class="mail-crm-badge">Kaynak: ${escapeHtml(c.source || "-")}</span></div></div></div><form class="mail-crm-form" id="crmCustomerForm"><input type="hidden" name="id" value="${c.id || ""}" /><div class="mail-crm-two"><label>Firma<input name="company_name" value="${escapeHtml(c.company_name)}" /></label><label>Yetkili<input name="contact_name" value="${escapeHtml(c.contact_name)}" /></label><label>Ülke<input name="country" value="${escapeHtml(c.country)}" /></label><label>E-posta<input name="email" type="email" value="${escapeHtml(c.email)}" /></label><label>Telefon<input name="phone" value="${escapeHtml(c.phone)}" /></label><label>WhatsApp<input name="whatsapp" value="${escapeHtml(c.whatsapp)}" /></label><label>Durum<select name="status"><option value="lead">Lead</option><option value="follow_up_1">Follow-up 1</option><option value="follow_up_2">Follow-up 2</option><option value="final_follow_up">Final Follow-up</option><option value="quoted">Teklif gönderildi</option><option value="won">Kazanıldı</option><option value="lost">Kaybedildi</option></select></label><label>Follow-up tarihi<input name="next_follow_up_at" type="date" value="${isoDate(c.next_follow_up_at)}" /></label></div><label>İlgilendiği ürünler<input name="interested_products" value="${escapeHtml(c.interested_products)}" /></label><label>Notlar<textarea name="notes">${escapeHtml(c.notes)}</textarea></label><div class="mail-crm-actions"><button class="primary" type="submit">Müşteriyi kaydet</button><button type="button" data-follow-days="15">Follow-up 1 (+15)</button><button type="button" data-follow-days="30">Follow-up 2 (+30)</button><button type="button" data-follow-days="60">Final (+60)</button></div></form><div class="mail-crm-two"><form class="mail-crm-form" id="crmMailForm"><h3>Mail / teklif gönder</h3><label>Konu<input name="subject" value="Sidya Global teklif ve ürün bilgilendirmesi" /></label><label>Mesaj<textarea name="body">Merhaba,
-
-Talebiniz için teşekkür ederiz. İlgilendiğiniz ürünlerle ilgili teklif detaylarını paylaşmak isteriz.
-
-Saygılarımızla,
-Sidya Global Export</textarea></label><div class="mail-crm-actions"><button class="primary" type="submit">Mail gönder</button><button type="button" id="crmQuoteButton">Teklif şablonu</button></div></form><form class="mail-crm-form" id="crmNoteForm"><h3>Not ekle</h3><label>Not<textarea name="body"></textarea></label><button type="submit">Notu kaydet</button></form></div><div><h3>Mail / işlem geçmişi</h3><div class="mail-crm-interactions" id="crmInteractionList"><div class="mail-crm-empty">Yükleniyor...</div></div></div>`;
+    return `<div class="mail-crm-detail-head"><div><p class="eyebrow">MÜŞTERİ KARTI</p><h2>${escapeHtml(c.company_name || c.contact_name || c.email)}</h2><div class="mail-crm-badges"><span class="mail-crm-badge">${escapeHtml(c.email || "-")}</span><span class="mail-crm-badge">${escapeHtml(c.phone || c.whatsapp || "-")}</span><span class="mail-crm-badge">Kaynak: ${escapeHtml(c.source || "-")}</span></div></div></div><form class="mail-crm-form" id="crmCustomerForm"><input type="hidden" name="id" value="${c.id || ""}" /><div class="mail-crm-two"><label>Firma<input name="company_name" value="${escapeHtml(c.company_name)}" /></label><label>Yetkili<input name="contact_name" value="${escapeHtml(c.contact_name)}" /></label><label>Ülke<input name="country" value="${escapeHtml(c.country)}" /></label><label>E-posta<input name="email" type="email" value="${escapeHtml(c.email)}" /></label><label>Telefon<input name="phone" value="${escapeHtml(c.phone)}" /></label><label>WhatsApp<input name="whatsapp" value="${escapeHtml(c.whatsapp)}" /></label><label>Durum<select name="status"><option value="lead">Lead</option><option value="follow_up_1">Follow-up 1</option><option value="follow_up_2">Follow-up 2</option><option value="final_follow_up">Final Follow-up</option><option value="quoted">Teklif gönderildi</option><option value="won">Kazanıldı</option><option value="lost">Kaybedildi</option></select></label><label>Follow-up tarihi<input name="next_follow_up_at" type="date" value="${isoDate(c.next_follow_up_at)}" /></label></div><label>İlgilendiği ürünler<input name="interested_products" value="${escapeHtml(c.interested_products)}" /></label><label>Notlar<textarea name="notes">${escapeHtml(c.notes)}</textarea></label><div class="mail-crm-actions"><button class="primary" type="submit">Müşteriyi kaydet</button><button type="button" data-follow-days="15">Follow-up 1 (+15)</button><button type="button" data-follow-days="30">Follow-up 2 (+30)</button><button type="button" data-follow-days="60">Final (+60)</button></div></form><div class="mail-crm-two"><form class="mail-crm-form" id="crmMailForm"><h3>Mail / teklif gönder</h3><label>Konu<input name="subject" value="Sidya Global teklif ve ürün bilgilendirmesi" /></label><label>Mesaj<textarea name="body">Merhaba,\n\nTalebiniz için teşekkür ederiz. İlgilendiğiniz ürünlerle ilgili teklif detaylarını paylaşmak isteriz.\n\nSaygılarımızla,\nSidya Global Export</textarea></label><div class="mail-crm-actions"><button class="primary" type="submit">Mail gönder</button><button type="button" id="crmQuoteButton">Teklif şablonu</button></div></form><form class="mail-crm-form" id="crmNoteForm"><h3>Not ekle</h3><label>Not<textarea name="body"></textarea></label><button type="submit">Notu kaydet</button></form></div><div><h3>Mail / işlem geçmişi</h3><div class="mail-crm-interactions" id="crmInteractionList"><div class="mail-crm-empty">Yükleniyor...</div></div></div>`;
   }
 
   function bindDetailEvents() {
@@ -252,6 +267,7 @@ Sidya Global Export</textarea></label><div class="mail-crm-actions"><button clas
     $("#crmNoteForm")?.addEventListener("submit", addNote);
     $("#crmQuoteButton")?.addEventListener("click", () => {
       const mailForm = $("#crmMailForm");
+      if (!mailForm) return;
       mailForm.elements.subject.value = "Sidya Global proforma teklif";
       mailForm.elements.body.value = `Merhaba ${selectedCustomer.contact_name || ""},\n\nTalebinize istinaden ürün ve proforma teklif detaylarını hazırlıyoruz. Ürün, koli ve sevkiyat bilgilerini teyit ederseniz aynı gün dönüş yapacağız.\n\nSaygılarımızla,\nSidya Global Export`;
     });
@@ -324,7 +340,6 @@ Sidya Global Export</textarea></label><div class="mail-crm-actions"><button clas
       setButtonLoading(button, false);
       return;
     }
-
     try {
       setButtonLoading(button, true, "Mail gönderiliyor...");
       await api("/api/backend-config?mailCrm=send-mail", { method: "POST", body: JSON.stringify({ to: customer.email, subject: payload.subject, body: payload.body, customerId: customer.id, type: payload.subject.toLowerCase().includes("teklif") ? "quote" : "email" }) });
@@ -359,6 +374,8 @@ Sidya Global Export</textarea></label><div class="mail-crm-actions"><button clas
   }
 
   function bindEvents() {
+    if (bound) return;
+    bound = true;
     $("#mailSettingsForm")?.addEventListener("submit", saveMailSettings);
     $("#sendTestMailButton")?.addEventListener("click", sendTestMail);
     $("#crmRefreshButton")?.addEventListener("click", loadCustomers);
