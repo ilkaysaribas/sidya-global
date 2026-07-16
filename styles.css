@@ -5139,3 +5139,64 @@ html[dir="rtl"] .proforma-rate-snapshot { direction: rtl; text-align: right; }
   .proforma-rate-list { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; }
   .proforma-price-comparison { grid-template-columns: 1fr; }
 }
+
+/* Keep the product picker spacious and place the order/quote summary below it. */
+.proforma-order-layout {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.proforma-order-summary {
+  position: static;
+  width: 100%;
+}
+
+.proforma-lines {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+
+.proforma-line {
+  display: grid;
+  grid-template-columns: 30px minmax(180px, .9fr) minmax(0, 3fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px;
+}
+
+.proforma-price-comparison {
+  grid-column: auto;
+  grid-template-columns: repeat(6, minmax(100px, 1fr));
+}
+
+.proforma-actions {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 1100px) {
+  .proforma-line {
+    grid-template-columns: 30px minmax(0, 1fr);
+  }
+
+  .proforma-price-comparison,
+  .proforma-line-actions {
+    grid-column: 2;
+  }
+
+  .proforma-price-comparison {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .proforma-line {
+    grid-template-columns: 30px minmax(0, 1fr);
+  }
+
+  .proforma-price-comparison {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .proforma-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
