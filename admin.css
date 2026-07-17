@@ -202,7 +202,7 @@ dialog::backdrop { background: rgba(4,15,26,.65); backdrop-filter: blur(3px); }
   .invoice-detail-meta .wide { grid-column: auto; }
 }
 
-/* Stok listesi: 100 satırlık sayfalama */
+/* Stok listesi: 100 satÄ±rlÄ±k sayfalama */
 .product-pagination {
  display: flex;
  align-items: center;
@@ -324,3 +324,44 @@ button.danger:hover { background: #fee4e2; }
 .order-price-difference.is-discount { color:#087462; font-weight:800; }
 .order-price-difference.is-increase { color:#b42318; font-weight:800; }
 @media (max-width: 900px) { .invoice-lines-table { overflow-x:auto; } }
+
+.exchange-rate-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: 12px 0 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #f8fbfd;
+  direction: ltr;
+}
+.exchange-rate-strip b { color: var(--navy); }
+.exchange-rate-strip span,
+.exchange-rate-strip small {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 6px 10px;
+  border: 1px solid #d8e1ec;
+  border-radius: 8px;
+  background: #fff;
+  white-space: nowrap;
+}
+.exchange-rate-strip small { color: var(--muted); }
+.exchange-rate-strip button {
+  min-height: 32px;
+  border: 1px solid #c8d6e5;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--navy);
+  font-weight: 700;
+  cursor: pointer;
+}
+.exchange-rate-strip .exchange-rate-warning {
+  color: #b42318;
+  border-color: #fecaca;
+  background: #fff1f2;
+}
