@@ -5,6 +5,8 @@
   var CART_KEY = "sidya:guest-proforma:v2";
   var SUPPORTED_LOCALES = ["tr", "en", "az", "ka", "ru", "ar"];
   var RTL = { ar: true, fa: true, ur: true, he: true };
+  var dockDismissed = false;
+  var dockContextWasActive = false;
   var PRODUCT_LABELS = {
     tr: {
       navFind: "Ürün Bul", navLogistics: "Lojistik", navProforma: "Proforma Oluştur",
@@ -104,6 +106,7 @@
       ".related-companies>strong{display:none!important}.related-companies{display:grid;gap:8px;position:relative;overflow:visible!important}.related-companies-toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:36px;padding:8px 10px;border:1px solid rgba(23,23,23,.12);border-radius:8px;background:#fff;color:#171717;font-weight:900;cursor:pointer}.related-companies-toggle::after{content:'⌄';transition:transform .16s ease}.related-companies.is-open .related-companies-toggle::after{transform:rotate(180deg)}.related-companies-panel{display:none!important;position:static!important;max-height:260px;overflow:auto}.related-companies.is-open .related-companies-panel{display:grid!important;gap:6px}.product-card{overflow:visible}.sidya-rfq-card-actions{position:relative;z-index:1}",
       ".sidya-live-proforma-dock{position:fixed;top:calc(var(--sidya-header-bottom,96px) + 14px);right:14px;z-index:70;width:min(360px,calc(100vw - 28px));max-height:calc(100vh - var(--sidya-header-bottom,96px) - 28px);display:grid;grid-template-rows:auto minmax(0,1fr) auto;border:1px solid rgba(23,23,23,.14);border-radius:8px;background:#fff;box-shadow:0 18px 42px rgba(0,0,0,.18);overflow:hidden}.sidya-live-proforma-dock.is-empty{display:none}.sidya-dock-header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;background:#242424;color:#fff}.sidya-dock-header strong{font-size:.95rem}.sidya-dock-toggle{border:0;background:rgba(255,255,255,.14);color:#fff;border-radius:999px;min-height:30px;padding:0 10px;cursor:pointer}.sidya-dock-lines{display:grid;gap:8px;padding:10px;overflow:auto}.sidya-dock-line{display:grid;gap:7px;padding:10px;border:1px solid rgba(23,23,23,.1);border-radius:8px;background:#f8f8f8}.sidya-dock-line strong{font-size:.86rem}.sidya-dock-controls{display:grid;grid-template-columns:70px 1fr 92px 32px;gap:6px;align-items:center}.sidya-dock-controls input,.sidya-dock-controls select{min-width:0;height:34px;border:1px solid rgba(23,23,23,.18);border-radius:7px;padding:0 8px}.sidya-dock-remove{height:34px;border:0;border-radius:7px;background:#3d3d3d;color:#fff;cursor:pointer}.sidya-dock-totals{display:grid;gap:6px;padding:12px 14px;border-top:1px solid rgba(23,23,23,.1);background:#fff}.sidya-dock-totals span{display:flex;justify-content:space-between;gap:8px;font-size:.82rem}.sidya-offer-inline{display:grid;grid-template-columns:minmax(0,1fr)110px auto;gap:8px;margin-top:8px;padding:8px;border:1px solid rgba(196,160,90,.42);border-radius:8px;background:#fffaf0}.sidya-offer-inline input,.sidya-offer-inline select{min-height:34px;border:1px solid rgba(23,23,23,.18);border-radius:7px;padding:0 8px}.sidya-offer-inline button{border:0;border-radius:7px;background:#242424;color:#fff;font-weight:850;padding:0 10px;cursor:pointer}.sidya-field-error{color:#b42318;font-size:.78rem}.exchange-rate-list{min-width:0;max-width:100%;overflow-x:auto;scrollbar-width:thin}.exchange-rate-list span{white-space:nowrap;flex:0 0 auto}",
       "html[dir='rtl'] .sidya-live-proforma-dock{right:auto;left:14px;direction:rtl;text-align:start}@media(max-width:920px){.sidya-live-proforma-dock{top:auto;left:10px!important;right:10px!important;bottom:10px;width:auto;max-height:58vh}.sidya-live-proforma-dock.is-collapsed{grid-template-rows:auto}.sidya-live-proforma-dock.is-collapsed .sidya-dock-lines,.sidya-live-proforma-dock.is-collapsed .sidya-dock-totals{display:none}.site-header{flex-wrap:wrap}.nav-links{overflow-x:auto;max-width:100%;justify-content:flex-start}.header-actions{max-width:100%;flex-wrap:wrap}}",
+      ".sidya-live-proforma-dock:not(.is-context-visible){display:none}.sidya-dock-header-actions{display:flex;align-items:center;gap:6px}.sidya-dock-close{border:0;background:rgba(255,255,255,.14);color:#fff;border-radius:999px;min-width:30px;min-height:30px;padding:0 9px;cursor:pointer}",
       "@media(max-width:560px){.sidya-dock-controls{grid-template-columns:64px 1fr 76px 32px}.sidya-offer-inline{grid-template-columns:1fr 90px}.sidya-offer-inline button{grid-column:1/-1;min-height:34px}.products-menu{grid-template-columns:1fr!important}}"
     ].join("\n");
     document.head.appendChild(style);
@@ -176,6 +179,22 @@
     document.querySelectorAll(".sidya-rfq-offer").forEach(function (a) { a.href = "#proforma"; a.textContent = l.quote; });
     document.querySelectorAll(".sidya-rfq-whatsapp").forEach(function (a) { a.textContent = l.whatsapp; });
   }
+  function isDockContextActive() {
+    return ["proforma", "b2bRegistrationModal", "customerDashboardModal", "catalogProformaModal"].some(function (id) {
+      var node = document.getElementById(id);
+      return node && !node.hidden;
+    });
+  }
+
+  function syncDockVisibility() {
+    var dock = document.getElementById("sidyaLiveProformaDock");
+    if (!dock) return;
+    var active = isDockContextActive();
+    if (active && !dockContextWasActive) dockDismissed = false;
+    dockContextWasActive = active;
+    dock.classList.toggle("is-context-visible", active && !dockDismissed);
+  }
+
 
   function ensureDock() {
     var dock = document.getElementById("sidyaLiveProformaDock");
@@ -185,6 +204,20 @@
     dock.className = "sidya-live-proforma-dock is-empty";
     dock.innerHTML = '<div class="sidya-dock-header"><strong></strong><button class="sidya-dock-toggle" type="button">−</button></div><div class="sidya-dock-lines"></div><div class="sidya-dock-totals"></div>';
     document.body.appendChild(dock);
+    var headerActions = document.createElement("div");
+    headerActions.className = "sidya-dock-header-actions";
+    headerActions.appendChild(dock.querySelector(".sidya-dock-toggle"));
+    var closeButton = document.createElement("button");
+    closeButton.type = "button";
+    closeButton.className = "sidya-dock-close";
+    closeButton.setAttribute("aria-label", "Close summary");
+    closeButton.textContent = "\u00d7";
+    headerActions.appendChild(closeButton);
+    dock.querySelector(".sidya-dock-header").appendChild(headerActions);
+    closeButton.addEventListener("click", function () {
+      dockDismissed = true;
+      syncDockVisibility();
+    });
     dock.querySelector(".sidya-dock-toggle").addEventListener("click", function () { dock.classList.toggle("is-collapsed"); });
     dock.addEventListener("input", function (event) {
       var line = event.target.closest("[data-cart-id]");
@@ -216,6 +249,7 @@
       var total = unit * Number(item.qty || 0);
       return '<article class="sidya-dock-line" data-cart-id="' + item.id + '"><strong>' + item.title + '</strong><small>' + item.brand + '</small><div class="sidya-dock-controls"><input data-cart-qty type="number" min="1" step="1" value="' + Number(item.qty || 1) + '" aria-label="' + l.qty + '"><input data-cart-offer type="number" min="0" step="0.0001" value="' + Number(item.offerPrice || 0) + '" placeholder="' + l.target + '" aria-label="' + l.target + '"><select data-cart-currency aria-label="' + l.currency + '">' + ["USD", "EUR", "TRY", "GEL", "RUB", "AZN", "GBP", "AED", "SAR", "QAR", "KWD"].map(function (c) { return '<option value="' + c + '"' + ((item.currency || "USD") === c ? " selected" : "") + '>' + c + '</option>'; }).join("") + '</select><button type="button" class="sidya-dock-remove" aria-label="Remove">×</button></div><small>' + money(total, item.currency || "USD") + '</small></article>';
     }).join("") : '<p class="proforma-empty">' + l.empty + '</p>';
+    syncDockVisibility();
     var totals = new Map();
     var totalCartons = 0;
     items.forEach(function (item) { var q = Number(item.qty || 0); totalCartons += q; var unit = Number(item.offerPrice || item.unitPrice || 0); if (unit > 0) totals.set(item.currency || "USD", (totals.get(item.currency || "USD") || 0) + unit * q); });
@@ -315,6 +349,12 @@
     renderDock();
     addOfferButtonsToRows();
     bindClicks();
+    syncDockVisibility();
+    new MutationObserver(syncDockVisibility).observe(document.body, {
+      attributes: true,
+      attributeFilter: ["hidden"],
+      subtree: true
+    });
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true }); else boot();

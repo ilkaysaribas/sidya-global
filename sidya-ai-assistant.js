@@ -4,6 +4,7 @@
   const API = "/api/ai-assistant";
   const STORAGE_KEY = "sidya_ai_assistant_v2";
   const SESSION_NOTICE = "sidya_ai_notice_closed";
+  const POSITION_KEY = "sidya_ai_position_v1";
   const SUPPORTED = ["tr","en","ar","ru","ka","az"];
   const TYPES = [
     ["product","Ürün arıyorum"],["quote","Fiyat teklifi almak istiyorum"],["sourcing","Türkiye'den tedarik yapmak istiyorum"],
@@ -74,7 +75,7 @@
   if (!state.session_id) state = fresh();
   state.language = language();
   let selectedFiles = [];
-  let panel, log, input, send, quick, fileName;
+  let panel, log, input, send, quick, fileName, assistantLayout = () => {};
   const t = (key) => (I18N[state.language] || I18N.en)[key] || I18N.en[key] || key;
   const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   const esc = (value) => String(value == null ? "" : value).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -268,17 +269,108 @@
   function openPanel() {
     panel.hidden = false; document.querySelector(".sidya-ai-teaser")?.remove();
     document.querySelector(".sidya-ai-launcher").setAttribute("aria-expanded","true");
+    requestAnimationFrame(assistantLayout);
     setTimeout(() => input.focus(),50);
     api("event",{session_id:state.session_id,conversation_id:state.conversation_id,event_name:"opened",language:state.language,page_url:location.href}).catch(()=>{});
   }
   function closePanel() { panel.hidden = true; document.querySelector(".sidya-ai-launcher").setAttribute("aria-expanded","false"); }
+  function setupAssistantDrag(root) {
+    const launcher = root.querySelector(".sidya-ai-launcher");
+    const head = root.querySelector(".sidya-ai-head");
+    let active = null;
+    let suppressClick = false;
+    const margin = 8;
+    const clamp = (value,min,max) => Math.min(Math.max(value,min),Math.max(min,max));
+    const popupPosition = (node) => {
+      if (!node || node.hidden) return;
+      if (node === panel && matchMedia("(max-width:560px)").matches) {
+        ["left","top","right","bottom"].forEach((name) => node.style.removeProperty(name));
+        return;
+      }
+      const anchor = launcher.getBoundingClientRect();
+      const width = node.offsetWidth;
+      const height = node.offsetHeight;
+      const left = clamp(anchor.right - width,margin,innerWidth - width - margin);
+      let top = anchor.top - height - 12;
+      if (top < margin) top = anchor.bottom + 12;
+      top = clamp(top,margin,innerHeight - height - margin);
+      node.style.left = (left - anchor.left) + "px";
+      node.style.top = (top - anchor.top) + "px";
+      node.style.right = "auto";
+      node.style.bottom = "auto";
+    };
+    const layout = () => {
+      if (root.style.left) {
+        const rect = launcher.getBoundingClientRect();
+        root.style.left = clamp(rect.left,margin,innerWidth - rect.width - margin) + "px";
+        root.style.top = clamp(rect.top,margin,innerHeight - rect.height - margin) + "px";
+      }
+      popupPosition(panel);
+      popupPosition(root.querySelector(".sidya-ai-teaser"));
+    };
+    const place = (x,y,persist) => {
+      const rect = launcher.getBoundingClientRect();
+      const left = clamp(x,margin,innerWidth - rect.width - margin);
+      const top = clamp(y,margin,innerHeight - rect.height - margin);
+      root.style.left = left + "px";
+      root.style.top = top + "px";
+      root.style.right = "auto";
+      root.style.bottom = "auto";
+      if (persist) {
+        try { localStorage.setItem(POSITION_KEY,JSON.stringify({x:left,y:top})); } catch (_) {}
+      }
+      layout();
+    };
+    try {
+      const saved = JSON.parse(localStorage.getItem(POSITION_KEY) || "null");
+      if (Number.isFinite(saved?.x) && Number.isFinite(saved?.y)) requestAnimationFrame(() => place(saved.x,saved.y,false));
+    } catch (_) {}
+    const begin = (event) => {
+      if (!event.isPrimary || (event.pointerType === "mouse" && event.button !== 0)) return;
+      if (event.currentTarget === head && event.target.closest("button,a,input,textarea,select")) return;
+      const rect = launcher.getBoundingClientRect();
+      active = {id:event.pointerId,startX:event.clientX,startY:event.clientY,left:rect.left,top:rect.top,moved:false,fromLauncher:event.currentTarget === launcher};
+      event.currentTarget.setPointerCapture?.(event.pointerId);
+    };
+    const move = (event) => {
+      if (!active || active.id !== event.pointerId) return;
+      const dx = event.clientX - active.startX;
+      const dy = event.clientY - active.startY;
+      if (!active.moved && Math.hypot(dx,dy) < 5) return;
+      active.moved = true;
+      event.preventDefault();
+      root.classList.add("is-dragging");
+      root.querySelector(".sidya-ai-teaser")?.remove();
+      place(active.left + dx,active.top + dy,false);
+    };
+    const finish = (event) => {
+      if (!active || active.id !== event.pointerId) return;
+      if (active.moved) {
+        const rect = launcher.getBoundingClientRect();
+        place(rect.left,rect.top,true);
+        suppressClick = active.fromLauncher;
+      }
+      active = null;
+      root.classList.remove("is-dragging");
+    };
+    [launcher,head].forEach((handle) => {
+      handle.addEventListener("pointerdown",begin);
+      handle.addEventListener("pointermove",move);
+      handle.addEventListener("pointerup",finish);
+      handle.addEventListener("pointercancel",finish);
+    });
+    addEventListener("resize",layout,{passive:true});
+    return {layout,consumeClick:() => { if (!suppressClick) return false; suppressClick=false; return true; }};
+  }
   function build() {
     const root = document.createElement("div");
     root.className = "sidya-ai-root"; root.dir = state.language === "ar" ? "rtl" : "ltr";
     root.innerHTML = "<button class='sidya-ai-launcher' type='button' aria-label='" + esc(t("title")) + "' aria-expanded='false'><span class='sidya-ai-launcher-icon'>AI</span><span>" + esc(t("launcher")) + "</span></button><section class='sidya-ai-panel' role='dialog' aria-modal='false' aria-label='" + esc(t("title")) + "' hidden><header class='sidya-ai-head'><div class='sidya-ai-head-copy'><span class='sidya-ai-avatar'>SG</span><div><strong>" + esc(t("title")) + "</strong><small>" + esc(t("online")) + "</small></div></div><button class='sidya-ai-close' type='button' aria-label='" + esc(t("close")) + "'>×</button></header><div class='sidya-ai-log' aria-live='polite'></div><footer class='sidya-ai-composer'><div class='sidya-ai-quick'></div><form class='sidya-ai-form'><textarea class='sidya-ai-input' rows='1' maxlength='2000' placeholder='" + esc(t("placeholder")) + "' aria-label='" + esc(t("placeholder")) + "'></textarea><button class='sidya-ai-send' type='submit' aria-label='" + esc(t("send")) + "'>➤</button></form><div class='sidya-ai-tools'><label class='sidya-ai-file'>" + esc(t("attach")) + "<input type='file' multiple accept='.pdf,.xls,.xlsx,.doc,.docx,.jpg,.jpeg,.png,.webp'></label><span class='sidya-ai-file-name'></span></div></footer></section>";
     document.body.appendChild(root);
     panel=root.querySelector(".sidya-ai-panel");log=root.querySelector(".sidya-ai-log");input=root.querySelector(".sidya-ai-input");send=root.querySelector(".sidya-ai-send");quick=root.querySelector(".sidya-ai-quick");fileName=root.querySelector(".sidya-ai-file-name");
-    root.querySelector(".sidya-ai-launcher").addEventListener("click",() => panel.hidden ? openPanel() : closePanel());
+    const drag = setupAssistantDrag(root);
+    assistantLayout = drag.layout;
+    root.querySelector(".sidya-ai-launcher").addEventListener("click",() => { if (drag.consumeClick()) return; panel.hidden ? openPanel() : closePanel(); });
     root.querySelector(".sidya-ai-close").addEventListener("click",closePanel);
     root.querySelector("form").addEventListener("submit",(event) => {
       event.preventDefault(); const value=input.value.trim(); if(!value)return; input.value="";
@@ -294,6 +386,7 @@
       if (!panel.hidden || sessionStorage.getItem(SESSION_NOTICE)) return;
       const teaser=document.createElement("div");teaser.className="sidya-ai-teaser";teaser.innerHTML="<div>"+esc(t("teaser"))+"</div><div class='sidya-ai-teaser-actions'><button class='primary' type='button'>"+esc(t("start"))+"</button><button type='button'>"+esc(t("close"))+"</button></div>";
       root.appendChild(teaser);
+      assistantLayout();
       teaser.querySelector(".primary").addEventListener("click",openPanel);
       teaser.querySelectorAll("button")[1].addEventListener("click",()=>{sessionStorage.setItem(SESSION_NOTICE,"1");teaser.remove();});
     },6500);
