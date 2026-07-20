@@ -11,12 +11,12 @@
     <div class="login-shell" id="loginShell">
       <form class="login-card" id="loginForm">
         <div class="brand-mark">TO</div>
-        <p class="eyebrow">Ä°HRACAT YÃ–NETÄ°MÄ°</p>
+        <p class="eyebrow">İHRACAT YÖNETİMİ</p>
         <h1>Ticari otomasyon</h1>
-        <p>Tek yÃ¶netici hesabÄ±yla cari, stok, sipariÅŸ ve fatura yÃ¶netimi</p>
+        <p>Tek yönetici hesabıyla cari, stok, sipariş ve fatura yönetimi</p>
         <label>E-posta<input id="loginEmail" type="email" autocomplete="email" required /></label>
-        <label>Åifre<input id="loginPassword" type="password" autocomplete="current-password" required /></label>
-        <button type="submit">GiriÅŸ yap</button>
+        <label>Şifre<input id="loginPassword" type="password" autocomplete="current-password" required /></label>
+        <button type="submit">Giriş yap</button>
         <p class="status" id="loginStatus"></p>
       </form>
     </div>
@@ -25,168 +25,168 @@
       <aside class="sidebar">
         <div class="sidebar-brand"><span>TO</span><strong>Ticari<br />Otomasyon</strong></div>
         <nav id="mainNav">
-          <button class="active" data-view="dashboard">Genel BakÄ±ÅŸ</button>
-          <button data-view="orders">Gelen SipariÅŸler <span class="nav-count" id="newOrderCount">0</span></button>
+          <button class="active" data-view="dashboard">Genel Bakış</button>
+          <button data-view="orders">Gelen Siparişler <span class="nav-count" id="newOrderCount">0</span></button>
           <button data-view="customers">Cariler</button>
           <button data-view="products">Stok Listesi</button>
           <button data-view="invoices">Faturalar</button>
         </nav>
-        <button class="signout" id="signOutButton">Ã‡Ä±kÄ±ÅŸ yap</button>
+        <button class="signout" id="signOutButton">Çıkış yap</button>
       </aside>
 
       <main class="main" dir="ltr">
         <header class="topbar">
-          <div><p class="eyebrow">YÃ–NETÄ°M PANELÄ°</p><h1 id="pageTitle">Genel BakÄ±ÅŸ</h1></div>
-          <div class="topbar-user"><span id="currentUser"></span><button id="receiveSiteDataButton">Bilgi Al</button><button class="primary" id="sendSiteDataButton">Bilgi GÃ¶nder</button></div>
+          <div><p class="eyebrow">YÖNETİM PANELİ</p><h1 id="pageTitle">Genel Bakış</h1></div>
+          <div class="topbar-user"><span id="currentUser"></span><button id="receiveSiteDataButton">Bilgi Al</button><button class="primary" id="sendSiteDataButton">Bilgi Gönder</button></div>
         </header>
         <p class="global-status" id="globalStatus"></p>
         <div class="schema-warning" id="schemaWarning" hidden>
-          <strong>VeritabanÄ± gÃ¼ncellemesi gerekiyor</strong>
-          <span id="schemaWarningText">Supabase SQL Editor'da gÃ¼ncel <code>supabase/schema.sql</code> dosyasÄ±nÄ± Ã§alÄ±ÅŸtÄ±rÄ±n. ArdÄ±ndan bu sayfada Yenile'ye basÄ±n.</span>
+          <strong>Veritabanı güncellemesi gerekiyor</strong>
+          <span id="schemaWarningText">Supabase SQL Editor'da güncel <code>supabase/schema.sql</code> dosyasını çalıştırın. Ardından bu sayfada Yenile'ye basın.</span>
         </div>
 
         <section class="view active" data-view-panel="dashboard">
           <div class="metric-grid">
-            <article><span>AlÄ±ÅŸ stok deÄŸeri</span><strong id="metricPurchaseValue">$0</strong><small>USD maliyet deÄŸeri</small></article>
-            <article><span>SatÄ±ÅŸ stok deÄŸeri</span><strong id="metricSaleValue">$0</strong><small>USD satÄ±ÅŸ deÄŸeri</small></article>
-            <article><span>Bu ay satÄ±ÅŸ</span><strong id="metricMonthlySales">$0</strong><small>USD faturalar</small></article>
-            <article><span>Yeni site sipariÅŸi</span><strong id="metricOrders">0</strong><small>Ä°ÅŸlem bekleyen</small></article>
+            <article><span>Alış stok değeri</span><strong id="metricPurchaseValue">$0</strong><small>USD maliyet değeri</small></article>
+            <article><span>Satış stok değeri</span><strong id="metricSaleValue">$0</strong><small>USD satış değeri</small></article>
+            <article><span>Bu ay satış</span><strong id="metricMonthlySales">$0</strong><small>USD faturalar</small></article>
+            <article><span>Yeni site siparişi</span><strong id="metricOrders">0</strong><small>İşlem bekleyen</small></article>
           </div>
           <div class="dashboard-grid">
             <article class="panel"><div class="panel-heading"><div><p class="eyebrow">UYARI</p><h2>Kritik stoklar</h2></div></div><div id="lowStockList" class="compact-list"></div></article>
-            <article class="panel"><div class="panel-heading"><div><p class="eyebrow">SON Ä°ÅLEMLER</p><h2>Faturalar</h2></div></div><div id="recentInvoices" class="compact-list"></div></article>
+            <article class="panel"><div class="panel-heading"><div><p class="eyebrow">SON İŞLEMLER</p><h2>Faturalar</h2></div></div><div id="recentInvoices" class="compact-list"></div></article>
           </div>
         </section>
 
         <section class="view" data-view-panel="orders">
           <div class="panel">
-            <div class="panel-heading"><div><p class="eyebrow">WEB SÄ°TESÄ°</p><h2>Gelen sipariÅŸler</h2></div><div class="button-row"><button id="newOrderButton">SipariÅŸ OluÅŸtur</button><button class="primary" id="refreshOrdersButton">Yenile</button></div></div>
-            <p class="helper">Sitede proforma indirildiÄŸinde veya paylaÅŸÄ±ldÄ±ÄŸÄ±nda sipariÅŸ buraya dÃ¼ÅŸer. SipariÅŸi seÃ§ip satÄ±ÅŸ faturasÄ± taslaÄŸÄ±na aktarabilirsiniz.</p>
-            <div class="table-wrap"><table><thead><tr><th>SipariÅŸ no</th><th>Tarih</th><th>AlÄ±cÄ±</th><th>ÃœrÃ¼n</th><th>Koli</th><th>Durum</th><th></th></tr></thead><tbody id="orderRows"></tbody></table></div>
+            <div class="panel-heading"><div><p class="eyebrow">WEB SİTESİ</p><h2>Gelen siparişler</h2></div><div class="button-row"><button id="newOrderButton">Sipariş Oluştur</button><button class="primary" id="refreshOrdersButton">Yenile</button></div></div>
+            <p class="helper">Sitede proforma indirildiğinde veya paylaşıldığında sipariş buraya düşer. Siparişi seçip satış faturası taslağına aktarabilirsiniz.</p>
+            <div class="table-wrap"><table><thead><tr><th>Sipariş no</th><th>Tarih</th><th>Alıcı</th><th>Ürün</th><th>Koli</th><th>Durum</th><th></th></tr></thead><tbody id="orderRows"></tbody></table></div>
           </div>
         </section>
 
         <section class="view" data-view-panel="customers">
           <div class="panel">
-            <div class="panel-heading"><div><p class="eyebrow">CARÄ° YÃ–NETÄ°MÄ°</p><h2>AlÄ±cÄ± ve satÄ±cÄ± cariler</h2></div><button class="primary" data-open-dialog="customerDialog">Yeni cari</button></div>
-            <div class="table-tools"><input class="search" id="customerSearch" type="search" placeholder="Firma, kod, e-posta veya vergi no ara" /><div class="button-row"><span id="selectedCustomerCount" class="selection-count">0 cari seÃ§ildi</span><button id="activateCustomersButton" type="button">Aktif yap</button><button id="deactivateCustomersButton" type="button">Pasif yap</button><button id="deleteCustomersButton" class="danger" type="button">Sil</button></div></div>
-            <div class="table-wrap"><table><thead><tr><th><input id="selectAllCustomers" type="checkbox" aria-label="TÃ¼m carileri seÃ§" /></th><th>Kod</th><th>Firma</th><th>Rol</th><th>Yetkili</th><th>Ãœlke</th><th>E-posta</th><th>Net bakiye</th><th></th></tr></thead><tbody id="customerRows"></tbody></table></div>
+            <div class="panel-heading"><div><p class="eyebrow">CARİ YÖNETİMİ</p><h2>Alıcı ve satıcı cariler</h2></div><button class="primary" data-open-dialog="customerDialog">Yeni cari</button></div>
+            <div class="table-tools"><input class="search" id="customerSearch" type="search" placeholder="Firma, kod, e-posta veya vergi no ara" /><div class="button-row"><span id="selectedCustomerCount" class="selection-count">0 cari seçildi</span><button id="activateCustomersButton" type="button">Aktif yap</button><button id="deactivateCustomersButton" type="button">Pasif yap</button><button id="deleteCustomersButton" class="danger" type="button">Sil</button></div></div>
+            <div class="table-wrap"><table><thead><tr><th><input id="selectAllCustomers" type="checkbox" aria-label="Tüm carileri seç" /></th><th>Kod</th><th>Firma</th><th>Rol</th><th>Yetkili</th><th>Ülke</th><th>E-posta</th><th>Net bakiye</th><th></th></tr></thead><tbody id="customerRows"></tbody></table></div>
           </div>
         </section>
 
         <section class="view" data-view-panel="products" data-stock-cards-version="2">
           <div class="panel">
-            <div class="panel-heading"><div><p class="eyebrow">STOK YÃ–NETÄ°MÄ°</p><h2>ÃœrÃ¼n ve depo stoklarÄ±</h2></div><button class="primary" data-open-dialog="productDialog">Yeni stok kartÄ±</button></div>
+            <div class="panel-heading"><div><p class="eyebrow">STOK YÖNETİMİ</p><h2>Ürün ve depo stokları</h2></div><button class="primary" data-open-dialog="productDialog">Yeni stok kartı</button></div>
             <div class="table-tools">
-              <input class="search" id="productSearch" type="search" placeholder="Marka, barkod, Ã¼rÃ¼n, gramaj veya SKU ara" />
-              <select id="productSort"><option value="brand-asc">Marka A-Z</option><option value="brand-desc">Marka Z-A</option><option value="name-asc">ÃœrÃ¼n adÄ± A-Z</option><option value="name-desc">ÃœrÃ¼n adÄ± Z-A</option><option value="sku-asc">Barkod / SKU A-Z</option><option value="sku-desc">Barkod / SKU Z-A</option><option value="grammage-asc">Gramaj A-Z</option><option value="grammage-desc">Gramaj Z-A</option><option value="purchase-asc">AlÄ±ÅŸ fiyatÄ± artan</option><option value="purchase-desc">AlÄ±ÅŸ fiyatÄ± azalan</option><option value="sale-asc">SatÄ±ÅŸ fiyatÄ± artan</option><option value="sale-desc">SatÄ±ÅŸ fiyatÄ± azalan</option><option value="stock-asc">Stok artan</option><option value="stock-desc">Stok azalan</option></select><button id="downloadPriceTemplateButton" type="button">Fiyat formatÄ± indir</button><label class="file-button">Excel fiyat yÃ¼kle<input id="priceImportFile" type="file" accept=".xlsx,.xls,.csv" /></label><span id="selectedProductCount" class="selection-count">0 Ã¼rÃ¼n seÃ§ildi</span><button id="deleteSelectedProductsButton" class="danger" type="button">SeÃ§ilenleri sil</button>
+              <input class="search" id="productSearch" type="search" placeholder="Marka, barkod, ürün, gramaj veya SKU ara" />
+              <select id="productSort"><option value="brand-asc">Marka A-Z</option><option value="brand-desc">Marka Z-A</option><option value="name-asc">Ürün adı A-Z</option><option value="name-desc">Ürün adı Z-A</option><option value="sku-asc">Barkod / SKU A-Z</option><option value="sku-desc">Barkod / SKU Z-A</option><option value="grammage-asc">Gramaj A-Z</option><option value="grammage-desc">Gramaj Z-A</option><option value="purchase-asc">Alış fiyatı artan</option><option value="purchase-desc">Alış fiyatı azalan</option><option value="sale-asc">Satış fiyatı artan</option><option value="sale-desc">Satış fiyatı azalan</option><option value="stock-asc">Stok artan</option><option value="stock-desc">Stok azalan</option></select><button id="downloadPriceTemplateButton" type="button">Fiyat formatı indir</button><label class="file-button">Excel fiyat yükle<input id="priceImportFile" type="file" accept=".xlsx,.xls,.csv" /></label><span id="selectedProductCount" class="selection-count">0 ürün seçildi</span><button id="deleteSelectedProductsButton" class="danger" type="button">Seçilenleri sil</button>
             </div>
-            <p class="helper">Hareketler, stok giriÅŸ/Ã§Ä±kÄ±ÅŸÄ±, dÃ¼zenleme ve silme komutlarÄ± iÃ§in Ã¼rÃ¼n satÄ±rÄ±na saÄŸ tÄ±klayÄ±n.</p>
-            <div class="table-wrap selectable-table product-stock-wrap"><table><thead><tr><th>SÄ±ra No</th><th><input id="selectAllProducts" type="checkbox" aria-label="TÃ¼mÃ¼nÃ¼ seÃ§" /></th><th data-product-sort="brand">Marka</th><th data-product-sort="sku">Barkod</th><th data-product-sort="name">ÃœrÃ¼n Ä°smi</th><th data-product-sort="grammage">Gramaj</th><th>Takip birimi</th><th>Koli Ä°Ã§i</th><th data-product-sort="stock">Stok</th><th>Stok Koli</th><th>Min.</th><th data-product-sort="purchase">AlÄ±ÅŸ / birim</th><th>Ort. alÄ±ÅŸ</th><th data-product-sort="sale">SatÄ±ÅŸ / birim</th><th>Ort. satÄ±ÅŸ</th><th>KÃ¢r endeksi</th><th>KDV</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div><div class="product-pagination" id="productPagination" aria-label="Stok listesi sayfalarÄ±"></div>
+            <p class="helper">Hareketler, stok giriş/çıkışı, düzenleme ve silme komutları için ürün satırına sağ tıklayın.</p>
+            <div class="table-wrap selectable-table product-stock-wrap"><table><thead><tr><th>Sıra No</th><th><input id="selectAllProducts" type="checkbox" aria-label="Tümünü seç" /></th><th data-product-sort="brand">Marka</th><th data-product-sort="sku">Barkod</th><th data-product-sort="name">Ürün İsmi</th><th data-product-sort="grammage">Gramaj</th><th>Takip birimi</th><th>Koli İçi</th><th data-product-sort="stock">Stok</th><th>Stok Koli</th><th>Min.</th><th data-product-sort="purchase">Alış / birim</th><th>Ort. alış</th><th data-product-sort="sale">Satış / birim</th><th>Ort. satış</th><th>Kâr endeksi</th><th>KDV</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div><div class="product-pagination" id="productPagination" aria-label="Stok listesi sayfaları"></div>
           </div>
         </section>
 
         <section class="view" data-view-panel="invoices">
           <div class="panel">
             <div class="panel-heading">
-              <div><p class="eyebrow">FATURA YÃ–NETÄ°MÄ°</p><h2>AlÄ±ÅŸ, satÄ±ÅŸ ve iade faturalarÄ±</h2></div>
-              <div class="button-row"><button id="newPurchaseInvoiceButton">AlÄ±ÅŸ faturasÄ±</button><button id="newReturnInvoiceButton">Ä°ade faturasÄ±</button><button class="primary" id="newSaleInvoiceButton">SatÄ±ÅŸ faturasÄ±</button></div>
+              <div><p class="eyebrow">FATURA YÖNETİMİ</p><h2>Alış, satış ve iade faturaları</h2></div>
+              <div class="button-row"><button id="newPurchaseInvoiceButton">Alış faturası</button><button id="newReturnInvoiceButton">İade faturası</button><button class="primary" id="newSaleInvoiceButton">Satış faturası</button></div>
             </div>
-            <div class="table-wrap"><table><thead><tr><th>Fatura no</th><th>TÃ¼r</th><th>Tarih</th><th>Cari</th><th>Senaryo</th><th>Tutar</th><th>KDV</th><th></th></tr></thead><tbody id="invoiceRows"></tbody></table></div>
+            <div class="table-wrap"><table><thead><tr><th>Fatura no</th><th>Tür</th><th>Tarih</th><th>Cari</th><th>Senaryo</th><th>Tutar</th><th>KDV</th><th></th></tr></thead><tbody id="invoiceRows"></tbody></table></div>
           </div>
         </section>
 
-        <section class="view" data-view-panel="audit"><div class="panel"><div class="panel-heading"><h2>Site kataloÄŸu ve stok hareketleri</h2></div><p class="helper">Bu alan mevcut ticari otomasyon eklentileri tarafÄ±ndan doldurulur.</p><div class="table-wrap"><table><tbody id="movementRows"></tbody></table></div></div></section>
-        <section class="view" data-view-panel="vat"><div class="panel"><div class="panel-heading"><h2>KDV Ã¶zeti</h2></div><div id="vatRows"></div></div></section>
-        <section class="view" data-view-panel="drafts"><div class="panel"><div class="panel-heading"><h2>Fatura taslaklarÄ±</h2></div><form id="templateForm"></form></div></section>
+        <section class="view" data-view-panel="audit"><div class="panel"><div class="panel-heading"><h2>Site kataloğu ve stok hareketleri</h2></div><p class="helper">Bu alan mevcut ticari otomasyon eklentileri tarafından doldurulur.</p><div class="table-wrap"><table><tbody id="movementRows"></tbody></table></div></div></section>
+        <section class="view" data-view-panel="vat"><div class="panel"><div class="panel-heading"><h2>KDV özeti</h2></div><div id="vatRows"></div></div></section>
+        <section class="view" data-view-panel="drafts"><div class="panel"><div class="panel-heading"><h2>Fatura taslakları</h2></div><form id="templateForm"></form></div></section>
         <section class="view" data-view-panel="reports"><div class="panel"><div class="panel-heading"><h2>Raporlar</h2></div><div id="balanceReport"></div><div id="salesProductReport"></div></div></section>
       </main>
     </div>
 
-    <div id="rowContextMenu" class="row-context-menu" hidden><div class="row-context-title" id="rowContextTitle">Ä°ÅŸlemler</div><div id="rowContextActions" class="row-context-actions"></div></div>
+    <div id="rowContextMenu" class="row-context-menu" hidden><div class="row-context-title" id="rowContextTitle">İşlemler</div><div id="rowContextActions" class="row-context-actions"></div></div>
 
     <dialog id="customerDialog"><form method="dialog" class="dialog-form" id="customerForm">
-      <div class="dialog-heading"><h2>Cari kartÄ±</h2><button type="button" data-close-dialog>Ã—</button></div><input type="hidden" name="id" />
-      <div class="form-grid"><label>Firma unvanÄ±<input name="company" required /></label><label>Yetkili kiÅŸi<input name="contact_name" /></label><label>E-posta<input name="email" type="email" /></label><label>Telefon<input name="phone" /></label><label>Ãœlke<input name="country" /></label><label>Vergi no<input name="tax_number" /></label><label>Vergi dairesi<input name="tax_office" /></label><label>Para birimi<select name="currency"><option>TRY</option><option>USD</option><option>EUR</option><option>RUB</option><option>GEL</option><option>AZN</option><option>SAR</option><option>AED</option><option>QAR</option><option>KWD</option><option>BHD</option><option>OMR</option></select></label><div class="full role-selector"><label><input name="is_buyer" type="checkbox" checked /> Bu cariye satÄ±ÅŸ yapabilirim (alÄ±cÄ±)</label><label><input name="is_seller" type="checkbox" checked /> Bu cariden mal alabilirim (satÄ±cÄ±)</label></div><label class="full">Adres<textarea name="address"></textarea></label><label class="full">Not<textarea name="notes"></textarea></label></div>
-      <div class="dialog-actions"><button type="button" data-close-dialog>VazgeÃ§</button><button class="primary" type="submit">Kaydet</button></div>
+      <div class="dialog-heading"><h2>Cari kartı</h2><button type="button" data-close-dialog>×</button></div><input type="hidden" name="id" />
+      <div class="form-grid"><label>Firma unvanı<input name="company" required /></label><label>Yetkili kişi<input name="contact_name" /></label><label>E-posta<input name="email" type="email" /></label><label>Telefon<input name="phone" /></label><label>Ülke<input name="country" /></label><label>Vergi no<input name="tax_number" /></label><label>Vergi dairesi<input name="tax_office" /></label><label>Para birimi<select name="currency"><option>TRY</option><option>USD</option><option>EUR</option><option>RUB</option><option>GEL</option><option>AZN</option><option>SAR</option><option>AED</option><option>QAR</option><option>KWD</option><option>BHD</option><option>OMR</option></select></label><div class="full role-selector"><label><input name="is_buyer" type="checkbox" checked /> Bu cariye satış yapabilirim (alıcı)</label><label><input name="is_seller" type="checkbox" checked /> Bu cariden mal alabilirim (satıcı)</label></div><label class="full">Adres<textarea name="address"></textarea></label><label class="full">Not<textarea name="notes"></textarea></label></div>
+      <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit">Kaydet</button></div>
     </form></dialog>
 
     <dialog id="productDialog"><form method="dialog" class="dialog-form" id="productForm">
-      <div class="dialog-heading"><h2>Stok kartÄ±</h2><button type="button" data-close-dialog>Ã—</button></div><input type="hidden" name="id" />
-      <div class="form-grid"><label>ÃœrÃ¼n adÄ±<input name="name" required /></label><label>Marka<input name="brand" /></label><label>SKU<input name="sku" /></label><label>Barkod<input name="barcode" /></label><label>Gramaj<input name="grammage" placeholder="Ã–rn. 750 ml" /></label><label>Kategori<input name="category" /></label><label>Stok takip birimi<select name="unit"><option value="adet">Adet</option><option value="koli">Koli</option><option value="litre">Litre</option><option value="metre">Metre</option><option value="kg">Kg</option></select></label><label>AlÄ±ÅŸ fiyatÄ±<span class="money-input"><input name="purchase_price" type="number" min="0" step="0.0001" value="0" /><select data-price-currency="purchase_price"><option>TRY</option><option>USD</option><option>EUR</option><option>RUB</option><option>GEL</option><option>AZN</option><option>SAR</option><option>AED</option><option>QAR</option><option>KWD</option><option>BHD</option><option>OMR</option></select></span><small data-price-preview="purchase_price">USD ana fiyat olarak saklanÄ±r.</small></label><label>SatÄ±ÅŸ fiyatÄ±<span class="money-input"><input name="sale_price" type="number" min="0" step="0.0001" value="0" /><select data-price-currency="sale_price"><option>TRY</option><option>USD</option><option>EUR</option><option>RUB</option><option>GEL</option><option>AZN</option><option>SAR</option><option>AED</option><option>QAR</option><option>KWD</option><option>BHD</option><option>OMR</option></select></span><small data-price-preview="sale_price">USD ana fiyat olarak saklanÄ±r.</small></label><label>KDV oranÄ± %<input name="vat_rate" type="number" list="vatRates" min="0" max="100" step="0.01" value="20" /></label><label>Minimum stok<input name="minimum_stock" type="number" min="0" step="0.001" value="0" /></label><label>Koli iÃ§i adet<input name="units_per_carton" type="number" min="1" step="1" value="1" /></label><label>Koli kg<input name="kg_per_carton" type="number" min="0" step="0.001" value="0" /></label></div>
-      <div class="dialog-actions"><button type="button" data-close-dialog>VazgeÃ§</button><button class="primary" type="submit">Kaydet</button></div>
+      <div class="dialog-heading"><h2>Stok kartı</h2><button type="button" data-close-dialog>×</button></div><input type="hidden" name="id" />
+      <div class="form-grid"><label>Ürün adı<input name="name" required /></label><label>Marka<input name="brand" /></label><label>SKU<input name="sku" /></label><label>Barkod<input name="barcode" /></label><label>Gramaj<input name="grammage" placeholder="Örn. 750 ml" /></label><label>Kategori<input name="category" /></label><label>Stok takip birimi<select name="unit"><option value="adet">Adet</option><option value="koli">Koli</option><option value="litre">Litre</option><option value="metre">Metre</option><option value="kg">Kg</option></select></label><label>Alış fiyatı<span class="money-input"><input name="purchase_price" type="number" min="0" step="0.0001" value="0" /><select data-price-currency="purchase_price"><option>TRY</option><option>USD</option><option>EUR</option><option>RUB</option><option>GEL</option><option>AZN</option><option>SAR</option><option>AED</option><option>QAR</option><option>KWD</option><option>BHD</option><option>OMR</option></select></span><small data-price-preview="purchase_price">USD ana fiyat olarak saklanır.</small></label><label>Satış fiyatı<span class="money-input"><input name="sale_price" type="number" min="0" step="0.0001" value="0" /><select data-price-currency="sale_price"><option>TRY</option><option>USD</option><option>EUR</option><option>RUB</option><option>GEL</option><option>AZN</option><option>SAR</option><option>AED</option><option>QAR</option><option>KWD</option><option>BHD</option><option>OMR</option></select></span><small data-price-preview="sale_price">USD ana fiyat olarak saklanır.</small></label><label>KDV oranı %<input name="vat_rate" type="number" list="vatRates" min="0" max="100" step="0.01" value="20" /></label><label>Minimum stok<input name="minimum_stock" type="number" min="0" step="0.001" value="0" /></label><label>Koli içi adet<input name="units_per_carton" type="number" min="1" step="1" value="1" /></label><label>Koli kg<input name="kg_per_carton" type="number" min="0" step="0.001" value="0" /></label></div>
+      <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit">Kaydet</button></div>
     </form></dialog>
 
     <dialog id="productPriceDialog"><form method="dialog" class="dialog-form narrow" id="productPriceForm">
-      <div class="dialog-heading"><div><p class="eyebrow">DÃ–VÄ°ZLÄ° FÄ°YAT</p><h2 id="productPriceTitle">Fiyat giriÅŸi</h2></div><button type="button" data-close-dialog>Ã—</button></div>
+      <div class="dialog-heading"><div><p class="eyebrow">DÖVİZLİ FİYAT</p><h2 id="productPriceTitle">Fiyat girişi</h2></div><button type="button" data-close-dialog>×</button></div>
       <input type="hidden" name="product_id" />
-      <label>AlÄ±ÅŸ fiyatÄ±<span class="money-input"><input name="purchase_price" type="number" min="0" step="0.0001" value="0" /><select name="purchase_currency"><option>TRY</option><option>USD</option><option>EUR</option><option>RUB</option><option>GEL</option><option>AZN</option><option>SAR</option><option>AED</option><option>QAR</option><option>KWD</option><option>BHD</option><option>OMR</option></select></span><small id="pricePurchasePreview">-</small></label>
-      <label>SatÄ±ÅŸ fiyatÄ±<span class="money-input"><input name="sale_price" type="number" min="0" step="0.0001" value="0" /><select name="sale_currency"><option>TRY</option><option>USD</option><option>EUR</option><option>RUB</option><option>GEL</option><option>AZN</option><option>SAR</option><option>AED</option><option>QAR</option><option>KWD</option><option>BHD</option><option>OMR</option></select></span><small id="priceSalePreview">-</small></label>
-      <p class="helper" id="priceRateInfo">Kur bilgisi Sidya Global TCMB alanÄ±ndan alÄ±nÄ±r. KayÄ±tta ana fiyat USD olarak saklanÄ±r.</p>
-      <div class="dialog-actions"><button type="button" data-close-dialog>VazgeÃ§</button><button class="primary" type="submit">FiyatÄ± kaydet</button></div>
+      <label>Alış fiyatı<span class="money-input"><input name="purchase_price" type="number" min="0" step="0.0001" value="0" /><select name="purchase_currency"><option>TRY</option><option>USD</option><option>EUR</option><option>RUB</option><option>GEL</option><option>AZN</option><option>SAR</option><option>AED</option><option>QAR</option><option>KWD</option><option>BHD</option><option>OMR</option></select></span><small id="pricePurchasePreview">-</small></label>
+      <label>Satış fiyatı<span class="money-input"><input name="sale_price" type="number" min="0" step="0.0001" value="0" /><select name="sale_currency"><option>TRY</option><option>USD</option><option>EUR</option><option>RUB</option><option>GEL</option><option>AZN</option><option>SAR</option><option>AED</option><option>QAR</option><option>KWD</option><option>BHD</option><option>OMR</option></select></span><small id="priceSalePreview">-</small></label>
+      <p class="helper" id="priceRateInfo">Kur bilgisi Sidya Global TCMB alanından alınır. Kayıtta ana fiyat USD olarak saklanır.</p>
+      <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit">Fiyatı kaydet</button></div>
     </form></dialog>
 
     <dialog id="stockDialog"><form method="dialog" class="dialog-form narrow" id="stockForm">
-      <div class="dialog-heading"><h2 id="stockDialogTitle">Manuel stok hareketi</h2><button type="button" data-close-dialog>Ã—</button></div>
-      <label>ÃœrÃ¼n<select name="product_id" id="stockProduct" required></select></label><label id="stockQuantityLabel">Miktar (adet)<input name="quantity" type="number" min="0.001" step="0.001" required /></label><label>Zorunlu aÃ§Ä±klama<textarea name="note" required></textarea></label>
-      <div class="dialog-actions"><button type="button" data-close-dialog>VazgeÃ§</button><button class="primary" type="submit" id="saveStockMovementButton">Stok hareketini kaydet</button></div>
+      <div class="dialog-heading"><h2 id="stockDialogTitle">Manuel stok hareketi</h2><button type="button" data-close-dialog>×</button></div>
+      <label>Ürün<select name="product_id" id="stockProduct" required></select></label><label id="stockQuantityLabel">Miktar (adet)<input name="quantity" type="number" min="0.001" step="0.001" required /></label><label>Zorunlu açıklama<textarea name="note" required></textarea></label>
+      <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit" id="saveStockMovementButton">Stok hareketini kaydet</button></div>
     </form></dialog>
 
     <dialog id="paymentDialog"><form method="dialog" class="dialog-form narrow" id="paymentForm">
-      <div class="dialog-heading"><h2>Tahsilat gir</h2><button type="button" data-close-dialog>Ã—</button></div><input type="hidden" name="customer_id" /><p id="paymentCustomerName"></p><label>Tutar<input name="amount" type="number" min="0.01" step="0.01" required /></label><label>Para birimi<select name="currency"><option>TRY</option><option>USD</option><option>EUR</option><option>RUB</option><option>GEL</option><option>AZN</option><option>SAR</option><option>AED</option><option>QAR</option><option>KWD</option><option>BHD</option><option>OMR</option></select></label><label>Tarih<input name="payment_date" type="date" required /></label><label>AÃ§Ä±klama<textarea name="description"></textarea></label>
-      <div class="dialog-actions"><button type="button" data-close-dialog>VazgeÃ§</button><button class="primary" type="submit">Kaydet</button></div>
+      <div class="dialog-heading"><h2>Tahsilat gir</h2><button type="button" data-close-dialog>×</button></div><input type="hidden" name="customer_id" /><p id="paymentCustomerName"></p><label>Tutar<input name="amount" type="number" min="0.01" step="0.01" required /></label><label>Para birimi<select name="currency"><option>TRY</option><option>USD</option><option>EUR</option><option>RUB</option><option>GEL</option><option>AZN</option><option>SAR</option><option>AED</option><option>QAR</option><option>KWD</option><option>BHD</option><option>OMR</option></select></label><label>Tarih<input name="payment_date" type="date" required /></label><label>Açıklama<textarea name="description"></textarea></label>
+      <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit">Kaydet</button></div>
     </form></dialog>
 
     <dialog id="productHistoryDialog" class="wide-dialog statement-dialog"><div class="dialog-form">
-      <div class="dialog-heading"><div><p class="eyebrow">STOK EKSTRESÄ°</p><h2 id="productHistoryTitle">ÃœrÃ¼n hareketleri</h2><p id="productHistoryMeta" class="helper"></p></div><button type="button" data-close-dialog>Ã—</button></div>
+      <div class="dialog-heading"><div><p class="eyebrow">STOK EKSTRESİ</p><h2 id="productHistoryTitle">Ürün hareketleri</h2><p id="productHistoryMeta" class="helper"></p></div><button type="button" data-close-dialog>×</button></div>
       <p id="productHistoryStatus" class="form-status" role="status"></p>
-      <div class="statement-metrics"><article><span>Mevcut stok</span><strong id="productHistoryStock">-</strong></article><article><span>Ortalama alÄ±ÅŸ</span><strong id="productHistoryAveragePurchase">-</strong></article><article><span>Ortalama satÄ±ÅŸ</span><strong id="productHistoryAverageSale">-</strong></article><article><span>KÃ¢r endeksi</span><strong id="productHistoryProfitIndex">-</strong></article></div>
-      <div class="table-wrap statement-table"><table><thead><tr><th>Tarih</th><th>Ä°ÅŸlem</th><th>Fatura / Referans</th><th>Cari</th><th>GiriÅŸ</th><th>Ã‡Ä±kÄ±ÅŸ</th><th>Birim fiyat</th><th>Para birimi</th><th>Stok bakiyesi</th><th>AÃ§Ä±klama</th></tr></thead><tbody id="productHistoryRows"></tbody></table></div>
+      <div class="statement-metrics"><article><span>Mevcut stok</span><strong id="productHistoryStock">-</strong></article><article><span>Ortalama alış</span><strong id="productHistoryAveragePurchase">-</strong></article><article><span>Ortalama satış</span><strong id="productHistoryAverageSale">-</strong></article><article><span>Kâr endeksi</span><strong id="productHistoryProfitIndex">-</strong></article></div>
+      <div class="table-wrap statement-table"><table><thead><tr><th>Tarih</th><th>İşlem</th><th>Fatura / Referans</th><th>Cari</th><th>Giriş</th><th>Çıkış</th><th>Birim fiyat</th><th>Para birimi</th><th>Stok bakiyesi</th><th>Açıklama</th></tr></thead><tbody id="productHistoryRows"></tbody></table></div>
       <div class="dialog-actions"><button type="button" data-close-dialog>Kapat</button></div>
     </div></dialog>
 
     <dialog id="customerHistoryDialog" class="wide-dialog statement-dialog"><div class="dialog-form">
-      <div class="dialog-heading"><div><p class="eyebrow">CARÄ° EKSTRESÄ°</p><h2 id="customerHistoryTitle">Cari hareketleri</h2><p id="customerHistoryMeta" class="helper"></p></div><button type="button" data-close-dialog>Ã—</button></div>
+      <div class="dialog-heading"><div><p class="eyebrow">CARİ EKSTRESİ</p><h2 id="customerHistoryTitle">Cari hareketleri</h2><p id="customerHistoryMeta" class="helper"></p></div><button type="button" data-close-dialog>×</button></div>
       <p id="customerHistoryStatus" class="form-status" role="status"></p>
-      <div class="statement-metrics"><article><span>Toplam borÃ§</span><strong id="customerHistoryDebit">-</strong></article><article><span>Toplam alacak</span><strong id="customerHistoryCredit">-</strong></article><article><span>Net bakiye</span><strong id="customerHistoryBalance">-</strong></article><article><span>Hareket sayÄ±sÄ±</span><strong id="customerHistoryCount">-</strong></article></div>
-      <div class="table-wrap statement-table"><table><thead><tr><th>Tarih</th><th>Ä°ÅŸlem</th><th>Fatura / Referans</th><th>BorÃ§</th><th>Alacak</th><th>Para birimi</th><th>Bakiye</th><th>AÃ§Ä±klama</th></tr></thead><tbody id="customerHistoryRows"></tbody></table></div>
+      <div class="statement-metrics"><article><span>Toplam borç</span><strong id="customerHistoryDebit">-</strong></article><article><span>Toplam alacak</span><strong id="customerHistoryCredit">-</strong></article><article><span>Net bakiye</span><strong id="customerHistoryBalance">-</strong></article><article><span>Hareket sayısı</span><strong id="customerHistoryCount">-</strong></article></div>
+      <div class="table-wrap statement-table"><table><thead><tr><th>Tarih</th><th>İşlem</th><th>Fatura / Referans</th><th>Borç</th><th>Alacak</th><th>Para birimi</th><th>Bakiye</th><th>Açıklama</th></tr></thead><tbody id="customerHistoryRows"></tbody></table></div>
       <div class="dialog-actions"><button type="button" data-close-dialog>Kapat</button></div>
     </div></dialog>
 
     <dialog id="invoiceDialog" class="wide-dialog"><form method="dialog" class="dialog-form" id="invoiceForm">
-      <div class="dialog-heading"><div><p class="eyebrow" id="invoiceKicker">SATIÅ FATURASI</p><h2 id="invoiceDialogTitle">Yeni fatura</h2></div><button type="button" data-close-dialog>Ã—</button></div>
+      <div class="dialog-heading"><div><p class="eyebrow" id="invoiceKicker">SATIŞ FATURASI</p><h2 id="invoiceDialogTitle">Yeni fatura</h2></div><button type="button" data-close-dialog>×</button></div>
       <input type="hidden" name="source_order_id" /><input type="hidden" name="currency" id="invoiceCurrency" value="USD" />
       <p id="invoiceFormStatus" class="form-status" role="status"></p>
       <div class="form-grid invoice-head">
-        <label>Fatura tipi<select name="invoice_type" id="invoiceType"><option value="purchase">AlÄ±ÅŸ faturasÄ±</option><option value="sale">SatÄ±ÅŸ faturasÄ±</option><option value="return">Ä°ade faturasÄ±</option></select></label>
+        <label>Fatura tipi<select name="invoice_type" id="invoiceType"><option value="purchase">Alış faturası</option><option value="sale">Satış faturası</option><option value="return">İade faturası</option></select></label>
         <div id="customerField" class="invoice-customer-field"><label>Cari<select name="customer_id" id="invoiceCustomer"></select></label><button type="button" id="invoiceNewCustomerButton">+ Yeni cari ekle</button></div>
-        <label>Fatura tarihi<input name="invoice_date" type="date" required /></label><label>Vade tarihi<div class="due-date-field"><input name="due_date" type="date" /><output id="invoiceTermDays">0 gÃ¼n</output></div></label>
-        <label>Fatura numarasÄ±<input name="document_number" placeholder="BoÅŸ bÄ±rakÄ±lÄ±rsa otomatik oluÅŸur" /></label>
-        <label>Senaryo<select name="scenario" id="invoiceScenario"><option value="export">Ä°hracat - KDV %0</option><option value="domestic">TÃ¼rkiye - KDV'li</option></select></label>
-        <label>Fatura altÄ± iskonto %<input name="invoice_discount_rate" type="number" min="0" max="100" step="0.01" value="0" /></label>
+        <label>Fatura tarihi<input name="invoice_date" type="date" required /></label><label>Vade tarihi<div class="due-date-field"><input name="due_date" type="date" /><output id="invoiceTermDays">0 gün</output></div></label>
+        <label>Fatura numarası<input name="document_number" placeholder="Boş bırakılırsa otomatik oluşur" /></label>
+        <label>Senaryo<select name="scenario" id="invoiceScenario"><option value="export">İhracat - KDV %0</option><option value="domestic">Türkiye - KDV'li</option></select></label>
+        <label>Fatura altı iskonto %<input name="invoice_discount_rate" type="number" min="0" max="100" step="0.01" value="0" /></label>
       </div>
       <div class="invoice-product-picker">
         <div class="picker-heading">
-          <div><p class="eyebrow">ÃœRÃœN SEÃ‡Ä°MÄ°</p><h3>ÃœrÃ¼n ekle</h3></div>
-          <div class="picker-actions"><input id="invoiceProductSearch" type="search" placeholder="Barkod, Ã¼rÃ¼n veya marka ara" /><button type="button" id="refreshInvoiceProductsButton">Listeyi yenile</button><button type="button" class="primary" data-open-dialog="productDialog">Yeni Ã¼rÃ¼n ekle</button></div>
+          <div><p class="eyebrow">ÜRÜN SEÇİMİ</p><h3>Ürün ekle</h3></div>
+          <div class="picker-actions"><input id="invoiceProductSearch" type="search" placeholder="Barkod, ürün veya marka ara" /><button type="button" id="refreshInvoiceProductsButton">Listeyi yenile</button><button type="button" class="primary" data-open-dialog="productDialog">Yeni ürün ekle</button></div>
         </div>
         <div class="table-wrap picker-table"><table>
-          <thead><tr><th>Barkod <button type="button" class="picker-sort-button" data-picker-sort="barcode" aria-label="Barkoda gÃ¶re sÄ±rala">â†•</button></th><th>ÃœrÃ¼n <button type="button" class="picker-sort-button" data-picker-sort="name" aria-label="ÃœrÃ¼n adÄ±na gÃ¶re sÄ±rala">â†•</button></th><th>Stok <button type="button" class="picker-sort-button" data-picker-sort="stock" aria-label="Stok miktarÄ±na gÃ¶re sÄ±rala">â†•</button></th><th>Miktar</th><th>Birim fiyat <button type="button" class="picker-sort-button" data-picker-sort="price" aria-label="Fiyata gÃ¶re sÄ±rala">â†•</button></th><th>Para birimi</th><th>Birim</th><th></th></tr></thead>
+          <thead><tr><th>Barkod <button type="button" class="picker-sort-button" data-picker-sort="barcode" aria-label="Barkoda göre sırala">↕</button></th><th>Ürün <button type="button" class="picker-sort-button" data-picker-sort="name" aria-label="Ürün adına göre sırala">↕</button></th><th>Stok <button type="button" class="picker-sort-button" data-picker-sort="stock" aria-label="Stok miktarına göre sırala">↕</button></th><th>Miktar</th><th>Birim fiyat <button type="button" class="picker-sort-button" data-picker-sort="price" aria-label="Fiyata göre sırala">↕</button></th><th>Para birimi</th><th>Birim</th><th></th></tr></thead>
           <tbody id="invoiceProductRows"></tbody>
         </table></div>
       </div>
-      <div class="invoice-lines-heading"><div><h3>SipariÅŸ / fatura satÄ±rlarÄ±</h3><span>Mevcut fiyat Ã¼rÃ¼n kartÄ±ndan otomatik gelir; talep fiyatÄ± dÃ¼zenlenebilir.</span></div><div id="adminOrderRates" class="admin-rate-snapshot" aria-label="GÃ¼ncel dÃ¶viz kurlarÄ±"></div></div>
-      <div class="table-wrap invoice-lines-table"><table><thead><tr><th>#</th><th>Stok kodu / Barkod</th><th>ÃœrÃ¼n</th><th>Stok</th><th>Miktar</th><th>Birim</th><th>Mevcut birim fiyat</th><th>Talep edilen birim fiyat</th><th>Para birimi</th><th>Mevcut toplam</th><th>Talep edilen toplam</th><th>Fark / Ä°ndirim</th><th>Ä°sk. 1</th><th>Ä°sk. 2</th><th>Ä°sk. 3</th><th>KDV %</th><th></th></tr></thead><tbody id="invoiceLineRows"></tbody></table></div>
-      <div class="invoice-footer"><label class="invoice-description">AÃ§Ä±klama<textarea name="notes" rows="5" placeholder="SipariÅŸ veya faturaya ait aÃ§Ä±klamayÄ± yazÄ±n"></textarea></label><div class="invoice-summary"><span>Mevcut fiyat toplamÄ± <strong id="invoiceCurrentSubtotal">0</strong></span><span>Talep edilen fiyat toplamÄ± <strong id="invoiceSubtotal">0</strong></span><span>Toplam fiyat farkÄ± <strong id="invoicePriceDifference">0</strong></span><span>Ortalama talep indirimi <strong id="invoiceAverageDiscount">%0</strong></span><span>Ä°skonto <strong id="invoiceDiscountTotal">0</strong></span><div id="invoiceVatBreakdown" class="invoice-vat-breakdown"></div><span>KDV (mevcut / talep) <strong id="invoiceTaxTotal">0</strong></span><span class="invoice-grand-total">Genel toplam (mevcut / talep) <strong id="invoiceGrandTotal">0</strong></span></div></div>
-      <div class="dialog-actions"><button type="button" data-close-dialog>VazgeÃ§</button><button class="primary" type="submit" id="saveInvoiceButton">FaturayÄ± kaydet</button></div>
+      <div class="invoice-lines-heading"><div><h3>Sipariş / fatura satırları</h3><span>Mevcut fiyat ürün kartından otomatik gelir; talep fiyatı düzenlenebilir.</span></div><div id="adminOrderRates" class="admin-rate-snapshot" aria-label="Güncel döviz kurları"></div></div>
+      <div class="table-wrap invoice-lines-table"><table><thead><tr><th>#</th><th>Stok kodu / Barkod</th><th>Ürün</th><th>Stok</th><th>Miktar</th><th>Birim</th><th>Mevcut birim fiyat</th><th>Talep edilen birim fiyat</th><th>Para birimi</th><th>Mevcut toplam</th><th>Talep edilen toplam</th><th>Fark / İndirim</th><th>İsk. 1</th><th>İsk. 2</th><th>İsk. 3</th><th>KDV %</th><th></th></tr></thead><tbody id="invoiceLineRows"></tbody></table></div>
+      <div class="invoice-footer"><label class="invoice-description">Açıklama<textarea name="notes" rows="5" placeholder="Sipariş veya faturaya ait açıklamayı yazın"></textarea></label><div class="invoice-summary"><span>Mevcut fiyat toplamı <strong id="invoiceCurrentSubtotal">0</strong></span><span>Talep edilen fiyat toplamı <strong id="invoiceSubtotal">0</strong></span><span>Toplam fiyat farkı <strong id="invoicePriceDifference">0</strong></span><span>Ortalama talep indirimi <strong id="invoiceAverageDiscount">%0</strong></span><span>İskonto <strong id="invoiceDiscountTotal">0</strong></span><div id="invoiceVatBreakdown" class="invoice-vat-breakdown"></div><span>KDV (mevcut / talep) <strong id="invoiceTaxTotal">0</strong></span><span class="invoice-grand-total">Genel toplam (mevcut / talep) <strong id="invoiceGrandTotal">0</strong></span></div></div>
+      <div class="dialog-actions"><button type="button" data-close-dialog>Vazgeç</button><button class="primary" type="submit" id="saveInvoiceButton">Faturayı kaydet</button></div>
     </form></dialog>
 
     <dialog id="invoiceDetailDialog" class="invoice-detail-dialog"><div class="invoice-detail-shell">
-      <div class="invoice-detail-toolbar"><button type="button" data-close-dialog>â† Fatura listesine dÃ¶n</button><div class="button-row"><button type="button" id="invoiceDetailPrint">YazdÄ±r / PDF</button><button type="button" data-close-dialog>Ã—</button></div></div>
-      <div class="invoice-detail-title"><div><p class="eyebrow">FATURA KAYDI</p><h2 id="invoiceDetailHeading">Fatura</h2></div><span class="badge" id="invoiceDetailStatus">KayÄ±tlÄ±</span></div>
-      <div class="invoice-detail-meta"><div><span>Fatura tipi</span><strong id="invoiceDetailType">-</strong></div><div><span>Fatura tarihi</span><strong id="invoiceDetailDate">-</strong></div><div><span>Fatura numarasÄ±</span><strong id="invoiceDetailNumber">-</strong></div><div><span>Vade tarihi</span><strong id="invoiceDetailDueDate">-</strong></div><div class="wide"><span>Cari hesap</span><strong id="invoiceDetailCustomer">-</strong></div><div><span>Para birimi</span><strong id="invoiceDetailCurrency">-</strong></div><div><span>Senaryo</span><strong id="invoiceDetailScenario">-</strong></div></div>
-      <div class="table-wrap invoice-detail-lines"><table><thead><tr><th>#</th><th>Stok kodu / Barkod</th><th>Stok cinsi</th><th>Birim</th><th>Miktar</th><th>Mevcut fiyat</th><th>Talep fiyatÄ±</th><th>Mevcut toplam</th><th>Talep toplamÄ±</th><th>Fark / Ä°ndirim</th><th>KDV</th><th>AÃ§Ä±klama</th></tr></thead><tbody id="invoiceDetailRows"></tbody></table></div>
-      <div class="invoice-detail-footer"><div class="invoice-detail-note"><span>AÃ§Ä±klama</span><p id="invoiceDetailNote">-</p></div><div class="invoice-detail-totals"><p><span>Mal / Hizmet ToplamÄ±</span><strong id="invoiceDetailSubtotal">0</strong></p><p><span>Toplam iskonto</span><strong id="invoiceDetailDiscount">0</strong></p><p><span>KDV</span><strong id="invoiceDetailTax">0</strong></p><p class="grand"><span>Ã–denecek Genel Toplam</span><strong id="invoiceDetailGrandTotal">0</strong></p></div></div>
+      <div class="invoice-detail-toolbar"><button type="button" data-close-dialog>← Fatura listesine dön</button><div class="button-row"><button type="button" id="invoiceDetailPrint">Yazdır / PDF</button><button type="button" data-close-dialog>×</button></div></div>
+      <div class="invoice-detail-title"><div><p class="eyebrow">FATURA KAYDI</p><h2 id="invoiceDetailHeading">Fatura</h2></div><span class="badge" id="invoiceDetailStatus">Kayıtlı</span></div>
+      <div class="invoice-detail-meta"><div><span>Fatura tipi</span><strong id="invoiceDetailType">-</strong></div><div><span>Fatura tarihi</span><strong id="invoiceDetailDate">-</strong></div><div><span>Fatura numarası</span><strong id="invoiceDetailNumber">-</strong></div><div><span>Vade tarihi</span><strong id="invoiceDetailDueDate">-</strong></div><div class="wide"><span>Cari hesap</span><strong id="invoiceDetailCustomer">-</strong></div><div><span>Para birimi</span><strong id="invoiceDetailCurrency">-</strong></div><div><span>Senaryo</span><strong id="invoiceDetailScenario">-</strong></div></div>
+      <div class="table-wrap invoice-detail-lines"><table><thead><tr><th>#</th><th>Stok kodu / Barkod</th><th>Stok cinsi</th><th>Birim</th><th>Miktar</th><th>Mevcut fiyat</th><th>Talep fiyatı</th><th>Mevcut toplam</th><th>Talep toplamı</th><th>Fark / İndirim</th><th>KDV</th><th>Açıklama</th></tr></thead><tbody id="invoiceDetailRows"></tbody></table></div>
+      <div class="invoice-detail-footer"><div class="invoice-detail-note"><span>Açıklama</span><p id="invoiceDetailNote">-</p></div><div class="invoice-detail-totals"><p><span>Mal / Hizmet Toplamı</span><strong id="invoiceDetailSubtotal">0</strong></p><p><span>Toplam iskonto</span><strong id="invoiceDetailDiscount">0</strong></p><p><span>KDV</span><strong id="invoiceDetailTax">0</strong></p><p class="grand"><span>Ödenecek Genel Toplam</span><strong id="invoiceDetailGrandTotal">0</strong></p></div></div>
     </div></dialog>
 
     <datalist id="vatRates"><option value="0"></option><option value="1"></option><option value="10"></option><option value="20"></option></datalist>
@@ -195,7 +195,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/xlsx.full.min.js"></script>
     <script src="admin-rate-fix.js?v=20260717-5351f88" defer></script>
-    <script src="admin.js?v=20260717-rates-orders-2"></script>
+    <script src="admin.js?v=20260720-admin-boot-1"></script>
     <script src="admin-product-price-fix.js?v=20260717-1" defer></script>
   </body>
 </html>

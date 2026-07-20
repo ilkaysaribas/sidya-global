@@ -521,12 +521,18 @@ const renderInvoiceLines = () => {
 const renderReports = () => {
   const sales = state.invoices.filter((i) => i.invoice_type === "sale").reduce((sum, i) => sum + Number(i.grand_total || 0), 0);
   const purchases = state.invoices.filter((i) => i.invoice_type === "purchase").reduce((sum, i) => sum + Number(i.grand_total || 0), 0);
-  document.querySelector("#reportSales").textContent = money(sales, "USD");
-  document.querySelector("#reportPurchases").textContent = money(purchases, "TRY");
-  document.querySelector("#reportStockQty").textContent = number(state.products.reduce((sum, p) => sum + Number(p.stock_quantity || 0), 0));
-  document.querySelector("#reportLowStock").textContent = number(state.products.filter((p) => Number(p.minimum_stock || 0) > 0 && Number(p.stock_quantity || 0) <= Number(p.minimum_stock || 0)).length);
-  document.querySelector("#balanceReport").innerHTML = state.customers.slice(0, 10).map((item) => `<div class="compact-row"><div><strong>${escapeHtml(item.company)}</strong><small>${customerRole(item)}</small></div><span>${[...customerBalance(item.id).entries()].map(([c, a]) => money(a, c)).join(" Â· ") || money(0, item.currency || "USD")}</span></div>`).join("") || '<p class="empty">Cari yok.</p>';
-  document.querySelector("#salesProductReport").innerHTML = state.products.slice(0, 10).map((item) => `<div class="compact-row"><div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.brand || "")}</small></div><span>${number(item.stock_quantity || 0)}</span></div>`).join("");
+  const reportSales = document.querySelector("#reportSales");
+  const reportPurchases = document.querySelector("#reportPurchases");
+  const reportStockQty = document.querySelector("#reportStockQty");
+  const reportLowStock = document.querySelector("#reportLowStock");
+  if (reportSales) reportSales.textContent = money(sales, "USD");
+  if (reportPurchases) reportPurchases.textContent = money(purchases, "TRY");
+  if (reportStockQty) reportStockQty.textContent = number(state.products.reduce((sum, p) => sum + Number(p.stock_quantity || 0), 0));
+  if (reportLowStock) reportLowStock.textContent = number(state.products.filter((p) => Number(p.minimum_stock || 0) > 0 && Number(p.stock_quantity || 0) <= Number(p.minimum_stock || 0)).length);
+  const balanceReport = document.querySelector("#balanceReport");
+  const salesProductReport = document.querySelector("#salesProductReport");
+  if (balanceReport) balanceReport.innerHTML = state.customers.slice(0, 10).map((item) => `<div class="compact-row"><div><strong>${escapeHtml(item.company)}</strong><small>${customerRole(item)}</small></div><span>${[...customerBalance(item.id).entries()].map(([c, a]) => money(a, c)).join(" · ") || money(0, item.currency || "USD")}</span></div>`).join("") || '<p class="empty">Cari yok.</p>';
+  if (salesProductReport) salesProductReport.innerHTML = state.products.slice(0, 10).map((item) => `<div class="compact-row"><div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.brand || "")}</small></div><span>${number(item.stock_quantity || 0)}</span></div>`).join("");
 };
 
 const renderSettings = () => {
