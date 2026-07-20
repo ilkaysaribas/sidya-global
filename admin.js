@@ -331,17 +331,29 @@ const formatStockCartons = (stock, unitsPerCarton) => {
 };
 
 const renderMetrics = () => {
+  const setText = (selector, value) => {
+    const node = document.querySelector(selector);
+    if (node) node.textContent = value;
+  };
+  const setHtml = (selector, value) => {
+    const node = document.querySelector(selector);
+    if (node) node.innerHTML = value;
+  };
   const purchaseValue = state.products.reduce((sum, item) => sum + Number(item.purchase_price || 0) * Number(item.stock_quantity || 0), 0);
   const saleValue = state.products.reduce((sum, item) => sum + Number(item.sale_price || 0) * Number(item.stock_quantity || 0), 0);
   const thisMonth = new Date().toISOString().slice(0, 7);
   const monthlySales = state.invoices.filter((item) => item.invoice_type === "sale" && String(item.invoice_date || item.created_at).startsWith(thisMonth)).reduce((sum, item) => sum + Number(item.grand_total || 0), 0);
-  document.querySelector("#metricPurchaseValue").textContent = money(purchaseValue, "USD");
-  document.querySelector("#metricSaleValue").textContent = money(saleValue, "USD");
-  document.querySelector("#metricMonthlySales").textContent = money(monthlySales, "USD");
-  document.querySelector("#metricOrders").textContent = number(state.orders.filter((item) => item.status !== "converted" && item.status !== "cancelled").length);
+  setText("#metricPurchaseValue", money(purchaseValue, "USD"));
+  setText("#metricSaleValue", money(saleValue, "USD"));
+  setText("#metricMonthlySales", money(monthlySales, "USD"));
+  setText("#metricOrders", number(state.orders.filter((item) => !["converted", "cancelled", "deleted"].includes(item.status)).length));
   const low = state.products.filter((item) => Number(item.minimum_stock || 0) > 0 && Number(item.stock_quantity || 0) <= Number(item.minimum_stock || 0)).slice(0, 8);
-  document.querySelector("#lowStockList").innerHTML = low.length ? low.map((item) => `<div class="compact-row"><div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.brand || "")}</small></div><span class="stock-low">${number(item.stock_quantity)} adet</span></div>`).join("") : '<p class="empty">Kritik stok yok.</p>';
-  document.querySelector("#recentInvoices").innerHTML = state.invoices.slice(0, 8).map((item) => `<div class="compact-row"><div><strong>${escapeHtml(item.invoice_no || item.draft_data?.document_number || "Fatura")}</strong><small>${date(item.invoice_date)} ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬ÂÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· ${escapeHtml(item.invoice_type)}</small></div><span>${money(item.grand_total, item.currency || "USD")}</span></div>`).join("") || '<p class="empty">HenÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬ÂÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼z fatura bulunmuyor.</p>';
+  setHtml("#lowStockList", low.length ? low.map((item) => `<div class="compact-row"><div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.brand || "")}</small></div><span class="stock-low">${number(item.stock_quantity)} adet</span></div>`).join("") : '<p class="empty">Kritik stok yok.</p>');
+  const recent = state.invoices.slice(0, 8);
+  setHtml("#recentInvoices", recent.length ? recent.map((item) => {
+    const invoiceType = item.invoice_type === "purchase" ? "Alis" : item.invoice_type === "return" ? "Iade" : "Satis";
+    return `<div class="compact-row"><div><strong>${escapeHtml(item.invoice_no || item.draft_data?.document_number || "Fatura")}</strong><small>${date(item.invoice_date)} - ${invoiceType}</small></div><span>${money(item.grand_total, item.currency || "USD")}</span></div>`;
+  }).join("") : '<p class="empty">Henuz fatura bulunmuyor.</p>');
 };
 
 const customerBalance = (customerId) => {

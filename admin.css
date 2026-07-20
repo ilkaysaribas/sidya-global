@@ -59,7 +59,10 @@ button { padding: 9px 13px; border: 1px solid var(--line); border-radius: 8px; c
 .metric-grid article { padding: 20px; }
 .metric-grid span, .metric-grid small { display: block; color: var(--muted); font-size: 12px; }
 .metric-grid strong { display: block; margin: 8px 0 4px; font-size: 28px; color: var(--navy); }
-.dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.dashboard-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+.dashboard-grid > .panel { min-width: 0; overflow: hidden; }
+.compact-row > div { min-width: 0; }
+.compact-row strong { overflow-wrap: anywhere; }
 .panel { padding: 20px; }
 .panel-heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 16px; }
 .panel-heading h2 { margin: 3px 0 0; font-size: 18px; }
