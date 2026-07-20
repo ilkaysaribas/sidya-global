@@ -52,7 +52,7 @@ check(styles.includes('html[dir="ltr"] main :where('), "LTR alignment guard is m
 check(styles.includes("text-align: left !important"), "LTR content must be forced left.");
 check(styles.includes('html[dir="rtl"] main :where('), "RTL alignment guard is missing.");
 check(styles.includes("text-align: right !important"), "RTL content must remain right aligned.");
-check(worker.includes("sidya-global-v106"), "Service worker cache version must be v106.");
+check(worker.includes("sidya-global-v108"), "Service worker cache version must be v108.");
 check(worker.includes("script.js?v=20260715-4"), "Service worker caches an old homepage script.");
 check(worker.includes("styles.css?v=20260715-4"), "Service worker caches an old stylesheet.");
 check(worker.includes('url.pathname === "/script.js"'), "Homepage script must use network-first cache handling.");

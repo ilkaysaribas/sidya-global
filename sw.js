@@ -1,4 +1,4 @@
-const CACHE_NAME = "sidya-global-v106";
+const CACHE_NAME = "sidya-global-v108";
 
 const SHELL_ASSETS = [
   "./",
@@ -114,6 +114,8 @@ self.addEventListener("fetch", (event) => {
     url.pathname === "/admin.js" ||
     url.pathname === "/admin.css" ||
     url.pathname === "/admin-ltr-guard.js" ||
+    url.pathname === "/admin-rate-fix.js" ||
+    url.pathname === "/admin-product-price-fix.js" ||
     url.pathname === "/sidya-arabic-currency-extension.js" ||
     url.pathname === "/sidya-locale-layout-fixes.js" ||
     url.pathname === "/sidya-rtl-hero-fix.js" ||
