@@ -43,7 +43,7 @@ const assertions = [
   [index.includes("proformaRequestedTotalAmount") && index.includes("proformaExchangeRates"), "Integrated requested-price summary is missing"],
   [read("script.js").includes("requestedUnitPrice") && read("api/site-order.js").includes("site_order_items"), "Requested prices are not persisted through the order API"],
   [!backendLoader.includes("sidya-rtl-hero-fix.js"), "Legacy RTL hero transformer is still active"],
-  [worker.includes("sidya-global-v109"), "Service worker cache version was not advanced"],
+  [worker.includes("sidya-global-v110"), "Service worker cache version was not advanced"],
   [proformaCore.includes("syncDockVisibility") && proformaCore.includes("is-context-visible"), "Proforma dock is not scoped to the active B2B/proforma context"],
   [aiAssistant.includes("setupAssistantDrag") && aiAssistant.includes("POSITION_KEY"), "Sidya AI drag support is missing"],
   [sourceFiles.length <= 12, `Vercel Hobby function limit exceeded: ${sourceFiles.length}/12`],

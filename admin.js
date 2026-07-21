@@ -113,6 +113,27 @@ const validExchangeRateMap = (rates = {}) => {
   return true;
 };
 
+const ADMIN_RATE_CACHE_KEY = "sidya-admin-valid-exchange-rates";
+const LEGACY_RATE_CACHE_KEYS = [
+  "sidya-admin-exchange-rates",
+  "sidyaExchangeRates",
+  "exchangeRates",
+  "exchange-rates",
+  "SIDYA_ADMIN_EXCHANGE_RATES",
+];
+
+const clearLegacyExchangeRateCaches = () => {
+  try {
+    LEGACY_RATE_CACHE_KEYS.forEach((key) => localStorage.removeItem(key));
+    const cached = JSON.parse(localStorage.getItem(ADMIN_RATE_CACHE_KEY) || "{}");
+    if (cached?.rates && !validExchangeRateMap(cached.rates)) {
+      localStorage.removeItem(ADMIN_RATE_CACHE_KEY);
+    }
+  } catch {
+    try { localStorage.removeItem(ADMIN_RATE_CACHE_KEY); } catch {}
+  }
+};
+
 const normalizeExchangeRates = (payload = {}) => {
   const rates = payload.rates || payload;
   const list = Array.isArray(rates) ? rates : Array.isArray(payload.rateList) ? payload.rateList : [];
@@ -132,13 +153,12 @@ const normalizeExchangeRates = (payload = {}) => {
     if (["USD", "EUR", "RUB", "GEL"].includes(code) && value) map[code] = value;
   });
 
-  const next = { ...state.exchangeRates, TRY: 1 };
-  ["USD", "EUR", "RUB", "GEL"].forEach((code) => {
-    if (map[code]) next[code] = map[code];
-  });
+  const next = { TRY: 1, USD: map.USD || 0, EUR: map.EUR || 0, RUB: map.RUB || 0, GEL: map.GEL || 0 };
+  if (!validExchangeRateMap(next)) {
+    throw new Error("Kur verisi mantiksiz veya eksik geldi; eski sabit kur kullanilmadi.");
+  }
   return next;
 };
-
 const tryRate = (currency) => {
   const code = normalizeCurrency(currency, "USD");
   if (code === "TRY") return 1;
@@ -226,50 +246,64 @@ const renderExchangeRateStrip = (payload = {}) => {
     minimumFractionDigits: 2,
     maximumFractionDigits: 4,
   }).format(Number(value || 0));
-  const updated = state.exchangeUpdatedAt ? new Date(state.exchangeUpdatedAt).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
+  const updated = state.exchangeUpdatedAt ? new Date(state.exchangeUpdatedAt).toLocaleString("tr-TR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "--";
+  const source = payload.source || "TCMB";
   const warning = payload.warning ? `<span class="exchange-rate-warning">${escapeHtml(payload.warning)}</span>` : "";
 
-  strip.dataset.rateSource = "admin-js-v7";
-  strip.innerHTML = `<b>Canli Kur Bilgisi</b><span>USD ${formatTry(tryRate("USD"))}</span><span>EUR ${formatTry(tryRate("EUR"))}</span><span>RUB ${formatTry(tryRate("RUB"))}</span><span>GEL ${formatTry(tryRate("GEL"))}</span><small>Kaynak: ${escapeHtml(payload.source || "TCMB")}</small><small>Guncelleme: ${updated}</small>${warning}<button id="refreshExchangeRatesButton" type="button">Kuru yenile</button>`;
-};
+  strip.dataset.rateSource = "admin-js-single-source-v1";
+  if (!validExchangeRateMap(state.exchangeRates)) {
+    strip.innerHTML = `<b>Canli Kur Bilgisi</b><span>Kur alinamadi</span>${warning}<button id="refreshExchangeRatesButton" type="button">Kuru yenile</button>`;
+    return;
+  }
 
+  strip.innerHTML = `<b>Canli Kur Bilgisi</b><span>USD ${formatTry(tryRate("USD"))}</span><span>EUR ${formatTry(tryRate("EUR"))}</span><span>RUB ${formatTry(tryRate("RUB"))}</span><span>GEL ${formatTry(tryRate("GEL"))}</span><small>Kaynak: ${escapeHtml(source)}</small><small>Guncelleme: ${updated}</small>${warning}<button id="refreshExchangeRatesButton" type="button">Kuru yenile</button>`;
+};
 const loadAdminExchangeRates = async () => {
+  clearLegacyExchangeRateCaches();
   try {
-    const res = await fetch(`/api/exchange-rates?t=${Date.now()}`, { cache: "no-store" });
-    if (!res.ok) throw new Error("Kur API yanit vermedi");
+    const res = await fetch(`/api/exchange-rates?admin=1&t=${Date.now()}`, {
+      cache: "no-store",
+      headers: { Accept: "application/json" },
+    });
+    if (!res.ok) throw new Error(`Kur API yanit vermedi (${res.status})`);
     const data = await res.json();
-    state.exchangeRates = normalizeExchangeRates(data);
+    const rates = normalizeExchangeRates(data);
+    state.exchangeRates = rates;
     state.exchangeUpdatedAt = data.updatedAt || data.fetched_at || data.updated_at || data.date || new Date().toISOString();
     try {
-      localStorage.setItem("sidya-admin-valid-exchange-rates", JSON.stringify({
-        rates: state.exchangeRates,
+      localStorage.setItem(ADMIN_RATE_CACHE_KEY, JSON.stringify({
+        rates,
         source: data.source || "TCMB",
         updatedAt: state.exchangeUpdatedAt,
         date: data.date || "",
       }));
     } catch {}
-    window.SIDYA_ADMIN_EXCHANGE_RATES = state.exchangeRates;
+    window.SIDYA_ADMIN_EXCHANGE_RATES = rates;
+    window.SIDYA_ADMIN_EXCHANGE_PAYLOAD = { rates, source: data.source || "TCMB", updatedAt: state.exchangeUpdatedAt, date: data.date || "" };
     renderExchangeRateStrip(data);
     renderAdminOrderRates();
     renderInvoiceLines();
   } catch (error) {
     console.warn("Kur alinamadi", error);
     try {
-      const cached = JSON.parse(localStorage.getItem("sidya-admin-valid-exchange-rates") || "{}");
+      const cached = JSON.parse(localStorage.getItem(ADMIN_RATE_CACHE_KEY) || "{}");
       if (cached?.rates && validExchangeRateMap(cached.rates)) {
         state.exchangeRates = { ...cached.rates, TRY: 1 };
         state.exchangeUpdatedAt = cached.updatedAt || new Date().toISOString();
         window.SIDYA_ADMIN_EXCHANGE_RATES = state.exchangeRates;
-        renderExchangeRateStrip({ source: cached.source || "TCMB", warning: "Son gecerli kur gosteriliyor." });
+        window.SIDYA_ADMIN_EXCHANGE_PAYLOAD = { rates: state.exchangeRates, source: cached.source || "TCMB", updatedAt: state.exchangeUpdatedAt, warning: "Son ge?erli kur g?steriliyor." };
+        renderExchangeRateStrip({ source: cached.source || "TCMB", warning: "Son ge?erli kur g?steriliyor." });
         renderAdminOrderRates();
         renderInvoiceLines();
         return;
       }
     } catch {}
-    renderExchangeRateStrip({ warning: "Kur alinamadi. Son gecerli kur yoksa deger 0 gosterilir." });
+    state.exchangeRates = { TRY: 1, USD: 0, EUR: 0, RUB: 0, GEL: 0 };
+    renderExchangeRateStrip({ warning: "Kur alinamadi. Hatal? eski kur g?sterilmedi." });
     renderAdminOrderRates();
   }
 };
+
 const loadData = async () => {
   if (!client) throw new Error("Supabase baÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬ÂÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¦ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸lantÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬ÂÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±sÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬ÂÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â± bulunamadÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬ÂÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±. backend-config.js ayarlarÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬ÂÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±nÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬ÂÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â± kontrol edin.");
   setStatus("Veriler yÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬ÂÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼kleniyor...");
