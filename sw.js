@@ -1,14 +1,15 @@
-const CACHE_NAME = "sidya-global-v117";
+﻿const CACHE_NAME = "sidya-global-v119";
 
 const SHELL_ASSETS = [
   "./",
   "./index.html",
   "./offline.html",
-  "./styles.css?v=20260722-1",
+  "./styles.css?v=20260722-2",
   "./catalog-products.generated.js?v=20260614-1",
-  "./script.js?v=20260722-1",
-  "./sidya-locale-layout-fixes.js?v=20260722-1",
-  "./sidya-proforma-core-fix.js?v=20260722-1",
+  "./script.js?v=20260722-2",
+  "./sidya-locale-layout-fixes.js?v=20260722-2",
+  "./sidya-proforma-core-fix.js?v=20260722-2",
+  "./sidya-ux-upgrades.js?v=20260722-2",
   "./admin-ltr-guard.js?v=20260712-1",
   "./assets/xlsx.full.min.js",
   "./manifest.webmanifest",
@@ -153,3 +154,6 @@ self.addEventListener("fetch", (event) => {
     }),
   );
 });
+
+
+

@@ -1,4 +1,4 @@
-const fs = require("fs");
+﻿const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
 
@@ -23,8 +23,8 @@ check(/class="site-container">\s*<div class="section-heading products-section-he
 check(index.includes('id="productGrid"'), "Homepage category grid is missing.");
 check(!index.includes('id="productCatalogSearch"'), "Individual product search must not appear on the homepage.");
 check(!index.includes('id="catalogLoadMore"'), "Individual product pagination must not appear on the homepage.");
-check(index.includes("script.js?v=20260722-1"), "Homepage script cache key is stale.");
-check(index.includes("styles.css?v=20260722-1"), "Homepage stylesheet cache key is stale.");
+check(index.includes("script.js?v=20260722-2"), "Homepage script cache key is stale.");
+check(index.includes("styles.css?v=20260722-2"), "Homepage stylesheet cache key is stale.");
 
 const renderStart = script.indexOf("const renderProducts = () => {");
 const renderEnd = script.indexOf("\nconst renderMarkets =", renderStart);
@@ -52,9 +52,9 @@ check(styles.includes('html[dir="ltr"] main :where('), "LTR alignment guard is m
 check(styles.includes("text-align: left !important"), "LTR content must be forced left.");
 check(styles.includes('html[dir="rtl"] main :where('), "RTL alignment guard is missing.");
 check(styles.includes("text-align: right !important"), "RTL content must remain right aligned.");
-check(worker.includes("sidya-global-v117"), "Service worker cache version must be v117.");
-check(worker.includes("script.js?v=20260722-1"), "Service worker caches an old homepage script.");
-check(worker.includes("styles.css?v=20260722-1"), "Service worker caches an old stylesheet.");
+check(worker.includes("sidya-global-v119"), "Service worker cache version must be v117.");
+check(worker.includes("script.js?v=20260722-2"), "Service worker caches an old homepage script.");
+check(worker.includes("styles.css?v=20260722-2"), "Service worker caches an old stylesheet.");
 check(worker.includes('url.pathname === "/script.js"'), "Homepage script must use network-first cache handling.");
 check(worker.includes('url.pathname === "/styles.css"'), "Homepage stylesheet must use network-first cache handling.");check(index.includes("Turkish Product Sourcing &amp; Export Proforma Platform"), "English SEO title must describe sourcing and proforma.");
 check(index.includes("source reliable Turkish products, request proforma offers"), "English SEO description is missing.");
@@ -67,3 +67,7 @@ check((index.match(/<div\b/g) || []).length === (index.match(/<\/div>/g) || []).
 check((index.match(/<section\b/g) || []).length === (index.match(/<\/section>/g) || []).length, "HTML section tags are unbalanced.");
 
 console.log(`Homepage regression test passed (${checks.length} checks)`);
+
+check(index.includes('sidya-ux-upgrades.js?v=20260722-2'), 'UX upgrades script is missing.');
+
+

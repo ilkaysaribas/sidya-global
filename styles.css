@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --ink: #171717;
   --muted: #5f6368;
   --paper: #f2f3f2;
@@ -1047,7 +1047,7 @@ h2 {
 }
 
 .port-pin::before {
-  content: "•";
+  content: "â€¢";
   color: #ffe08a;
   margin-right: 6px;
   font-size: 1.1rem;
@@ -1333,7 +1333,7 @@ h2 {
 }
 
 .related-companies strong::after {
-  content: "⌄";
+  content: "âŒ„";
   font-size: 0.86rem;
 }
 
@@ -2001,7 +2001,7 @@ h2 {
 }
 
 .proforma-search-label::after {
-  content: "🔍";
+  content: "ğŸ”";
   position: absolute;
   right: 14px;
   bottom: 11px;
@@ -5200,3 +5200,28 @@ html[dir="rtl"] .proforma-rate-snapshot { direction: rtl; text-align: right; }
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* UX revision: compact PWA prompt, catalog accordion, proforma wizard, logistics cards. */
+.install-panel { place-items: end center; padding: 18px; background: rgba(10, 18, 28, 0.22); backdrop-filter: blur(3px); }
+.install-panel-card { width: min(100%, 460px); padding: 20px; border-radius: 18px; }
+.install-dismiss-link { min-height: 40px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: #151515; font: inherit; font-weight: 900; cursor: pointer; }
+@media (min-width: 900px) { .install-panel { display: none; } }
+.related-companies summary { display:flex; align-items:center; justify-content:space-between; min-height:34px; padding:0 10px; border:1px solid var(--line); border-radius:8px; color:var(--navy); background:#f4f6f6; font-size:.78rem; font-weight:850; cursor:pointer; list-style:none; }
+.related-companies summary::-webkit-details-marker { display:none; }
+.related-companies summary::after { content:"+"; }
+.related-companies[open] summary::after { content:"−"; }
+.related-companies[open] > div { max-height:280px; padding:10px; border-color:var(--line); opacity:1; overflow:auto; pointer-events:auto; transform:none; }
+.related-company .sample-action { background:#151515; color:#fff; }
+.proforma-wizard { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.proforma-wizard button { display:flex; align-items:center; gap:9px; min-height:46px; border:1px solid var(--line); border-radius:999px; background:#fff; color:#4f565c; font:inherit; font-weight:900; cursor:pointer; }
+.proforma-wizard span { display:grid; place-items:center; width:28px; height:28px; border-radius:999px; background:#e9ecec; color:#151515; }
+.proforma-wizard button.is-active { background:#151515; color:#fff; border-color:#151515; }
+.proforma-wizard button.is-active span { background:#fff; color:#151515; }
+.proforma-step-panel[hidden] { display:none !important; }
+.proforma-filter-row { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-bottom:10px; }
+.proforma-filter-row label { display:grid; gap:6px; color:var(--muted); font-size:.78rem; font-weight:850; }
+.proforma-filter-row select { min-height:40px; border:1px solid var(--line); border-radius:8px; background:#fff; padding:0 10px; font:inherit; }
+.gate-stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.gate-stats span { padding:8px; border-radius:8px; background:#f6f7f7; }
+.logistics-tab-panel .border-gate-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+@media (max-width:900px){ .proforma-wizard,.proforma-filter-row,.logistics-tab-panel .border-gate-grid,.gate-stats{grid-template-columns:1fr;} .proforma-screen-dialog{padding:12px;width:min(100%,calc(100vw - 16px));} .proforma-wizard button{border-radius:12px;justify-content:flex-start;} }
