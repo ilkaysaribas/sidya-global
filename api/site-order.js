@@ -255,6 +255,12 @@ const createRfqOrder = async (body, serviceRoleKey, req) => {
 };
 
 module.exports = async (req, res) => {
+  setCorsHeaders(req, res);
+  if (req.method === "OPTIONS") {
+    res.status(204).end();
+    return;
+  }
+
   try {
     const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
     if (!serviceRoleKey) {
