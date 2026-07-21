@@ -283,6 +283,7 @@ const loadAdminExchangeRates = async () => {
     renderExchangeRateStrip(data);
     renderAdminOrderRates();
     renderInvoiceLines();
+    renderMetrics();
   } catch (error) {
     console.warn("Kur alinamadi", error);
     try {
@@ -295,6 +296,7 @@ const loadAdminExchangeRates = async () => {
         renderExchangeRateStrip({ source: cached.source || "TCMB", warning: "Son ge?erli kur g?steriliyor." });
         renderAdminOrderRates();
         renderInvoiceLines();
+        renderMetrics();
         return;
       }
     } catch {}
@@ -365,29 +367,173 @@ const formatStockCartons = (stock, unitsPerCarton) => {
 };
 
 const renderMetrics = () => {
-  const setText = (selector, value) => {
-    const node = document.querySelector(selector);
-    if (node) node.textContent = value;
+  const safeNum = (value) => {
+    const parsed = Number(String(value ?? "").replace(/\s/g, "").replace(/,/g, "."));
+    return Number.isFinite(parsed) ? parsed : 0;
   };
   const setHtml = (selector, value) => {
     const node = document.querySelector(selector);
     if (node) node.innerHTML = value;
   };
-  const purchaseValue = state.products.reduce((sum, item) => sum + Number(item.purchase_price || 0) * Number(item.stock_quantity || 0), 0);
-  const saleValue = state.products.reduce((sum, item) => sum + Number(item.sale_price || 0) * Number(item.stock_quantity || 0), 0);
+  const firstValue = (record, keys, fallback = "") => {
+    for (const key of keys) {
+      if (record && record[key] !== undefined && record[key] !== null && record[key] !== "") return record[key];
+    }
+    return fallback;
+  };
+  const safeCurrency = (value, fallback = "USD") => {
+    try { return normalizeCurrency(value || fallback, fallback); } catch { return fallback; }
+  };
+  const asUsd = (amount, currency = "USD") => {
+    const normalized = safeCurrency(currency, "USD");
+    return normalized === "USD" ? safeNum(amount) : convertToUsd(safeNum(amount), normalized);
+  };
+  const moneyTry = (value) => money(value, "TRY");
+  const moneyUsd = (value) => money(value, "USD");
+  const percent = (value) => `${number(value)}%`;
+  const parseDate = (value) => {
+    if (!value) return null;
+    const parsed = new Date(value);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  };
+  const dateKey = (value) => {
+    const parsed = parseDate(value);
+    return parsed ? parsed.toISOString().slice(0, 10) : "";
+  };
+  const today = new Date();
+  const todayKey = today.toISOString().slice(0, 10);
+  const daysUntil = (value) => {
+    const parsed = parseDate(value);
+    if (!parsed) return null;
+    const a = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const b = new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate());
+    return Math.round((b - a) / 86400000);
+  };
+  const customerById = new Map((state.customers || []).map((item) => [item.id, item]));
+  const customerName = (id, fallback = "-") => {
+    const customer = customerById.get(id);
+    return customer?.company || customer?.company_name || customer?.contact_name || fallback || "-";
+  };
+  const invoiceTotalUsd = (invoice) => asUsd(firstValue(invoice, ["grand_total", "total", "total_amount", "amount", "subtotal"], 0), firstValue(invoice, ["currency"], "USD"));
+  const invoiceKind = (invoice) => {
+    const type = String(firstValue(invoice, ["invoice_type", "type", "kind"], "sale")).toLowerCase();
+    if (type.includes("purchase") || type.includes("alis") || type.includes("al\u0131\u015f")) return "purchase";
+    if (type.includes("return") || type.includes("iade")) return "return";
+    return "sale";
+  };
+  const invoiceStatus = (invoice) => {
+    const raw = String(firstValue(invoice, ["status", "payment_status"], "")).toLowerCase();
+    if (["paid", "collected", "tahsil", "tahsil_edildi", "odendi", "\u00f6dendi"].some((token) => raw.includes(token))) return "paid";
+    if (["cancelled", "deleted", "void"].some((token) => raw.includes(token))) return "cancelled";
+    const due = daysUntil(firstValue(invoice, ["due_date", "payment_due_date", "maturity_date"], ""));
+    return due !== null && due < 0 ? "late" : "open";
+  };
+  const statusBadge = (status) => {
+    const label = status === "paid" ? "Tahsil Edildi" : status === "late" ? "Gecikti" : status === "cancelled" ? "\u0130ptal" : "Bekliyor";
+    const tone = status === "paid" ? "success" : status === "late" ? "danger" : status === "cancelled" ? "muted" : "warning";
+    return `<span class="erp-badge erp-badge--${tone}">${label}</span>`;
+  };
+  const productRows = state.products || [];
+  const productTotals = productRows.reduce((acc, item) => {
+    const stock = safeNum(firstValue(item, ["stock_quantity", "stock", "quantity"], 0));
+    const minStock = safeNum(firstValue(item, ["minimum_stock", "min_stock"], 0));
+    const purchase = safeNum(firstValue(item, ["purchase_price", "purchase_unit_price"], 0));
+    const sale = safeNum(firstValue(item, ["sale_price", "sale_unit_price"], 0));
+    acc.count += 1;
+    acc.stock += stock;
+    acc.purchaseUsd += stock * purchase;
+    acc.saleUsd += stock * sale;
+    if (minStock > 0 && stock <= minStock) acc.low.push({ item, stock, minStock, missing: Math.max(minStock - stock, 0) });
+    const category = String(firstValue(item, ["category"], "Di\u011fer") || "Di\u011fer");
+    acc.category.set(category, (acc.category.get(category) || 0) + Math.max(stock * sale, 0));
+    return acc;
+  }, { count: 0, stock: 0, purchaseUsd: 0, saleUsd: 0, low: [], category: new Map() });
+  const purchaseTry = convertFromUsd(productTotals.purchaseUsd, "TRY");
+  const saleTry = convertFromUsd(productTotals.saleUsd, "TRY");
+  const grossProfitTry = saleTry - purchaseTry;
+  const stockMargin = saleTry > 0 ? (grossProfitTry / saleTry) * 100 : 0;
+  const invoiceRows = state.invoices || [];
   const thisMonth = new Date().toISOString().slice(0, 7);
-  const monthlySales = state.invoices.filter((item) => item.invoice_type === "sale" && String(item.invoice_date || item.created_at).startsWith(thisMonth)).reduce((sum, item) => sum + Number(item.grand_total || 0), 0);
-  setText("#metricPurchaseValue", money(purchaseValue, "USD"));
-  setText("#metricSaleValue", money(saleValue, "USD"));
-  setText("#metricMonthlySales", money(monthlySales, "USD"));
-  setText("#metricOrders", number(state.orders.filter((item) => !["converted", "cancelled", "deleted"].includes(item.status)).length));
-  const low = state.products.filter((item) => Number(item.minimum_stock || 0) > 0 && Number(item.stock_quantity || 0) <= Number(item.minimum_stock || 0)).slice(0, 8);
-  setHtml("#lowStockList", low.length ? low.map((item) => `<div class="compact-row"><div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.brand || "")}</small></div><span class="stock-low">${number(item.stock_quantity)} adet</span></div>`).join("") : '<p class="empty">Kritik stok yok.</p>');
-  const recent = state.invoices.slice(0, 8);
-  setHtml("#recentInvoices", recent.length ? recent.map((item) => {
-    const invoiceType = item.invoice_type === "purchase" ? "Alis" : item.invoice_type === "return" ? "Iade" : "Satis";
-    return `<div class="compact-row"><div><strong>${escapeHtml(item.invoice_no || item.draft_data?.document_number || "Fatura")}</strong><small>${date(item.invoice_date)} - ${invoiceType}</small></div><span>${money(item.grand_total, item.currency || "USD")}</span></div>`;
-  }).join("") : '<p class="empty">Henuz fatura bulunmuyor.</p>');
+  const monthlySalesUsd = invoiceRows.filter((item) => invoiceKind(item) === "sale" && dateKey(firstValue(item, ["invoice_date", "created_at", "date"], "")).startsWith(thisMonth)).reduce((sum, item) => sum + invoiceTotalUsd(item), 0);
+  const todaySalesUsd = invoiceRows.filter((item) => invoiceKind(item) === "sale" && dateKey(firstValue(item, ["invoice_date", "created_at", "date"], "")) === todayKey).reduce((sum, item) => sum + invoiceTotalUsd(item), 0);
+  const openOrderCount = (state.orders || []).filter((item) => !["converted", "cancelled", "deleted"].includes(String(item.status || "").toLowerCase())).length;
+  const ledgerItems = (state.ledger || []).map((row) => {
+    const debit = safeNum(row.debit);
+    const credit = safeNum(row.credit);
+    const explicit = safeNum(firstValue(row, ["amount", "total", "total_amount"], 0));
+    const amount = explicit || Math.abs(debit - credit);
+    const haystack = `${row.type || ""} ${row.direction || ""} ${row.category || ""} ${row.description || ""} ${row.status || ""}`.toLocaleLowerCase("tr");
+    const payable = ["borc", "bor\u00e7", "payable", "payment", "odeme", "\u00f6deme", "supplier", "tedarik"].some((token) => haystack.includes(token)) || credit > debit;
+    const paid = ["paid", "collected", "tahsil", "odendi", "\u00f6dendi", "closed", "kapandi", "kapand\u0131"].some((token) => haystack.includes(token));
+    return { kind: payable ? "payable" : "receivable", status: paid ? "paid" : "open", amountUsd: asUsd(amount, row.currency || "USD"), dueDate: firstValue(row, ["due_date", "payment_due_date", "maturity_date", "date", "created_at"], ""), party: customerName(row.customer_id, row.customer_name || row.company || row.party || row.description || "-") };
+  }).filter((item) => item.amountUsd > 0);
+  const invoiceFinanceItems = invoiceRows.filter((invoice) => invoiceStatus(invoice) !== "cancelled").map((invoice) => ({ kind: invoiceKind(invoice) === "purchase" ? "payable" : "receivable", status: invoiceStatus(invoice) === "paid" ? "paid" : "open", amountUsd: invoiceTotalUsd(invoice), dueDate: firstValue(invoice, ["due_date", "payment_due_date", "maturity_date", "invoice_date", "created_at"], ""), party: customerName(invoice.customer_id, invoice.customer_name || invoice.company || invoice.company_name || "-") })).filter((item) => item.amountUsd > 0);
+  const financeItems = ledgerItems.length ? ledgerItems : invoiceFinanceItems;
+  const financeSummary = financeItems.reduce((acc, item) => {
+    const amountTry = convertFromUsd(item.amountUsd, "TRY");
+    const d = daysUntil(item.dueDate);
+    const target = item.kind === "payable" ? acc.payable : acc.receivable;
+    target.total += amountTry;
+    if (item.status === "paid") target.paid += amountTry;
+    else {
+      target.pending += amountTry;
+      if (d !== null && d < 0) target.overdue += amountTry;
+      if (d !== null && d >= 0 && d <= 7) target.upcoming += amountTry;
+    }
+    if (item.status !== "paid" && dateKey(item.dueDate) === todayKey) (item.kind === "payable" ? acc.todayPayables : acc.todayReceivables).push({ ...item, amountTry });
+    return acc;
+  }, { receivable: { total: 0, paid: 0, pending: 0, overdue: 0, upcoming: 0 }, payable: { total: 0, paid: 0, pending: 0, overdue: 0, upcoming: 0 }, todayReceivables: [], todayPayables: [] });
+  const todayCollection = financeSummary.todayReceivables.reduce((sum, item) => sum + item.amountTry, 0);
+  const todayPayment = financeSummary.todayPayables.reduce((sum, item) => sum + item.amountTry, 0);
+  const netCashToday = todayCollection - todayPayment + convertFromUsd(todaySalesUsd, "TRY");
+  const netTrade = financeSummary.receivable.pending - financeSummary.payable.pending;
+  const dashboard = document.querySelector('[data-view-panel="dashboard"]');
+  const metricGrid = dashboard?.querySelector(".metric-grid");
+  const baseGrid = dashboard?.querySelector(".dashboard-grid");
+  const ensureBlock = (id, className, anchor, position = "after") => {
+    let node = document.querySelector(`#${id}`);
+    if (!node && dashboard) {
+      node = document.createElement("div");
+      node.id = id;
+      node.className = className;
+      if (anchor && position === "before") dashboard.insertBefore(node, anchor);
+      else if (anchor) anchor.insertAdjacentElement("afterend", node);
+      else dashboard.appendChild(node);
+    }
+    return node;
+  };
+  const dailyNode = ensureBlock("erpDailySummary", "erp-daily-summary", metricGrid, "before");
+  if (dailyNode) dailyNode.innerHTML = [["Bug\u00fcn Tahsilat", moneyTry(todayCollection), "success"], ["Bug\u00fcn \u00d6deme", moneyTry(todayPayment), "danger"], ["Bug\u00fcnk\u00fc Sat\u0131\u015f", moneyTry(convertFromUsd(todaySalesUsd, "TRY")), "info"], ["Yeni Sipari\u015f", number(openOrderCount), "info"], ["Net Nakit", moneyTry(netCashToday), netCashToday >= 0 ? "success" : "danger"]].map(([label, value, tone]) => `<article class="erp-mini-card erp-mini-card--${tone}"><span>${label}</span><strong>${value}</strong></article>`).join("");
+  const purchaseCard = document.querySelector("#metricPurchaseValue")?.closest("article");
+  if (purchaseCard) purchaseCard.innerHTML = `<span>Toplam Al\u0131\u015f Stok De\u011feri</span><strong id="metricPurchaseValue">${moneyTry(purchaseTry)}</strong><small>${moneyUsd(productTotals.purchaseUsd)} USD kar\u015f\u0131l\u0131\u011f\u0131</small><div class="metric-details"><em>Toplam \u00fcr\u00fcn: ${number(productTotals.count)}</em><em>Toplam stok: ${number(productTotals.stock)}</em></div>`;
+  const saleCard = document.querySelector("#metricSaleValue")?.closest("article");
+  if (saleCard) saleCard.innerHTML = `<span>Toplam Sat\u0131\u015f De\u011feri</span><strong id="metricSaleValue">${moneyTry(saleTry)}</strong><small>${moneyUsd(productTotals.saleUsd)} USD kar\u015f\u0131l\u0131\u011f\u0131</small><div class="metric-details"><em>Beklenen br\u00fct k\u00e2r: ${moneyTry(grossProfitTry)}</em><em>K\u00e2r marj\u0131: ${percent(stockMargin)}</em></div>`;
+  const monthCard = document.querySelector("#metricMonthlySales")?.closest("article");
+  if (monthCard) monthCard.innerHTML = `<span>Bu ay sat\u0131\u015f</span><strong id="metricMonthlySales">${moneyTry(convertFromUsd(monthlySalesUsd, "TRY"))}</strong><small>${moneyUsd(monthlySalesUsd)} USD faturalar</small><div class="metric-details"><em>Fatura adedi: ${number(invoiceRows.filter((item) => dateKey(firstValue(item, ["invoice_date", "created_at", "date"], "")).startsWith(thisMonth)).length)}</em></div>`;
+  const orderCard = document.querySelector("#metricOrders")?.closest("article");
+  if (orderCard) orderCard.innerHTML = `<span>Yeni site sipari\u015fi</span><strong id="metricOrders">${number(openOrderCount)}</strong><small>\u0130\u015flem bekleyen</small><div class="metric-details"><em>Toplam sipari\u015f: ${number((state.orders || []).length)}</em></div>`;
+  const financeNode = ensureBlock("erpFinanceCards", "erp-finance-grid", metricGrid);
+  if (financeNode) financeNode.innerHTML = `<article class="erp-finance-card erp-finance-card--green"><p>Ticari Alacaklar</p><strong>${moneyTry(financeSummary.receivable.pending)}</strong><div><span>Toplam alacak</span><b>${moneyTry(financeSummary.receivable.total)}</b></div><div><span>Tahsil edilen</span><b>${moneyTry(financeSummary.receivable.paid)}</b></div><div><span>Vadesi ge\u00e7en</span><b>${moneyTry(financeSummary.receivable.overdue)}</b></div><div><span>Yakla\u015fan tahsilatlar</span><b>${moneyTry(financeSummary.receivable.upcoming)}</b></div></article><article class="erp-finance-card erp-finance-card--red"><p>Ticari Bor\u00e7lar</p><strong>${moneyTry(financeSummary.payable.pending)}</strong><div><span>Toplam bor\u00e7</span><b>${moneyTry(financeSummary.payable.total)}</b></div><div><span>\u00d6denen</span><b>${moneyTry(financeSummary.payable.paid)}</b></div><div><span>Vadesi ge\u00e7en</span><b>${moneyTry(financeSummary.payable.overdue)}</b></div><div><span>Yakla\u015fan \u00f6demeler</span><b>${moneyTry(financeSummary.payable.upcoming)}</b></div></article><article class="erp-finance-card erp-finance-card--${netTrade >= 0 ? "green" : "red"}"><p>Net Ticari Durum</p><strong>${moneyTry(netTrade)}</strong><div><span>Bekleyen alacak</span><b>${moneyTry(financeSummary.receivable.pending)}</b></div><div><span>Bekleyen bor\u00e7</span><b>${moneyTry(financeSummary.payable.pending)}</b></div><div><span>Form\u00fcl</span><b>Alacak - Bor\u00e7</b></div></article>`;
+  const low = productTotals.low.sort((a, b) => b.missing - a.missing || a.stock - b.stock).slice(0, 10);
+  setHtml("#lowStockList", low.length ? low.map(({ item, stock, minStock, missing }) => `<div class="compact-row erp-stock-row"><div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.brand || "")}</small></div><div class="erp-stock-numbers"><span>Mevcut <b>${number(stock)}</b></span><span>Minimum <b>${number(minStock)}</b></span><span class="stock-low">Eksik <b>${number(missing)}</b></span></div></div>`).join("") : '<p class="empty">Kritik stok yok.</p>');
+  const recent = invoiceRows.slice(0, 8);
+  setHtml("#recentInvoices", recent.length ? `<div class="erp-invoice-list">${recent.map((item) => { const total = invoiceTotalUsd(item); const kind = invoiceKind(item) === "purchase" ? "Al\u0131\u015f" : invoiceKind(item) === "return" ? "\u0130ade" : "Sat\u0131\u015f"; return `<div class="erp-invoice-row"><strong>${escapeHtml(item.invoice_no || item.draft_data?.document_number || "Fatura")}</strong><span>${escapeHtml(customerName(item.customer_id, item.customer_name || item.company || "-"))}</span><span>${moneyTry(convertFromUsd(total, "TRY"))}</span><span>${kind}</span><span>${date(firstValue(item, ["due_date", "invoice_date", "created_at"], ""))}</span>${statusBadge(invoiceStatus(item))}</div>`; }).join("")}</div>` : '<p class="empty">Hen\u00fcz fatura bulunmuyor.</p>');
+  const monthStarts = Array.from({ length: 12 }, (_, index) => { const d = new Date(today.getFullYear(), today.getMonth() - 11 + index, 1); return { key: d.toISOString().slice(0, 7), label: d.toLocaleDateString("tr-TR", { month: "short" }) }; });
+  const monthlyValues = monthStarts.map((m) => invoiceRows.filter((item) => invoiceKind(item) === "sale" && dateKey(firstValue(item, ["invoice_date", "created_at", "date"], "")).startsWith(m.key)).reduce((sum, item) => sum + convertFromUsd(invoiceTotalUsd(item), "TRY"), 0));
+  const maxMonthly = Math.max(...monthlyValues, 1);
+  const points = monthlyValues.map((v, i) => `${20 + i * 36},${140 - (v / maxMonthly) * 110}`).join(" ");
+  const agingBuckets = [{ label: "0-30", min: 0, max: 30 }, { label: "31-60", min: 31, max: 60 }, { label: "61-90", min: 61, max: 90 }, { label: "90+", min: 91, max: Infinity }].map((bucket) => { const rows = financeItems.filter((item) => item.status !== "paid").filter((item) => { const d = daysUntil(item.dueDate); const days = d === null ? 999 : Math.max(d, 0); return days >= bucket.min && days <= bucket.max; }); return { label: bucket.label, receivable: rows.filter((item) => item.kind === "receivable").reduce((sum, item) => sum + convertFromUsd(item.amountUsd, "TRY"), 0), payable: rows.filter((item) => item.kind === "payable").reduce((sum, item) => sum + convertFromUsd(item.amountUsd, "TRY"), 0) }; });
+  const maxAging = Math.max(...agingBuckets.flatMap((item) => [item.receivable, item.payable]), 1);
+  const calendarDays = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+  const calendarHtml = Array.from({ length: calendarDays }, (_, i) => { const d = new Date(today.getFullYear(), today.getMonth(), i + 1); const key = d.toISOString().slice(0, 10); const dayItems = financeItems.filter((item) => item.status !== "paid" && dateKey(item.dueDate) === key); const income = dayItems.filter((item) => item.kind === "receivable").reduce((sum, item) => sum + convertFromUsd(item.amountUsd, "TRY"), 0); const out = dayItems.filter((item) => item.kind === "payable").reduce((sum, item) => sum + convertFromUsd(item.amountUsd, "TRY"), 0); return `<div class="erp-calendar-day ${key === todayKey ? "is-today" : ""}"><b>${i + 1}</b><span class="income">${income ? moneyTry(income) : "-"}</span><span class="outcome">${out ? moneyTry(out) : "-"}</span><span class="net">${income || out ? moneyTry(income - out) : ""}</span></div>`; }).join("");
+  const accountRows = [...financeItems.reduce((map, item) => { const row = map.get(item.party) || { party: item.party, receivable: 0, payable: 0 }; if (item.kind === "receivable") row.receivable += convertFromUsd(item.amountUsd, "TRY"); else row.payable += convertFromUsd(item.amountUsd, "TRY"); map.set(item.party, row); return map; }, new Map()).values()].sort((a, b) => Math.abs((b.receivable - b.payable)) - Math.abs((a.receivable - a.payable))).slice(0, 10);
+  const categoryEntries = [...productTotals.category.entries()].filter(([, value]) => value > 0).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  const categoryTotal = categoryEntries.reduce((sum, [, value]) => sum + value, 0) || 1;
+  const pieColors = ["#0f766e", "#2563eb", "#f59e0b", "#dc2626", "#7c3aed", "#64748b"];
+  let pieStart = 0;
+  const pieGradient = categoryEntries.map(([, value], index) => { const end = pieStart + (value / categoryTotal) * 360; const part = `${pieColors[index]} ${pieStart}deg ${end}deg`; pieStart = end; return part; }).join(", ") || "#e2e8f0 0deg 360deg";
+  const sections = ensureBlock("erpDashboardSections", "erp-dashboard-sections", baseGrid || metricGrid);
+  if (sections) sections.innerHTML = `<div class="erp-wide-grid"><article class="panel erp-calendar-panel"><div class="panel-heading"><div><p class="eyebrow">VADE TAKV\u0130M\u0130</p><h2>Tahsilat ve \u00d6deme Takvimi</h2></div></div><div class="erp-calendar-grid">${calendarHtml}</div></article><article class="panel erp-today-panel"><div class="panel-heading"><div><p class="eyebrow">BUG\u00dcN</p><h2>Bug\u00fcn\u00fcn Ak\u0131\u015f\u0131</h2></div></div><h3>Bug\u00fcn Tahsil Edilecekler</h3>${financeSummary.todayReceivables.length ? financeSummary.todayReceivables.slice(0, 6).map((item) => `<div class="compact-row"><div><strong>${escapeHtml(item.party)}</strong><small>Kalan g\u00fcn: 0</small></div><span class="text-success">${moneyTry(item.amountTry)}</span></div>`).join("") : '<p class="empty">Bug\u00fcn tahsilat yok.</p>'}<h3>Bug\u00fcn \u00d6denecekler</h3>${financeSummary.todayPayables.length ? financeSummary.todayPayables.slice(0, 6).map((item) => `<div class="compact-row"><div><strong>${escapeHtml(item.party)}</strong><small>Kalan g\u00fcn: 0</small></div><span class="text-danger">${moneyTry(item.amountTry)}</span></div>`).join("") : '<p class="empty">Bug\u00fcn \u00f6deme yok.</p>'}</article></div><div class="erp-wide-grid erp-wide-grid--balanced"><article class="panel"><div class="panel-heading"><div><p class="eyebrow">VADE ANAL\u0130Z\u0130</p><h2>Alacak / Bor\u00e7 Vade Analizi</h2></div></div><div class="erp-aging-chart">${agingBuckets.map((bucket) => `<div class="erp-aging-row"><span>${bucket.label} G\u00fcn</span><div class="erp-aging-bars"><i class="green" style="width:${Math.max((bucket.receivable / maxAging) * 100, bucket.receivable ? 4 : 0)}%"></i><i class="red" style="width:${Math.max((bucket.payable / maxAging) * 100, bucket.payable ? 4 : 0)}%"></i></div><b>${moneyTry(bucket.receivable)} / ${moneyTry(bucket.payable)}</b></div>`).join("")}</div></article><article class="panel"><div class="panel-heading"><div><p class="eyebrow">CAR\u0130 \u00d6ZET\u0130</p><h2>En B\u00fcy\u00fck 10 Cari Hesap</h2></div></div><div class="erp-account-list">${accountRows.length ? accountRows.map((row) => { const balance = row.receivable - row.payable; return `<div class="erp-account-row"><strong>${escapeHtml(row.party)}</strong><span>${moneyTry(row.payable)}</span><span>${moneyTry(row.receivable)}</span><b class="${balance >= 0 ? "text-success" : "text-danger"}">${moneyTry(balance)}</b></div>`; }).join("") : '<p class="empty">Cari bakiye bulunmuyor.</p>'}</div></article></div><div class="erp-wide-grid erp-wide-grid--balanced"><article class="panel"><div class="panel-heading"><div><p class="eyebrow">SATI\u015e GRAF\u0130\u011e\u0130</p><h2>Ayl\u0131k Sat\u0131\u015f</h2></div></div><svg class="erp-line-chart" viewBox="0 0 430 160" role="img" aria-label="Ayl\u0131k sat\u0131\u015f grafi\u011fi"><polyline fill="none" stroke="#0f766e" stroke-width="4" points="${points}"></polyline>${monthlyValues.map((v, i) => `<circle cx="${20 + i * 36}" cy="${140 - (v / maxMonthly) * 110}" r="4"></circle>`).join("")}</svg><div class="erp-chart-labels">${monthStarts.map((m) => `<span>${m.label}</span>`).join("")}</div></article><article class="panel"><div class="panel-heading"><div><p class="eyebrow">STOK DA\u011eILIMI</p><h2>Kategori Bazl\u0131 Stok</h2></div></div><div class="erp-pie-wrap"><div class="erp-pie" style="background: conic-gradient(${pieGradient})"></div><div class="erp-pie-legend">${categoryEntries.length ? categoryEntries.map(([label, value], index) => `<span><i style="background:${pieColors[index]}"></i>${escapeHtml(label)} <b>${percent((value / categoryTotal) * 100)}</b></span>`).join("") : '<p class="empty">Kategori verisi yok.</p>'}</div></div></article></div>`;
 };
 
 const customerBalance = (customerId) => {
