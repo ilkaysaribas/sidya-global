@@ -755,9 +755,7 @@ const handleDeleteIncomingOrder = async (orderId) => {
       throw Object.assign(new Error("Admin oturumu bulunamadi."), { code: "ADMIN_SESSION_MISSING" });
     }
 
-    const deleteUrl = window.location.hostname === "sidyaglobal.com"
-      ? "https://www.sidyaglobal.com/api/site-order?adminDelete=1"
-      : "/api/site-order?adminDelete=1";
+    const deleteUrl = "/api/site-order?adminDelete=1";
     console.log("DELETE REQUEST", {
       url: deleteUrl,
       method: "DELETE",
