@@ -743,24 +743,48 @@ const handleDeleteIncomingOrder = async (orderId) => {
       button.textContent = "Siliniyor...";
     }
 
-    const deletedAt = new Date().toISOString();
-    let result = await client
-      .from("site_orders")
-      .update({ status: "deleted", updated_at: deletedAt })
-      .eq("id", orderId)
-      .select("id");
+    console.log("DELETE CLICKED", {
+      fullOrder: order,
+      id: order.id,
+      orderNo: order.order_no,
+    });
 
-    if (result.error && /updated_at/i.test(String(result.error.message || ""))) {
-      result = await client
-        .from("site_orders")
-        .update({ status: "deleted" })
-        .eq("id", orderId)
-        .select("id");
+    const sessionResult = await client.auth.getSession();
+    const accessToken = sessionResult?.data?.session?.access_token;
+    if (!accessToken) {
+      throw Object.assign(new Error("Admin oturumu bulunamadi."), { code: "ADMIN_SESSION_MISSING" });
     }
 
-    if (result.error) throw result.error;
-    if (!Array.isArray(result.data) || result.data.length === 0) {
-      throw new Error("No site_orders row was updated for incoming order delete.");
+    const deleteUrl = "/api/site-order?adminDelete=1";
+    console.log("DELETE REQUEST", {
+      url: deleteUrl,
+      method: "DELETE",
+      orderId,
+    });
+
+    const response = await fetch(deleteUrl, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: orderId }),
+    });
+    const responseText = await response.text();
+    console.error("DELETE RESPONSE", {
+      status: response.status,
+      statusText: response.statusText,
+      body: responseText,
+    });
+
+    let result = null;
+    try { result = responseText ? JSON.parse(responseText) : null; } catch (_error) {}
+    if (!response.ok || !result?.success) {
+      const message = result?.message || result?.error || responseText || "Siparis silinemedi.";
+      throw Object.assign(new Error(message), {
+        code: result?.code || `HTTP_${response.status}`,
+        status: response.status,
+      });
     }
 
     state.orders = state.orders.filter((item) => String(item.id) !== String(orderId));
@@ -769,7 +793,7 @@ const handleDeleteIncomingOrder = async (orderId) => {
     setStatus("Sipari\u015f silindi ve listeden kald\u0131r\u0131ld\u0131.");
   } catch (error) {
     console.error("Incoming order delete error:", error);
-    setStatus("Sipari\u015f silinemedi. L\u00fctfen tekrar deneyin.", true);
+    setStatus(`Siparis silinemedi: ${error.message || "Lutfen tekrar deneyin."}${error.code ? ` (Kod: ${error.code})` : ""}`, true);
     if (button && document.body.contains(button)) {
       button.disabled = false;
       button.textContent = previousText;

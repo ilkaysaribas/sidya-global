@@ -1,5 +1,6 @@
 const DEFAULT_SUPABASE_URL = "https://jhjforyykkxklfarjtjl.supabase.co";
 const MAX_BODY_SIZE = 1024 * 1024;
+const SUPABASE_MISSING_TABLE_CODES = new Set(["42P01", "PGRST205", "PGRST106"]);
 
 const readBody = (req) => new Promise((resolve, reject) => {
   const chunks = [];
@@ -25,6 +26,8 @@ const parseBody = async (req) => {
 const cleanText = (value, max = 240) => String(value || "").replace(/[<>]/g, "").trim().slice(0, max);
 const cleanNumber = (value) => Math.max(0, Number(value) || 0);
 const isUuid = (value) => /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(value || ""));
+const stripBearer = (value) => String(value || "").trim().replace(/^Bearer\s+/i, "").replace(/^['"]|['"]$/g, "").trim();
+const supabaseUrl = () => (process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || process.env.SUPABASE_URL?.trim() || DEFAULT_SUPABASE_URL).replace(/\/$/, "");
 const cleanCurrency = (value) => {
   const code = cleanText(value || "USD", 3).toUpperCase();
   return /^[A-Z]{3}$/.test(code) ? code : "USD";
@@ -44,8 +47,7 @@ const parsePrice = (value) => {
 };
 
 const supabaseRequest = async (path, options, serviceRoleKey) => {
-  const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || DEFAULT_SUPABASE_URL).replace(/\/$/, "");
-  const response = await fetch(`${supabaseUrl}${path}`, {
+  const response = await fetch(`${supabaseUrl()}${path}`, {
     ...options,
     headers: {
       apikey: serviceRoleKey,
@@ -54,8 +56,93 @@ const supabaseRequest = async (path, options, serviceRoleKey) => {
       ...(options.headers || {}),
     },
   });
-  if (!response.ok) throw Object.assign(new Error(await response.text()), { statusCode: response.status });
-  return response.status === 204 ? null : response.json();
+  const text = await response.text();
+  let parsed = text;
+  try { parsed = text ? JSON.parse(text) : null; } catch (_error) {}
+  if (!response.ok) {
+    const message = parsed && typeof parsed === "object" && parsed.message ? parsed.message : text;
+    throw Object.assign(new Error(message || "Supabase REST request failed."), {
+      statusCode: response.status,
+      safeDetails: parsed,
+    });
+  }
+  return response.status === 204 ? null : parsed;
+};
+
+const errorCode = (error) => error?.code || error?.safeDetails?.code || "";
+const errorMessage = (error) => error?.safeDetails?.message || error?.message || "";
+const isMissingTableError = (error) => {
+  const code = errorCode(error);
+  const message = errorMessage(error);
+  return SUPABASE_MISSING_TABLE_CODES.has(code) || /relation .* does not exist|schema cache/i.test(message);
+};
+
+const safeDeleteErrorMessage = (error) => {
+  const code = errorCode(error);
+  const message = errorMessage(error);
+  if (code === "ORDER_CONVERTED") return "Bu siparis satis faturasina aktarildigi icin silinemez.";
+  if (code === "ORDER_NOT_FOUND") return "Siparis veritabaninda bulunamadi.";
+  if (code === "INVALID_ORDER_ID") return "Silme istegi gecersiz siparis ID degeri gonderdi.";
+  if (code === "ADMIN_SESSION_MISSING" || code === "ADMIN_SESSION_INVALID") return "Admin oturumu dogrulanamadi. Lutfen tekrar giris yapin.";
+  if (code === "ADMIN_REQUIRED") return "Bu islem icin admin yetkisi gerekli.";
+  if (/23503|foreign key|violates|reference/i.test(`${code} ${message}`)) return "Bu siparise bagli kayitlar bulundugu icin silinemiyor.";
+  return "Siparis silinemedi. Sunucu loglarini kontrol edin.";
+};
+
+const assertAdmin = async (req, serviceRoleKey) => {
+  const token = stripBearer(req.headers.authorization);
+  if (!token) {
+    throw Object.assign(new Error("Admin session token is missing."), { statusCode: 401, code: "ADMIN_SESSION_MISSING" });
+  }
+  const response = await fetch(`${supabaseUrl()}/auth/v1/user`, {
+    headers: { apikey: serviceRoleKey, Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) {
+    throw Object.assign(new Error("Admin session could not be verified."), { statusCode: 401, code: "ADMIN_SESSION_INVALID" });
+  }
+  const user = await response.json();
+  const admins = await supabaseRequest(`/rest/v1/admin_users?user_id=eq.${encodeURIComponent(user.id)}&select=user_id&limit=1`, { method: "GET" }, serviceRoleKey);
+  if (!Array.isArray(admins) || !admins.length) {
+    throw Object.assign(new Error("Admin authorization required."), { statusCode: 403, code: "ADMIN_REQUIRED" });
+  }
+  return user;
+};
+
+const incomingOrderHasInvoiceLink = (order = {}) => {
+  const status = String(order.status || "").toLowerCase();
+  if (["converted", "invoiced", "invoice", "fatura"].some((token) => status.includes(token))) return true;
+  return Boolean(order.invoice_id || order.invoiceId || order.converted_invoice_id || order.draft_invoice_id || order.invoice_no);
+};
+
+const deleteIncomingOrder = async (req, serviceRoleKey) => {
+  const url = new URL(req.url, "https://sidyaglobal.com");
+  const body = await parseBody(req).catch(() => ({}));
+  const orderId = cleanText(body.id || url.searchParams.get("id"), 80);
+  console.log("SITE_ORDER_DELETE_REQUEST", { method: req.method, orderId, hasBodyId: Boolean(body.id), hasQueryId: Boolean(url.searchParams.get("id")) });
+  if (!orderId || !isUuid(orderId)) {
+    throw Object.assign(new Error("Incoming order delete received an invalid primary key."), { statusCode: 400, code: "INVALID_ORDER_ID" });
+  }
+  const existingRows = await supabaseRequest(`/rest/v1/site_orders?id=eq.${encodeURIComponent(orderId)}&select=*&limit=1`, { method: "GET" }, serviceRoleKey);
+  const existingOrder = Array.isArray(existingRows) ? existingRows[0] : null;
+  console.log("ORDER_BEFORE_DELETE", { orderId, found: Boolean(existingOrder), orderNo: existingOrder?.order_no || null, status: existingOrder?.status || null });
+  if (!existingOrder) {
+    throw Object.assign(new Error("Incoming order row was not found before delete."), { statusCode: 404, code: "ORDER_NOT_FOUND" });
+  }
+  if (incomingOrderHasInvoiceLink(existingOrder)) {
+    throw Object.assign(new Error("Incoming order is already linked to an invoice."), { statusCode: 409, code: "ORDER_CONVERTED" });
+  }
+  try {
+    await supabaseRequest(`/rest/v1/site_order_items?order_id=eq.${encodeURIComponent(orderId)}`, { method: "DELETE", headers: { Prefer: "return=minimal" } }, serviceRoleKey);
+  } catch (childError) {
+    if (!isMissingTableError(childError)) throw childError;
+    console.warn("SITE_ORDER_ITEMS_DELETE_SKIPPED", { orderId, code: errorCode(childError), message: errorMessage(childError) });
+  }
+  const deletedRows = await supabaseRequest(`/rest/v1/site_orders?id=eq.${encodeURIComponent(orderId)}&select=id,order_no`, { method: "DELETE", headers: { Prefer: "return=representation" } }, serviceRoleKey);
+  console.error("SUPABASE_DELETE_RESULT", { orderId, deletedCount: Array.isArray(deletedRows) ? deletedRows.length : 0, deletedOrderNo: Array.isArray(deletedRows) ? deletedRows[0]?.order_no || null : null });
+  if (!Array.isArray(deletedRows) || deletedRows.length === 0) {
+    throw Object.assign(new Error("Supabase returned no deleted site_orders rows."), { statusCode: 409, code: "DELETE_RETURNED_ZERO_ROWS" });
+  }
+  return { success: true, deletedId: orderId, deletedOrderNo: deletedRows[0]?.order_no || existingOrder.order_no || null };
 };
 
 const mapRfqRow = (row) => {
@@ -158,6 +245,28 @@ module.exports = async (req, res) => {
       return;
     }
 
+    if (req.method === "DELETE") {
+      try {
+        const user = await assertAdmin(req, serviceRoleKey);
+        const result = await deleteIncomingOrder(req, serviceRoleKey);
+        console.log("SITE_ORDER_DELETE_SUCCESS", { deletedId: result.deletedId, deletedOrderNo: result.deletedOrderNo, userId: user.id });
+        res.status(200).json({ ok: true, ...result });
+      } catch (deleteError) {
+        const code = deleteError.code || errorCode(deleteError) || "SITE_ORDER_DELETE_FAILED";
+        const details = deleteError.safeDetails || {};
+        console.error("SITE_ORDER_DELETE_FAILED", {
+          statusCode: deleteError.statusCode || 500,
+          code,
+          message: deleteError.message,
+          pgCode: details.code || "",
+          pgMessage: details.message || "",
+          pgDetails: details.details || "",
+        });
+        res.status(deleteError.statusCode || 500).json({ ok: false, success: false, code, message: safeDeleteErrorMessage(deleteError) });
+      }
+      return;
+    }
+
     if (req.method === "GET") {
       const url = new URL(req.url, "https://sidyaglobal.com");
       if (url.searchParams.get("rfq") === "1") {
@@ -183,13 +292,13 @@ module.exports = async (req, res) => {
         const rows = await supabaseRequest("/rest/v1/site_orders?order_no=like.RFQ-*&select=*&order=created_at.desc&limit=200", { method: "GET" }, serviceRoleKey);
         return res.status(200).json({ ok: true, rfqs: (rows || []).map(mapRfqRow) });
       }
-      res.setHeader("Allow", "GET, POST");
+      res.setHeader("Allow", "GET, POST, DELETE");
       res.status(405).json({ error: "Method not allowed" });
       return;
     }
 
     if (req.method !== "POST") {
-      res.setHeader("Allow", "GET, POST");
+      res.setHeader("Allow", "GET, POST, DELETE");
       res.status(405).json({ error: "Method not allowed" });
       return;
     }
