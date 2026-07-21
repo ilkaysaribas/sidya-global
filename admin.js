@@ -687,10 +687,104 @@ const showOrderDetail = (order) => {
   alert([...header, ...body].join("\n"));
 };
 
+let deletingIncomingOrderId = null;
+
+const incomingOrderDisplayValue = (value, fallback = "-") => {
+  const text = String(value ?? "").trim();
+  return text || fallback;
+};
+
+const incomingOrderHasInvoiceLink = (order = {}) => {
+  const status = String(order.status || "").toLowerCase();
+  if (["converted", "invoiced", "invoice", "fatura"].some((token) => status.includes(token))) return true;
+  return Boolean(order.invoice_id || order.invoiceId || order.converted_invoice_id || order.draft_invoice_id || order.invoice_no);
+};
+
+const findOrderDeleteButton = (orderId) =>
+  Array.from(document.querySelectorAll("[data-order-delete]")).find((button) => button.dataset.orderDelete === String(orderId));
+
+const handleDeleteIncomingOrder = async (orderId) => {
+  if (!orderId || deletingIncomingOrderId) return;
+  if (!client) {
+    setStatus("Sipari\u015f silinemedi. Supabase ba\u011flant\u0131s\u0131 yok.", true);
+    return;
+  }
+
+  const order = state.orders.find((item) => String(item.id) === String(orderId));
+  if (!order) {
+    setStatus("Sipari\u015f bulunamad\u0131.", true);
+    return;
+  }
+
+  if (incomingOrderHasInvoiceLink(order)) {
+    setStatus("Bu sipari\u015f sat\u0131\u015f faturas\u0131na aktar\u0131ld\u0131\u011f\u0131 i\u00e7in silinemez. \u00d6nce ba\u011flant\u0131l\u0131 faturay\u0131 kontrol edin.", true);
+    return;
+  }
+
+  const confirmed = window.confirm([
+    "Sipari\u015fi silmek istedi\u011finize emin misiniz?",
+    "",
+    `Sipari\u015f No: ${incomingOrderDisplayValue(order.order_no || order.id)}`,
+    `Al\u0131c\u0131: ${incomingOrderDisplayValue(order.customer_name || order.company || order.email || order.phone)}`,
+    `Tarih: ${date(order.created_at)}`,
+    "",
+    "Bu i\u015flem geri al\u0131namaz.",
+  ].join("\n"));
+
+  if (!confirmed) return;
+
+  const button = findOrderDeleteButton(orderId);
+  const previousText = button?.textContent || "Sil";
+
+  try {
+    deletingIncomingOrderId = orderId;
+    if (button) {
+      button.disabled = true;
+      button.textContent = "Siliniyor...";
+    }
+
+    const deletedAt = new Date().toISOString();
+    let result = await client
+      .from("site_orders")
+      .update({ status: "deleted", updated_at: deletedAt })
+      .eq("id", orderId)
+      .select("id");
+
+    if (result.error && /updated_at/i.test(String(result.error.message || ""))) {
+      result = await client
+        .from("site_orders")
+        .update({ status: "deleted" })
+        .eq("id", orderId)
+        .select("id");
+    }
+
+    if (result.error) throw result.error;
+    if (!Array.isArray(result.data) || result.data.length === 0) {
+      throw new Error("No site_orders row was updated for incoming order delete.");
+    }
+
+    state.orders = state.orders.filter((item) => String(item.id) !== String(orderId));
+    renderOrders();
+    renderMetrics();
+    setStatus("Sipari\u015f silindi ve listeden kald\u0131r\u0131ld\u0131.");
+  } catch (error) {
+    console.error("Incoming order delete error:", error);
+    setStatus("Sipari\u015f silinemedi. L\u00fctfen tekrar deneyin.", true);
+    if (button && document.body.contains(button)) {
+      button.disabled = false;
+      button.textContent = previousText;
+    }
+  } finally {
+    deletingIncomingOrderId = null;
+  }
+};
 const renderOrders = () => {
   const rows = visibleOrders();
-  document.querySelector("#newOrderCount").textContent = rows.length;
-  document.querySelector("#orderRows").innerHTML = rows.length ? rows.map((item) => `<tr data-order-row="${item.id}"><td>${escapeHtml(item.order_no || item.id.slice(0, 8))}</td><td>${date(item.created_at)}</td><td><strong>${escapeHtml(item.customer_name || item.company || "-")}</strong><small>${escapeHtml(item.email || item.phone || "")}</small></td><td>${escapeHtml(orderProductSummary(item))}</td><td>${number(orderCartonTotal(item))}</td><td><span class="badge">${escapeHtml(item.status || "new")}</span></td><td class="row-actions"><button data-order-convert="${item.id}">Fatura aktar</button><button data-order-detail="${item.id}">Detay</button><button data-order-delete="${item.id}">Sil</button></td></tr>`).join("") : '<tr><td colspan="7" class="empty">Henuz siparis bulunmuyor.</td></tr>';
+  const orderCountTarget = document.querySelector("#newOrderCount");
+  if (orderCountTarget) orderCountTarget.textContent = rows.length;
+  const orderRowsTarget = document.querySelector("#orderRows");
+  if (!orderRowsTarget) return;
+  orderRowsTarget.innerHTML = rows.length ? rows.map((item) => `<tr data-order-row="${item.id}"><td>${escapeHtml(item.order_no || item.id.slice(0, 8))}</td><td>${date(item.created_at)}</td><td><strong>${escapeHtml(item.customer_name || item.company || "-")}</strong><small>${escapeHtml(item.email || item.phone || "")}</small></td><td>${escapeHtml(orderProductSummary(item))}</td><td>${number(orderCartonTotal(item))}</td><td><span class="badge">${escapeHtml(item.status || "new")}</span></td><td class="row-actions"><button type="button" data-order-convert="${item.id}">Fatura aktar</button><button type="button" data-order-detail="${item.id}">Detay</button><button type="button" data-order-delete="${item.id}">Sil</button></td></tr>`).join("") : '<tr><td colspan="7" class="empty">Henuz siparis bulunmuyor.</td></tr>';
 };
 const renderInvoices = () => {
   document.querySelector("#invoiceRows").innerHTML = state.invoices.length ? state.invoices.map((item) => {
@@ -1749,7 +1843,10 @@ document.addEventListener("click", safely(async (event) => {
     renderInvoiceProductPicker();
   }
   const deleteOrder = event.target.closest("[data-order-delete]");
-  if (deleteOrder) await deleteIncomingOrder(deleteOrder.dataset.orderDelete);
+  if (deleteOrder) {
+    event.preventDefault();
+    await handleDeleteIncomingOrder(deleteOrder.dataset.orderDelete);
+  }
 }));
 
 document.querySelector("#exportCustomersButton")?.addEventListener("click", () => csvDownload("cari-bakiyeler.csv", [
