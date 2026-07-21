@@ -10,7 +10,7 @@
         location.replace("https://www.sidyaglobal.com" + location.pathname + location.search + location.hash);
       }
     </script>
-    <link rel="stylesheet" href="admin.css?v=20260721-erp-dashboard-1" />
+    <link rel="stylesheet" href="admin.css?v=20260722-mojibake-2" />
   </head>
   <body dir="ltr">
     <div class="login-shell" id="loginShell">
@@ -87,7 +87,7 @@
               <select id="productSort"><option value="brand-asc">Marka A-Z</option><option value="brand-desc">Marka Z-A</option><option value="name-asc">Ürün adı A-Z</option><option value="name-desc">Ürün adı Z-A</option><option value="sku-asc">Barkod / SKU A-Z</option><option value="sku-desc">Barkod / SKU Z-A</option><option value="grammage-asc">Gramaj A-Z</option><option value="grammage-desc">Gramaj Z-A</option><option value="purchase-asc">Alış fiyatı artan</option><option value="purchase-desc">Alış fiyatı azalan</option><option value="sale-asc">Satış fiyatı artan</option><option value="sale-desc">Satış fiyatı azalan</option><option value="stock-asc">Stok artan</option><option value="stock-desc">Stok azalan</option></select><button id="downloadPriceTemplateButton" type="button">Fiyat formatı indir</button><label class="file-button">Excel fiyat yükle<input id="priceImportFile" type="file" accept=".xlsx,.xls,.csv" /></label><span id="selectedProductCount" class="selection-count">0 ürün seçildi</span><button id="deleteSelectedProductsButton" class="danger" type="button">Seçilenleri sil</button>
             </div>
             <p class="helper">Hareketler, stok giriş/çıkışı, düzenleme ve silme komutları için ürün satırına sağ tıklayın.</p>
-            <div class="table-wrap selectable-table product-stock-wrap"><table><thead><tr><th>Sıra No</th><th><input id="selectAllProducts" type="checkbox" aria-label="Tümünü seç" /></th><th data-product-sort="brand">Marka</th><th data-product-sort="sku">Barkod</th><th data-product-sort="name">Ürün İsmi</th><th data-product-sort="grammage">Gramaj</th><th>Takip birimi</th><th>Koli İçi</th><th data-product-sort="stock">Stok</th><th>Stok Koli</th><th>Min.</th><th data-product-sort="purchase">Alış / birim</th><th>Ort. alış</th><th data-product-sort="sale">Satış / birim</th><th>Ort. satış</th><th>Kâr endeksi</th><th>KDV</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div><div class="product-pagination" id="productPagination" aria-label="Stok listesi sayfaları"></div>
+            <div class="table-wrap selectable-table product-stock-wrap"><table><thead><tr><th>Sıra</th><th><input id="selectAllProducts" type="checkbox" aria-label="Tümünü seç" /></th><th data-product-sort="brand">Marka</th><th data-product-sort="sku">Barkod</th><th data-product-sort="name">Ürün İsmi</th><th data-product-sort="grammage">Gramaj</th><th>Birim</th><th>Koli İçi</th><th data-product-sort="stock">Stok Adet</th><th>Stok Koli</th><th>Min. Stok</th><th data-product-sort="purchase">Alış USD</th><th>Alış TRY</th><th>Alış EUR</th><th>Alış GEL</th><th>Alış RUB</th><th data-product-sort="sale">Satış USD</th><th>Satış TRY</th><th>Satış EUR</th><th>Satış GEL</th><th>Satış RUB</th><th>Ort. Alış USD</th><th>Ort. Satış USD</th><th>Kâr %</th><th>KDV</th><th>İşlem</th></tr></thead><tbody id="productRows"></tbody></table></div><div class="product-pagination" id="productPagination" aria-label="Stok listesi sayfaları"></div>
           </div>
         </section>
 
@@ -199,8 +199,8 @@
     <script src="/api/backend-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/xlsx.full.min.js"></script>
-    <script src="admin-utf8-fix.js?v=20260721-utf8-2"></script>
-    <script src="admin.js?v=20260722-order-delete-api-3"></script>
+    <script src="admin-utf8-fix.js?v=20260722-utf8-guard-2"></script>
+    <script src="admin.js?v=20260722-mojibake-2"></script>
     <script src="admin-product-price-fix.js?v=20260721-kur-single-source-2" defer></script>
   </body>
 </html>

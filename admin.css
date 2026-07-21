@@ -406,3 +406,37 @@ button.danger:hover { background: #fee4e2; }
   justify-content: flex-start;
   flex-wrap: nowrap;
 }
+
+.table-cell-text {
+  max-width: 260px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.table-cell-nowrap,
+.numeric-cell {
+  white-space: nowrap;
+}
+
+.numeric-cell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.product-stock-wrap th,
+.product-stock-wrap td {
+  border: 1px solid #d8e1ec;
+}
+
+.product-stock-wrap th {
+  background: #f1f5f9;
+}
+
+.product-stock-wrap tbody tr:nth-child(even) td {
+  background: #fbfdff;
+}
+
+.product-stock-wrap tbody tr:hover td {
+  background: #f0f8fb;
+}
