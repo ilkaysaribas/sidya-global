@@ -1,6 +1,23 @@
 const DEFAULT_SUPABASE_URL = "https://jhjforyykkxklfarjtjl.supabase.co";
 const MAX_BODY_SIZE = 1024 * 1024;
 const SUPABASE_MISSING_TABLE_CODES = new Set(["42P01", "PGRST205", "PGRST106"]);
+const ALLOWED_ADMIN_ORIGINS = new Set([
+  "https://sidyaglobal.com",
+  "https://www.sidyaglobal.com",
+  "http://localhost:3000",
+  "http://localhost:5173",
+]);
+
+const setCorsHeaders = (req, res) => {
+  const origin = req.headers.origin;
+  if (ALLOWED_ADMIN_ORIGINS.has(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+  }
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
+  res.setHeader("Access-Control-Max-Age", "86400");
+};
 
 const readBody = (req) => new Promise((resolve, reject) => {
   const chunks = [];
@@ -138,7 +155,7 @@ const deleteIncomingOrder = async (req, serviceRoleKey) => {
     console.warn("SITE_ORDER_ITEMS_DELETE_SKIPPED", { orderId, code: errorCode(childError), message: errorMessage(childError) });
   }
   const deletedRows = await supabaseRequest(`/rest/v1/site_orders?id=eq.${encodeURIComponent(orderId)}&select=id,order_no`, { method: "DELETE", headers: { Prefer: "return=representation" } }, serviceRoleKey);
-  console.error("SUPABASE_DELETE_RESULT", { orderId, deletedCount: Array.isArray(deletedRows) ? deletedRows.length : 0, deletedOrderNo: Array.isArray(deletedRows) ? deletedRows[0]?.order_no || null : null });
+  console.log("SUPABASE_DELETE_RESULT", { orderId, deletedCount: Array.isArray(deletedRows) ? deletedRows.length : 0, deletedOrderNo: Array.isArray(deletedRows) ? deletedRows[0]?.order_no || null : null });
   if (!Array.isArray(deletedRows) || deletedRows.length === 0) {
     throw Object.assign(new Error("Supabase returned no deleted site_orders rows."), { statusCode: 409, code: "DELETE_RETURNED_ZERO_ROWS" });
   }
