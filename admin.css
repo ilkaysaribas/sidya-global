@@ -440,3 +440,11 @@ button.danger:hover { background: #fee4e2; }
 .product-stock-wrap tbody tr:hover td {
   background: #f0f8fb;
 }
+.dashboard-grid--bottom { margin-top: 18px; }
+.dashboard-grid--bottom .dashboard-full { grid-column: 1 / -1; }
+.dashboard-grid--bottom .compact-row { min-width: 0; }
+.dashboard-grid--bottom .compact-row strong,
+.dashboard-grid--bottom .compact-row small { overflow-wrap: anywhere; word-break: break-word; }
+@media (max-width: 720px) {
+  .dashboard-grid--bottom .dashboard-full { grid-column: auto; }
+}

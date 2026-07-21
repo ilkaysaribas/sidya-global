@@ -10,7 +10,7 @@
         location.replace("https://www.sidyaglobal.com" + location.pathname + location.search + location.hash);
       }
     </script>
-    <link rel="stylesheet" href="admin.css?v=20260722-mojibake-2" />
+    <link rel="stylesheet" href="admin.css?v=20260722-dashboard-bottom-1" />
   </head>
   <body dir="ltr">
     <div class="login-shell" id="loginShell">
@@ -57,9 +57,9 @@
             <article><span>Bu ay satış</span><strong id="metricMonthlySales">$0</strong><small>USD faturalar</small></article>
             <article><span>Yeni site siparişi</span><strong id="metricOrders">0</strong><small>İşlem bekleyen</small></article>
           </div>
-          <div class="dashboard-grid">
-            <article class="panel"><div class="panel-heading"><div><p class="eyebrow">UYARI</p><h2>Kritik stoklar</h2></div></div><div id="lowStockList" class="compact-list"></div></article>
+          <div class="dashboard-grid dashboard-grid--bottom">
             <article class="panel"><div class="panel-heading"><div><p class="eyebrow">SON İŞLEMLER</p><h2>Faturalar</h2></div></div><div id="recentInvoices" class="compact-list"></div></article>
+            <article class="panel dashboard-full"><div class="panel-heading"><div><p class="eyebrow">UYARI</p><h2>Kritik stoklar</h2></div></div><div id="lowStockList" class="compact-list"></div></article>
           </div>
         </section>
 
@@ -200,7 +200,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/xlsx.full.min.js"></script>
     <script src="admin-utf8-fix.js?v=20260722-utf8-guard-2"></script>
-    <script src="admin.js?v=20260722-mojibake-2"></script>
+    <script src="admin.js?v=20260722-dashboard-bottom-1"></script>
     <script src="admin-product-price-fix.js?v=20260721-kur-single-source-2" defer></script>
   </body>
 </html>
