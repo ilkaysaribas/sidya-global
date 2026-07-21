@@ -130,6 +130,10 @@
     },
     en: {
       "Ürün Bul": "Find Products",
+      "Lojistik Merkezi": "Logistics Center",
+      "Ürün toplamı": "Product total",
+      "Arama başlatın": "Start searching",
+      "Teklif Al": "Request a Quote",
       "Lojistik": "Logistics",
       "Dolar": "USD",
       "Euro": "EUR",
@@ -317,7 +321,7 @@
       var arDescription = document.querySelector("meta[name='description']");
       if (arDescription) arDescription.setAttribute("content", "تساعد Sidya Global المشترين على توريد المنتجات التركية مع دعم رموز HS/GTIP والوثائق الجمركية والبروفرما واللوجستيات.");
     } else if (lang === "en") {
-      document.title = "Sidya Global | GTIP, Customs Documents and Export Product Showcase";
+      document.title = "Sidya Global | Turkish Product Sourcing & Export Proforma Platform";
     }
   }
 

@@ -17,10 +17,10 @@
     },
     en: {
       navFind: "Find Products", navLogistics: "Logistics", navProforma: "Create Proforma",
-      quote: "Make Offer", add: "Add to Proforma", whatsapp: "Ask on WhatsApp",
+      quote: "Request a Quote", add: "Add to Proforma", whatsapp: "Ask on WhatsApp",
       related: "Related companies / Catalogs", price: "Sales price", target: "Your offer price", qty: "Cartons", currency: "Currency",
       panel: "Proforma Summary", empty: "No product added yet.", totalCartons: "Total cartons", totalPallets: "Estimated pallets", totalKg: "Estimated kg", productTotal: "Product total", invalid: "Enter a price greater than zero.", ratesError: "Exchange rates are currently unavailable.", ratesLoading: "Loading current TCMB rates...",
-      productsTitle: "Featured product groups", supplierTitle: "Find Products from Turkiye", supplierCopy: "Type a product name to see matching categories, brands, minimum order and loading notes."
+      productsTitle: "Featured product groups", supplierTitle: "Find Products from Türkiye", supplierCopy: "Type a product name to see matching categories, brands, minimum order and loading notes."
     },
     ar: {
       navFind: "البحث عن منتج", navLogistics: "اللوجستيات", navProforma: "إنشاء بروفرما",

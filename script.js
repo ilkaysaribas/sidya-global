@@ -1943,6 +1943,14 @@ let selectedContainerRoute = "road";
 
 const t = (key) => content[currentLang]?.[key] || content.en?.[key] || content.tr?.[key] || key;
 
+const setHiddenPanelState = (node, isOpen) => {
+  if (!node) return;
+  node.hidden = !isOpen;
+  node.setAttribute("aria-hidden", isOpen ? "false" : "true");
+  if (isOpen) node.removeAttribute("inert");
+  else node.setAttribute("inert", "");
+};
+
 const customsText = {
   en: {
     stages: [
@@ -2181,7 +2189,7 @@ const renderProducts = () => {
             <a class="product-quote-button" href="#catalog-proforma" data-category-id="${product.id}" data-product-option="${trade.optionValue}" data-product-title="${product.title}">${t("tradeQuoteCta")}</a>
           </div>`
         : "";
-      return `<article class="product-card product-card-${product.id}" id="${product.id}"><div><div class="product-card-media"><img src="${productCategoryImages[product.id] || "assets/app-icon.svg"}" alt="" loading="lazy" /><span class="product-icon" aria-hidden="true">${product.icon}</span></div><h3>${product.title}</h3><p>${product.copy}</p></div><div class="product-meta">${product.meta
+      return `<article class="product-card product-card-${product.id}" id="${product.id}"><div><div class="product-card-media"><img src="${productCategoryImages[product.id] || "assets/app-icon.svg"}" alt="${escapeHtml(product.title)}" loading="lazy" /><span class="product-icon" aria-hidden="true">${product.icon}</span></div><h3>${product.title}</h3><p>${product.copy}</p></div><div class="product-meta">${product.meta
         .map((item) => `<span>${item}</span>`)
         .join("")}</div>${tradeMarkup}${relatedMarkup}</article>`;
     })
@@ -2805,7 +2813,7 @@ const openCatalogProformaModal = (categoryId, title) => {
   if (modalTitle) modalTitle.textContent = title || getCategoryTitle(categoryId);
   if (modalCopy) modalCopy.textContent = t("catalogProformaCopy");
   if (search) search.value = "";
-  catalogProformaModal.hidden = false;
+  setHiddenPanelState(catalogProformaModal, true);
   document.body.classList.add("is-modal-open");
   renderCatalogProformaProducts();
   setTimeout(() => search?.focus(), 0);
@@ -2813,7 +2821,7 @@ const openCatalogProformaModal = (categoryId, title) => {
 
 const closeCatalogProformaModal = () => {
   if (!catalogProformaModal) return;
-  catalogProformaModal.hidden = true;
+  setHiddenPanelState(catalogProformaModal, false);
   activeCatalogProformaCategory = null;
   document.body.classList.remove("is-modal-open");
 };
@@ -3234,7 +3242,7 @@ const setupCustomsModal = () => {
   customsModal = document.createElement("div");
   customsModal.className = "b2b-modal customs-modal";
   customsModal.id = "customsModal";
-  customsModal.hidden = true;
+  setHiddenPanelState(customsModal, false);
 
   const backdrop = document.createElement("div");
   backdrop.className = "b2b-modal-backdrop";
@@ -3263,7 +3271,7 @@ const setupCustomsModal = () => {
 const openCustomsModal = () => {
   const modal = setupCustomsModal();
   if (!modal) return;
-  modal.hidden = false;
+  setHiddenPanelState(modal, true);
   document.body.classList.add("is-modal-open");
   renderCustomsDesk();
   setTimeout(() => document.querySelector("#gtipSearchInput")?.focus(), 0);
@@ -3272,7 +3280,7 @@ const openCustomsModal = () => {
 const closeCustomsModal = () => {
   const modal = setupCustomsModal();
   if (!modal) return;
-  modal.hidden = true;
+  setHiddenPanelState(modal, false);
   document.body.classList.remove("is-modal-open");
 };
 
@@ -3368,9 +3376,9 @@ const isIosDevice = () => /iphone|ipad|ipod/i.test(window.navigator.userAgent);
 const isStandaloneApp = () => window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
 const showInstallPanel = (message) => {
   if (installPanelCopy) installPanelCopy.textContent = message;
-  installPanel?.removeAttribute("hidden");
+  setHiddenPanelState(installPanel, true);
 };
-const hideInstallPanel = () => installPanel?.setAttribute("hidden", "");
+const hideInstallPanel = () => setHiddenPanelState(installPanel, false);
 
 window.addEventListener("beforeinstallprompt", (event) => {
   event.preventDefault();
@@ -4069,7 +4077,7 @@ const logisticsModal = document.querySelector("#logisticsModal");
 const openB2BModal = () => {
   if (!b2bModal) return;
   setB2BRegistrationPanelVisible(false);
-  b2bModal.hidden = false;
+  setHiddenPanelState(b2bModal, true);
   document.body.classList.add("is-modal-open");
   setTimeout(() => document.querySelector("#b2bAuthEmail")?.focus(), 0);
 };
@@ -4077,27 +4085,27 @@ const openB2BModal = () => {
 const closeB2BModal = () => {
   if (!b2bModal) return;
   setB2BRegistrationPanelVisible(false);
-  b2bModal.hidden = true;
+  setHiddenPanelState(b2bModal, false);
   document.body.classList.remove("is-modal-open");
 };
 
 const openCustomerDashboard = (session = activeB2BSession) => {
   if (!customerDashboardModal || !session?.user) return;
   activeB2BSession = session;
-  customerDashboardModal.hidden = false;
+  setHiddenPanelState(customerDashboardModal, true);
   document.body.classList.add("is-modal-open");
   renderCustomerOrderHistory(session);
 };
 
 const closeCustomerDashboard = () => {
   if (!customerDashboardModal) return;
-  customerDashboardModal.hidden = true;
+  setHiddenPanelState(customerDashboardModal, false);
   document.body.classList.remove("is-modal-open");
 };
 
 const openLogisticsModal = () => {
   if (!logisticsModal) return;
-  logisticsModal.hidden = false;
+  setHiddenPanelState(logisticsModal, true);
   document.body.classList.add("is-modal-open");
   renderLogisticsCenter();
   fetchLogisticsStatus();
@@ -4105,7 +4113,7 @@ const openLogisticsModal = () => {
 
 const closeLogisticsModal = () => {
   if (!logisticsModal) return;
-  logisticsModal.hidden = true;
+  setHiddenPanelState(logisticsModal, false);
   document.body.classList.remove("is-modal-open");
 };
 
@@ -4128,7 +4136,7 @@ const openCustomerProformaPanel = () => {
 const openMainProformaPanel = (options = {}) => {
   const proformaScreen = document.querySelector("#proforma");
   if (proformaScreen) {
-    proformaScreen.hidden = false;
+    setHiddenPanelState(proformaScreen, true);
     proformaScreen.classList.toggle("is-summary-focus", Boolean(options.focusSummary));
     document.body.classList.add("is-modal-open");
   }
@@ -4152,7 +4160,7 @@ const openMainProformaPanel = (options = {}) => {
 
 const closeMainProformaPanel = () => {
   const proformaScreen = document.querySelector("#proforma");
-  if (proformaScreen) proformaScreen.hidden = true;
+  if (proformaScreen) setHiddenPanelState(proformaScreen, false);
   proformaScreen?.classList.remove("is-summary-focus");
   document.body.classList.remove("is-modal-open");
 };
