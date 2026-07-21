@@ -189,6 +189,36 @@ const convertFromUsd = (usd, currency) => {
   return targetTry ? valueTry / targetTry : 0;
 };
 
+const convertCurrency = (amount, fromCurrency, toCurrency, rates = state.exchangeRates) => {
+  const numericAmount = Number(String(amount ?? 0).replace(/\s/g, "").replace(",", "."));
+  if (!Number.isFinite(numericAmount)) return 0;
+  let fromCode;
+  let toCode;
+  try {
+    fromCode = normalizeCurrency(fromCurrency || "USD", "USD");
+    toCode = normalizeCurrency(toCurrency || fromCode || "USD", fromCode || "USD");
+  } catch (error) {
+    console.warn("Kur dönüşümü şu anda hesaplanamıyor.", { fromCurrency, toCurrency, message: error.message });
+    return numericAmount;
+  }
+  if (!fromCode || !toCode || fromCode === toCode) return numericAmount;
+  const sourceRates = rates && typeof rates === "object" ? rates : state.exchangeRates;
+  const rateFor = (code) => {
+    if (code === "TRY") return 1;
+    const direct = parsePositiveRate(sourceRates?.[code] ?? sourceRates?.[String(code).toLowerCase()]);
+    return direct || tryRate(code);
+  };
+  const fromRate = rateFor(fromCode);
+  const toRate = rateFor(toCode);
+  if (!fromRate || !toRate) {
+    console.warn("Kur dönüşümü şu anda hesaplanamıyor.", { fromCurrency: fromCode, toCurrency: toCode });
+    return numericAmount;
+  }
+  const amountTry = fromCode === "TRY" ? numericAmount : numericAmount * fromRate;
+  return toCode === "TRY" ? amountTry : amountTry / toRate;
+};
+
+window.SIDYA_CURRENCY = { ...(window.SIDYA_CURRENCY || {}), convertCurrency };
 const formatCurrencyGroups = (items) => {
   const totals = new Map();
   items.forEach((item) => {
