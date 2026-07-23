@@ -34,6 +34,118 @@
     return tr ? `${tr[3]}-${String(tr[2]).padStart(2, "0")}-${String(tr[1]).padStart(2, "0")}` : "";
   };
   const currency = (v, fallback = "TRY") => { try { return normalizeCurrency(v || fallback, fallback); } catch { return fallback; } };
+  const normalizeTextLine = (value) => txt(value).replace(/\s+/g, " ").trim();
+  const loadPdfJs = async () => {
+    if (window.pdfjsLib?.getDocument) return window.pdfjsLib;
+    const pdfjs = await import("https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.mjs");
+    pdfjs.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.mjs";
+    window.pdfjsLib = pdfjs;
+    return pdfjs;
+  };
+  const extractPdfText = async (file) => {
+    setProgress("PDF metni okunuyor...", 35);
+    const pdfjs = await loadPdfJs();
+    const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer(), useWorkerFetch: true }).promise;
+    const pages = [];
+    for (let pageNo = 1; pageNo <= pdf.numPages; pageNo += 1) {
+      const page = await pdf.getPage(pageNo);
+      const content = await page.getTextContent();
+      const rows = new Map();
+      content.items.forEach((item) => {
+        const y = Math.round(item.transform?.[5] || 0);
+        const x = item.transform?.[4] || 0;
+        const row = rows.get(y) || [];
+        row.push({ x, text: item.str || "" });
+        rows.set(y, row);
+      });
+      pages.push(Array.from(rows.entries())
+        .sort((a, b) => b[0] - a[0])
+        .map(([, row]) => normalizeTextLine(row.sort((a, b) => a.x - b.x).map((cell) => cell.text).join(" ")))
+        .filter(Boolean)
+        .join("\n"));
+    }
+    return pages.join("\n");
+  };
+  const loadTesseract = async () => {
+    if (window.Tesseract?.recognize) return window.Tesseract;
+    await new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = () => reject(new Error("OCR kütüphanesi yüklenemedi."));
+      document.head.appendChild(script);
+    });
+    if (!window.Tesseract?.recognize) throw new Error("OCR kütüphanesi başlatılamadı.");
+    return window.Tesseract;
+  };
+  const extractImageText = async (file) => {
+    setProgress("Görsel OCR ile taranıyor...", 35);
+    const tesseract = await loadTesseract();
+    const result = await tesseract.recognize(file, "tur+eng", {
+      logger: (m) => {
+        if (m?.status === "recognizing text") setProgress("OCR taranıyor... %" + Math.round((m.progress || 0) * 100), 35 + (m.progress || 0) * 30);
+      }
+    });
+    return result?.data?.text || "";
+  };
+  const textValueAfter = (text, patterns) => {
+    for (const pattern of patterns) {
+      const match = text.match(pattern);
+      if (match?.[1]) return normalizeTextLine(match[1]);
+    }
+    return "";
+  };
+  const parseInvoiceText = (text, file, sourceLabel) => {
+    const clean = String(text || "").replace(/\u00A0/g, " ");
+    const rawLines = clean.split(/\r?\n/).map(normalizeTextLine).filter(Boolean);
+    const joined = rawLines.join("\n");
+    const header = {
+      invoice_type: /sat[ıi]ş|satis|sales/i.test(joined) ? "sale" : "purchase",
+      invoice_no: textValueAfter(joined, [/(?:Fatura\s*(?:No|Numarası)|Invoice\s*(?:No|Number)|Belge\s*No)\s*[:#-]?\s*([A-Z0-9][A-Z0-9./_-]+)/i, /\b(E[A-Z0-9]{3,}[\d-]{4,})\b/i]),
+      invoice_date: dateLoose(textValueAfter(joined, [/(?:Fatura\s*Tarihi|Tarih|Issue\s*Date)\s*[:#-]?\s*([0-9./-]{8,10})/i])),
+      due_date: dateLoose(textValueAfter(joined, [/(?:Vade\s*Tarihi|Due\s*Date)\s*[:#-]?\s*([0-9./-]{8,10})/i])),
+      document_number: textValueAfter(joined, [/(?:ETTN|UUID|Belge\s*Numarası)\s*[:#-]?\s*([A-Z0-9-]{8,})/i]),
+      raw_tax_number: textValueAfter(joined, [/(?:VKN|TCKN|Vergi\s*(?:No|Numarası)|Tax\s*(?:No|Number))\s*[:#-]?\s*([0-9]{10,11})/i]),
+      raw_customer_name: textValueAfter(joined, [/(?:Sayın|Cari|Alıcı|Satıcı|Müşteri|Tedarikçi|Customer|Supplier)\s*[:#-]?\s*([^\n]{3,100})/i]),
+      currency: currency(textValueAfter(joined, [/\b(TRY|TL|USD|EUR|GEL|LARI|RUB|RUBLE)\b/i]), "TRY"),
+      subtotal: num(textValueAfter(joined, [/(?:Ara\s*Toplam|Mal\s*Hizmet\s*Toplam|Matrah|Subtotal)\s*[:#-]?\s*([0-9.,]+)/i])),
+      tax_total: num(textValueAfter(joined, [/(?:Toplam\s*KDV|KDV\s*Toplamı|VAT\s*Total)\s*[:#-]?\s*([0-9.,]+)/i])),
+      grand_total: num(textValueAfter(joined, [/(?:Genel\s*Toplam|Vergiler\s*Dahil\s*Toplam|Grand\s*Total)\s*[:#-]?\s*([0-9.,]+)/i])),
+      payable_total: num(textValueAfter(joined, [/(?:Ödenecek\s*Tutar|Payable\s*Amount)\s*[:#-]?\s*([0-9.,]+)/i])),
+      source_file_name: file?.name || ""
+    };
+    const moneyToken = "[0-9]{1,3}(?:[.\\s][0-9]{3})*(?:,[0-9]{1,4})?|[0-9]+(?:\\.[0-9]{1,4})?";
+    const lineRegex = new RegExp("^(?:(\\d{8,14})\\s+)?(.{3,}?)\\s+(" + moneyToken + ")\\s*(adet|ad|pcs|kg|lt|koli|paket|pk|\\w{1,5})?\\s+(" + moneyToken + ")\\s+(?:%?\\s*([0-9]{1,2}))?\\s*(" + moneyToken + ")$", "i");
+    const skip = /fatura|invoice|toplam|kdv|matrah|ödenecek|odenecek|vergi|subtotal|total|tarih|adres|vkn|tckn|ettn|uuid/i;
+    const lines = [];
+    rawLines.forEach((line) => {
+      if (skip.test(line) || line.length < 12) return;
+      const match = line.match(lineRegex);
+      if (!match) return;
+      const quantity = num(match[3]);
+      const unitPrice = num(match[5]);
+      const vatRate = num(match[6]);
+      const lineTotal = num(match[7]);
+      if (!quantity || !unitPrice || !lineTotal) return;
+      lines.push(lineCalc({
+        row_index: lines.length + 1,
+        raw_barcode: match[1] || "",
+        raw_product_name: normalizeTextLine(match[2]),
+        quantity,
+        unit: match[4] || "adet",
+        unit_price: unitPrice,
+        vat_rate: vatRate,
+        line_total: lineTotal,
+        line_subtotal: vatRate ? lineTotal / (1 + vatRate / 100) : quantity * unitPrice,
+        raw_payload: { source: sourceLabel, text: line }
+      }));
+    });
+    const warnings = [];
+    if (!clean.trim()) warnings.push(sourceLabel + " içinden metin alınamadı. Belge taranmış veya korumalı olabilir.");
+    if (clean.trim() && !lines.length) warnings.push(sourceLabel + " metni okundu ancak ürün satırı otomatik ayrıştırılamadı. Ön izleme alanından manuel satır ekleyebilir veya XML/Excel yükleyebilirsiniz.");
+    return { header, lines, warnings };
+  };
   const setProgress = (label, value = 0, hidden = false) => {
     const box = q("#invoiceImportProgress"); if (!box) return;
     box.hidden = hidden;
@@ -264,7 +376,24 @@
     if (["xml", "ubl"].includes(ext) || /xml/i.test(file.type)) parsed = parseXml(await file.text(), file);
     else if (["xls", "xlsx"].includes(ext)) parsed = parseRows(await workbookRows(file), file);
     else if (ext === "csv" || /csv|text/i.test(file.type)) parsed = parseRows(csvRows(await file.text()), file);
-    else if (["pdf", "jpg", "jpeg", "png"].includes(ext) || /pdf|image/i.test(file.type)) parsed = { header: { invoice_type: "purchase", currency: "TRY", source_file_name: file.name }, lines: [], warnings: ["Bu belge yüklendi; tarayıcı içinde OCR/PDF metin servisi bulunmadığı için satırlar manuel kontrol bekliyor. XML/e-Fatura veya Excel yüklerseniz satırlar otomatik okunur."] };
+    else if (ext === "pdf" || /pdf/i.test(file.type)) {
+      try {
+        parsed = parseInvoiceText(await extractPdfText(file), file, "PDF");
+      } catch (error) {
+        parsed = { header: { invoice_type: "purchase", currency: "TRY", source_file_name: file.name }, lines: [], warnings: [
+          "PDF otomatik okuma başarısız: " + (error?.message || "metin çıkarılamadı") + ". Belge taranmışsa görsel OCR veya XML/Excel yükleme kullanın; manuel giriş açık kalır."
+        ] };
+      }
+    }
+    else if (["jpg", "jpeg", "png"].includes(ext) || /image/i.test(file.type)) {
+      try {
+        parsed = parseInvoiceText(await extractImageText(file), file, "Görsel OCR");
+      } catch (error) {
+        parsed = { header: { invoice_type: "purchase", currency: "TRY", source_file_name: file.name }, lines: [], warnings: [
+          "Görsel OCR başarısız: " + (error?.message || "metin çıkarılamadı") + ". Manuel kontrol alanı açık bırakıldı; XML/e-Fatura veya Excel yüklerseniz satırlar otomatik okunur."
+        ] };
+      }
+    }
     else throw new Error("Desteklenmeyen fatura dosyası türü.");
     setProgress("Cari ve ürün eşleştiriliyor...", 70);
     parsed.header.currency = currency(parsed.header.currency, "TRY"); matchCustomer(parsed.header);
