@@ -2080,10 +2080,27 @@ const getProformaEntries = () =>
     .map(([productId, cartons]) => ({ product: productCatalog.find((item) => item.id === productId), cartons }))
     .filter((entry) => entry.product);
 
-const getCategoryTitle = (categoryId) =>
-  (products[currentLang] || products.en).find((product) => product.id === categoryId)?.title ||
-  products.en.find((product) => product.id === categoryId)?.title ||
-  t("catalogProformaTitle");
+const asSafeArray = (value, label = "value") => {
+  if (Array.isArray(value)) return value;
+  if (value !== undefined && value !== null) console.warn(`${label} must be an array; received:`, value);
+  return [];
+};
+
+const getLocalizedProductCategories = () => {
+  const localized = asSafeArray(products?.[currentLang], `products.${currentLang}`);
+  if (localized.length) return localized;
+  const english = asSafeArray(products?.en, "products.en");
+  if (english.length) return english;
+  return asSafeArray(products?.tr, "products.tr");
+};
+
+const getCategoryTitle = (categoryId) => {
+  const categories = getLocalizedProductCategories();
+  const english = asSafeArray(products?.en, "products.en");
+  return categories.find((product) => product?.id === categoryId)?.title ||
+    english.find((product) => product?.id === categoryId)?.title ||
+    t("catalogProformaTitle");
+};
 
 const getCategoryProducts = (categoryId) => productCatalog.filter((product) => product.category === categoryId);
 const normalizeSearchText = (value) =>
@@ -2168,32 +2185,71 @@ const addProformaLineWithQuantity = (productId, quantity) => {
 const renderProducts = () => {
   const grid = document.querySelector("#productGrid");
   if (!grid) return;
-  const localizedProducts = products[currentLang] || products.en || products.tr || [];
-  grid.innerHTML = localizedProducts
-    .map((product) => {
-      const related = productPartners[product.id] || [];
-      const trade = productTradeDetails[product.id];
-      const relatedMarkup = related.length
-        ? `<div class="related-companies"><strong tabindex="0">${t("relatedCompanies")}</strong><div>${related
-            .map(
-              (company) =>
-                `<span class="related-company"><a class="site-action" href="${company.site}" target="_blank" rel="noopener"><img src="${company.logo}" alt="" aria-hidden="true" /><span>${company.name}</span></a>${[
-                  company.catalog ? `<a class="catalog-action" href="${company.catalog}" target="_blank" rel="noopener">${t("sampleCatalogCta")}</a>` : "",
-                  ...(company.catalogs || []).map((catalog) => `<a class="catalog-action" href="${catalog.href}" target="_blank" rel="noopener">${catalog.label}</a>`),
-                ].join("")}</span>`,
-            )
-            .join("")}</div></div>`
-        : "";
-      const tradeMarkup = trade
-        ? `<div class="trade-details">
-            <a class="product-quote-button" href="#catalog-proforma" data-category-id="${product.id}" data-product-option="${trade.optionValue}" data-product-title="${product.title}">${t("tradeQuoteCta")}</a>
-          </div>`
-        : "";
-      return `<article class="product-card product-card-${product.id}" id="${product.id}"><div><div class="product-card-media"><img src="${productCategoryImages[product.id] || "assets/app-icon.svg"}" alt="${escapeHtml(product.title)}" loading="lazy" /><span class="product-icon" aria-hidden="true">${product.icon}</span></div><h3>${product.title}</h3><p>${product.copy}</p></div><div class="product-meta">${product.meta
-        .map((item) => `<span>${item}</span>`)
-        .join("")}</div>${tradeMarkup}${relatedMarkup}</article>`;
-    })
-    .join("");
+  try {
+    const safeProducts = getLocalizedProductCategories();
+    if (!safeProducts.length) {
+      console.warn("Product category list is empty or invalid:", products?.[currentLang], products?.en, products?.tr);
+      grid.innerHTML = `<div class="product-render-warning" role="status">${escapeHtml(t("productCatalogEmpty") || "Product categories are loading. Please try again shortly.")}</div>`;
+      return;
+    }
+
+    const cards = safeProducts
+      .map((rawProduct, index) => {
+        try {
+          const product = rawProduct && typeof rawProduct === "object" ? rawProduct : {};
+          if (!rawProduct || typeof rawProduct !== "object") console.warn("Invalid product category item", { index, rawProduct });
+          const fallbackId = `category-${index + 1}`;
+          const id = String(product.id || product.slug || fallbackId);
+          const title = String(product.title || product.name || product.category || t("catalogProformaTitle") || "Product category");
+          const copy = String(product.copy || product.description || "");
+          const icon = String(product.icon || title.slice(0, 2).toUpperCase() || "SG");
+          const meta = asSafeArray(product.meta, `products.${currentLang}[${index}].meta`).map((item) => String(item || "")).filter(Boolean);
+          const related = asSafeArray(productPartners?.[id], `productPartners.${id}`)
+            .filter((company) => company && typeof company === "object");
+          const trade = productTradeDetails?.[id];
+          const relatedMarkup = related.length
+            ? `<div class="related-companies"><strong tabindex="0">${t("relatedCompanies")}</strong><div>${related
+                .map((company, companyIndex) => {
+                  try {
+                    const companyName = String(company.name || t("partnerSiteCta") || "Partner");
+                    const companySite = String(company.site || "#");
+                    const companyLogo = String(company.logo || "assets/app-icon.svg");
+                    const catalogs = asSafeArray(company.catalogs, `productPartners.${id}[${companyIndex}].catalogs`);
+                    return `<span class="related-company"><a class="site-action" href="${escapeHtml(companySite)}" target="_blank" rel="noopener"><img src="${escapeHtml(companyLogo)}" alt="" aria-hidden="true" /><span>${escapeHtml(companyName)}</span></a>${[
+                      company.catalog ? `<a class="catalog-action" href="${escapeHtml(String(company.catalog))}" target="_blank" rel="noopener">${t("sampleCatalogCta")}</a>` : "",
+                      ...catalogs
+                        .filter((catalog) => catalog && typeof catalog === "object")
+                        .map((catalog) => `<a class="catalog-action" href="${escapeHtml(String(catalog.href || "#"))}" target="_blank" rel="noopener">${escapeHtml(String(catalog.label || t("sampleCatalogCta") || "Catalog"))}</a>`),
+                    ].join("")}</span>`;
+                  } catch (companyError) {
+                    console.error("Related company render error", { productId: id, companyIndex, company }, companyError);
+                    return "";
+                  }
+                })
+                .join("")}</div></div>`
+            : "";
+          const tradeMarkup = trade
+            ? `<div class="trade-details">
+                <a class="product-quote-button" href="#catalog-proforma" data-category-id="${escapeHtml(id)}" data-product-option="${escapeHtml(String(trade.optionValue || ""))}" data-product-title="${escapeHtml(title)}">${t("tradeQuoteCta")}</a>
+              </div>`
+            : "";
+          const images = Array.isArray(product.images) ? product.images : [];
+          const image = productCategoryImages?.[id] || product.image || images[0] || "assets/app-icon.svg";
+          return `<article class="product-card product-card-${escapeHtml(id)}" id="${escapeHtml(id)}"><div><div class="product-card-media"><img src="${escapeHtml(String(image))}" alt="${escapeHtml(title)}" loading="lazy" /><span class="product-icon" aria-hidden="true">${escapeHtml(icon)}</span></div><h3>${escapeHtml(title)}</h3><p>${escapeHtml(copy)}</p></div><div class="product-meta">${meta
+            .map((item) => `<span>${escapeHtml(item)}</span>`)
+            .join("")}</div>${tradeMarkup}${relatedMarkup}</article>`;
+        } catch (productError) {
+          console.error(`Product render error. Index: ${index}`, rawProduct, productError);
+          return "";
+        }
+      })
+      .filter(Boolean);
+
+    grid.innerHTML = cards.join("") || `<div class="product-render-warning" role="status">${escapeHtml(t("productCatalogEmpty") || "Product categories are loading. Please try again shortly.")}</div>`;
+  } catch (error) {
+    console.error("renderProducts critical error:", error);
+    grid.innerHTML = `<div class="product-render-warning" role="alert">${escapeHtml(t("productCatalogError") || "Product categories could not be displayed right now.")}</div>`;
+  }
 };
 
 const renderMarkets = () => {
@@ -2318,7 +2374,7 @@ const renderGtipGuide = () => {
 };
 
 const getLocalizedCategoryTitle = (categoryId, fallback = "") =>
-  (products[currentLang] || products.en).find((product) => product.id === categoryId)?.title || fallback;
+  getLocalizedProductCategories().find((product) => product?.id === categoryId)?.title || fallback;
 
 const getSupplierSearchItems = () => {
   const items = [];
@@ -3299,7 +3355,11 @@ const translatePage = () => {
   const supplierSearchInput = document.querySelector("#supplierSearchInput");
   if (supplierSearchInput) supplierSearchInput.placeholder = t("supplierSearchPlaceholder");
   document.querySelector("#supplierSearchForm button")?.setAttribute("aria-label", t("supplierSearchTitle"));
-  renderProducts();
+  try {
+    renderProducts();
+  } catch (error) {
+    console.error("translatePage renderProducts failed:", error);
+  }
   renderMarkets();
   renderSupplierSearchResults(document.querySelector("#supplierSearchInput")?.value || "");
   renderGtipGuide();

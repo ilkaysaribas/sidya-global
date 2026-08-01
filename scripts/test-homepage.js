@@ -23,18 +23,23 @@ check(/class="site-container">\s*<div class="section-heading products-section-he
 check(index.includes('id="productGrid"'), "Homepage category grid is missing.");
 check(!index.includes('id="productCatalogSearch"'), "Individual product search must not appear on the homepage.");
 check(!index.includes('id="catalogLoadMore"'), "Individual product pagination must not appear on the homepage.");
-check(index.includes("script.js?v=20260722-2"), "Homepage script cache key is stale.");
+check(index.includes("script.js?v=20260801-1"), "Homepage script cache key is stale.");
 check(index.includes("styles.css?v=20260722-2"), "Homepage stylesheet cache key is stale.");
 
 const renderStart = script.indexOf("const renderProducts = () => {");
 const renderEnd = script.indexOf("\nconst renderMarkets =", renderStart);
 check(renderStart >= 0 && renderEnd > renderStart, "Category renderer could not be located.");
 const renderSource = script.slice(renderStart, renderEnd);
-check(renderSource.includes("products[currentLang]"), "Homepage must render the original product categories.");
+check(renderSource.includes("getLocalizedProductCategories()"), "Homepage must render product categories through the safe locale accessor.");
 check(renderSource.includes("product-card product-card-"), "Original category cards are not rendered.");
 check(renderSource.includes("related-companies"), "Catalog and supplier links are missing from category cards.");
 check(renderSource.includes("sampleCatalogCta"), "Original catalog links are not rendered.");
 check(!renderSource.includes("catalog-product-card"), "Individual products are still rendered on the homepage.");
+check(renderSource.includes("try {") && renderSource.includes("renderProducts critical error"), "Category renderer must be protected by try/catch.");
+check(renderSource.includes("Product render error. Index"), "A broken product must not crash the full homepage.");
+check(renderSource.includes("Product category list is empty or invalid"), "Invalid product data must show a safe empty state.");
+check(script.includes("const asSafeArray") && script.includes("Array.isArray(value)"), "Array map inputs must be normalized with Array.isArray.");
+check(script.includes("translatePage renderProducts failed"), "translatePage must not crash if product rendering fails.");
 
 check(script.includes('db.rpc("get_public_catalog_products"'), "Proforma is not connected to the safe full catalog RPC.");
 check(!script.includes('db.from("site_catalog_prices")'), "The obsolete 92-row price source is still queried.");
@@ -52,8 +57,8 @@ check(styles.includes('html[dir="ltr"] main :where('), "LTR alignment guard is m
 check(styles.includes("text-align: left !important"), "LTR content must be forced left.");
 check(styles.includes('html[dir="rtl"] main :where('), "RTL alignment guard is missing.");
 check(styles.includes("text-align: right !important"), "RTL content must remain right aligned.");
-check(worker.includes("sidya-global-v120"), "Service worker cache version must be v120.");
-check(worker.includes("script.js?v=20260722-2"), "Service worker caches an old homepage script.");
+check(worker.includes("sidya-global-v121"), "Service worker cache version must be v121.");
+check(worker.includes("script.js?v=20260801-1"), "Service worker caches an old homepage script.");
 check(worker.includes("styles.css?v=20260722-2"), "Service worker caches an old stylesheet.");
 check(worker.includes('url.pathname === "/script.js"'), "Homepage script must use network-first cache handling.");
 check(worker.includes('url.pathname === "/styles.css"'), "Homepage stylesheet must use network-first cache handling.");check(index.includes("Turkish Product Sourcing &amp; Export Proforma Platform"), "English SEO title must describe sourcing and proforma.");
