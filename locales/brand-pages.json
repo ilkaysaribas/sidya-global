@@ -59,6 +59,72 @@
       "name": "Reckitt",
       "officialUrl": "https://www.reckitt.com/",
       "category": "cleaning"
+    },
+    {
+      "slug": "oncu-salca",
+      "name": "Öncü Salça",
+      "officialUrl": "https://www.oncusalca.com.tr/",
+      "category": "food"
+    },
+    {
+      "slug": "heinz",
+      "name": "Heinz",
+      "officialUrl": "https://www.heinz.com/tr-TR/products",
+      "category": "food"
+    },
+    {
+      "slug": "lokman",
+      "name": "Lokman",
+      "officialUrl": "https://www.lokmankahvalti.com/?lang=en",
+      "category": "food"
+    },
+    {
+      "slug": "yudum",
+      "name": "Yudum",
+      "officialUrl": "https://yudumtoptan.com/",
+      "category": "food"
+    },
+    {
+      "slug": "fide",
+      "name": "Fide",
+      "officialUrl": "https://fide.com.tr/",
+      "category": "food"
+    },
+    {
+      "slug": "melwiss-cocowiss",
+      "name": "Melwiss / Cocowiss",
+      "officialUrl": "https://cocowiss.com/",
+      "category": "food"
+    },
+    {
+      "slug": "johnson-johnson",
+      "name": "Johnson & Johnson",
+      "officialUrl": "https://www.jnjmedicalcloud.com.tr/tr-tr",
+      "category": "medical"
+    },
+    {
+      "slug": "ikihan-medikal",
+      "name": "İkihan Medikal",
+      "officialUrl": "https://www.ikihanmedikal.com/",
+      "category": "medical"
+    },
+    {
+      "slug": "omron-healthcare",
+      "name": "Omron Healthcare",
+      "officialUrl": "https://www.omron-healthcare.com.tr/",
+      "category": "medical"
+    },
+    {
+      "slug": "hanymish",
+      "name": "Hanymish",
+      "officialUrl": "https://www.hanymish.com/",
+      "category": "medical"
+    },
+    {
+      "slug": "sebamed",
+      "name": "Sebamed",
+      "officialUrl": "https://www.sebamed.com.tr/",
+      "category": "cosmetics"
     }
   ],
   "locales": {
@@ -141,6 +207,94 @@
           "intro": "Sidya Global organizes B2B sourcing and export workflows for Reckitt in the cleaning category. This page gives buyers a clear internal reference before opening a proforma or quote request.",
           "details": "Reckitt requests are reviewed together with carton quantity, loading type, destination market and Incoterm preference. Sidya Global keeps buyers inside its own proforma flow while preserving the official brand site as a secondary reference.",
           "logistics": "For Reckitt, the focus is hygiene, disinfection and household cleaning portfolios. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning and export documentation."
+        },
+        "oncu-salca": {
+          "categoryName": "Food Products",
+          "title": "Öncü Salça Food Products | Sidya Global",
+          "metaDescription": "Öncü Salça B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps international buyers source Turkish food brands with proforma preparation, shelf-life review and FOB/CIF/EXW delivery planning.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Öncü Salça in the Food Products category. This page keeps buyers inside Sidya Global before they use the official brand site as a secondary reference.",
+          "details": "Öncü Salça requests are reviewed with product group, carton quantity, target country, delivery terms and any shelf-life or certificate requirements. The proforma journey stays on Sidya Global while the official brand site remains available for background information.",
+          "logistics": "For Öncü Salça, the focus is tomato paste, pepper paste and retail-ready Turkish pantry products. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning, document checks and delivery notes."
+        },
+        "heinz": {
+          "categoryName": "Food Products",
+          "title": "Heinz Food Products | Sidya Global",
+          "metaDescription": "Heinz B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps international buyers source Turkish food brands with proforma preparation, shelf-life review and FOB/CIF/EXW delivery planning.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Heinz in the Food Products category. This page keeps buyers inside Sidya Global before they use the official brand site as a secondary reference.",
+          "details": "Heinz requests are reviewed with product group, carton quantity, target country, delivery terms and any shelf-life or certificate requirements. The proforma journey stays on Sidya Global while the official brand site remains available for background information.",
+          "logistics": "For Heinz, the focus is sauces, ketchup and food-service friendly branded grocery lines. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning, document checks and delivery notes."
+        },
+        "lokman": {
+          "categoryName": "Food Products",
+          "title": "Lokman Food Products | Sidya Global",
+          "metaDescription": "Lokman B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps international buyers source Turkish food brands with proforma preparation, shelf-life review and FOB/CIF/EXW delivery planning.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Lokman in the Food Products category. This page keeps buyers inside Sidya Global before they use the official brand site as a secondary reference.",
+          "details": "Lokman requests are reviewed with product group, carton quantity, target country, delivery terms and any shelf-life or certificate requirements. The proforma journey stays on Sidya Global while the official brand site remains available for background information.",
+          "logistics": "For Lokman, the focus is breakfast products, spreads and grocery assortments for regional B2B buyers. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning, document checks and delivery notes."
+        },
+        "yudum": {
+          "categoryName": "Food Products",
+          "title": "Yudum Food Products | Sidya Global",
+          "metaDescription": "Yudum B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps international buyers source Turkish food brands with proforma preparation, shelf-life review and FOB/CIF/EXW delivery planning.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Yudum in the Food Products category. This page keeps buyers inside Sidya Global before they use the official brand site as a secondary reference.",
+          "details": "Yudum requests are reviewed with product group, carton quantity, target country, delivery terms and any shelf-life or certificate requirements. The proforma journey stays on Sidya Global while the official brand site remains available for background information.",
+          "logistics": "For Yudum, the focus is edible oils and grocery products where carton, pallet and shelf-life planning matter. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning, document checks and delivery notes."
+        },
+        "fide": {
+          "categoryName": "Food Products",
+          "title": "Fide Food Products | Sidya Global",
+          "metaDescription": "Fide B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps international buyers source Turkish food brands with proforma preparation, shelf-life review and FOB/CIF/EXW delivery planning.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Fide in the Food Products category. This page keeps buyers inside Sidya Global before they use the official brand site as a secondary reference.",
+          "details": "Fide requests are reviewed with product group, carton quantity, target country, delivery terms and any shelf-life or certificate requirements. The proforma journey stays on Sidya Global while the official brand site remains available for background information.",
+          "logistics": "For Fide, the focus is sauce, condiment and packaged food selections for mixed grocery shipments. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning, document checks and delivery notes."
+        },
+        "melwiss-cocowiss": {
+          "categoryName": "Food Products",
+          "title": "Melwiss / Cocowiss Food Products | Sidya Global",
+          "metaDescription": "Melwiss / Cocowiss B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps international buyers source Turkish food brands with proforma preparation, shelf-life review and FOB/CIF/EXW delivery planning.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Melwiss / Cocowiss in the Food Products category. This page keeps buyers inside Sidya Global before they use the official brand site as a secondary reference.",
+          "details": "Melwiss / Cocowiss requests are reviewed with product group, carton quantity, target country, delivery terms and any shelf-life or certificate requirements. The proforma journey stays on Sidya Global while the official brand site remains available for background information.",
+          "logistics": "For Melwiss / Cocowiss, the focus is chocolate, cocoa-based products and confectionery catalog requests. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning, document checks and delivery notes."
+        },
+        "johnson-johnson": {
+          "categoryName": "Medical Products",
+          "title": "Johnson & Johnson Medical Products | Sidya Global",
+          "metaDescription": "Johnson & Johnson B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global supports international buyers with medical and healthcare product sourcing, documentation review and professional export coordination.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Johnson & Johnson in the Medical Products category. This page keeps buyers inside Sidya Global before they use the official brand site as a secondary reference.",
+          "details": "Johnson & Johnson requests are reviewed with product group, carton quantity, target country, delivery terms and any shelf-life or certificate requirements. The proforma journey stays on Sidya Global while the official brand site remains available for background information.",
+          "logistics": "For Johnson & Johnson, the focus is healthcare, clinical-use and medical consumable catalog requests. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning, document checks and delivery notes."
+        },
+        "ikihan-medikal": {
+          "categoryName": "Medical Products",
+          "title": "İkihan Medikal Medical Products | Sidya Global",
+          "metaDescription": "İkihan Medikal B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global supports international buyers with medical and healthcare product sourcing, documentation review and professional export coordination.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for İkihan Medikal in the Medical Products category. This page keeps buyers inside Sidya Global before they use the official brand site as a secondary reference.",
+          "details": "İkihan Medikal requests are reviewed with product group, carton quantity, target country, delivery terms and any shelf-life or certificate requirements. The proforma journey stays on Sidya Global while the official brand site remains available for background information.",
+          "logistics": "For İkihan Medikal, the focus is medical supply requests, distributor-style sourcing and documentation follow-up. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning, document checks and delivery notes."
+        },
+        "omron-healthcare": {
+          "categoryName": "Medical Products",
+          "title": "Omron Healthcare Medical Products | Sidya Global",
+          "metaDescription": "Omron Healthcare B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global supports international buyers with medical and healthcare product sourcing, documentation review and professional export coordination.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Omron Healthcare in the Medical Products category. This page keeps buyers inside Sidya Global before they use the official brand site as a secondary reference.",
+          "details": "Omron Healthcare requests are reviewed with product group, carton quantity, target country, delivery terms and any shelf-life or certificate requirements. The proforma journey stays on Sidya Global while the official brand site remains available for background information.",
+          "logistics": "For Omron Healthcare, the focus is blood pressure monitors, diagnostic devices and healthcare catalog requests. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning, document checks and delivery notes."
+        },
+        "hanymish": {
+          "categoryName": "Medical Products",
+          "title": "Hanymish Medical Products | Sidya Global",
+          "metaDescription": "Hanymish B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global supports international buyers with medical and healthcare product sourcing, documentation review and professional export coordination.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Hanymish in the Medical Products category. This page keeps buyers inside Sidya Global before they use the official brand site as a secondary reference.",
+          "details": "Hanymish requests are reviewed with product group, carton quantity, target country, delivery terms and any shelf-life or certificate requirements. The proforma journey stays on Sidya Global while the official brand site remains available for background information.",
+          "logistics": "For Hanymish, the focus is baby care, feeding accessories and hygiene-adjacent product requests. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning, document checks and delivery notes."
+        },
+        "sebamed": {
+          "categoryName": "Cosmetics & Personal Care",
+          "title": "Sebamed Cosmetics & Personal Care | Sidya Global",
+          "metaDescription": "Sebamed B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps buyers source personal care and cosmetics products from Türkiye with proforma, logistics and document support.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Sebamed in the Cosmetics & Personal Care category. This page keeps buyers inside Sidya Global before they use the official brand site as a secondary reference.",
+          "details": "Sebamed requests are reviewed with product group, carton quantity, target country, delivery terms and any shelf-life or certificate requirements. The proforma journey stays on Sidya Global while the official brand site remains available for background information.",
+          "logistics": "For Sebamed, the focus is dermatological skin care, personal care and pharmacy-channel assortments. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning, document checks and delivery notes."
         }
       }
     },
@@ -223,6 +377,94 @@
           "intro": "Sidya Global, Reckitt için temizlik kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa, proforma veya teklif talebi açmadan önce alıcıya net bir iş referansı sunmak için hazırlandı.",
           "details": "Reckitt talepleri koli miktarı, yükleme tipi, varış pazarı ve Incoterm tercihiyle birlikte değerlendirilir. Sidya Global alıcıyı kendi proforma akışında tutarken resmi marka sitesini ikincil bilgi kaynağı olarak korur.",
           "logistics": "Reckitt tarafında odak alanı hijyen, dezenfeksiyon ve ev temizliği portföyleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı ve ihracat evraklarıyla birlikte ilerletebilir."
+        },
+        "oncu-salca": {
+          "categoryName": "Gıda Ürünleri",
+          "title": "Öncü Salça Gıda Ürünleri | Sidya Global",
+          "metaDescription": "Öncü Salça için Türkiye’den B2B gıda ürünleri tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, uluslararası alıcıların Türkiye’den gıda markaları için proforma, raf ömrü kontrolü ve FOB/CIF/EXW teslimat planı oluşturmasına yardımcı olur.",
+          "intro": "Sidya Global, Öncü Salça için gıda ürünleri kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa alıcıyı dış siteye göndermeden önce Sidya Global içinde net bir marka referansı sunar.",
+          "details": "Öncü Salça talepleri ürün grubu, koli miktarı, hedef ülke, teslim şekli ve varsa raf ömrü/sertifika ihtiyacıyla birlikte değerlendirilir. Proforma akışı Sidya Global’de kalır; resmi marka sitesi ikincil bilgi kaynağı olarak korunur.",
+          "logistics": "Öncü Salça tarafında odak alanı salça, biber salçası ve perakendeye uygun Türk gıda ürünleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı, evrak kontrolü ve teslimat notlarıyla birlikte ilerletebilir."
+        },
+        "heinz": {
+          "categoryName": "Gıda Ürünleri",
+          "title": "Heinz Gıda Ürünleri | Sidya Global",
+          "metaDescription": "Heinz için Türkiye’den B2B gıda ürünleri tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, uluslararası alıcıların Türkiye’den gıda markaları için proforma, raf ömrü kontrolü ve FOB/CIF/EXW teslimat planı oluşturmasına yardımcı olur.",
+          "intro": "Sidya Global, Heinz için gıda ürünleri kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa alıcıyı dış siteye göndermeden önce Sidya Global içinde net bir marka referansı sunar.",
+          "details": "Heinz talepleri ürün grubu, koli miktarı, hedef ülke, teslim şekli ve varsa raf ömrü/sertifika ihtiyacıyla birlikte değerlendirilir. Proforma akışı Sidya Global’de kalır; resmi marka sitesi ikincil bilgi kaynağı olarak korunur.",
+          "logistics": "Heinz tarafında odak alanı soslar, ketçap ve food-service kanallarına uygun markalı market ürünleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı, evrak kontrolü ve teslimat notlarıyla birlikte ilerletebilir."
+        },
+        "lokman": {
+          "categoryName": "Gıda Ürünleri",
+          "title": "Lokman Gıda Ürünleri | Sidya Global",
+          "metaDescription": "Lokman için Türkiye’den B2B gıda ürünleri tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, uluslararası alıcıların Türkiye’den gıda markaları için proforma, raf ömrü kontrolü ve FOB/CIF/EXW teslimat planı oluşturmasına yardımcı olur.",
+          "intro": "Sidya Global, Lokman için gıda ürünleri kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa alıcıyı dış siteye göndermeden önce Sidya Global içinde net bir marka referansı sunar.",
+          "details": "Lokman talepleri ürün grubu, koli miktarı, hedef ülke, teslim şekli ve varsa raf ömrü/sertifika ihtiyacıyla birlikte değerlendirilir. Proforma akışı Sidya Global’de kalır; resmi marka sitesi ikincil bilgi kaynağı olarak korunur.",
+          "logistics": "Lokman tarafında odak alanı kahvaltılık ürünler, sürülebilir ürünler ve bölgesel B2B alıcılar için market çeşitleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı, evrak kontrolü ve teslimat notlarıyla birlikte ilerletebilir."
+        },
+        "yudum": {
+          "categoryName": "Gıda Ürünleri",
+          "title": "Yudum Gıda Ürünleri | Sidya Global",
+          "metaDescription": "Yudum için Türkiye’den B2B gıda ürünleri tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, uluslararası alıcıların Türkiye’den gıda markaları için proforma, raf ömrü kontrolü ve FOB/CIF/EXW teslimat planı oluşturmasına yardımcı olur.",
+          "intro": "Sidya Global, Yudum için gıda ürünleri kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa alıcıyı dış siteye göndermeden önce Sidya Global içinde net bir marka referansı sunar.",
+          "details": "Yudum talepleri ürün grubu, koli miktarı, hedef ülke, teslim şekli ve varsa raf ömrü/sertifika ihtiyacıyla birlikte değerlendirilir. Proforma akışı Sidya Global’de kalır; resmi marka sitesi ikincil bilgi kaynağı olarak korunur.",
+          "logistics": "Yudum tarafında odak alanı koli, palet ve raf ömrü planlaması önemli olan sıvı yağ ve market ürünleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı, evrak kontrolü ve teslimat notlarıyla birlikte ilerletebilir."
+        },
+        "fide": {
+          "categoryName": "Gıda Ürünleri",
+          "title": "Fide Gıda Ürünleri | Sidya Global",
+          "metaDescription": "Fide için Türkiye’den B2B gıda ürünleri tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, uluslararası alıcıların Türkiye’den gıda markaları için proforma, raf ömrü kontrolü ve FOB/CIF/EXW teslimat planı oluşturmasına yardımcı olur.",
+          "intro": "Sidya Global, Fide için gıda ürünleri kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa alıcıyı dış siteye göndermeden önce Sidya Global içinde net bir marka referansı sunar.",
+          "details": "Fide talepleri ürün grubu, koli miktarı, hedef ülke, teslim şekli ve varsa raf ömrü/sertifika ihtiyacıyla birlikte değerlendirilir. Proforma akışı Sidya Global’de kalır; resmi marka sitesi ikincil bilgi kaynağı olarak korunur.",
+          "logistics": "Fide tarafında odak alanı karma market yüklemeleri için sos, çeşni ve paketli gıda seçenekleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı, evrak kontrolü ve teslimat notlarıyla birlikte ilerletebilir."
+        },
+        "melwiss-cocowiss": {
+          "categoryName": "Gıda Ürünleri",
+          "title": "Melwiss / Cocowiss Gıda Ürünleri | Sidya Global",
+          "metaDescription": "Melwiss / Cocowiss için Türkiye’den B2B gıda ürünleri tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, uluslararası alıcıların Türkiye’den gıda markaları için proforma, raf ömrü kontrolü ve FOB/CIF/EXW teslimat planı oluşturmasına yardımcı olur.",
+          "intro": "Sidya Global, Melwiss / Cocowiss için gıda ürünleri kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa alıcıyı dış siteye göndermeden önce Sidya Global içinde net bir marka referansı sunar.",
+          "details": "Melwiss / Cocowiss talepleri ürün grubu, koli miktarı, hedef ülke, teslim şekli ve varsa raf ömrü/sertifika ihtiyacıyla birlikte değerlendirilir. Proforma akışı Sidya Global’de kalır; resmi marka sitesi ikincil bilgi kaynağı olarak korunur.",
+          "logistics": "Melwiss / Cocowiss tarafında odak alanı çikolata, kakao bazlı ürünler ve şekerleme katalog talepleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı, evrak kontrolü ve teslimat notlarıyla birlikte ilerletebilir."
+        },
+        "johnson-johnson": {
+          "categoryName": "Medikal Ürünler",
+          "title": "Johnson & Johnson Medikal Ürünler | Sidya Global",
+          "metaDescription": "Johnson & Johnson için Türkiye’den B2B medikal ürünler tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, medikal ve sağlık ürünleri tedarikinde belge kontrolü, proforma hazırlığı ve profesyonel ihracat koordinasyonu sunar.",
+          "intro": "Sidya Global, Johnson & Johnson için medikal ürünler kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa alıcıyı dış siteye göndermeden önce Sidya Global içinde net bir marka referansı sunar.",
+          "details": "Johnson & Johnson talepleri ürün grubu, koli miktarı, hedef ülke, teslim şekli ve varsa raf ömrü/sertifika ihtiyacıyla birlikte değerlendirilir. Proforma akışı Sidya Global’de kalır; resmi marka sitesi ikincil bilgi kaynağı olarak korunur.",
+          "logistics": "Johnson & Johnson tarafında odak alanı sağlık, klinik kullanım ve medikal sarf katalog talepleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı, evrak kontrolü ve teslimat notlarıyla birlikte ilerletebilir."
+        },
+        "ikihan-medikal": {
+          "categoryName": "Medikal Ürünler",
+          "title": "İkihan Medikal Medikal Ürünler | Sidya Global",
+          "metaDescription": "İkihan Medikal için Türkiye’den B2B medikal ürünler tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, medikal ve sağlık ürünleri tedarikinde belge kontrolü, proforma hazırlığı ve profesyonel ihracat koordinasyonu sunar.",
+          "intro": "Sidya Global, İkihan Medikal için medikal ürünler kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa alıcıyı dış siteye göndermeden önce Sidya Global içinde net bir marka referansı sunar.",
+          "details": "İkihan Medikal talepleri ürün grubu, koli miktarı, hedef ülke, teslim şekli ve varsa raf ömrü/sertifika ihtiyacıyla birlikte değerlendirilir. Proforma akışı Sidya Global’de kalır; resmi marka sitesi ikincil bilgi kaynağı olarak korunur.",
+          "logistics": "İkihan Medikal tarafında odak alanı medikal tedarik talepleri, distribütör tipi kaynak araştırması ve belge takibi. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı, evrak kontrolü ve teslimat notlarıyla birlikte ilerletebilir."
+        },
+        "omron-healthcare": {
+          "categoryName": "Medikal Ürünler",
+          "title": "Omron Healthcare Medikal Ürünler | Sidya Global",
+          "metaDescription": "Omron Healthcare için Türkiye’den B2B medikal ürünler tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, medikal ve sağlık ürünleri tedarikinde belge kontrolü, proforma hazırlığı ve profesyonel ihracat koordinasyonu sunar.",
+          "intro": "Sidya Global, Omron Healthcare için medikal ürünler kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa alıcıyı dış siteye göndermeden önce Sidya Global içinde net bir marka referansı sunar.",
+          "details": "Omron Healthcare talepleri ürün grubu, koli miktarı, hedef ülke, teslim şekli ve varsa raf ömrü/sertifika ihtiyacıyla birlikte değerlendirilir. Proforma akışı Sidya Global’de kalır; resmi marka sitesi ikincil bilgi kaynağı olarak korunur.",
+          "logistics": "Omron Healthcare tarafında odak alanı tansiyon cihazları, teşhis ekipmanları ve sağlık kataloğu talepleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı, evrak kontrolü ve teslimat notlarıyla birlikte ilerletebilir."
+        },
+        "hanymish": {
+          "categoryName": "Medikal Ürünler",
+          "title": "Hanymish Medikal Ürünler | Sidya Global",
+          "metaDescription": "Hanymish için Türkiye’den B2B medikal ürünler tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, medikal ve sağlık ürünleri tedarikinde belge kontrolü, proforma hazırlığı ve profesyonel ihracat koordinasyonu sunar.",
+          "intro": "Sidya Global, Hanymish için medikal ürünler kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa alıcıyı dış siteye göndermeden önce Sidya Global içinde net bir marka referansı sunar.",
+          "details": "Hanymish talepleri ürün grubu, koli miktarı, hedef ülke, teslim şekli ve varsa raf ömrü/sertifika ihtiyacıyla birlikte değerlendirilir. Proforma akışı Sidya Global’de kalır; resmi marka sitesi ikincil bilgi kaynağı olarak korunur.",
+          "logistics": "Hanymish tarafında odak alanı bebek bakımı, beslenme aksesuarları ve hijyen bağlantılı ürün talepleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı, evrak kontrolü ve teslimat notlarıyla birlikte ilerletebilir."
+        },
+        "sebamed": {
+          "categoryName": "Kozmetik ve Kişisel Bakım",
+          "title": "Sebamed Kozmetik ve Kişisel Bakım | Sidya Global",
+          "metaDescription": "Sebamed için Türkiye’den B2B kozmetik ve kişisel bakım tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, Türkiye’den kozmetik ve kişisel bakım ürünleri için proforma, lojistik ve evrak desteğiyle tedarik akışını yönetir.",
+          "intro": "Sidya Global, Sebamed için kozmetik ve kişisel bakım kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa alıcıyı dış siteye göndermeden önce Sidya Global içinde net bir marka referansı sunar.",
+          "details": "Sebamed talepleri ürün grubu, koli miktarı, hedef ülke, teslim şekli ve varsa raf ömrü/sertifika ihtiyacıyla birlikte değerlendirilir. Proforma akışı Sidya Global’de kalır; resmi marka sitesi ikincil bilgi kaynağı olarak korunur.",
+          "logistics": "Sebamed tarafında odak alanı dermatolojik cilt bakımı, kişisel bakım ve eczane kanalına uygun ürün çeşitleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı, evrak kontrolü ve teslimat notlarıyla birlikte ilerletebilir."
         }
       }
     },
@@ -305,6 +547,94 @@
           "intro": "Sidya Global Reckitt üçün təmizlik kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə proforma və ya təklif sorğusundan əvvəl alıcıya aydın iş istinadı vermək üçün hazırlanıb.",
           "details": "Reckitt sorğuları koli miqdarı, yükləmə tipi, təyinat bazarı və Incoterm seçimi ilə birlikdə qiymətləndirilir. Sidya Global alıcını öz proforma axınında saxlayır, rəsmi marka saytını isə ikinci məlumat mənbəyi kimi qoruyur.",
           "logistics": "Reckitt üzrə əsas fokus gigiyena, dezinfeksiya və ev təmizliyi portfelləri. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı və ixrac sənədləri ilə birlikdə idarə edə bilər."
+        },
+        "oncu-salca": {
+          "categoryName": "Qida Məhsulları",
+          "title": "Öncü Salça Qida Məhsulları | Sidya Global",
+          "metaDescription": "Öncü Salça üçün Türkiyədən B2B qida məhsulları tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global beynəlxalq alıcılara Türkiyədən qida markaları üçün proforma, raf ömrü yoxlanışı və FOB/CIF/EXW çatdırılma planı hazırlamaqda kömək edir.",
+          "intro": "Sidya Global Öncü Salça üçün qida məhsulları kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə alıcını xarici sayta göndərmədən Sidya Global daxilində aydın marka istinadı verir.",
+          "details": "Öncü Salça sorğuları məhsul qrupu, koli miqdarı, hədəf ölkə, çatdırılma şərti və lazım olduqda raf ömrü/sertifikat ehtiyacı ilə qiymətləndirilir. Proforma axını Sidya Global-də qalır, rəsmi marka saytı isə ikinci məlumat mənbəyidir.",
+          "logistics": "Öncü Salça üzrə əsas fokus tomat pastası, bibər pastası və pərakəndəyə uyğun Türk qida məhsulları. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı, sənəd yoxlanışı və çatdırılma qeydləri ilə birlikdə idarə edə bilər."
+        },
+        "heinz": {
+          "categoryName": "Qida Məhsulları",
+          "title": "Heinz Qida Məhsulları | Sidya Global",
+          "metaDescription": "Heinz üçün Türkiyədən B2B qida məhsulları tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global beynəlxalq alıcılara Türkiyədən qida markaları üçün proforma, raf ömrü yoxlanışı və FOB/CIF/EXW çatdırılma planı hazırlamaqda kömək edir.",
+          "intro": "Sidya Global Heinz üçün qida məhsulları kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə alıcını xarici sayta göndərmədən Sidya Global daxilində aydın marka istinadı verir.",
+          "details": "Heinz sorğuları məhsul qrupu, koli miqdarı, hədəf ölkə, çatdırılma şərti və lazım olduqda raf ömrü/sertifikat ehtiyacı ilə qiymətləndirilir. Proforma axını Sidya Global-də qalır, rəsmi marka saytı isə ikinci məlumat mənbəyidir.",
+          "logistics": "Heinz üzrə əsas fokus souslar, ketçup və food-service kanalları üçün uyğun markalı ərzaq xətləri. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı, sənəd yoxlanışı və çatdırılma qeydləri ilə birlikdə idarə edə bilər."
+        },
+        "lokman": {
+          "categoryName": "Qida Məhsulları",
+          "title": "Lokman Qida Məhsulları | Sidya Global",
+          "metaDescription": "Lokman üçün Türkiyədən B2B qida məhsulları tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global beynəlxalq alıcılara Türkiyədən qida markaları üçün proforma, raf ömrü yoxlanışı və FOB/CIF/EXW çatdırılma planı hazırlamaqda kömək edir.",
+          "intro": "Sidya Global Lokman üçün qida məhsulları kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə alıcını xarici sayta göndərmədən Sidya Global daxilində aydın marka istinadı verir.",
+          "details": "Lokman sorğuları məhsul qrupu, koli miqdarı, hədəf ölkə, çatdırılma şərti və lazım olduqda raf ömrü/sertifikat ehtiyacı ilə qiymətləndirilir. Proforma axını Sidya Global-də qalır, rəsmi marka saytı isə ikinci məlumat mənbəyidir.",
+          "logistics": "Lokman üzrə əsas fokus səhər yeməyi məhsulları, sürtmələr və regional B2B alıcılar üçün ərzaq çeşidləri. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı, sənəd yoxlanışı və çatdırılma qeydləri ilə birlikdə idarə edə bilər."
+        },
+        "yudum": {
+          "categoryName": "Qida Məhsulları",
+          "title": "Yudum Qida Məhsulları | Sidya Global",
+          "metaDescription": "Yudum üçün Türkiyədən B2B qida məhsulları tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global beynəlxalq alıcılara Türkiyədən qida markaları üçün proforma, raf ömrü yoxlanışı və FOB/CIF/EXW çatdırılma planı hazırlamaqda kömək edir.",
+          "intro": "Sidya Global Yudum üçün qida məhsulları kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə alıcını xarici sayta göndərmədən Sidya Global daxilində aydın marka istinadı verir.",
+          "details": "Yudum sorğuları məhsul qrupu, koli miqdarı, hədəf ölkə, çatdırılma şərti və lazım olduqda raf ömrü/sertifikat ehtiyacı ilə qiymətləndirilir. Proforma axını Sidya Global-də qalır, rəsmi marka saytı isə ikinci məlumat mənbəyidir.",
+          "logistics": "Yudum üzrə əsas fokus koli, palet və raf ömrü planlaması vacib olan yeməli yağ və ərzaq məhsulları. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı, sənəd yoxlanışı və çatdırılma qeydləri ilə birlikdə idarə edə bilər."
+        },
+        "fide": {
+          "categoryName": "Qida Məhsulları",
+          "title": "Fide Qida Məhsulları | Sidya Global",
+          "metaDescription": "Fide üçün Türkiyədən B2B qida məhsulları tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global beynəlxalq alıcılara Türkiyədən qida markaları üçün proforma, raf ömrü yoxlanışı və FOB/CIF/EXW çatdırılma planı hazırlamaqda kömək edir.",
+          "intro": "Sidya Global Fide üçün qida məhsulları kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə alıcını xarici sayta göndərmədən Sidya Global daxilində aydın marka istinadı verir.",
+          "details": "Fide sorğuları məhsul qrupu, koli miqdarı, hədəf ölkə, çatdırılma şərti və lazım olduqda raf ömrü/sertifikat ehtiyacı ilə qiymətləndirilir. Proforma axını Sidya Global-də qalır, rəsmi marka saytı isə ikinci məlumat mənbəyidir.",
+          "logistics": "Fide üzrə əsas fokus qarışıq ərzaq yükləmələri üçün sous, ədviyyat və qablaşdırılmış qida seçimləri. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı, sənəd yoxlanışı və çatdırılma qeydləri ilə birlikdə idarə edə bilər."
+        },
+        "melwiss-cocowiss": {
+          "categoryName": "Qida Məhsulları",
+          "title": "Melwiss / Cocowiss Qida Məhsulları | Sidya Global",
+          "metaDescription": "Melwiss / Cocowiss üçün Türkiyədən B2B qida məhsulları tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global beynəlxalq alıcılara Türkiyədən qida markaları üçün proforma, raf ömrü yoxlanışı və FOB/CIF/EXW çatdırılma planı hazırlamaqda kömək edir.",
+          "intro": "Sidya Global Melwiss / Cocowiss üçün qida məhsulları kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə alıcını xarici sayta göndərmədən Sidya Global daxilində aydın marka istinadı verir.",
+          "details": "Melwiss / Cocowiss sorğuları məhsul qrupu, koli miqdarı, hədəf ölkə, çatdırılma şərti və lazım olduqda raf ömrü/sertifikat ehtiyacı ilə qiymətləndirilir. Proforma axını Sidya Global-də qalır, rəsmi marka saytı isə ikinci məlumat mənbəyidir.",
+          "logistics": "Melwiss / Cocowiss üzrə əsas fokus şokolad, kakao əsaslı məhsullar və qənnadı kataloq sorğuları. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı, sənəd yoxlanışı və çatdırılma qeydləri ilə birlikdə idarə edə bilər."
+        },
+        "johnson-johnson": {
+          "categoryName": "Tibbi Məhsullar",
+          "title": "Johnson & Johnson Tibbi Məhsullar | Sidya Global",
+          "metaDescription": "Johnson & Johnson üçün Türkiyədən B2B tibbi məhsullar tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global tibbi və səhiyyə məhsullarının tədarükündə sənəd yoxlanışı, proforma hazırlığı və ixrac koordinasiyası təqdim edir.",
+          "intro": "Sidya Global Johnson & Johnson üçün tibbi məhsullar kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə alıcını xarici sayta göndərmədən Sidya Global daxilində aydın marka istinadı verir.",
+          "details": "Johnson & Johnson sorğuları məhsul qrupu, koli miqdarı, hədəf ölkə, çatdırılma şərti və lazım olduqda raf ömrü/sertifikat ehtiyacı ilə qiymətləndirilir. Proforma axını Sidya Global-də qalır, rəsmi marka saytı isə ikinci məlumat mənbəyidir.",
+          "logistics": "Johnson & Johnson üzrə əsas fokus səhiyyə, klinik istifadə və tibbi sərf materialları kataloq sorğuları. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı, sənəd yoxlanışı və çatdırılma qeydləri ilə birlikdə idarə edə bilər."
+        },
+        "ikihan-medikal": {
+          "categoryName": "Tibbi Məhsullar",
+          "title": "İkihan Medikal Tibbi Məhsullar | Sidya Global",
+          "metaDescription": "İkihan Medikal üçün Türkiyədən B2B tibbi məhsullar tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global tibbi və səhiyyə məhsullarının tədarükündə sənəd yoxlanışı, proforma hazırlığı və ixrac koordinasiyası təqdim edir.",
+          "intro": "Sidya Global İkihan Medikal üçün tibbi məhsullar kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə alıcını xarici sayta göndərmədən Sidya Global daxilində aydın marka istinadı verir.",
+          "details": "İkihan Medikal sorğuları məhsul qrupu, koli miqdarı, hədəf ölkə, çatdırılma şərti və lazım olduqda raf ömrü/sertifikat ehtiyacı ilə qiymətləndirilir. Proforma axını Sidya Global-də qalır, rəsmi marka saytı isə ikinci məlumat mənbəyidir.",
+          "logistics": "İkihan Medikal üzrə əsas fokus tibbi tədarük sorğuları, distribütor tipli qaynaq araşdırması və sənəd izləmə. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı, sənəd yoxlanışı və çatdırılma qeydləri ilə birlikdə idarə edə bilər."
+        },
+        "omron-healthcare": {
+          "categoryName": "Tibbi Məhsullar",
+          "title": "Omron Healthcare Tibbi Məhsullar | Sidya Global",
+          "metaDescription": "Omron Healthcare üçün Türkiyədən B2B tibbi məhsullar tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global tibbi və səhiyyə məhsullarının tədarükündə sənəd yoxlanışı, proforma hazırlığı və ixrac koordinasiyası təqdim edir.",
+          "intro": "Sidya Global Omron Healthcare üçün tibbi məhsullar kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə alıcını xarici sayta göndərmədən Sidya Global daxilində aydın marka istinadı verir.",
+          "details": "Omron Healthcare sorğuları məhsul qrupu, koli miqdarı, hədəf ölkə, çatdırılma şərti və lazım olduqda raf ömrü/sertifikat ehtiyacı ilə qiymətləndirilir. Proforma axını Sidya Global-də qalır, rəsmi marka saytı isə ikinci məlumat mənbəyidir.",
+          "logistics": "Omron Healthcare üzrə əsas fokus təzyiq ölçən cihazlar, diaqnostik avadanlıq və səhiyyə kataloq sorğuları. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı, sənəd yoxlanışı və çatdırılma qeydləri ilə birlikdə idarə edə bilər."
+        },
+        "hanymish": {
+          "categoryName": "Tibbi Məhsullar",
+          "title": "Hanymish Tibbi Məhsullar | Sidya Global",
+          "metaDescription": "Hanymish üçün Türkiyədən B2B tibbi məhsullar tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global tibbi və səhiyyə məhsullarının tədarükündə sənəd yoxlanışı, proforma hazırlığı və ixrac koordinasiyası təqdim edir.",
+          "intro": "Sidya Global Hanymish üçün tibbi məhsullar kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə alıcını xarici sayta göndərmədən Sidya Global daxilində aydın marka istinadı verir.",
+          "details": "Hanymish sorğuları məhsul qrupu, koli miqdarı, hədəf ölkə, çatdırılma şərti və lazım olduqda raf ömrü/sertifikat ehtiyacı ilə qiymətləndirilir. Proforma axını Sidya Global-də qalır, rəsmi marka saytı isə ikinci məlumat mənbəyidir.",
+          "logistics": "Hanymish üzrə əsas fokus uşaq baxımı, qidalanma aksesuarları və gigiyena ilə əlaqəli məhsul sorğuları. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı, sənəd yoxlanışı və çatdırılma qeydləri ilə birlikdə idarə edə bilər."
+        },
+        "sebamed": {
+          "categoryName": "Kosmetika və şəxsi qulluq",
+          "title": "Sebamed Kosmetika və şəxsi qulluq | Sidya Global",
+          "metaDescription": "Sebamed üçün Türkiyədən B2B kosmetika və şəxsi qulluq tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global Türkiyədən kosmetika və şəxsi qulluq məhsulları üçün proforma, logistika və sənəd dəstəyi ilə tədarük axınını idarə edir.",
+          "intro": "Sidya Global Sebamed üçün kosmetika və şəxsi qulluq kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə alıcını xarici sayta göndərmədən Sidya Global daxilində aydın marka istinadı verir.",
+          "details": "Sebamed sorğuları məhsul qrupu, koli miqdarı, hədəf ölkə, çatdırılma şərti və lazım olduqda raf ömrü/sertifikat ehtiyacı ilə qiymətləndirilir. Proforma axını Sidya Global-də qalır, rəsmi marka saytı isə ikinci məlumat mənbəyidir.",
+          "logistics": "Sebamed üzrə əsas fokus dermatoloji dəri baxımı, şəxsi qulluq və aptek kanalı üçün məhsul çeşidləri. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı, sənəd yoxlanışı və çatdırılma qeydləri ilə birlikdə idarə edə bilər."
         }
       }
     },
@@ -387,6 +717,94 @@
           "intro": "Sidya Global Reckitt-ისთვის წმენდის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწესრიგებს. გვერდი მყიდველს აძლევს მკაფიო სამუშაო მიმართულებას პროფორმის ან ფასის მოთხოვნამდე.",
           "details": "Reckitt-ის მოთხოვნები ფასდება ყუთების რაოდენობის, ტრანსპორტის ტიპის, დანიშნულების ბაზრისა და Incoterm-ის მიხედვით. Sidya Global მყიდველს საკუთარ პროფორმის პროცესში ტოვებს, ოფიციალური საიტი კი დამატებით წყაროდ რჩება.",
           "logistics": "Reckitt-ის ძირითადი მიმართულებაა ჰიგიენის, დეზინფექციისა და სახლის წმენდის პორტფელი. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმითა და ექსპორტის დოკუმენტებით."
+        },
+        "oncu-salca": {
+          "categoryName": "საკვები პროდუქტები",
+          "title": "Öncü Salça საკვები პროდუქტები | Sidya Global",
+          "metaDescription": "Öncü Salça-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global საერთაშორისო მყიდველებს ეხმარება თურქული საკვები ბრენდების პროფორმის, ვადის შემოწმებისა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+          "intro": "Sidya Global Öncü Salça-ისთვის საკვები პროდუქტები-ის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწყობს. გვერდი მყიდველს აძლევს შიდა ბრენდის მკაფიო ცნობარს, სანამ ოფიციალურ საიტზე გადავა.",
+          "details": "Öncü Salça-ის მოთხოვნები ფასდება პროდუქტის ჯგუფის, ყუთების რაოდენობის, მიზნობრივი ქვეყნის, მიწოდების პირობისა და საჭიროების შემთხვევაში ვადის/სერტიფიკატის მიხედვით. პროფორმის პროცესი Sidya Global-ში რჩება, ოფიციალური საიტი კი დამატებით წყაროდ გამოიყენება.",
+          "logistics": "Öncü Salça-ის ძირითადი მიმართულებაა ტომატის პასტა, წიწაკის პასტა და საცალო გაყიდვებისთვის მზად თურქული პროდუქტები. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმით, დოკუმენტების კონტროლითა და მიწოდების შენიშვნებით."
+        },
+        "heinz": {
+          "categoryName": "საკვები პროდუქტები",
+          "title": "Heinz საკვები პროდუქტები | Sidya Global",
+          "metaDescription": "Heinz-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global საერთაშორისო მყიდველებს ეხმარება თურქული საკვები ბრენდების პროფორმის, ვადის შემოწმებისა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+          "intro": "Sidya Global Heinz-ისთვის საკვები პროდუქტები-ის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწყობს. გვერდი მყიდველს აძლევს შიდა ბრენდის მკაფიო ცნობარს, სანამ ოფიციალურ საიტზე გადავა.",
+          "details": "Heinz-ის მოთხოვნები ფასდება პროდუქტის ჯგუფის, ყუთების რაოდენობის, მიზნობრივი ქვეყნის, მიწოდების პირობისა და საჭიროების შემთხვევაში ვადის/სერტიფიკატის მიხედვით. პროფორმის პროცესი Sidya Global-ში რჩება, ოფიციალური საიტი კი დამატებით წყაროდ გამოიყენება.",
+          "logistics": "Heinz-ის ძირითადი მიმართულებაა სოუსები, კეტჩუპი და food-service არხებისთვის შესაბამისი ბრენდული პროდუქცია. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმით, დოკუმენტების კონტროლითა და მიწოდების შენიშვნებით."
+        },
+        "lokman": {
+          "categoryName": "საკვები პროდუქტები",
+          "title": "Lokman საკვები პროდუქტები | Sidya Global",
+          "metaDescription": "Lokman-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global საერთაშორისო მყიდველებს ეხმარება თურქული საკვები ბრენდების პროფორმის, ვადის შემოწმებისა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+          "intro": "Sidya Global Lokman-ისთვის საკვები პროდუქტები-ის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწყობს. გვერდი მყიდველს აძლევს შიდა ბრენდის მკაფიო ცნობარს, სანამ ოფიციალურ საიტზე გადავა.",
+          "details": "Lokman-ის მოთხოვნები ფასდება პროდუქტის ჯგუფის, ყუთების რაოდენობის, მიზნობრივი ქვეყნის, მიწოდების პირობისა და საჭიროების შემთხვევაში ვადის/სერტიფიკატის მიხედვით. პროფორმის პროცესი Sidya Global-ში რჩება, ოფიციალური საიტი კი დამატებით წყაროდ გამოიყენება.",
+          "logistics": "Lokman-ის ძირითადი მიმართულებაა საუზმის პროდუქტები, წასასმელები და რეგიონული B2B მყიდველებისთვის სასურსათო ასორტიმენტი. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმით, დოკუმენტების კონტროლითა და მიწოდების შენიშვნებით."
+        },
+        "yudum": {
+          "categoryName": "საკვები პროდუქტები",
+          "title": "Yudum საკვები პროდუქტები | Sidya Global",
+          "metaDescription": "Yudum-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global საერთაშორისო მყიდველებს ეხმარება თურქული საკვები ბრენდების პროფორმის, ვადის შემოწმებისა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+          "intro": "Sidya Global Yudum-ისთვის საკვები პროდუქტები-ის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწყობს. გვერდი მყიდველს აძლევს შიდა ბრენდის მკაფიო ცნობარს, სანამ ოფიციალურ საიტზე გადავა.",
+          "details": "Yudum-ის მოთხოვნები ფასდება პროდუქტის ჯგუფის, ყუთების რაოდენობის, მიზნობრივი ქვეყნის, მიწოდების პირობისა და საჭიროების შემთხვევაში ვადის/სერტიფიკატის მიხედვით. პროფორმის პროცესი Sidya Global-ში რჩება, ოფიციალური საიტი კი დამატებით წყაროდ გამოიყენება.",
+          "logistics": "Yudum-ის ძირითადი მიმართულებაა საკვები ზეთები და სასურსათო პროდუქტები, სადაც ყუთი, პალეტი და ვადა მნიშვნელოვანია. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმით, დოკუმენტების კონტროლითა და მიწოდების შენიშვნებით."
+        },
+        "fide": {
+          "categoryName": "საკვები პროდუქტები",
+          "title": "Fide საკვები პროდუქტები | Sidya Global",
+          "metaDescription": "Fide-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global საერთაშორისო მყიდველებს ეხმარება თურქული საკვები ბრენდების პროფორმის, ვადის შემოწმებისა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+          "intro": "Sidya Global Fide-ისთვის საკვები პროდუქტები-ის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწყობს. გვერდი მყიდველს აძლევს შიდა ბრენდის მკაფიო ცნობარს, სანამ ოფიციალურ საიტზე გადავა.",
+          "details": "Fide-ის მოთხოვნები ფასდება პროდუქტის ჯგუფის, ყუთების რაოდენობის, მიზნობრივი ქვეყნის, მიწოდების პირობისა და საჭიროების შემთხვევაში ვადის/სერტიფიკატის მიხედვით. პროფორმის პროცესი Sidya Global-ში რჩება, ოფიციალური საიტი კი დამატებით წყაროდ გამოიყენება.",
+          "logistics": "Fide-ის ძირითადი მიმართულებაა შერეული სასურსათო გადაზიდვებისთვის სოუსები, სანელებლები და შეფუთული საკვები. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმით, დოკუმენტების კონტროლითა და მიწოდების შენიშვნებით."
+        },
+        "melwiss-cocowiss": {
+          "categoryName": "საკვები პროდუქტები",
+          "title": "Melwiss / Cocowiss საკვები პროდუქტები | Sidya Global",
+          "metaDescription": "Melwiss / Cocowiss-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global საერთაშორისო მყიდველებს ეხმარება თურქული საკვები ბრენდების პროფორმის, ვადის შემოწმებისა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+          "intro": "Sidya Global Melwiss / Cocowiss-ისთვის საკვები პროდუქტები-ის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწყობს. გვერდი მყიდველს აძლევს შიდა ბრენდის მკაფიო ცნობარს, სანამ ოფიციალურ საიტზე გადავა.",
+          "details": "Melwiss / Cocowiss-ის მოთხოვნები ფასდება პროდუქტის ჯგუფის, ყუთების რაოდენობის, მიზნობრივი ქვეყნის, მიწოდების პირობისა და საჭიროების შემთხვევაში ვადის/სერტიფიკატის მიხედვით. პროფორმის პროცესი Sidya Global-ში რჩება, ოფიციალური საიტი კი დამატებით წყაროდ გამოიყენება.",
+          "logistics": "Melwiss / Cocowiss-ის ძირითადი მიმართულებაა შოკოლადი, კაკაოს პროდუქტები და საკონდიტრო კატალოგის მოთხოვნები. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმით, დოკუმენტების კონტროლითა და მიწოდების შენიშვნებით."
+        },
+        "johnson-johnson": {
+          "categoryName": "სამედიცინო პროდუქტები",
+          "title": "Johnson & Johnson სამედიცინო პროდუქტები | Sidya Global",
+          "metaDescription": "Johnson & Johnson-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global სამედიცინო და ჯანმრთელობის პროდუქტების მიწოდებაში უზრუნველყოფს დოკუმენტების შემოწმებას, პროფორმას და ექსპორტის კოორდინაციას.",
+          "intro": "Sidya Global Johnson & Johnson-ისთვის სამედიცინო პროდუქტები-ის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწყობს. გვერდი მყიდველს აძლევს შიდა ბრენდის მკაფიო ცნობარს, სანამ ოფიციალურ საიტზე გადავა.",
+          "details": "Johnson & Johnson-ის მოთხოვნები ფასდება პროდუქტის ჯგუფის, ყუთების რაოდენობის, მიზნობრივი ქვეყნის, მიწოდების პირობისა და საჭიროების შემთხვევაში ვადის/სერტიფიკატის მიხედვით. პროფორმის პროცესი Sidya Global-ში რჩება, ოფიციალური საიტი კი დამატებით წყაროდ გამოიყენება.",
+          "logistics": "Johnson & Johnson-ის ძირითადი მიმართულებაა ჯანმრთელობის, კლინიკური გამოყენებისა და სამედიცინო სახარჯო კატალოგები. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმით, დოკუმენტების კონტროლითა და მიწოდების შენიშვნებით."
+        },
+        "ikihan-medikal": {
+          "categoryName": "სამედიცინო პროდუქტები",
+          "title": "İkihan Medikal სამედიცინო პროდუქტები | Sidya Global",
+          "metaDescription": "İkihan Medikal-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global სამედიცინო და ჯანმრთელობის პროდუქტების მიწოდებაში უზრუნველყოფს დოკუმენტების შემოწმებას, პროფორმას და ექსპორტის კოორდინაციას.",
+          "intro": "Sidya Global İkihan Medikal-ისთვის სამედიცინო პროდუქტები-ის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწყობს. გვერდი მყიდველს აძლევს შიდა ბრენდის მკაფიო ცნობარს, სანამ ოფიციალურ საიტზე გადავა.",
+          "details": "İkihan Medikal-ის მოთხოვნები ფასდება პროდუქტის ჯგუფის, ყუთების რაოდენობის, მიზნობრივი ქვეყნის, მიწოდების პირობისა და საჭიროების შემთხვევაში ვადის/სერტიფიკატის მიხედვით. პროფორმის პროცესი Sidya Global-ში რჩება, ოფიციალური საიტი კი დამატებით წყაროდ გამოიყენება.",
+          "logistics": "İkihan Medikal-ის ძირითადი მიმართულებაა სამედიცინო მიწოდება, დისტრიბუტორის ტიპის მოძიება და დოკუმენტების მონიტორინგი. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმით, დოკუმენტების კონტროლითა და მიწოდების შენიშვნებით."
+        },
+        "omron-healthcare": {
+          "categoryName": "სამედიცინო პროდუქტები",
+          "title": "Omron Healthcare სამედიცინო პროდუქტები | Sidya Global",
+          "metaDescription": "Omron Healthcare-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global სამედიცინო და ჯანმრთელობის პროდუქტების მიწოდებაში უზრუნველყოფს დოკუმენტების შემოწმებას, პროფორმას და ექსპორტის კოორდინაციას.",
+          "intro": "Sidya Global Omron Healthcare-ისთვის სამედიცინო პროდუქტები-ის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწყობს. გვერდი მყიდველს აძლევს შიდა ბრენდის მკაფიო ცნობარს, სანამ ოფიციალურ საიტზე გადავა.",
+          "details": "Omron Healthcare-ის მოთხოვნები ფასდება პროდუქტის ჯგუფის, ყუთების რაოდენობის, მიზნობრივი ქვეყნის, მიწოდების პირობისა და საჭიროების შემთხვევაში ვადის/სერტიფიკატის მიხედვით. პროფორმის პროცესი Sidya Global-ში რჩება, ოფიციალური საიტი კი დამატებით წყაროდ გამოიყენება.",
+          "logistics": "Omron Healthcare-ის ძირითადი მიმართულებაა წნევის აპარატები, დიაგნოსტიკური მოწყობილობები და healthcare კატალოგები. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმით, დოკუმენტების კონტროლითა და მიწოდების შენიშვნებით."
+        },
+        "hanymish": {
+          "categoryName": "სამედიცინო პროდუქტები",
+          "title": "Hanymish სამედიცინო პროდუქტები | Sidya Global",
+          "metaDescription": "Hanymish-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global სამედიცინო და ჯანმრთელობის პროდუქტების მიწოდებაში უზრუნველყოფს დოკუმენტების შემოწმებას, პროფორმას და ექსპორტის კოორდინაციას.",
+          "intro": "Sidya Global Hanymish-ისთვის სამედიცინო პროდუქტები-ის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწყობს. გვერდი მყიდველს აძლევს შიდა ბრენდის მკაფიო ცნობარს, სანამ ოფიციალურ საიტზე გადავა.",
+          "details": "Hanymish-ის მოთხოვნები ფასდება პროდუქტის ჯგუფის, ყუთების რაოდენობის, მიზნობრივი ქვეყნის, მიწოდების პირობისა და საჭიროების შემთხვევაში ვადის/სერტიფიკატის მიხედვით. პროფორმის პროცესი Sidya Global-ში რჩება, ოფიციალური საიტი კი დამატებით წყაროდ გამოიყენება.",
+          "logistics": "Hanymish-ის ძირითადი მიმართულებაა ბავშვის მოვლა, კვების აქსესუარები და ჰიგიენასთან დაკავშირებული პროდუქტები. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმით, დოკუმენტების კონტროლითა და მიწოდების შენიშვნებით."
+        },
+        "sebamed": {
+          "categoryName": "კოსმეტიკა და პირადი მოვლა",
+          "title": "Sebamed კოსმეტიკა და პირადი მოვლა | Sidya Global",
+          "metaDescription": "Sebamed-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global თურქეთიდან კოსმეტიკისა და პირადი მოვლის პროდუქტების მიწოდებას მართავს პროფორმის, ლოგისტიკისა და დოკუმენტების მხარდაჭერით.",
+          "intro": "Sidya Global Sebamed-ისთვის კოსმეტიკა და პირადი მოვლა-ის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწყობს. გვერდი მყიდველს აძლევს შიდა ბრენდის მკაფიო ცნობარს, სანამ ოფიციალურ საიტზე გადავა.",
+          "details": "Sebamed-ის მოთხოვნები ფასდება პროდუქტის ჯგუფის, ყუთების რაოდენობის, მიზნობრივი ქვეყნის, მიწოდების პირობისა და საჭიროების შემთხვევაში ვადის/სერტიფიკატის მიხედვით. პროფორმის პროცესი Sidya Global-ში რჩება, ოფიციალური საიტი კი დამატებით წყაროდ გამოიყენება.",
+          "logistics": "Sebamed-ის ძირითადი მიმართულებაა დერმატოლოგიური კანის მოვლა, პირადი მოვლა და აფთიაქის არხის ასორტიმენტი. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმით, დოკუმენტების კონტროლითა და მიწოდების შენიშვნებით."
         }
       }
     },
@@ -469,6 +887,94 @@
           "intro": "Sidya Global организует для Reckitt B2B-процесс закупки и экспорта в категории клининга. Эта страница помогает покупателю быстро перейти к проформе или запросу коммерческого предложения.",
           "details": "Запросы Reckitt оцениваются с учетом количества коробов, типа загрузки, целевого рынка и условий Incoterm. Sidya Global удерживает покупателя в собственном процессе проформы, а официальный сайт бренда остается дополнительным источником информации.",
           "logistics": "Фокус по Reckitt: портфели гигиены, дезинфекции и бытовой химии. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет и экспортными документами."
+        },
+        "oncu-salca": {
+          "categoryName": "Пищевые продукты",
+          "title": "Öncü Salça Пищевые продукты | Sidya Global",
+          "metaDescription": "B2B-поставка Öncü Salça из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает международным покупателям закупать турецкие пищевые бренды с проформой, проверкой сроков годности и планированием поставок FOB/CIF/EXW.",
+          "intro": "Sidya Global организует для Öncü Salça B2B-закупку и экспорт в категории «Пищевые продукты». Страница удерживает покупателя внутри Sidya Global и дает понятную бренд-ориентацию до перехода на официальный сайт.",
+          "details": "Запросы Öncü Salça оцениваются по товарной группе, количеству коробов, целевой стране, условиям поставки и при необходимости срокам годности/сертификатам. Процесс проформы остается в Sidya Global, официальный сайт бренда сохраняется как дополнительный источник.",
+          "logistics": "Фокус по Öncü Salça: томатная и перечная паста, а также турецкие продукты для розницы. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет, проверкой документов и примечаниями по доставке."
+        },
+        "heinz": {
+          "categoryName": "Пищевые продукты",
+          "title": "Heinz Пищевые продукты | Sidya Global",
+          "metaDescription": "B2B-поставка Heinz из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает международным покупателям закупать турецкие пищевые бренды с проформой, проверкой сроков годности и планированием поставок FOB/CIF/EXW.",
+          "intro": "Sidya Global организует для Heinz B2B-закупку и экспорт в категории «Пищевые продукты». Страница удерживает покупателя внутри Sidya Global и дает понятную бренд-ориентацию до перехода на официальный сайт.",
+          "details": "Запросы Heinz оцениваются по товарной группе, количеству коробов, целевой стране, условиям поставки и при необходимости срокам годности/сертификатам. Процесс проформы остается в Sidya Global, официальный сайт бренда сохраняется как дополнительный источник.",
+          "logistics": "Фокус по Heinz: соусы, кетчуп и брендированные продукты для розницы и food-service. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет, проверкой документов и примечаниями по доставке."
+        },
+        "lokman": {
+          "categoryName": "Пищевые продукты",
+          "title": "Lokman Пищевые продукты | Sidya Global",
+          "metaDescription": "B2B-поставка Lokman из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает международным покупателям закупать турецкие пищевые бренды с проформой, проверкой сроков годности и планированием поставок FOB/CIF/EXW.",
+          "intro": "Sidya Global организует для Lokman B2B-закупку и экспорт в категории «Пищевые продукты». Страница удерживает покупателя внутри Sidya Global и дает понятную бренд-ориентацию до перехода на официальный сайт.",
+          "details": "Запросы Lokman оцениваются по товарной группе, количеству коробов, целевой стране, условиям поставки и при необходимости срокам годности/сертификатам. Процесс проформы остается в Sidya Global, официальный сайт бренда сохраняется как дополнительный источник.",
+          "logistics": "Фокус по Lokman: завтраки, пасты и продуктовые ассортименты для региональных B2B-покупателей. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет, проверкой документов и примечаниями по доставке."
+        },
+        "yudum": {
+          "categoryName": "Пищевые продукты",
+          "title": "Yudum Пищевые продукты | Sidya Global",
+          "metaDescription": "B2B-поставка Yudum из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает международным покупателям закупать турецкие пищевые бренды с проформой, проверкой сроков годности и планированием поставок FOB/CIF/EXW.",
+          "intro": "Sidya Global организует для Yudum B2B-закупку и экспорт в категории «Пищевые продукты». Страница удерживает покупателя внутри Sidya Global и дает понятную бренд-ориентацию до перехода на официальный сайт.",
+          "details": "Запросы Yudum оцениваются по товарной группе, количеству коробов, целевой стране, условиям поставки и при необходимости срокам годности/сертификатам. Процесс проформы остается в Sidya Global, официальный сайт бренда сохраняется как дополнительный источник.",
+          "logistics": "Фокус по Yudum: растительные масла и продукты, где важны короб, палета и срок годности. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет, проверкой документов и примечаниями по доставке."
+        },
+        "fide": {
+          "categoryName": "Пищевые продукты",
+          "title": "Fide Пищевые продукты | Sidya Global",
+          "metaDescription": "B2B-поставка Fide из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает международным покупателям закупать турецкие пищевые бренды с проформой, проверкой сроков годности и планированием поставок FOB/CIF/EXW.",
+          "intro": "Sidya Global организует для Fide B2B-закупку и экспорт в категории «Пищевые продукты». Страница удерживает покупателя внутри Sidya Global и дает понятную бренд-ориентацию до перехода на официальный сайт.",
+          "details": "Запросы Fide оцениваются по товарной группе, количеству коробов, целевой стране, условиям поставки и при необходимости срокам годности/сертификатам. Процесс проформы остается в Sidya Global, официальный сайт бренда сохраняется как дополнительный источник.",
+          "logistics": "Фокус по Fide: соусы, приправы и упакованные продукты для смешанных поставок. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет, проверкой документов и примечаниями по доставке."
+        },
+        "melwiss-cocowiss": {
+          "categoryName": "Пищевые продукты",
+          "title": "Melwiss / Cocowiss Пищевые продукты | Sidya Global",
+          "metaDescription": "B2B-поставка Melwiss / Cocowiss из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает международным покупателям закупать турецкие пищевые бренды с проформой, проверкой сроков годности и планированием поставок FOB/CIF/EXW.",
+          "intro": "Sidya Global организует для Melwiss / Cocowiss B2B-закупку и экспорт в категории «Пищевые продукты». Страница удерживает покупателя внутри Sidya Global и дает понятную бренд-ориентацию до перехода на официальный сайт.",
+          "details": "Запросы Melwiss / Cocowiss оцениваются по товарной группе, количеству коробов, целевой стране, условиям поставки и при необходимости срокам годности/сертификатам. Процесс проформы остается в Sidya Global, официальный сайт бренда сохраняется как дополнительный источник.",
+          "logistics": "Фокус по Melwiss / Cocowiss: шоколад, продукты на основе какао и кондитерские каталоги. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет, проверкой документов и примечаниями по доставке."
+        },
+        "johnson-johnson": {
+          "categoryName": "Медицинские товары",
+          "title": "Johnson & Johnson Медицинские товары | Sidya Global",
+          "metaDescription": "B2B-поставка Johnson & Johnson из Турции, запрос проформы и план экспортной доставки. Sidya Global сопровождает закупку медицинских и healthcare-товаров: документы, проформа и экспортная координация.",
+          "intro": "Sidya Global организует для Johnson & Johnson B2B-закупку и экспорт в категории «Медицинские товары». Страница удерживает покупателя внутри Sidya Global и дает понятную бренд-ориентацию до перехода на официальный сайт.",
+          "details": "Запросы Johnson & Johnson оцениваются по товарной группе, количеству коробов, целевой стране, условиям поставки и при необходимости срокам годности/сертификатам. Процесс проформы остается в Sidya Global, официальный сайт бренда сохраняется как дополнительный источник.",
+          "logistics": "Фокус по Johnson & Johnson: healthcare, клиническое применение и медицинские расходные материалы. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет, проверкой документов и примечаниями по доставке."
+        },
+        "ikihan-medikal": {
+          "categoryName": "Медицинские товары",
+          "title": "İkihan Medikal Медицинские товары | Sidya Global",
+          "metaDescription": "B2B-поставка İkihan Medikal из Турции, запрос проформы и план экспортной доставки. Sidya Global сопровождает закупку медицинских и healthcare-товаров: документы, проформа и экспортная координация.",
+          "intro": "Sidya Global организует для İkihan Medikal B2B-закупку и экспорт в категории «Медицинские товары». Страница удерживает покупателя внутри Sidya Global и дает понятную бренд-ориентацию до перехода на официальный сайт.",
+          "details": "Запросы İkihan Medikal оцениваются по товарной группе, количеству коробов, целевой стране, условиям поставки и при необходимости срокам годности/сертификатам. Процесс проформы остается в Sidya Global, официальный сайт бренда сохраняется как дополнительный источник.",
+          "logistics": "Фокус по İkihan Medikal: медицинские поставки, дистрибьюторский sourcing и сопровождение документов. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет, проверкой документов и примечаниями по доставке."
+        },
+        "omron-healthcare": {
+          "categoryName": "Медицинские товары",
+          "title": "Omron Healthcare Медицинские товары | Sidya Global",
+          "metaDescription": "B2B-поставка Omron Healthcare из Турции, запрос проформы и план экспортной доставки. Sidya Global сопровождает закупку медицинских и healthcare-товаров: документы, проформа и экспортная координация.",
+          "intro": "Sidya Global организует для Omron Healthcare B2B-закупку и экспорт в категории «Медицинские товары». Страница удерживает покупателя внутри Sidya Global и дает понятную бренд-ориентацию до перехода на официальный сайт.",
+          "details": "Запросы Omron Healthcare оцениваются по товарной группе, количеству коробов, целевой стране, условиям поставки и при необходимости срокам годности/сертификатам. Процесс проформы остается в Sidya Global, официальный сайт бренда сохраняется как дополнительный источник.",
+          "logistics": "Фокус по Omron Healthcare: тонометры, диагностические устройства и healthcare-каталоги. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет, проверкой документов и примечаниями по доставке."
+        },
+        "hanymish": {
+          "categoryName": "Медицинские товары",
+          "title": "Hanymish Медицинские товары | Sidya Global",
+          "metaDescription": "B2B-поставка Hanymish из Турции, запрос проформы и план экспортной доставки. Sidya Global сопровождает закупку медицинских и healthcare-товаров: документы, проформа и экспортная координация.",
+          "intro": "Sidya Global организует для Hanymish B2B-закупку и экспорт в категории «Медицинские товары». Страница удерживает покупателя внутри Sidya Global и дает понятную бренд-ориентацию до перехода на официальный сайт.",
+          "details": "Запросы Hanymish оцениваются по товарной группе, количеству коробов, целевой стране, условиям поставки и при необходимости срокам годности/сертификатам. Процесс проформы остается в Sidya Global, официальный сайт бренда сохраняется как дополнительный источник.",
+          "logistics": "Фокус по Hanymish: уход за детьми, аксессуары для кормления и смежные гигиенические товары. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет, проверкой документов и примечаниями по доставке."
+        },
+        "sebamed": {
+          "categoryName": "Косметика и личный уход",
+          "title": "Sebamed Косметика и личный уход | Sidya Global",
+          "metaDescription": "B2B-поставка Sebamed из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает закупать косметику и товары личного ухода из Турции с поддержкой проформы, логистики и документов.",
+          "intro": "Sidya Global организует для Sebamed B2B-закупку и экспорт в категории «Косметика и личный уход». Страница удерживает покупателя внутри Sidya Global и дает понятную бренд-ориентацию до перехода на официальный сайт.",
+          "details": "Запросы Sebamed оцениваются по товарной группе, количеству коробов, целевой стране, условиям поставки и при необходимости срокам годности/сертификатам. Процесс проформы остается в Sidya Global, официальный сайт бренда сохраняется как дополнительный источник.",
+          "logistics": "Фокус по Sebamed: дерматологический уход за кожей, личная гигиена и аптечные ассортименты. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет, проверкой документов и примечаниями по доставке."
         }
       }
     },
@@ -551,6 +1057,94 @@
           "intro": "تنظم Sidya Global تدفق التوريد والتصدير لفئة التنظيف الخاصة بـ Reckitt. تساعد هذه الصفحة المشتري على الانتقال بسرعة إلى طلب بروفرما أو عرض سعر واضح.",
           "details": "يتم تقييم طلبات Reckitt حسب عدد الكراتين ونوع التحميل والسوق المستهدف وشروط Incoterm. يبقى المشتري داخل مسار البروفرما في Sidya Global، بينما يظل الموقع الرسمي للعلامة مرجعاً ثانوياً.",
           "logistics": "يركز Reckitt على محافظ النظافة والتعقيم وتنظيف المنزل. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ووثائق التصدير المطلوبة."
+        },
+        "oncu-salca": {
+          "categoryName": "المنتجات الغذائية",
+          "title": "Öncü Salça المنتجات الغذائية | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Öncü Salça من تركيا مع طلب بروفرما وخطة شحن تصديرية. تساعد Sidya Global المشترين الدوليين على توريد العلامات الغذائية التركية مع إعداد البروفرما ومراجعة مدة الصلاحية وتخطيط شحن FOB/CIF/EXW.",
+          "intro": "تنظم Sidya Global مسار التوريد والتصدير لفئة المنتجات الغذائية الخاصة بـ Öncü Salça. تمنح هذه الصفحة المشتري مرجعاً داخلياً واضحاً قبل الانتقال إلى الموقع الرسمي للعلامة.",
+          "details": "يتم تقييم طلبات Öncü Salça حسب مجموعة المنتج وعدد الكراتين والبلد المستهدف وشروط التسليم، ومع الحاجة مدة الصلاحية أو الشهادات. يبقى مسار البروفرما داخل Sidya Global، بينما يظل الموقع الرسمي مرجعاً ثانوياً.",
+          "logistics": "يركز Öncü Salça على معجون الطماطم ومعجون الفلفل ومنتجات غذائية تركية جاهزة للبيع. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ومراجعة الوثائق وملاحظات التسليم."
+        },
+        "heinz": {
+          "categoryName": "المنتجات الغذائية",
+          "title": "Heinz المنتجات الغذائية | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Heinz من تركيا مع طلب بروفرما وخطة شحن تصديرية. تساعد Sidya Global المشترين الدوليين على توريد العلامات الغذائية التركية مع إعداد البروفرما ومراجعة مدة الصلاحية وتخطيط شحن FOB/CIF/EXW.",
+          "intro": "تنظم Sidya Global مسار التوريد والتصدير لفئة المنتجات الغذائية الخاصة بـ Heinz. تمنح هذه الصفحة المشتري مرجعاً داخلياً واضحاً قبل الانتقال إلى الموقع الرسمي للعلامة.",
+          "details": "يتم تقييم طلبات Heinz حسب مجموعة المنتج وعدد الكراتين والبلد المستهدف وشروط التسليم، ومع الحاجة مدة الصلاحية أو الشهادات. يبقى مسار البروفرما داخل Sidya Global، بينما يظل الموقع الرسمي مرجعاً ثانوياً.",
+          "logistics": "يركز Heinz على الصلصات والكاتشب وخطوط البقالة المناسبة لقنوات المطاعم والتجزئة. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ومراجعة الوثائق وملاحظات التسليم."
+        },
+        "lokman": {
+          "categoryName": "المنتجات الغذائية",
+          "title": "Lokman المنتجات الغذائية | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Lokman من تركيا مع طلب بروفرما وخطة شحن تصديرية. تساعد Sidya Global المشترين الدوليين على توريد العلامات الغذائية التركية مع إعداد البروفرما ومراجعة مدة الصلاحية وتخطيط شحن FOB/CIF/EXW.",
+          "intro": "تنظم Sidya Global مسار التوريد والتصدير لفئة المنتجات الغذائية الخاصة بـ Lokman. تمنح هذه الصفحة المشتري مرجعاً داخلياً واضحاً قبل الانتقال إلى الموقع الرسمي للعلامة.",
+          "details": "يتم تقييم طلبات Lokman حسب مجموعة المنتج وعدد الكراتين والبلد المستهدف وشروط التسليم، ومع الحاجة مدة الصلاحية أو الشهادات. يبقى مسار البروفرما داخل Sidya Global، بينما يظل الموقع الرسمي مرجعاً ثانوياً.",
+          "logistics": "يركز Lokman على منتجات الإفطار والمنتجات القابلة للدهن وتشكيلات البقالة للمشترين التجاريين. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ومراجعة الوثائق وملاحظات التسليم."
+        },
+        "yudum": {
+          "categoryName": "المنتجات الغذائية",
+          "title": "Yudum المنتجات الغذائية | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Yudum من تركيا مع طلب بروفرما وخطة شحن تصديرية. تساعد Sidya Global المشترين الدوليين على توريد العلامات الغذائية التركية مع إعداد البروفرما ومراجعة مدة الصلاحية وتخطيط شحن FOB/CIF/EXW.",
+          "intro": "تنظم Sidya Global مسار التوريد والتصدير لفئة المنتجات الغذائية الخاصة بـ Yudum. تمنح هذه الصفحة المشتري مرجعاً داخلياً واضحاً قبل الانتقال إلى الموقع الرسمي للعلامة.",
+          "details": "يتم تقييم طلبات Yudum حسب مجموعة المنتج وعدد الكراتين والبلد المستهدف وشروط التسليم، ومع الحاجة مدة الصلاحية أو الشهادات. يبقى مسار البروفرما داخل Sidya Global، بينما يظل الموقع الرسمي مرجعاً ثانوياً.",
+          "logistics": "يركز Yudum على زيوت الطعام ومنتجات البقالة التي تتطلب تخطيط الكراتين والمنصات ومدة الصلاحية. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ومراجعة الوثائق وملاحظات التسليم."
+        },
+        "fide": {
+          "categoryName": "المنتجات الغذائية",
+          "title": "Fide المنتجات الغذائية | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Fide من تركيا مع طلب بروفرما وخطة شحن تصديرية. تساعد Sidya Global المشترين الدوليين على توريد العلامات الغذائية التركية مع إعداد البروفرما ومراجعة مدة الصلاحية وتخطيط شحن FOB/CIF/EXW.",
+          "intro": "تنظم Sidya Global مسار التوريد والتصدير لفئة المنتجات الغذائية الخاصة بـ Fide. تمنح هذه الصفحة المشتري مرجعاً داخلياً واضحاً قبل الانتقال إلى الموقع الرسمي للعلامة.",
+          "details": "يتم تقييم طلبات Fide حسب مجموعة المنتج وعدد الكراتين والبلد المستهدف وشروط التسليم، ومع الحاجة مدة الصلاحية أو الشهادات. يبقى مسار البروفرما داخل Sidya Global، بينما يظل الموقع الرسمي مرجعاً ثانوياً.",
+          "logistics": "يركز Fide على الصلصات والتوابل والأغذية المعبأة للشحنات الغذائية المختلطة. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ومراجعة الوثائق وملاحظات التسليم."
+        },
+        "melwiss-cocowiss": {
+          "categoryName": "المنتجات الغذائية",
+          "title": "Melwiss / Cocowiss المنتجات الغذائية | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Melwiss / Cocowiss من تركيا مع طلب بروفرما وخطة شحن تصديرية. تساعد Sidya Global المشترين الدوليين على توريد العلامات الغذائية التركية مع إعداد البروفرما ومراجعة مدة الصلاحية وتخطيط شحن FOB/CIF/EXW.",
+          "intro": "تنظم Sidya Global مسار التوريد والتصدير لفئة المنتجات الغذائية الخاصة بـ Melwiss / Cocowiss. تمنح هذه الصفحة المشتري مرجعاً داخلياً واضحاً قبل الانتقال إلى الموقع الرسمي للعلامة.",
+          "details": "يتم تقييم طلبات Melwiss / Cocowiss حسب مجموعة المنتج وعدد الكراتين والبلد المستهدف وشروط التسليم، ومع الحاجة مدة الصلاحية أو الشهادات. يبقى مسار البروفرما داخل Sidya Global، بينما يظل الموقع الرسمي مرجعاً ثانوياً.",
+          "logistics": "يركز Melwiss / Cocowiss على الشوكولاتة ومنتجات الكاكاو وطلبات كتالوج الحلويات. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ومراجعة الوثائق وملاحظات التسليم."
+        },
+        "johnson-johnson": {
+          "categoryName": "المنتجات الطبية",
+          "title": "Johnson & Johnson المنتجات الطبية | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Johnson & Johnson من تركيا مع طلب بروفرما وخطة شحن تصديرية. تدعم Sidya Global توريد المنتجات الطبية والصحية عبر مراجعة الوثائق وإعداد البروفرما وتنسيق التصدير باحتراف.",
+          "intro": "تنظم Sidya Global مسار التوريد والتصدير لفئة المنتجات الطبية الخاصة بـ Johnson & Johnson. تمنح هذه الصفحة المشتري مرجعاً داخلياً واضحاً قبل الانتقال إلى الموقع الرسمي للعلامة.",
+          "details": "يتم تقييم طلبات Johnson & Johnson حسب مجموعة المنتج وعدد الكراتين والبلد المستهدف وشروط التسليم، ومع الحاجة مدة الصلاحية أو الشهادات. يبقى مسار البروفرما داخل Sidya Global، بينما يظل الموقع الرسمي مرجعاً ثانوياً.",
+          "logistics": "يركز Johnson & Johnson على طلبات كتالوج الرعاية الصحية والاستخدام السريري والمستلزمات الطبية. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ومراجعة الوثائق وملاحظات التسليم."
+        },
+        "ikihan-medikal": {
+          "categoryName": "المنتجات الطبية",
+          "title": "İkihan Medikal المنتجات الطبية | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات İkihan Medikal من تركيا مع طلب بروفرما وخطة شحن تصديرية. تدعم Sidya Global توريد المنتجات الطبية والصحية عبر مراجعة الوثائق وإعداد البروفرما وتنسيق التصدير باحتراف.",
+          "intro": "تنظم Sidya Global مسار التوريد والتصدير لفئة المنتجات الطبية الخاصة بـ İkihan Medikal. تمنح هذه الصفحة المشتري مرجعاً داخلياً واضحاً قبل الانتقال إلى الموقع الرسمي للعلامة.",
+          "details": "يتم تقييم طلبات İkihan Medikal حسب مجموعة المنتج وعدد الكراتين والبلد المستهدف وشروط التسليم، ومع الحاجة مدة الصلاحية أو الشهادات. يبقى مسار البروفرما داخل Sidya Global، بينما يظل الموقع الرسمي مرجعاً ثانوياً.",
+          "logistics": "يركز İkihan Medikal على طلبات التوريد الطبي والبحث عن مصادر بنمط الموزعين ومتابعة الوثائق. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ومراجعة الوثائق وملاحظات التسليم."
+        },
+        "omron-healthcare": {
+          "categoryName": "المنتجات الطبية",
+          "title": "Omron Healthcare المنتجات الطبية | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Omron Healthcare من تركيا مع طلب بروفرما وخطة شحن تصديرية. تدعم Sidya Global توريد المنتجات الطبية والصحية عبر مراجعة الوثائق وإعداد البروفرما وتنسيق التصدير باحتراف.",
+          "intro": "تنظم Sidya Global مسار التوريد والتصدير لفئة المنتجات الطبية الخاصة بـ Omron Healthcare. تمنح هذه الصفحة المشتري مرجعاً داخلياً واضحاً قبل الانتقال إلى الموقع الرسمي للعلامة.",
+          "details": "يتم تقييم طلبات Omron Healthcare حسب مجموعة المنتج وعدد الكراتين والبلد المستهدف وشروط التسليم، ومع الحاجة مدة الصلاحية أو الشهادات. يبقى مسار البروفرما داخل Sidya Global، بينما يظل الموقع الرسمي مرجعاً ثانوياً.",
+          "logistics": "يركز Omron Healthcare على أجهزة قياس الضغط وأجهزة التشخيص وطلبات كتالوج الرعاية الصحية. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ومراجعة الوثائق وملاحظات التسليم."
+        },
+        "hanymish": {
+          "categoryName": "المنتجات الطبية",
+          "title": "Hanymish المنتجات الطبية | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Hanymish من تركيا مع طلب بروفرما وخطة شحن تصديرية. تدعم Sidya Global توريد المنتجات الطبية والصحية عبر مراجعة الوثائق وإعداد البروفرما وتنسيق التصدير باحتراف.",
+          "intro": "تنظم Sidya Global مسار التوريد والتصدير لفئة المنتجات الطبية الخاصة بـ Hanymish. تمنح هذه الصفحة المشتري مرجعاً داخلياً واضحاً قبل الانتقال إلى الموقع الرسمي للعلامة.",
+          "details": "يتم تقييم طلبات Hanymish حسب مجموعة المنتج وعدد الكراتين والبلد المستهدف وشروط التسليم، ومع الحاجة مدة الصلاحية أو الشهادات. يبقى مسار البروفرما داخل Sidya Global، بينما يظل الموقع الرسمي مرجعاً ثانوياً.",
+          "logistics": "يركز Hanymish على العناية بالطفل وإكسسوارات التغذية والمنتجات المرتبطة بالنظافة. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ومراجعة الوثائق وملاحظات التسليم."
+        },
+        "sebamed": {
+          "categoryName": "مستحضرات التجميل والعناية الشخصية",
+          "title": "Sebamed مستحضرات التجميل والعناية الشخصية | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Sebamed من تركيا مع طلب بروفرما وخطة شحن تصديرية. تدير Sidya Global توريد مستحضرات التجميل والعناية الشخصية من تركيا مع دعم البروفرما واللوجستيات والوثائق.",
+          "intro": "تنظم Sidya Global مسار التوريد والتصدير لفئة مستحضرات التجميل والعناية الشخصية الخاصة بـ Sebamed. تمنح هذه الصفحة المشتري مرجعاً داخلياً واضحاً قبل الانتقال إلى الموقع الرسمي للعلامة.",
+          "details": "يتم تقييم طلبات Sebamed حسب مجموعة المنتج وعدد الكراتين والبلد المستهدف وشروط التسليم، ومع الحاجة مدة الصلاحية أو الشهادات. يبقى مسار البروفرما داخل Sidya Global، بينما يظل الموقع الرسمي مرجعاً ثانوياً.",
+          "logistics": "يركز Sebamed على العناية الجلدية والشخصية وتشكيلات مناسبة لقنوات الصيدليات. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ومراجعة الوثائق وملاحظات التسليم."
         }
       }
     }

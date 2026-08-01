@@ -25,7 +25,7 @@ check(/class="site-container">\s*<div class="section-heading products-section-he
 check(index.includes('id="productGrid"'), "Homepage category grid is missing.");
 check(!index.includes('id="productCatalogSearch"'), "Individual product search must not appear on the homepage.");
 check(!index.includes('id="catalogLoadMore"'), "Individual product pagination must not appear on the homepage.");
-check(index.includes("script.js?v=20260802-2"), "Homepage script cache key is stale.");
+check(index.includes("script.js?v=20260802-3"), "Homepage script cache key is stale.");
 check(index.includes("SIDYA_SEO_META"), "Language-specific SEO metadata map is missing.");
 ["tr", "en", "az", "ka", "ru", "ar"].forEach((locale) => {
   check(index.includes('"' + locale + '": {'), "SEO metadata is missing for locale: " + locale);
@@ -35,9 +35,9 @@ check(index.includes('hreflang="x-default" href="https://www.sidyaglobal.com/?la
 check(index.includes('window.applySidyaSeoMeta'), "Runtime SEO updater is missing.");
 check(script.includes('window.applySidyaSeoMeta?.(currentLang)'), "Language switch must refresh SEO metadata.");
 check(!mojibakePattern.test(index), "Homepage contains mojibake text.");
-check(index.includes("Build: 20260802-2 - Environment: production"), "Production build label must be shown.");
+check(index.includes("Build: 20260802-3 - Environment: production"), "Production build label must be shown.");
 check(!index.includes("Environment: development") && !index.includes("Build: local"), "Development build label must not be exposed.");
-check(index.includes("styles.css?v=20260802-2"), "Homepage stylesheet cache key is stale.");
+check(index.includes("styles.css?v=20260802-3"), "Homepage stylesheet cache key is stale.");
 
 const renderStart = script.indexOf("const renderProducts = () => {");
 const renderEnd = script.indexOf("\nconst renderMarkets =", renderStart);
@@ -72,17 +72,18 @@ check(styles.includes('html[dir="ltr"] main :where('), "LTR alignment guard is m
 check(styles.includes("text-align: left !important"), "LTR content must be forced left.");
 check(styles.includes('html[dir="rtl"] main :where('), "RTL alignment guard is missing.");
 check(styles.includes("text-align: right !important"), "RTL content must remain right aligned.");
-check(worker.includes("sidya-global-v130"), "Service worker cache version must be v130.");
-check(worker.includes("script.js?v=20260802-2"), "Service worker caches an old homepage script.");
-check(worker.includes("styles.css?v=20260802-2"), "Service worker caches an old stylesheet.");
+check(worker.includes("sidya-global-v131"), "Service worker cache version must be v131.");
+check(worker.includes("script.js?v=20260802-3"), "Service worker caches an old homepage script.");
+check(worker.includes("styles.css?v=20260802-3"), "Service worker caches an old stylesheet.");
 check(worker.includes('url.pathname === "/script.js"'), "Homepage script must use network-first cache handling.");
 check(worker.includes('url.pathname === "/styles.css"'), "Homepage stylesheet must use network-first cache handling.");
-check(brandPages.brands?.length === 10, "Cleaning pilot must include 10 internal brand pages.");
-["abc-deterjan","unilever","p-g","henkel","evyap","eczacibasi-selpak","sc-johnson","nivea","vileda","reckitt"].forEach((slug) => {
+check(brandPages.brands?.length === 21, "Brand pages must include 21 internal brand pages.");
+["abc-deterjan","unilever","p-g","henkel","evyap","eczacibasi-selpak","sc-johnson","nivea","vileda","reckitt","oncu-salca","heinz","lokman","yudum","fide","melwiss-cocowiss","johnson-johnson","ikihan-medikal","omron-healthcare","hanymish","sebamed"].forEach((slug) => {
   check(index.includes(`data-brand-link="${slug}"`), `Missing data-brand-link for ${slug}.`);
-  check(index.includes(`/en/brands/${slug}/`), `Cleaning link for ${slug} must point to an internal brand page.`);
+  check(index.includes(`/en/brands/${slug}/`), `Brand link for ${slug} must point to an internal brand page.`);
 });
 check(script.includes("[data-brand-link]") && script.includes("currentLang === \"en\" ? \"brands\" : \"markalar\""), "Client-side language switch must update internal brand URLs.");
+check(script.includes("getBrandPagePath(company.brandSlug)"), "Rendered product partner cards must use internal brand pages.");
 check(index.includes("Turkish Product Sourcing &amp; Export Proforma Platform"), "English SEO title must describe sourcing and proforma.");
 check(index.includes("source reliable Turkish products, request proforma offers"), "English SEO description is missing.");
 check(index.includes('aria-hidden="true"') && index.includes("inert") && index.includes("data-nosnippet"), "Closed panels must be hidden from assistive tech and snippets.");
@@ -95,4 +96,4 @@ check((index.match(/<section\b/g) || []).length === (index.match(/<\/section>/g)
 
 console.log(`Homepage regression test passed (${checks.length} checks)`);
 
-check(!index.includes('sidya-ux-upgrades.js?v=20260802-2'), 'UX upgrades script must not block homepage loading.');
+check(!index.includes('sidya-ux-upgrades.js?v=20260802-3'), 'UX upgrades script must not block homepage loading.');

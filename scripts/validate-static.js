@@ -48,7 +48,7 @@ const assertions = [
   [index.includes("proformaRequestedTotalAmount") && index.includes("proformaExchangeRates"), "Integrated requested-price summary is missing"],
   [read("script.js").includes("requestedUnitPrice") && read("api/site-order.js").includes("site_order_items"), "Requested prices are not persisted through the order API"],
   [!backendLoader.includes("sidya-rtl-hero-fix.js"), "Legacy RTL hero transformer is still active"],
-  [worker.includes("sidya-global-v130"), "Service worker cache version was not advanced"],
+  [worker.includes("sidya-global-v131"), "Service worker cache version was not advanced"],
   [index.includes("Turkish Product Sourcing &amp; Export Proforma Platform"), "English SEO title is not updated"],
   [index.includes("SIDYA_SEO_META"), "Language-specific SEO metadata map is missing"],
   [["tr", "en", "az", "ka", "ru", "ar"].every((locale) => index.includes('"' + locale + '": {')), "SEO metadata is missing one or more locales"],
@@ -60,21 +60,22 @@ const assertions = [
   [index.includes('hreflang="x-default" href="https://www.sidyaglobal.com/?lang=en"'), "x-default hreflang is missing"],
   [read("script.js").includes("window.applySidyaSeoMeta?.(currentLang)"), "Language switch does not refresh SEO metadata"],
   [!mojibakePattern.test(index), "Mojibake text remains in index.html"],
-  [index.includes("Build: 20260802-2 - Environment: production"), "Production build label is missing"],
+  [index.includes("Build: 20260802-3 - Environment: production"), "Production build label is missing"],
   [!index.includes("Environment: development") && !index.includes("Build: local"), "Development build label leaked into production"],
   [index.includes("source reliable Turkish products, request proforma offers"), "English SEO description is not updated"],
   [index.includes('id="proforma"') && index.includes('aria-hidden="true"') && index.includes("inert"), "Hidden modal accessibility state is missing"],
   [index.includes("data-nosnippet"), "Closed modal content should be marked data-nosnippet"],
   [read("script.js").includes("setHiddenPanelState"), "Modal hidden/inert state helper is missing"],
   [read("script.js").includes("const escapeHtml = (value) =>"), "Homepage escapeHtml helper is missing"],
+  [read("script.js").includes("getBrandPagePath(company.brandSlug)"), "Rendered partner cards do not use internal brand pages"],
   [!/\.is-loading body \{\s*opacity:\s*0;\s*\}/.test(read("styles.css")), "JS-dependent loading state must not hide the full homepage"],
   [read("sidya-locale-layout-fixes.js").includes('"Teklif Al": "Request a Quote"'), "English exact replacement for quote CTA is missing"],
   [read("sidya-proforma-core-fix.js").includes('quote: "Request a Quote"'), "Proforma English quote label is not normalized"],
   [proformaCore.includes("syncDockVisibility") && proformaCore.includes("is-context-visible"), "Proforma dock is not scoped to the active B2B/proforma context"],
   [aiAssistant.includes("setupAssistantDrag") && aiAssistant.includes("POSITION_KEY"), "Sidya AI drag support is missing"],
-  [brandPages.brands?.length === 10, "Cleaning pilot must define exactly 10 brand pages"],
+  [brandPages.brands?.length === 21, "Brand pages must define exactly 21 brand pages"],
   [read("scripts/build-static.js").includes("brand-pages.json") && read("scripts/build-static.js").includes("sitemap.xml"), "Static build does not generate pilot brand pages and sitemap"],
-  [["abc-deterjan","unilever","p-g","henkel","evyap","eczacibasi-selpak","sc-johnson","nivea","vileda","reckitt"].every((slug) => index.includes(`data-brand-link="${slug}"`) && index.includes(`/en/brands/${slug}/`)), "Cleaning brand links must point to internal English brand pages"],
+  [["abc-deterjan","unilever","p-g","henkel","evyap","eczacibasi-selpak","sc-johnson","nivea","vileda","reckitt","oncu-salca","heinz","lokman","yudum","fide","melwiss-cocowiss","johnson-johnson","ikihan-medikal","omron-healthcare","hanymish","sebamed"].every((slug) => index.includes(`data-brand-link="${slug}"`) && index.includes(`/en/brands/${slug}/`)), "Brand links must point to internal English brand pages"],
   [sourceFiles.length <= 12, `Vercel Hobby function limit exceeded: ${sourceFiles.length}/12`],
 ];
 
@@ -98,5 +99,5 @@ if (process.env.VALIDATE_PRODUCTION_ENV === "1") {
 
 console.log(`Static production validation passed (${sourceFiles.length}/12 Vercel functions)`);
 
-if (index.includes('sidya-ux-upgrades.js?v=20260802-2')) throw new Error('UX upgrades script must not block homepage loading.');
-if (!worker.includes('sidya-global-v130')) throw new Error('Service worker cache version is stale.');
+if (index.includes('sidya-ux-upgrades.js?v=20260802-3')) throw new Error('UX upgrades script must not block homepage loading.');
+if (!worker.includes('sidya-global-v131')) throw new Error('Service worker cache version is stale.');

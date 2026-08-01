@@ -1247,7 +1247,7 @@ const productPartners = {
   ],
   "cleaning-products": [
     { name: "ABC Deterjan", site: "https://www.abcdeterjan.com.tr/", catalog: "assets/abc-deterjan-urunleri-katalog-2025.pdf", logo: "assets/abc-logo.jpg" },
-    { name: "Unilever", site: "https://www.unilever.com.tr/", logo: "assets/unilever-logo.svg" },
+    { name: "Unilever", brandSlug: "unilever", site: "https://www.unilever.com.tr/", logo: "assets/unilever-logo.svg" },
     { name: "P&G", site: "https://www.pg.com.tr/", logo: "assets/pg-logo.svg" },
     { name: "Henkel", site: "https://www.henkel.com.tr/", logo: "assets/henkel-logo.svg" },
     { name: "Evyap", site: "https://www.evyap.com.tr/", catalog: "assets/evyap-katalog.pdf", logo: "assets/evyap-logo.svg", catalogs: [
@@ -1263,31 +1263,31 @@ const productPartners = {
     ] },
   ],
   "food-products": [
-    { name: "Unilever", site: "https://www.unilever.com.tr/", logo: "assets/unilever-logo.svg" },
-    { name: "Öncü Salça", site: "https://www.oncusalca.com.tr/", logo: "assets/oncu-salca-logo.svg" },
-    { name: "Heinz", site: "https://www.heinz.com/tr-TR/products", catalog: "assets/heinz-urun-listesi.pdf", logo: "assets/heinz-logo.svg" },
-    { name: "Lokman", site: "https://www.lokmankahvalti.com/?lang=en", catalog: "assets/lokman-katalog-2025.pdf", logo: "assets/category-food.svg" },
-    { name: "Yudum", site: "https://yudumtoptan.com/?srsltid=AfmBOopx8QdW48_PkY5jc-LMnMEkkJz82cShivaHnkuP9v9oFQta4xK9", catalog: "assets/yudum-perakende-urun-katalog-2024.pdf", logo: "assets/category-food.svg" },
-    { name: "Fide", site: "https://fide.com.tr/", catalog: "assets/fide-katalog.pdf", logo: "assets/category-food.svg" },
-    { name: "Melwiss Chocolate", site: "https://cocowiss.com/", catalog: "assets/melwiss-chocolate-katalog.pdf", logo: "assets/category-food.svg" },
+    { name: "Unilever", brandSlug: "unilever", site: "https://www.unilever.com.tr/", logo: "assets/unilever-logo.svg" },
+    { name: "Öncü Salça", brandSlug: "oncu-salca", site: "https://www.oncusalca.com.tr/", logo: "assets/oncu-salca-logo.svg" },
+    { name: "Heinz", brandSlug: "heinz", site: "https://www.heinz.com/tr-TR/products", catalog: "assets/heinz-urun-listesi.pdf", logo: "assets/heinz-logo.svg" },
+    { name: "Lokman", brandSlug: "lokman", site: "https://www.lokmankahvalti.com/?lang=en", catalog: "assets/lokman-katalog-2025.pdf", logo: "assets/category-food.svg" },
+    { name: "Yudum", brandSlug: "yudum", site: "https://yudumtoptan.com/", catalog: "assets/yudum-perakende-urun-katalog-2024.pdf", logo: "assets/category-food.svg" },
+    { name: "Fide", brandSlug: "fide", site: "https://fide.com.tr/", catalog: "assets/fide-katalog.pdf", logo: "assets/category-food.svg" },
+    { name: "Melwiss Chocolate", brandSlug: "melwiss-cocowiss", site: "https://cocowiss.com/", catalog: "assets/melwiss-chocolate-katalog.pdf", logo: "assets/category-food.svg" },
   ],
   "industrial-products": [
     { name: "Demet Temizlik", site: "https://demettemizlik.com/", logo: "assets/demet-temizlik-logo.svg" },
   ],
   "medical-products": [
-    { name: "Johnson & Johnson", site: "https://www.jnjmedicalcloud.com.tr/tr-tr", catalog: "assets/johnson-katalog.pdf", logo: "assets/johnson-logo.svg", catalogs: [
+    { name: "Johnson & Johnson", brandSlug: "johnson-johnson", site: "https://www.jnjmedicalcloud.com.tr/tr-tr", catalog: "assets/johnson-katalog.pdf", logo: "assets/johnson-logo.svg", catalogs: [
       { label: "EN Catalog", href: "assets/johnson-catalog-english.pdf" },
       { label: "AZ Catalog", href: "assets/johnson-catalog-azerbaijani.pdf" },
       { label: "KA Catalog", href: "assets/johnson-catalog-georgian.pdf" },
     ] },
-    { name: "İkihan Medikal", site: "https://www.ikihanmedikal.com/", logo: "assets/ikihan-medikal-logo.svg" },
-    { name: "Omron Healthcare", site: "https://www.omron-healthcare.com.tr/", logo: "assets/omron-logo.svg" },
-    { name: "Hanymish", site: "https://www.hanymish.com/", logo: "assets/hanymish-logo.svg" },
+    { name: "İkihan Medikal", brandSlug: "ikihan-medikal", site: "https://www.ikihanmedikal.com/", logo: "assets/ikihan-medikal-logo.svg" },
+    { name: "Omron Healthcare", brandSlug: "omron-healthcare", site: "https://www.omron-healthcare.com.tr/", logo: "assets/omron-logo.svg" },
+    { name: "Hanymish", brandSlug: "hanymish", site: "https://www.hanymish.com/", logo: "assets/hanymish-logo.svg" },
     { name: "Medcare", site: "#medical-products", catalog: "assets/medcare-katalog-2025.pdf", logo: "assets/medcare-logo.svg" },
   ],
   "cosmetics-products": [
-    { name: "Unilever", site: "https://www.unilever.com.tr/", logo: "assets/unilever-logo.svg" },
-    { name: "Sebamed", site: "https://www.sebamed.com.tr/", catalog: "assets/sebamed-katalog-2024.pdf", logo: "assets/sebamed-logo.svg" },
+    { name: "Unilever", brandSlug: "unilever", site: "https://www.unilever.com.tr/", logo: "assets/unilever-logo.svg" },
+    { name: "Sebamed", brandSlug: "sebamed", site: "https://www.sebamed.com.tr/", catalog: "assets/sebamed-katalog-2024.pdf", logo: "assets/sebamed-logo.svg" },
   ],
 };
 
@@ -2130,6 +2130,13 @@ const normalizeSearchText = (value) =>
     .trim();
 const normalizeCatalogName = (value) => normalizeSearchText(value).replace(/\s+/g, "");
 
+const getBrandPagePath = (slug) => {
+  if (!slug) return "#b2b";
+  const locale = currentLang === "en" ? "en" : currentLang;
+  const segment = locale === "en" ? "brands" : "markalar";
+  return `/${locale}/${segment}/${slug}/`;
+};
+
 const partnerBrandAliases = {
   "ABC Deterjan": ["ABC"],
   "Eczacıbaşı / Selpak": ["Eczacıbaşı", "Selpak"],
@@ -2229,10 +2236,10 @@ const renderProducts = () => {
                 .map((company, companyIndex) => {
                   try {
                     const companyName = String(company.name || t("partnerSiteCta") || "Partner");
-                    const companySite = String(company.site || "#");
+                    const companySite = company.brandSlug ? getBrandPagePath(company.brandSlug) : String(company.site || "#");
                     const companyLogo = String(company.logo || "assets/app-icon.svg");
                     const catalogs = asSafeArray(company.catalogs, `productPartners.${id}[${companyIndex}].catalogs`);
-                    return `<span class="related-company"><a class="site-action" href="${escapeHtml(companySite)}" target="_blank" rel="noopener"><img src="${escapeHtml(companyLogo)}" alt="" aria-hidden="true" /><span>${escapeHtml(companyName)}</span></a>${[
+                    return `<span class="related-company"><a class="site-action" href="${escapeHtml(companySite)}"${company.brandSlug ? "" : " target=\"_blank\" rel=\"noopener\""}><img src="${escapeHtml(companyLogo)}" alt="" aria-hidden="true" /><span>${escapeHtml(companyName)}</span></a>${[
                       company.catalog ? `<a class="catalog-action" href="${escapeHtml(String(company.catalog))}" target="_blank" rel="noopener">${t("sampleCatalogCta")}</a>` : "",
                       ...catalogs
                         .filter((catalog) => catalog && typeof catalog === "object")
@@ -3446,6 +3453,8 @@ document.querySelector("#calculateFuel")?.addEventListener("click", calculateFue
 document.addEventListener("click", (event) => {
   const link = event.target.closest(".catalog-action, .site-action");
   if (!link) return;
+  const href = link.getAttribute("href") || "";
+  if (link.classList.contains("site-action") && !/^https?:\/\//i.test(href)) return;
   event.preventDefault();
   window.open(link.href, "_blank", "noopener");
 });

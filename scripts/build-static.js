@@ -55,7 +55,7 @@ const buildContentI18nScript = (contentI18n) => `<script>
 const injectContentI18nScript = (html, contentI18n) => {
   let outputHtml = html.replace(/\s*<script>\s*window\.SIDYA_CONTENT_I18N = [\s\S]*?<\/script>/, "");
   outputHtml = outputHtml.replace(/\s*<script src="script\.js\?v=[^"]+"><\/script>/,
-    `\n    ${buildContentI18nScript(contentI18n)}\n    <script src="script.js?v=20260802-2"></script>`);
+    `\n    ${buildContentI18nScript(contentI18n)}\n    <script src="script.js?v=20260802-3"></script>`);
   return outputHtml;
 };
 
@@ -166,14 +166,14 @@ const buildBrandPageHtml = (brand, locale, brandPages) => {
     `    <meta property="og:description" content="${htmlEscape(page.metaDescription)}" />`,
     "    <meta property=\"og:type\" content=\"website\" />",
     `    <meta property="og:url" content="${canonical}" />`,
-    "    <link rel=\"stylesheet\" href=\"/styles.css?v=20260802-2\" />",
+    "    <link rel=\"stylesheet\" href=\"/styles.css?v=20260802-3\" />",
     "  </head>",
     `  <body class="brand-page-body">`,
     "    <main class=\"brand-page-shell\">",
     `      <a class="brand-page-back" href="/${lang}/" data-i18n="brandBackCta">${htmlEscape(localeCopy.backCta)}</a>`,
     "      <section class=\"brand-page-card\" aria-labelledby=\"brand-page-title\">",
     `        <p class="section-kicker" data-i18n="brandPageEyebrow">${htmlEscape(localeCopy.eyebrow)}</p>`,
-    `        <p class="brand-page-category" data-i18n="brandPageCategory">${htmlEscape(localeCopy.categoryName)}</p>`,
+    `        <p class="brand-page-category" data-i18n="brandPageCategory">${htmlEscape(page.categoryName || localeCopy.categoryName)}</p>`,
     `        <h1 id="brand-page-title" data-i18n="brandPageTitle">${htmlEscape(brand.name)}</h1>`,
     `        <p class="brand-page-lead" data-i18n="brandPageIntro">${htmlEscape(page.intro)}</p>`,
     `        <p data-i18n="brandPageDetails">${htmlEscape(page.details)}</p>`,
