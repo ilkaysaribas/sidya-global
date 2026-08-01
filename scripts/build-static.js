@@ -140,6 +140,9 @@ const validateLocalizedHtml = (html, locale, seoMeta, contentI18n, options = {})
     [html.includes(htmlEscape(copy.heroTitle)), `Missing localized hero body for ${locale}`],
     [html.includes(htmlEscape(copy.navProducts)), `Missing localized nav body for ${locale}`],
     [html.includes(htmlEscape(copy.footerText)), `Missing localized footer body for ${locale}`],
+    [html.includes(htmlEscape(copy.gtipTitle)), "Missing localized GTIP body"],
+    [html.includes(htmlEscape(copy.customsPlannerTitle)), "Missing localized route planner body"],
+    [html.includes(htmlEscape(copy.customsDocsTitle)), "Missing localized customs output body"],
     [locale === "ar" ? /<html[^>]*dir="rtl"/.test(html) : /<html[^>]*dir="ltr"/.test(html), `Missing localized direction for ${locale}`],
   ];
   for (const [ok, message] of checks) if (!ok) throw new Error(message);

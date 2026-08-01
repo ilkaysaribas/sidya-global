@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = "sidya-global-v125";
+﻿const CACHE_NAME = "sidya-global-v126";
 
 const SHELL_ASSETS = [
   "./",

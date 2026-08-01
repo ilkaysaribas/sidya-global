@@ -46,7 +46,7 @@ const assertions = [
   [index.includes("proformaRequestedTotalAmount") && index.includes("proformaExchangeRates"), "Integrated requested-price summary is missing"],
   [read("script.js").includes("requestedUnitPrice") && read("api/site-order.js").includes("site_order_items"), "Requested prices are not persisted through the order API"],
   [!backendLoader.includes("sidya-rtl-hero-fix.js"), "Legacy RTL hero transformer is still active"],
-  [worker.includes("sidya-global-v125"), "Service worker cache version was not advanced"],
+  [worker.includes("sidya-global-v126"), "Service worker cache version was not advanced"],
   [index.includes("Turkish Product Sourcing &amp; Export Proforma Platform"), "English SEO title is not updated"],
   [index.includes("SIDYA_SEO_META"), "Language-specific SEO metadata map is missing"],
   [["tr", "en", "az", "ka", "ru", "ar"].every((locale) => index.includes('"' + locale + '": {')), "SEO metadata is missing one or more locales"],
@@ -91,7 +91,7 @@ if (process.env.VALIDATE_PRODUCTION_ENV === "1") {
 console.log(`Static production validation passed (${sourceFiles.length}/12 Vercel functions)`);
 
 if (index.includes('sidya-ux-upgrades.js?v=20260722-2')) throw new Error('UX upgrades script must not block homepage loading.');
-if (!worker.includes('sidya-global-v125')) throw new Error('Service worker cache version is stale.');
+if (!worker.includes('sidya-global-v126')) throw new Error('Service worker cache version is stale.');
 
 
 
