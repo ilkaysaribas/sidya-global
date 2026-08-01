@@ -1,4 +1,4 @@
-const fs = require("fs");
+﻿const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
 
@@ -69,7 +69,7 @@ check(styles.includes('html[dir="ltr"] main :where('), "LTR alignment guard is m
 check(styles.includes("text-align: left !important"), "LTR content must be forced left.");
 check(styles.includes('html[dir="rtl"] main :where('), "RTL alignment guard is missing.");
 check(styles.includes("text-align: right !important"), "RTL content must remain right aligned.");
-check(worker.includes("sidya-global-v124"), "Service worker cache version must be v124.");
+check(worker.includes("sidya-global-v125"), "Service worker cache version must be v125.");
 check(worker.includes("script.js?v=20260801-2"), "Service worker caches an old homepage script.");
 check(worker.includes("styles.css?v=20260722-2"), "Service worker caches an old stylesheet.");
 check(worker.includes('url.pathname === "/script.js"'), "Homepage script must use network-first cache handling.");
