@@ -2069,6 +2069,14 @@ const formatCrossRate = (value) =>
     maximumFractionDigits: 4,
   }).format(value);
 
+const escapeHtml = (value) =>
+  String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
 const localizedExchangeViews = {
   az: { code: "AZN", usdLabel: "Dolar/Manat", eurLabel: "Euro/Manat" },
   ka: { code: "GEL", usdLabel: "Dolar/Lari", eurLabel: "Euro/Lari" },

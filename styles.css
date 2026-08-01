@@ -19,7 +19,7 @@
 }
 
 .is-loading body {
-  opacity: 0;
+  opacity: 1;
 }
 
 html {
