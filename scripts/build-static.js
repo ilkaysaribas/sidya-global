@@ -166,6 +166,7 @@ const buildBrandPageHtml = (brand, locale, brandPages) => {
     `    <meta property="og:description" content="${htmlEscape(page.metaDescription)}" />`,
     "    <meta property=\"og:type\" content=\"website\" />",
     `    <meta property="og:url" content="${canonical}" />`,
+    "    <link rel=\"icon\" href=\"/assets/app-icon.svg\" type=\"image/svg+xml\" />",
     "    <link rel=\"stylesheet\" href=\"/styles.css?v=20260802-3\" />",
     "  </head>",
     `  <body class="brand-page-body">`,
@@ -201,6 +202,7 @@ const validateBrandPageHtml = (html, brand, locale, brandPages) => {
     [html.includes(`data-i18n="brandPageIntro">${htmlEscape(page.intro)}`), `Missing brand intro for ${locale}/${brand.slug}`],
     [html.includes(`data-i18n="brandOfficialCta">${htmlEscape(copy.officialCta)}`), `Missing official CTA for ${locale}/${brand.slug}`],
     [html.includes(brand.officialUrl), `Missing official URL for ${locale}/${brand.slug}`],
+    [html.includes('/assets/app-icon.svg'), `Missing brand favicon for ${locale}/${brand.slug}`],
   ];
   for (const [ok, message] of checks) if (!ok) throw new Error(message);
 };
