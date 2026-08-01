@@ -5225,3 +5225,113 @@ html[dir="rtl"] .proforma-rate-snapshot { direction: rtl; text-align: right; }
 .gate-stats span { padding:8px; border-radius:8px; background:#f6f7f7; }
 .logistics-tab-panel .border-gate-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
 @media (max-width:900px){ .proforma-wizard,.proforma-filter-row,.logistics-tab-panel .border-gate-grid,.gate-stats{grid-template-columns:1fr;} .proforma-screen-dialog{padding:12px;width:min(100%,calc(100vw - 16px));} .proforma-wizard button{border-radius:12px;justify-content:flex-start;} }
+
+
+/* Pilot internal brand pages */
+.brand-page-body {
+  min-height: 100vh;
+  margin: 0;
+  color: var(--ink, #101316);
+  background: linear-gradient(135deg, #f7f7f4 0%, #ffffff 48%, #ecefed 100%);
+}
+
+.brand-page-shell {
+  width: min(1120px, calc(100% - clamp(32px, 8vw, 144px)));
+  margin: 0 auto;
+  padding: clamp(32px, 7vw, 96px) 0;
+}
+
+.brand-page-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  color: #1f2428;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.brand-page-card {
+  display: grid;
+  gap: 18px;
+  max-width: 860px;
+  padding: clamp(28px, 5vw, 56px);
+  border: 1px solid rgba(17, 24, 39, 0.1);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 24px 70px rgba(17, 24, 39, 0.12);
+}
+
+.brand-page-category {
+  width: fit-content;
+  margin: 0;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #111418;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.brand-page-card h1 {
+  margin: 0;
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+
+.brand-page-card p {
+  margin: 0;
+  color: #4b5563;
+  font-size: clamp(1rem, 1.8vw, 1.16rem);
+  line-height: 1.75;
+}
+
+.brand-page-card .brand-page-lead {
+  color: #111827;
+  font-size: clamp(1.12rem, 2vw, 1.35rem);
+  font-weight: 700;
+}
+
+.brand-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.brand-page-official {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid rgba(17, 24, 39, 0.14);
+  border-radius: 999px;
+  color: #111827;
+  font-weight: 900;
+  text-decoration: none;
+  background: #fff;
+}
+
+[dir="rtl"] .brand-page-card,
+[dir="rtl"] .brand-page-shell {
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .brand-page-shell {
+    width: min(100% - 28px, 1120px);
+    padding-block: 28px;
+  }
+
+  .brand-page-card {
+    border-radius: 20px;
+  }
+
+  .brand-page-actions > * {
+    width: 100%;
+  }
+}

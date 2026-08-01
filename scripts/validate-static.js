@@ -18,6 +18,7 @@ const requiredFiles = [
   "admin-ai-assistant.js",
   "lib/smtp-crypto.js",
   "sw.js",
+  "locales/brand-pages.json",
 ];
 
 for (const file of requiredFiles) {
@@ -32,6 +33,7 @@ const proformaCore = read("sidya-proforma-core-fix.js");
 const aiAssistant = read("sidya-ai-assistant.js");
 const sourceFiles = fs.readdirSync(path.join(root, "api")).filter((file) => file.endsWith(".js"));
 const contentI18n = JSON.parse(read("locales/content-i18n.json"));
+const brandPages = JSON.parse(read("locales/brand-pages.json"));
 
 const hasVersionedScript = (file) => index.includes(`${file}?v=`);
 
@@ -46,7 +48,7 @@ const assertions = [
   [index.includes("proformaRequestedTotalAmount") && index.includes("proformaExchangeRates"), "Integrated requested-price summary is missing"],
   [read("script.js").includes("requestedUnitPrice") && read("api/site-order.js").includes("site_order_items"), "Requested prices are not persisted through the order API"],
   [!backendLoader.includes("sidya-rtl-hero-fix.js"), "Legacy RTL hero transformer is still active"],
-  [worker.includes("sidya-global-v128"), "Service worker cache version was not advanced"],
+  [worker.includes("sidya-global-v129"), "Service worker cache version was not advanced"],
   [index.includes("Turkish Product Sourcing &amp; Export Proforma Platform"), "English SEO title is not updated"],
   [index.includes("SIDYA_SEO_META"), "Language-specific SEO metadata map is missing"],
   [["tr", "en", "az", "ka", "ru", "ar"].every((locale) => index.includes('"' + locale + '": {')), "SEO metadata is missing one or more locales"],
@@ -58,7 +60,7 @@ const assertions = [
   [index.includes('hreflang="x-default" href="https://www.sidyaglobal.com/?lang=en"'), "x-default hreflang is missing"],
   [read("script.js").includes("window.applySidyaSeoMeta?.(currentLang)"), "Language switch does not refresh SEO metadata"],
   [!mojibakePattern.test(index), "Mojibake text remains in index.html"],
-  [index.includes("Build: 20260801-2 - Environment: production"), "Production build label is missing"],
+  [index.includes("Build: 20260802-1 - Environment: production"), "Production build label is missing"],
   [!index.includes("Environment: development") && !index.includes("Build: local"), "Development build label leaked into production"],
   [index.includes("source reliable Turkish products, request proforma offers"), "English SEO description is not updated"],
   [index.includes('id="proforma"') && index.includes('aria-hidden="true"') && index.includes("inert"), "Hidden modal accessibility state is missing"],
@@ -68,6 +70,9 @@ const assertions = [
   [read("sidya-proforma-core-fix.js").includes('quote: "Request a Quote"'), "Proforma English quote label is not normalized"],
   [proformaCore.includes("syncDockVisibility") && proformaCore.includes("is-context-visible"), "Proforma dock is not scoped to the active B2B/proforma context"],
   [aiAssistant.includes("setupAssistantDrag") && aiAssistant.includes("POSITION_KEY"), "Sidya AI drag support is missing"],
+  [brandPages.brands?.length === 10, "Cleaning pilot must define exactly 10 brand pages"],
+  [read("scripts/build-static.js").includes("brand-pages.json") && read("scripts/build-static.js").includes("sitemap.xml"), "Static build does not generate pilot brand pages and sitemap"],
+  [["abc-deterjan","unilever","p-g","henkel","evyap","eczacibasi-selpak","sc-johnson","nivea","vileda","reckitt"].every((slug) => index.includes(`data-brand-link="${slug}"`) && index.includes(`/en/brands/${slug}/`)), "Cleaning brand links must point to internal English brand pages"],
   [sourceFiles.length <= 12, `Vercel Hobby function limit exceeded: ${sourceFiles.length}/12`],
 ];
 
@@ -91,5 +96,5 @@ if (process.env.VALIDATE_PRODUCTION_ENV === "1") {
 
 console.log(`Static production validation passed (${sourceFiles.length}/12 Vercel functions)`);
 
-if (index.includes('sidya-ux-upgrades.js?v=20260722-2')) throw new Error('UX upgrades script must not block homepage loading.');
-if (!worker.includes('sidya-global-v128')) throw new Error('Service worker cache version is stale.');
+if (index.includes('sidya-ux-upgrades.js?v=20260802-1')) throw new Error('UX upgrades script must not block homepage loading.');
+if (!worker.includes('sidya-global-v129')) throw new Error('Service worker cache version is stale.');

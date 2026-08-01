@@ -1,0 +1,558 @@
+{
+  "brands": [
+    {
+      "slug": "abc-deterjan",
+      "name": "ABC Deterjan",
+      "officialUrl": "https://www.abcdeterjan.com.tr/",
+      "category": "cleaning"
+    },
+    {
+      "slug": "unilever",
+      "name": "Unilever",
+      "officialUrl": "https://www.unilever.com.tr/",
+      "category": "cleaning"
+    },
+    {
+      "slug": "p-g",
+      "name": "P&G",
+      "officialUrl": "https://tr.pg.com/",
+      "category": "cleaning"
+    },
+    {
+      "slug": "henkel",
+      "name": "Henkel",
+      "officialUrl": "https://www.henkel.com.tr/",
+      "category": "cleaning"
+    },
+    {
+      "slug": "evyap",
+      "name": "Evyap",
+      "officialUrl": "https://www.evyap.com.tr/",
+      "category": "cleaning"
+    },
+    {
+      "slug": "eczacibasi-selpak",
+      "name": "Eczacıbaşı / Selpak",
+      "officialUrl": "https://www.selpak.com.tr/",
+      "category": "cleaning"
+    },
+    {
+      "slug": "sc-johnson",
+      "name": "SC Johnson",
+      "officialUrl": "https://www.scjohnson.com.tr/",
+      "category": "cleaning"
+    },
+    {
+      "slug": "nivea",
+      "name": "Nivea",
+      "officialUrl": "https://www.nivea.com.tr/",
+      "category": "cleaning"
+    },
+    {
+      "slug": "vileda",
+      "name": "Vileda",
+      "officialUrl": "https://www.vileda.com.tr/",
+      "category": "cleaning"
+    },
+    {
+      "slug": "reckitt",
+      "name": "Reckitt",
+      "officialUrl": "https://www.reckitt.com/",
+      "category": "cleaning"
+    }
+  ],
+  "locales": {
+    "en": {
+      "routeSegment": "brands",
+      "categoryName": "Cleaning",
+      "eyebrow": "Cleaning brand sourcing",
+      "backCta": "Back to Sidya Global",
+      "proformaCta": "Create proforma",
+      "quoteCta": "Request a quote",
+      "officialCta": "Learn more on the official brand site",
+      "metaTail": "Sidya Global helps international buyers request proforma offers, plan FOB/CIF/EXW delivery and source Turkish cleaning products professionally.",
+      "pages": {
+        "abc-deterjan": {
+          "title": "ABC Deterjan Cleaning Products | Sidya Global",
+          "metaDescription": "ABC Deterjan B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps international buyers request proforma offers, plan FOB/CIF/EXW delivery and source Turkish cleaning products professionally.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for ABC Deterjan in the cleaning category. This page gives buyers a clear internal reference before opening a proforma or quote request.",
+          "details": "ABC Deterjan requests are reviewed together with carton quantity, loading type, destination market and Incoterm preference. Sidya Global keeps buyers inside its own proforma flow while preserving the official brand site as a secondary reference.",
+          "logistics": "For ABC Deterjan, the focus is detergent, surface cleaner and household cleaning lines. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning and export documentation."
+        },
+        "unilever": {
+          "title": "Unilever Cleaning Products | Sidya Global",
+          "metaDescription": "Unilever B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps international buyers request proforma offers, plan FOB/CIF/EXW delivery and source Turkish cleaning products professionally.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Unilever in the cleaning category. This page gives buyers a clear internal reference before opening a proforma or quote request.",
+          "details": "Unilever requests are reviewed together with carton quantity, loading type, destination market and Incoterm preference. Sidya Global keeps buyers inside its own proforma flow while preserving the official brand site as a secondary reference.",
+          "logistics": "For Unilever, the focus is well-known home care and hygiene brands with strong export recognition. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning and export documentation."
+        },
+        "p-g": {
+          "title": "P&G Cleaning Products | Sidya Global",
+          "metaDescription": "P&G B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps international buyers request proforma offers, plan FOB/CIF/EXW delivery and source Turkish cleaning products professionally.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for P&G in the cleaning category. This page gives buyers a clear internal reference before opening a proforma or quote request.",
+          "details": "P&G requests are reviewed together with carton quantity, loading type, destination market and Incoterm preference. Sidya Global keeps buyers inside its own proforma flow while preserving the official brand site as a secondary reference.",
+          "logistics": "For P&G, the focus is laundry, cleaning and personal hygiene portfolios for B2B buyers. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning and export documentation."
+        },
+        "henkel": {
+          "title": "Henkel Cleaning Products | Sidya Global",
+          "metaDescription": "Henkel B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps international buyers request proforma offers, plan FOB/CIF/EXW delivery and source Turkish cleaning products professionally.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Henkel in the cleaning category. This page gives buyers a clear internal reference before opening a proforma or quote request.",
+          "details": "Henkel requests are reviewed together with carton quantity, loading type, destination market and Incoterm preference. Sidya Global keeps buyers inside its own proforma flow while preserving the official brand site as a secondary reference.",
+          "logistics": "For Henkel, the focus is laundry detergents, cleaning aids and professional household care ranges. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning and export documentation."
+        },
+        "evyap": {
+          "title": "Evyap Cleaning Products | Sidya Global",
+          "metaDescription": "Evyap B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps international buyers request proforma offers, plan FOB/CIF/EXW delivery and source Turkish cleaning products professionally.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Evyap in the cleaning category. This page gives buyers a clear internal reference before opening a proforma or quote request.",
+          "details": "Evyap requests are reviewed together with carton quantity, loading type, destination market and Incoterm preference. Sidya Global keeps buyers inside its own proforma flow while preserving the official brand site as a secondary reference.",
+          "logistics": "For Evyap, the focus is soap, hygiene and fast-moving household care products from Türkiye. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning and export documentation."
+        },
+        "eczacibasi-selpak": {
+          "title": "Eczacıbaşı / Selpak Cleaning Products | Sidya Global",
+          "metaDescription": "Eczacıbaşı / Selpak B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps international buyers request proforma offers, plan FOB/CIF/EXW delivery and source Turkish cleaning products professionally.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Eczacıbaşı / Selpak in the cleaning category. This page gives buyers a clear internal reference before opening a proforma or quote request.",
+          "details": "Eczacıbaşı / Selpak requests are reviewed together with carton quantity, loading type, destination market and Incoterm preference. Sidya Global keeps buyers inside its own proforma flow while preserving the official brand site as a secondary reference.",
+          "logistics": "For Eczacıbaşı / Selpak, the focus is paper hygiene, tissue and professional consumption products. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning and export documentation."
+        },
+        "sc-johnson": {
+          "title": "SC Johnson Cleaning Products | Sidya Global",
+          "metaDescription": "SC Johnson B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps international buyers request proforma offers, plan FOB/CIF/EXW delivery and source Turkish cleaning products professionally.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for SC Johnson in the cleaning category. This page gives buyers a clear internal reference before opening a proforma or quote request.",
+          "details": "SC Johnson requests are reviewed together with carton quantity, loading type, destination market and Incoterm preference. Sidya Global keeps buyers inside its own proforma flow while preserving the official brand site as a secondary reference.",
+          "logistics": "For SC Johnson, the focus is home cleaning, air care and pest control categories. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning and export documentation."
+        },
+        "nivea": {
+          "title": "Nivea Cleaning Products | Sidya Global",
+          "metaDescription": "Nivea B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps international buyers request proforma offers, plan FOB/CIF/EXW delivery and source Turkish cleaning products professionally.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Nivea in the cleaning category. This page gives buyers a clear internal reference before opening a proforma or quote request.",
+          "details": "Nivea requests are reviewed together with carton quantity, loading type, destination market and Incoterm preference. Sidya Global keeps buyers inside its own proforma flow while preserving the official brand site as a secondary reference.",
+          "logistics": "For Nivea, the focus is personal care and skin care products requested alongside hygiene assortments. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning and export documentation."
+        },
+        "vileda": {
+          "title": "Vileda Cleaning Products | Sidya Global",
+          "metaDescription": "Vileda B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps international buyers request proforma offers, plan FOB/CIF/EXW delivery and source Turkish cleaning products professionally.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Vileda in the cleaning category. This page gives buyers a clear internal reference before opening a proforma or quote request.",
+          "details": "Vileda requests are reviewed together with carton quantity, loading type, destination market and Incoterm preference. Sidya Global keeps buyers inside its own proforma flow while preserving the official brand site as a secondary reference.",
+          "logistics": "For Vileda, the focus is cleaning tools, mop systems, cloths and household equipment. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning and export documentation."
+        },
+        "reckitt": {
+          "title": "Reckitt Cleaning Products | Sidya Global",
+          "metaDescription": "Reckitt B2B sourcing from Türkiye with proforma offers, export documentation and FOB/CIF/EXW delivery planning. Sidya Global helps international buyers request proforma offers, plan FOB/CIF/EXW delivery and source Turkish cleaning products professionally.",
+          "intro": "Sidya Global organizes B2B sourcing and export workflows for Reckitt in the cleaning category. This page gives buyers a clear internal reference before opening a proforma or quote request.",
+          "details": "Reckitt requests are reviewed together with carton quantity, loading type, destination market and Incoterm preference. Sidya Global keeps buyers inside its own proforma flow while preserving the official brand site as a secondary reference.",
+          "logistics": "For Reckitt, the focus is hygiene, disinfection and household cleaning portfolios. Our team can prepare FOB, CIF and EXW offers with mixed pallet planning and export documentation."
+        }
+      }
+    },
+    "tr": {
+      "routeSegment": "markalar",
+      "categoryName": "Temizlik",
+      "eyebrow": "Temizlik markası tedariki",
+      "backCta": "Sidya Global ana sayfasına dön",
+      "proformaCta": "Proforma oluştur",
+      "quoteCta": "Teklif al",
+      "officialCta": "Marka hakkında daha fazla bilgi",
+      "metaTail": "Sidya Global, uluslararası alıcıların Türkiye’den temizlik ürünleri için proforma talep etmesine ve FOB/CIF/EXW teslimat planlamasına yardımcı olur.",
+      "pages": {
+        "abc-deterjan": {
+          "title": "ABC Deterjan Temizlik Ürünleri | Sidya Global",
+          "metaDescription": "ABC Deterjan için Türkiye’den B2B temizlik ürünü tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, uluslararası alıcıların Türkiye’den temizlik ürünleri için proforma talep etmesine ve FOB/CIF/EXW teslimat planlamasına yardımcı olur.",
+          "intro": "Sidya Global, ABC Deterjan için temizlik kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa, proforma veya teklif talebi açmadan önce alıcıya net bir iş referansı sunmak için hazırlandı.",
+          "details": "ABC Deterjan talepleri koli miktarı, yükleme tipi, varış pazarı ve Incoterm tercihiyle birlikte değerlendirilir. Sidya Global alıcıyı kendi proforma akışında tutarken resmi marka sitesini ikincil bilgi kaynağı olarak korur.",
+          "logistics": "ABC Deterjan tarafında odak alanı deterjan, yüzey temizleyici ve ev temizlik ürünleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı ve ihracat evraklarıyla birlikte ilerletebilir."
+        },
+        "unilever": {
+          "title": "Unilever Temizlik Ürünleri | Sidya Global",
+          "metaDescription": "Unilever için Türkiye’den B2B temizlik ürünü tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, uluslararası alıcıların Türkiye’den temizlik ürünleri için proforma talep etmesine ve FOB/CIF/EXW teslimat planlamasına yardımcı olur.",
+          "intro": "Sidya Global, Unilever için temizlik kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa, proforma veya teklif talebi açmadan önce alıcıya net bir iş referansı sunmak için hazırlandı.",
+          "details": "Unilever talepleri koli miktarı, yükleme tipi, varış pazarı ve Incoterm tercihiyle birlikte değerlendirilir. Sidya Global alıcıyı kendi proforma akışında tutarken resmi marka sitesini ikincil bilgi kaynağı olarak korur.",
+          "logistics": "Unilever tarafında odak alanı ihracat pazarlarında bilinirliği yüksek ev bakımı ve hijyen markaları. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı ve ihracat evraklarıyla birlikte ilerletebilir."
+        },
+        "p-g": {
+          "title": "P&G Temizlik Ürünleri | Sidya Global",
+          "metaDescription": "P&G için Türkiye’den B2B temizlik ürünü tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, uluslararası alıcıların Türkiye’den temizlik ürünleri için proforma talep etmesine ve FOB/CIF/EXW teslimat planlamasına yardımcı olur.",
+          "intro": "Sidya Global, P&G için temizlik kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa, proforma veya teklif talebi açmadan önce alıcıya net bir iş referansı sunmak için hazırlandı.",
+          "details": "P&G talepleri koli miktarı, yükleme tipi, varış pazarı ve Incoterm tercihiyle birlikte değerlendirilir. Sidya Global alıcıyı kendi proforma akışında tutarken resmi marka sitesini ikincil bilgi kaynağı olarak korur.",
+          "logistics": "P&G tarafında odak alanı B2B alıcılar için çamaşır, temizlik ve kişisel hijyen portföyleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı ve ihracat evraklarıyla birlikte ilerletebilir."
+        },
+        "henkel": {
+          "title": "Henkel Temizlik Ürünleri | Sidya Global",
+          "metaDescription": "Henkel için Türkiye’den B2B temizlik ürünü tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, uluslararası alıcıların Türkiye’den temizlik ürünleri için proforma talep etmesine ve FOB/CIF/EXW teslimat planlamasına yardımcı olur.",
+          "intro": "Sidya Global, Henkel için temizlik kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa, proforma veya teklif talebi açmadan önce alıcıya net bir iş referansı sunmak için hazırlandı.",
+          "details": "Henkel talepleri koli miktarı, yükleme tipi, varış pazarı ve Incoterm tercihiyle birlikte değerlendirilir. Sidya Global alıcıyı kendi proforma akışında tutarken resmi marka sitesini ikincil bilgi kaynağı olarak korur.",
+          "logistics": "Henkel tarafında odak alanı çamaşır deterjanları, temizlik yardımcıları ve profesyonel ev bakım serileri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı ve ihracat evraklarıyla birlikte ilerletebilir."
+        },
+        "evyap": {
+          "title": "Evyap Temizlik Ürünleri | Sidya Global",
+          "metaDescription": "Evyap için Türkiye’den B2B temizlik ürünü tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, uluslararası alıcıların Türkiye’den temizlik ürünleri için proforma talep etmesine ve FOB/CIF/EXW teslimat planlamasına yardımcı olur.",
+          "intro": "Sidya Global, Evyap için temizlik kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa, proforma veya teklif talebi açmadan önce alıcıya net bir iş referansı sunmak için hazırlandı.",
+          "details": "Evyap talepleri koli miktarı, yükleme tipi, varış pazarı ve Incoterm tercihiyle birlikte değerlendirilir. Sidya Global alıcıyı kendi proforma akışında tutarken resmi marka sitesini ikincil bilgi kaynağı olarak korur.",
+          "logistics": "Evyap tarafında odak alanı Türkiye’den sabun, hijyen ve hızlı tüketilen ev bakım ürünleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı ve ihracat evraklarıyla birlikte ilerletebilir."
+        },
+        "eczacibasi-selpak": {
+          "title": "Eczacıbaşı / Selpak Temizlik Ürünleri | Sidya Global",
+          "metaDescription": "Eczacıbaşı / Selpak için Türkiye’den B2B temizlik ürünü tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, uluslararası alıcıların Türkiye’den temizlik ürünleri için proforma talep etmesine ve FOB/CIF/EXW teslimat planlamasına yardımcı olur.",
+          "intro": "Sidya Global, Eczacıbaşı / Selpak için temizlik kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa, proforma veya teklif talebi açmadan önce alıcıya net bir iş referansı sunmak için hazırlandı.",
+          "details": "Eczacıbaşı / Selpak talepleri koli miktarı, yükleme tipi, varış pazarı ve Incoterm tercihiyle birlikte değerlendirilir. Sidya Global alıcıyı kendi proforma akışında tutarken resmi marka sitesini ikincil bilgi kaynağı olarak korur.",
+          "logistics": "Eczacıbaşı / Selpak tarafında odak alanı kağıt hijyen, temizlik kâğıdı ve profesyonel tüketim ürünleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı ve ihracat evraklarıyla birlikte ilerletebilir."
+        },
+        "sc-johnson": {
+          "title": "SC Johnson Temizlik Ürünleri | Sidya Global",
+          "metaDescription": "SC Johnson için Türkiye’den B2B temizlik ürünü tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, uluslararası alıcıların Türkiye’den temizlik ürünleri için proforma talep etmesine ve FOB/CIF/EXW teslimat planlamasına yardımcı olur.",
+          "intro": "Sidya Global, SC Johnson için temizlik kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa, proforma veya teklif talebi açmadan önce alıcıya net bir iş referansı sunmak için hazırlandı.",
+          "details": "SC Johnson talepleri koli miktarı, yükleme tipi, varış pazarı ve Incoterm tercihiyle birlikte değerlendirilir. Sidya Global alıcıyı kendi proforma akışında tutarken resmi marka sitesini ikincil bilgi kaynağı olarak korur.",
+          "logistics": "SC Johnson tarafında odak alanı ev temizliği, koku giderici ve haşere kontrol kategorileri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı ve ihracat evraklarıyla birlikte ilerletebilir."
+        },
+        "nivea": {
+          "title": "Nivea Temizlik Ürünleri | Sidya Global",
+          "metaDescription": "Nivea için Türkiye’den B2B temizlik ürünü tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, uluslararası alıcıların Türkiye’den temizlik ürünleri için proforma talep etmesine ve FOB/CIF/EXW teslimat planlamasına yardımcı olur.",
+          "intro": "Sidya Global, Nivea için temizlik kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa, proforma veya teklif talebi açmadan önce alıcıya net bir iş referansı sunmak için hazırlandı.",
+          "details": "Nivea talepleri koli miktarı, yükleme tipi, varış pazarı ve Incoterm tercihiyle birlikte değerlendirilir. Sidya Global alıcıyı kendi proforma akışında tutarken resmi marka sitesini ikincil bilgi kaynağı olarak korur.",
+          "logistics": "Nivea tarafında odak alanı hijyen ürünleriyle birlikte talep edilen kişisel bakım ve cilt bakım ürünleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı ve ihracat evraklarıyla birlikte ilerletebilir."
+        },
+        "vileda": {
+          "title": "Vileda Temizlik Ürünleri | Sidya Global",
+          "metaDescription": "Vileda için Türkiye’den B2B temizlik ürünü tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, uluslararası alıcıların Türkiye’den temizlik ürünleri için proforma talep etmesine ve FOB/CIF/EXW teslimat planlamasına yardımcı olur.",
+          "intro": "Sidya Global, Vileda için temizlik kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa, proforma veya teklif talebi açmadan önce alıcıya net bir iş referansı sunmak için hazırlandı.",
+          "details": "Vileda talepleri koli miktarı, yükleme tipi, varış pazarı ve Incoterm tercihiyle birlikte değerlendirilir. Sidya Global alıcıyı kendi proforma akışında tutarken resmi marka sitesini ikincil bilgi kaynağı olarak korur.",
+          "logistics": "Vileda tarafında odak alanı temizlik ekipmanları, mop sistemleri, bezler ve ev gereçleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı ve ihracat evraklarıyla birlikte ilerletebilir."
+        },
+        "reckitt": {
+          "title": "Reckitt Temizlik Ürünleri | Sidya Global",
+          "metaDescription": "Reckitt için Türkiye’den B2B temizlik ürünü tedariki, proforma teklif ve ihracat teslimat planı. Sidya Global, uluslararası alıcıların Türkiye’den temizlik ürünleri için proforma talep etmesine ve FOB/CIF/EXW teslimat planlamasına yardımcı olur.",
+          "intro": "Sidya Global, Reckitt için temizlik kategorisinde B2B tedarik ve ihracat akışını düzenler. Bu sayfa, proforma veya teklif talebi açmadan önce alıcıya net bir iş referansı sunmak için hazırlandı.",
+          "details": "Reckitt talepleri koli miktarı, yükleme tipi, varış pazarı ve Incoterm tercihiyle birlikte değerlendirilir. Sidya Global alıcıyı kendi proforma akışında tutarken resmi marka sitesini ikincil bilgi kaynağı olarak korur.",
+          "logistics": "Reckitt tarafında odak alanı hijyen, dezenfeksiyon ve ev temizliği portföyleri. Ekibimiz FOB, CIF ve EXW teklif hazırlığını karma palet planı ve ihracat evraklarıyla birlikte ilerletebilir."
+        }
+      }
+    },
+    "az": {
+      "routeSegment": "markalar",
+      "categoryName": "Təmizlik",
+      "eyebrow": "Təmizlik markası tədarükü",
+      "backCta": "Sidya Global ana səhifəsinə qayıt",
+      "proformaCta": "Proforma yarat",
+      "quoteCta": "Təklif al",
+      "officialCta": "Marka haqqında daha çox məlumat",
+      "metaTail": "Sidya Global beynəlxalq alıcıların Türkiyədən təmizlik məhsulları üçün proforma istəməsinə və FOB/CIF/EXW çatdırılmasını planlamasına kömək edir.",
+      "pages": {
+        "abc-deterjan": {
+          "title": "ABC Deterjan Təmizlik Məhsulları | Sidya Global",
+          "metaDescription": "ABC Deterjan üçün Türkiyədən B2B təmizlik məhsulu tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global beynəlxalq alıcıların Türkiyədən təmizlik məhsulları üçün proforma istəməsinə və FOB/CIF/EXW çatdırılmasını planlamasına kömək edir.",
+          "intro": "Sidya Global ABC Deterjan üçün təmizlik kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə proforma və ya təklif sorğusundan əvvəl alıcıya aydın iş istinadı vermək üçün hazırlanıb.",
+          "details": "ABC Deterjan sorğuları koli miqdarı, yükləmə tipi, təyinat bazarı və Incoterm seçimi ilə birlikdə qiymətləndirilir. Sidya Global alıcını öz proforma axınında saxlayır, rəsmi marka saytını isə ikinci məlumat mənbəyi kimi qoruyur.",
+          "logistics": "ABC Deterjan üzrə əsas fokus yuyucu vasitə, səth təmizləyicisi və ev təmizliyi məhsulları. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı və ixrac sənədləri ilə birlikdə idarə edə bilər."
+        },
+        "unilever": {
+          "title": "Unilever Təmizlik Məhsulları | Sidya Global",
+          "metaDescription": "Unilever üçün Türkiyədən B2B təmizlik məhsulu tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global beynəlxalq alıcıların Türkiyədən təmizlik məhsulları üçün proforma istəməsinə və FOB/CIF/EXW çatdırılmasını planlamasına kömək edir.",
+          "intro": "Sidya Global Unilever üçün təmizlik kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə proforma və ya təklif sorğusundan əvvəl alıcıya aydın iş istinadı vermək üçün hazırlanıb.",
+          "details": "Unilever sorğuları koli miqdarı, yükləmə tipi, təyinat bazarı və Incoterm seçimi ilə birlikdə qiymətləndirilir. Sidya Global alıcını öz proforma axınında saxlayır, rəsmi marka saytını isə ikinci məlumat mənbəyi kimi qoruyur.",
+          "logistics": "Unilever üzrə əsas fokus ixrac bazarlarında tanınan ev baxımı və gigiyena markaları. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı və ixrac sənədləri ilə birlikdə idarə edə bilər."
+        },
+        "p-g": {
+          "title": "P&G Təmizlik Məhsulları | Sidya Global",
+          "metaDescription": "P&G üçün Türkiyədən B2B təmizlik məhsulu tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global beynəlxalq alıcıların Türkiyədən təmizlik məhsulları üçün proforma istəməsinə və FOB/CIF/EXW çatdırılmasını planlamasına kömək edir.",
+          "intro": "Sidya Global P&G üçün təmizlik kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə proforma və ya təklif sorğusundan əvvəl alıcıya aydın iş istinadı vermək üçün hazırlanıb.",
+          "details": "P&G sorğuları koli miqdarı, yükləmə tipi, təyinat bazarı və Incoterm seçimi ilə birlikdə qiymətləndirilir. Sidya Global alıcını öz proforma axınında saxlayır, rəsmi marka saytını isə ikinci məlumat mənbəyi kimi qoruyur.",
+          "logistics": "P&G üzrə əsas fokus B2B alıcılar üçün yuma, təmizlik və şəxsi gigiyena portfelləri. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı və ixrac sənədləri ilə birlikdə idarə edə bilər."
+        },
+        "henkel": {
+          "title": "Henkel Təmizlik Məhsulları | Sidya Global",
+          "metaDescription": "Henkel üçün Türkiyədən B2B təmizlik məhsulu tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global beynəlxalq alıcıların Türkiyədən təmizlik məhsulları üçün proforma istəməsinə və FOB/CIF/EXW çatdırılmasını planlamasına kömək edir.",
+          "intro": "Sidya Global Henkel üçün təmizlik kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə proforma və ya təklif sorğusundan əvvəl alıcıya aydın iş istinadı vermək üçün hazırlanıb.",
+          "details": "Henkel sorğuları koli miqdarı, yükləmə tipi, təyinat bazarı və Incoterm seçimi ilə birlikdə qiymətləndirilir. Sidya Global alıcını öz proforma axınında saxlayır, rəsmi marka saytını isə ikinci məlumat mənbəyi kimi qoruyur.",
+          "logistics": "Henkel üzrə əsas fokus paltaryuyan vasitələr, təmizlik köməkçiləri və peşəkar ev baxımı seriyaları. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı və ixrac sənədləri ilə birlikdə idarə edə bilər."
+        },
+        "evyap": {
+          "title": "Evyap Təmizlik Məhsulları | Sidya Global",
+          "metaDescription": "Evyap üçün Türkiyədən B2B təmizlik məhsulu tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global beynəlxalq alıcıların Türkiyədən təmizlik məhsulları üçün proforma istəməsinə və FOB/CIF/EXW çatdırılmasını planlamasına kömək edir.",
+          "intro": "Sidya Global Evyap üçün təmizlik kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə proforma və ya təklif sorğusundan əvvəl alıcıya aydın iş istinadı vermək üçün hazırlanıb.",
+          "details": "Evyap sorğuları koli miqdarı, yükləmə tipi, təyinat bazarı və Incoterm seçimi ilə birlikdə qiymətləndirilir. Sidya Global alıcını öz proforma axınında saxlayır, rəsmi marka saytını isə ikinci məlumat mənbəyi kimi qoruyur.",
+          "logistics": "Evyap üzrə əsas fokus Türkiyədən sabun, gigiyena və sürətli dövriyyəli ev baxımı məhsulları. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı və ixrac sənədləri ilə birlikdə idarə edə bilər."
+        },
+        "eczacibasi-selpak": {
+          "title": "Eczacıbaşı / Selpak Təmizlik Məhsulları | Sidya Global",
+          "metaDescription": "Eczacıbaşı / Selpak üçün Türkiyədən B2B təmizlik məhsulu tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global beynəlxalq alıcıların Türkiyədən təmizlik məhsulları üçün proforma istəməsinə və FOB/CIF/EXW çatdırılmasını planlamasına kömək edir.",
+          "intro": "Sidya Global Eczacıbaşı / Selpak üçün təmizlik kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə proforma və ya təklif sorğusundan əvvəl alıcıya aydın iş istinadı vermək üçün hazırlanıb.",
+          "details": "Eczacıbaşı / Selpak sorğuları koli miqdarı, yükləmə tipi, təyinat bazarı və Incoterm seçimi ilə birlikdə qiymətləndirilir. Sidya Global alıcını öz proforma axınında saxlayır, rəsmi marka saytını isə ikinci məlumat mənbəyi kimi qoruyur.",
+          "logistics": "Eczacıbaşı / Selpak üzrə əsas fokus kağız gigiyena, salfet və peşəkar istehlak məhsulları. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı və ixrac sənədləri ilə birlikdə idarə edə bilər."
+        },
+        "sc-johnson": {
+          "title": "SC Johnson Təmizlik Məhsulları | Sidya Global",
+          "metaDescription": "SC Johnson üçün Türkiyədən B2B təmizlik məhsulu tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global beynəlxalq alıcıların Türkiyədən təmizlik məhsulları üçün proforma istəməsinə və FOB/CIF/EXW çatdırılmasını planlamasına kömək edir.",
+          "intro": "Sidya Global SC Johnson üçün təmizlik kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə proforma və ya təklif sorğusundan əvvəl alıcıya aydın iş istinadı vermək üçün hazırlanıb.",
+          "details": "SC Johnson sorğuları koli miqdarı, yükləmə tipi, təyinat bazarı və Incoterm seçimi ilə birlikdə qiymətləndirilir. Sidya Global alıcını öz proforma axınında saxlayır, rəsmi marka saytını isə ikinci məlumat mənbəyi kimi qoruyur.",
+          "logistics": "SC Johnson üzrə əsas fokus ev təmizliyi, hava baxımı və zərərvericilərə nəzarət kateqoriyaları. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı və ixrac sənədləri ilə birlikdə idarə edə bilər."
+        },
+        "nivea": {
+          "title": "Nivea Təmizlik Məhsulları | Sidya Global",
+          "metaDescription": "Nivea üçün Türkiyədən B2B təmizlik məhsulu tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global beynəlxalq alıcıların Türkiyədən təmizlik məhsulları üçün proforma istəməsinə və FOB/CIF/EXW çatdırılmasını planlamasına kömək edir.",
+          "intro": "Sidya Global Nivea üçün təmizlik kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə proforma və ya təklif sorğusundan əvvəl alıcıya aydın iş istinadı vermək üçün hazırlanıb.",
+          "details": "Nivea sorğuları koli miqdarı, yükləmə tipi, təyinat bazarı və Incoterm seçimi ilə birlikdə qiymətləndirilir. Sidya Global alıcını öz proforma axınında saxlayır, rəsmi marka saytını isə ikinci məlumat mənbəyi kimi qoruyur.",
+          "logistics": "Nivea üzrə əsas fokus gigiyena çeşidləri ilə birlikdə tələb olunan şəxsi qulluq və dəriyə qulluq məhsulları. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı və ixrac sənədləri ilə birlikdə idarə edə bilər."
+        },
+        "vileda": {
+          "title": "Vileda Təmizlik Məhsulları | Sidya Global",
+          "metaDescription": "Vileda üçün Türkiyədən B2B təmizlik məhsulu tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global beynəlxalq alıcıların Türkiyədən təmizlik məhsulları üçün proforma istəməsinə və FOB/CIF/EXW çatdırılmasını planlamasına kömək edir.",
+          "intro": "Sidya Global Vileda üçün təmizlik kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə proforma və ya təklif sorğusundan əvvəl alıcıya aydın iş istinadı vermək üçün hazırlanıb.",
+          "details": "Vileda sorğuları koli miqdarı, yükləmə tipi, təyinat bazarı və Incoterm seçimi ilə birlikdə qiymətləndirilir. Sidya Global alıcını öz proforma axınında saxlayır, rəsmi marka saytını isə ikinci məlumat mənbəyi kimi qoruyur.",
+          "logistics": "Vileda üzrə əsas fokus təmizlik avadanlıqları, mop sistemləri, bezlər və ev ləvazimatları. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı və ixrac sənədləri ilə birlikdə idarə edə bilər."
+        },
+        "reckitt": {
+          "title": "Reckitt Təmizlik Məhsulları | Sidya Global",
+          "metaDescription": "Reckitt üçün Türkiyədən B2B təmizlik məhsulu tədarükü, proforma təklif və ixrac çatdırılma planı. Sidya Global beynəlxalq alıcıların Türkiyədən təmizlik məhsulları üçün proforma istəməsinə və FOB/CIF/EXW çatdırılmasını planlamasına kömək edir.",
+          "intro": "Sidya Global Reckitt üçün təmizlik kateqoriyasında B2B tədarük və ixrac axınını təşkil edir. Bu səhifə proforma və ya təklif sorğusundan əvvəl alıcıya aydın iş istinadı vermək üçün hazırlanıb.",
+          "details": "Reckitt sorğuları koli miqdarı, yükləmə tipi, təyinat bazarı və Incoterm seçimi ilə birlikdə qiymətləndirilir. Sidya Global alıcını öz proforma axınında saxlayır, rəsmi marka saytını isə ikinci məlumat mənbəyi kimi qoruyur.",
+          "logistics": "Reckitt üzrə əsas fokus gigiyena, dezinfeksiya və ev təmizliyi portfelləri. Komandamız FOB, CIF və EXW təklif hazırlığını qarışıq palet planı və ixrac sənədləri ilə birlikdə idarə edə bilər."
+        }
+      }
+    },
+    "ka": {
+      "routeSegment": "markalar",
+      "categoryName": "წმენდა",
+      "eyebrow": "წმენდის ბრენდის მიწოდება",
+      "backCta": "დაბრუნება Sidya Global-ზე",
+      "proformaCta": "პროფორმის შექმნა",
+      "quoteCta": "ფასის მოთხოვნა",
+      "officialCta": "მეტი ინფორმაცია ოფიციალურ ბრენდის საიტზე",
+      "metaTail": "Sidya Global ეხმარება საერთაშორისო მყიდველებს თურქეთიდან წმენდის პროდუქტებზე პროფორმის მოთხოვნასა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+      "pages": {
+        "abc-deterjan": {
+          "title": "ABC Deterjan წმენდის პროდუქტები | Sidya Global",
+          "metaDescription": "ABC Deterjan-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global ეხმარება საერთაშორისო მყიდველებს თურქეთიდან წმენდის პროდუქტებზე პროფორმის მოთხოვნასა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+          "intro": "Sidya Global ABC Deterjan-ისთვის წმენდის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწესრიგებს. გვერდი მყიდველს აძლევს მკაფიო სამუშაო მიმართულებას პროფორმის ან ფასის მოთხოვნამდე.",
+          "details": "ABC Deterjan-ის მოთხოვნები ფასდება ყუთების რაოდენობის, ტრანსპორტის ტიპის, დანიშნულების ბაზრისა და Incoterm-ის მიხედვით. Sidya Global მყიდველს საკუთარ პროფორმის პროცესში ტოვებს, ოფიციალური საიტი კი დამატებით წყაროდ რჩება.",
+          "logistics": "ABC Deterjan-ის ძირითადი მიმართულებაა სარეცხი საშუალებები, ზედაპირის საწმენდები და სახლის მოვლის პროდუქტები. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმითა და ექსპორტის დოკუმენტებით."
+        },
+        "unilever": {
+          "title": "Unilever წმენდის პროდუქტები | Sidya Global",
+          "metaDescription": "Unilever-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global ეხმარება საერთაშორისო მყიდველებს თურქეთიდან წმენდის პროდუქტებზე პროფორმის მოთხოვნასა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+          "intro": "Sidya Global Unilever-ისთვის წმენდის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწესრიგებს. გვერდი მყიდველს აძლევს მკაფიო სამუშაო მიმართულებას პროფორმის ან ფასის მოთხოვნამდე.",
+          "details": "Unilever-ის მოთხოვნები ფასდება ყუთების რაოდენობის, ტრანსპორტის ტიპის, დანიშნულების ბაზრისა და Incoterm-ის მიხედვით. Sidya Global მყიდველს საკუთარ პროფორმის პროცესში ტოვებს, ოფიციალური საიტი კი დამატებით წყაროდ რჩება.",
+          "logistics": "Unilever-ის ძირითადი მიმართულებაა ექსპორტის ბაზრებზე ცნობადი სახლის მოვლისა და ჰიგიენის ბრენდები. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმითა და ექსპორტის დოკუმენტებით."
+        },
+        "p-g": {
+          "title": "P&G წმენდის პროდუქტები | Sidya Global",
+          "metaDescription": "P&G-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global ეხმარება საერთაშორისო მყიდველებს თურქეთიდან წმენდის პროდუქტებზე პროფორმის მოთხოვნასა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+          "intro": "Sidya Global P&G-ისთვის წმენდის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწესრიგებს. გვერდი მყიდველს აძლევს მკაფიო სამუშაო მიმართულებას პროფორმის ან ფასის მოთხოვნამდე.",
+          "details": "P&G-ის მოთხოვნები ფასდება ყუთების რაოდენობის, ტრანსპორტის ტიპის, დანიშნულების ბაზრისა და Incoterm-ის მიხედვით. Sidya Global მყიდველს საკუთარ პროფორმის პროცესში ტოვებს, ოფიციალური საიტი კი დამატებით წყაროდ რჩება.",
+          "logistics": "P&G-ის ძირითადი მიმართულებაა B2B მყიდველებისთვის სარეცხი, წმენდისა და პირადი ჰიგიენის პორტფელი. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმითა და ექსპორტის დოკუმენტებით."
+        },
+        "henkel": {
+          "title": "Henkel წმენდის პროდუქტები | Sidya Global",
+          "metaDescription": "Henkel-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global ეხმარება საერთაშორისო მყიდველებს თურქეთიდან წმენდის პროდუქტებზე პროფორმის მოთხოვნასა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+          "intro": "Sidya Global Henkel-ისთვის წმენდის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწესრიგებს. გვერდი მყიდველს აძლევს მკაფიო სამუშაო მიმართულებას პროფორმის ან ფასის მოთხოვნამდე.",
+          "details": "Henkel-ის მოთხოვნები ფასდება ყუთების რაოდენობის, ტრანსპორტის ტიპის, დანიშნულების ბაზრისა და Incoterm-ის მიხედვით. Sidya Global მყიდველს საკუთარ პროფორმის პროცესში ტოვებს, ოფიციალური საიტი კი დამატებით წყაროდ რჩება.",
+          "logistics": "Henkel-ის ძირითადი მიმართულებაა სარეცხი ფხვნილები, წმენდის დამხმარე საშუალებები და სახლის მოვლის პროფესიული სერიები. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმითა და ექსპორტის დოკუმენტებით."
+        },
+        "evyap": {
+          "title": "Evyap წმენდის პროდუქტები | Sidya Global",
+          "metaDescription": "Evyap-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global ეხმარება საერთაშორისო მყიდველებს თურქეთიდან წმენდის პროდუქტებზე პროფორმის მოთხოვნასა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+          "intro": "Sidya Global Evyap-ისთვის წმენდის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწესრიგებს. გვერდი მყიდველს აძლევს მკაფიო სამუშაო მიმართულებას პროფორმის ან ფასის მოთხოვნამდე.",
+          "details": "Evyap-ის მოთხოვნები ფასდება ყუთების რაოდენობის, ტრანსპორტის ტიპის, დანიშნულების ბაზრისა და Incoterm-ის მიხედვით. Sidya Global მყიდველს საკუთარ პროფორმის პროცესში ტოვებს, ოფიციალური საიტი კი დამატებით წყაროდ რჩება.",
+          "logistics": "Evyap-ის ძირითადი მიმართულებაა თურქეთიდან საპონი, ჰიგიენა და სწრაფად ბრუნვადი სახლის მოვლის პროდუქტები. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმითა და ექსპორტის დოკუმენტებით."
+        },
+        "eczacibasi-selpak": {
+          "title": "Eczacıbaşı / Selpak წმენდის პროდუქტები | Sidya Global",
+          "metaDescription": "Eczacıbaşı / Selpak-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global ეხმარება საერთაშორისო მყიდველებს თურქეთიდან წმენდის პროდუქტებზე პროფორმის მოთხოვნასა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+          "intro": "Sidya Global Eczacıbaşı / Selpak-ისთვის წმენდის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწესრიგებს. გვერდი მყიდველს აძლევს მკაფიო სამუშაო მიმართულებას პროფორმის ან ფასის მოთხოვნამდე.",
+          "details": "Eczacıbaşı / Selpak-ის მოთხოვნები ფასდება ყუთების რაოდენობის, ტრანსპორტის ტიპის, დანიშნულების ბაზრისა და Incoterm-ის მიხედვით. Sidya Global მყიდველს საკუთარ პროფორმის პროცესში ტოვებს, ოფიციალური საიტი კი დამატებით წყაროდ რჩება.",
+          "logistics": "Eczacıbaşı / Selpak-ის ძირითადი მიმართულებაა ქაღალდის ჰიგიენა, ხელსახოცები და პროფესიული მოხმარების პროდუქტები. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმითა და ექსპორტის დოკუმენტებით."
+        },
+        "sc-johnson": {
+          "title": "SC Johnson წმენდის პროდუქტები | Sidya Global",
+          "metaDescription": "SC Johnson-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global ეხმარება საერთაშორისო მყიდველებს თურქეთიდან წმენდის პროდუქტებზე პროფორმის მოთხოვნასა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+          "intro": "Sidya Global SC Johnson-ისთვის წმენდის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწესრიგებს. გვერდი მყიდველს აძლევს მკაფიო სამუშაო მიმართულებას პროფორმის ან ფასის მოთხოვნამდე.",
+          "details": "SC Johnson-ის მოთხოვნები ფასდება ყუთების რაოდენობის, ტრანსპორტის ტიპის, დანიშნულების ბაზრისა და Incoterm-ის მიხედვით. Sidya Global მყიდველს საკუთარ პროფორმის პროცესში ტოვებს, ოფიციალური საიტი კი დამატებით წყაროდ რჩება.",
+          "logistics": "SC Johnson-ის ძირითადი მიმართულებაა სახლის წმენდა, ჰაერის მოვლა და მავნებლებთან ბრძოლის კატეგორიები. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმითა და ექსპორტის დოკუმენტებით."
+        },
+        "nivea": {
+          "title": "Nivea წმენდის პროდუქტები | Sidya Global",
+          "metaDescription": "Nivea-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global ეხმარება საერთაშორისო მყიდველებს თურქეთიდან წმენდის პროდუქტებზე პროფორმის მოთხოვნასა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+          "intro": "Sidya Global Nivea-ისთვის წმენდის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწესრიგებს. გვერდი მყიდველს აძლევს მკაფიო სამუშაო მიმართულებას პროფორმის ან ფასის მოთხოვნამდე.",
+          "details": "Nivea-ის მოთხოვნები ფასდება ყუთების რაოდენობის, ტრანსპორტის ტიპის, დანიშნულების ბაზრისა და Incoterm-ის მიხედვით. Sidya Global მყიდველს საკუთარ პროფორმის პროცესში ტოვებს, ოფიციალური საიტი კი დამატებით წყაროდ რჩება.",
+          "logistics": "Nivea-ის ძირითადი მიმართულებაა ჰიგიენის ასორტიმენტთან ერთად მოთხოვნადი პირადი და კანის მოვლის პროდუქტები. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმითა და ექსპორტის დოკუმენტებით."
+        },
+        "vileda": {
+          "title": "Vileda წმენდის პროდუქტები | Sidya Global",
+          "metaDescription": "Vileda-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global ეხმარება საერთაშორისო მყიდველებს თურქეთიდან წმენდის პროდუქტებზე პროფორმის მოთხოვნასა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+          "intro": "Sidya Global Vileda-ისთვის წმენდის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწესრიგებს. გვერდი მყიდველს აძლევს მკაფიო სამუშაო მიმართულებას პროფორმის ან ფასის მოთხოვნამდე.",
+          "details": "Vileda-ის მოთხოვნები ფასდება ყუთების რაოდენობის, ტრანსპორტის ტიპის, დანიშნულების ბაზრისა და Incoterm-ის მიხედვით. Sidya Global მყიდველს საკუთარ პროფორმის პროცესში ტოვებს, ოფიციალური საიტი კი დამატებით წყაროდ რჩება.",
+          "logistics": "Vileda-ის ძირითადი მიმართულებაა საწმენდი აღჭურვილობა, მოპის სისტემები, ტილოები და სახლის აქსესუარები. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმითა და ექსპორტის დოკუმენტებით."
+        },
+        "reckitt": {
+          "title": "Reckitt წმენდის პროდუქტები | Sidya Global",
+          "metaDescription": "Reckitt-ის B2B მიწოდება თურქეთიდან, პროფორმის მოთხოვნა და ექსპორტის მიწოდების გეგმა. Sidya Global ეხმარება საერთაშორისო მყიდველებს თურქეთიდან წმენდის პროდუქტებზე პროფორმის მოთხოვნასა და FOB/CIF/EXW მიწოდების დაგეგმვაში.",
+          "intro": "Sidya Global Reckitt-ისთვის წმენდის კატეგორიაში B2B მიწოდებისა და ექსპორტის პროცესს აწესრიგებს. გვერდი მყიდველს აძლევს მკაფიო სამუშაო მიმართულებას პროფორმის ან ფასის მოთხოვნამდე.",
+          "details": "Reckitt-ის მოთხოვნები ფასდება ყუთების რაოდენობის, ტრანსპორტის ტიპის, დანიშნულების ბაზრისა და Incoterm-ის მიხედვით. Sidya Global მყიდველს საკუთარ პროფორმის პროცესში ტოვებს, ოფიციალური საიტი კი დამატებით წყაროდ რჩება.",
+          "logistics": "Reckitt-ის ძირითადი მიმართულებაა ჰიგიენის, დეზინფექციისა და სახლის წმენდის პორტფელი. გუნდი ამზადებს FOB, CIF და EXW შეთავაზებებს შერეული პალეტების გეგმითა და ექსპორტის დოკუმენტებით."
+        }
+      }
+    },
+    "ru": {
+      "routeSegment": "markalar",
+      "categoryName": "Клининг",
+      "eyebrow": "Поставка брендов для уборки",
+      "backCta": "Вернуться на Sidya Global",
+      "proformaCta": "Создать проформу",
+      "quoteCta": "Запросить предложение",
+      "officialCta": "Подробнее на официальном сайте бренда",
+      "metaTail": "Sidya Global помогает международным покупателям запрашивать проформы на турецкие чистящие товары и планировать поставки FOB/CIF/EXW.",
+      "pages": {
+        "abc-deterjan": {
+          "title": "ABC Deterjan чистящие товары | Sidya Global",
+          "metaDescription": "B2B-поставка ABC Deterjan из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает международным покупателям запрашивать проформы на турецкие чистящие товары и планировать поставки FOB/CIF/EXW.",
+          "intro": "Sidya Global организует для ABC Deterjan B2B-процесс закупки и экспорта в категории клининга. Эта страница помогает покупателю быстро перейти к проформе или запросу коммерческого предложения.",
+          "details": "Запросы ABC Deterjan оцениваются с учетом количества коробов, типа загрузки, целевого рынка и условий Incoterm. Sidya Global удерживает покупателя в собственном процессе проформы, а официальный сайт бренда остается дополнительным источником информации.",
+          "logistics": "Фокус по ABC Deterjan: стиральные средства, очистители поверхностей и товары для дома. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет и экспортными документами."
+        },
+        "unilever": {
+          "title": "Unilever чистящие товары | Sidya Global",
+          "metaDescription": "B2B-поставка Unilever из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает международным покупателям запрашивать проформы на турецкие чистящие товары и планировать поставки FOB/CIF/EXW.",
+          "intro": "Sidya Global организует для Unilever B2B-процесс закупки и экспорта в категории клининга. Эта страница помогает покупателю быстро перейти к проформе или запросу коммерческого предложения.",
+          "details": "Запросы Unilever оцениваются с учетом количества коробов, типа загрузки, целевого рынка и условий Incoterm. Sidya Global удерживает покупателя в собственном процессе проформы, а официальный сайт бренда остается дополнительным источником информации.",
+          "logistics": "Фокус по Unilever: узнаваемые на экспортных рынках бренды ухода за домом и гигиены. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет и экспортными документами."
+        },
+        "p-g": {
+          "title": "P&G чистящие товары | Sidya Global",
+          "metaDescription": "B2B-поставка P&G из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает международным покупателям запрашивать проформы на турецкие чистящие товары и планировать поставки FOB/CIF/EXW.",
+          "intro": "Sidya Global организует для P&G B2B-процесс закупки и экспорта в категории клининга. Эта страница помогает покупателю быстро перейти к проформе или запросу коммерческого предложения.",
+          "details": "Запросы P&G оцениваются с учетом количества коробов, типа загрузки, целевого рынка и условий Incoterm. Sidya Global удерживает покупателя в собственном процессе проформы, а официальный сайт бренда остается дополнительным источником информации.",
+          "logistics": "Фокус по P&G: портфели для стирки, уборки и личной гигиены для B2B-покупателей. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет и экспортными документами."
+        },
+        "henkel": {
+          "title": "Henkel чистящие товары | Sidya Global",
+          "metaDescription": "B2B-поставка Henkel из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает международным покупателям запрашивать проформы на турецкие чистящие товары и планировать поставки FOB/CIF/EXW.",
+          "intro": "Sidya Global организует для Henkel B2B-процесс закупки и экспорта в категории клининга. Эта страница помогает покупателю быстро перейти к проформе или запросу коммерческого предложения.",
+          "details": "Запросы Henkel оцениваются с учетом количества коробов, типа загрузки, целевого рынка и условий Incoterm. Sidya Global удерживает покупателя в собственном процессе проформы, а официальный сайт бренда остается дополнительным источником информации.",
+          "logistics": "Фокус по Henkel: стиральные средства, вспомогательные чистящие продукты и профессиональные линейки ухода за домом. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет и экспортными документами."
+        },
+        "evyap": {
+          "title": "Evyap чистящие товары | Sidya Global",
+          "metaDescription": "B2B-поставка Evyap из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает международным покупателям запрашивать проформы на турецкие чистящие товары и планировать поставки FOB/CIF/EXW.",
+          "intro": "Sidya Global организует для Evyap B2B-процесс закупки и экспорта в категории клининга. Эта страница помогает покупателю быстро перейти к проформе или запросу коммерческого предложения.",
+          "details": "Запросы Evyap оцениваются с учетом количества коробов, типа загрузки, целевого рынка и условий Incoterm. Sidya Global удерживает покупателя в собственном процессе проформы, а официальный сайт бренда остается дополнительным источником информации.",
+          "logistics": "Фокус по Evyap: мыло, гигиенические и быстрооборачиваемые товары для дома из Турции. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет и экспортными документами."
+        },
+        "eczacibasi-selpak": {
+          "title": "Eczacıbaşı / Selpak чистящие товары | Sidya Global",
+          "metaDescription": "B2B-поставка Eczacıbaşı / Selpak из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает международным покупателям запрашивать проформы на турецкие чистящие товары и планировать поставки FOB/CIF/EXW.",
+          "intro": "Sidya Global организует для Eczacıbaşı / Selpak B2B-процесс закупки и экспорта в категории клининга. Эта страница помогает покупателю быстро перейти к проформе или запросу коммерческого предложения.",
+          "details": "Запросы Eczacıbaşı / Selpak оцениваются с учетом количества коробов, типа загрузки, целевого рынка и условий Incoterm. Sidya Global удерживает покупателя в собственном процессе проформы, а официальный сайт бренда остается дополнительным источником информации.",
+          "logistics": "Фокус по Eczacıbaşı / Selpak: бумажная гигиена, салфетки и профессиональные расходные материалы. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет и экспортными документами."
+        },
+        "sc-johnson": {
+          "title": "SC Johnson чистящие товары | Sidya Global",
+          "metaDescription": "B2B-поставка SC Johnson из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает международным покупателям запрашивать проформы на турецкие чистящие товары и планировать поставки FOB/CIF/EXW.",
+          "intro": "Sidya Global организует для SC Johnson B2B-процесс закупки и экспорта в категории клининга. Эта страница помогает покупателю быстро перейти к проформе или запросу коммерческого предложения.",
+          "details": "Запросы SC Johnson оцениваются с учетом количества коробов, типа загрузки, целевого рынка и условий Incoterm. Sidya Global удерживает покупателя в собственном процессе проформы, а официальный сайт бренда остается дополнительным источником информации.",
+          "logistics": "Фокус по SC Johnson: категории уборки дома, ароматизации воздуха и борьбы с вредителями. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет и экспортными документами."
+        },
+        "nivea": {
+          "title": "Nivea чистящие товары | Sidya Global",
+          "metaDescription": "B2B-поставка Nivea из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает международным покупателям запрашивать проформы на турецкие чистящие товары и планировать поставки FOB/CIF/EXW.",
+          "intro": "Sidya Global организует для Nivea B2B-процесс закупки и экспорта в категории клининга. Эта страница помогает покупателю быстро перейти к проформе или запросу коммерческого предложения.",
+          "details": "Запросы Nivea оцениваются с учетом количества коробов, типа загрузки, целевого рынка и условий Incoterm. Sidya Global удерживает покупателя в собственном процессе проформы, а официальный сайт бренда остается дополнительным источником информации.",
+          "logistics": "Фокус по Nivea: средства личной гигиены и ухода за кожей, часто запрашиваемые вместе с гигиеническим ассортиментом. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет и экспортными документами."
+        },
+        "vileda": {
+          "title": "Vileda чистящие товары | Sidya Global",
+          "metaDescription": "B2B-поставка Vileda из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает международным покупателям запрашивать проформы на турецкие чистящие товары и планировать поставки FOB/CIF/EXW.",
+          "intro": "Sidya Global организует для Vileda B2B-процесс закупки и экспорта в категории клининга. Эта страница помогает покупателю быстро перейти к проформе или запросу коммерческого предложения.",
+          "details": "Запросы Vileda оцениваются с учетом количества коробов, типа загрузки, целевого рынка и условий Incoterm. Sidya Global удерживает покупателя в собственном процессе проформы, а официальный сайт бренда остается дополнительным источником информации.",
+          "logistics": "Фокус по Vileda: инструменты для уборки, системы швабр, салфетки и бытовой инвентарь. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет и экспортными документами."
+        },
+        "reckitt": {
+          "title": "Reckitt чистящие товары | Sidya Global",
+          "metaDescription": "B2B-поставка Reckitt из Турции, запрос проформы и план экспортной доставки. Sidya Global помогает международным покупателям запрашивать проформы на турецкие чистящие товары и планировать поставки FOB/CIF/EXW.",
+          "intro": "Sidya Global организует для Reckitt B2B-процесс закупки и экспорта в категории клининга. Эта страница помогает покупателю быстро перейти к проформе или запросу коммерческого предложения.",
+          "details": "Запросы Reckitt оцениваются с учетом количества коробов, типа загрузки, целевого рынка и условий Incoterm. Sidya Global удерживает покупателя в собственном процессе проформы, а официальный сайт бренда остается дополнительным источником информации.",
+          "logistics": "Фокус по Reckitt: портфели гигиены, дезинфекции и бытовой химии. Команда может подготовить предложения FOB, CIF и EXW вместе с планом смешанных палет и экспортными документами."
+        }
+      }
+    },
+    "ar": {
+      "routeSegment": "markalar",
+      "categoryName": "التنظيف",
+      "eyebrow": "توريد علامات التنظيف",
+      "backCta": "العودة إلى Sidya Global",
+      "proformaCta": "إنشاء بروفرما",
+      "quoteCta": "طلب عرض سعر",
+      "officialCta": "المزيد على الموقع الرسمي للعلامة",
+      "metaTail": "تساعد Sidya Global المشترين الدوليين على طلب بروفرما لمنتجات التنظيف التركية وتخطيط الشحن بشروط FOB/CIF/EXW.",
+      "pages": {
+        "abc-deterjan": {
+          "title": "منتجات ABC Deterjan للتنظيف | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات ABC Deterjan من تركيا مع طلب بروفرما وخطة شحن تصديرية. تساعد Sidya Global المشترين الدوليين على طلب بروفرما لمنتجات التنظيف التركية وتخطيط الشحن بشروط FOB/CIF/EXW.",
+          "intro": "تنظم Sidya Global تدفق التوريد والتصدير لفئة التنظيف الخاصة بـ ABC Deterjan. تساعد هذه الصفحة المشتري على الانتقال بسرعة إلى طلب بروفرما أو عرض سعر واضح.",
+          "details": "يتم تقييم طلبات ABC Deterjan حسب عدد الكراتين ونوع التحميل والسوق المستهدف وشروط Incoterm. يبقى المشتري داخل مسار البروفرما في Sidya Global، بينما يظل الموقع الرسمي للعلامة مرجعاً ثانوياً.",
+          "logistics": "يركز ABC Deterjan على المنظفات ومنتجات تنظيف الأسطح والعناية المنزلية. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ووثائق التصدير المطلوبة."
+        },
+        "unilever": {
+          "title": "منتجات Unilever للتنظيف | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Unilever من تركيا مع طلب بروفرما وخطة شحن تصديرية. تساعد Sidya Global المشترين الدوليين على طلب بروفرما لمنتجات التنظيف التركية وتخطيط الشحن بشروط FOB/CIF/EXW.",
+          "intro": "تنظم Sidya Global تدفق التوريد والتصدير لفئة التنظيف الخاصة بـ Unilever. تساعد هذه الصفحة المشتري على الانتقال بسرعة إلى طلب بروفرما أو عرض سعر واضح.",
+          "details": "يتم تقييم طلبات Unilever حسب عدد الكراتين ونوع التحميل والسوق المستهدف وشروط Incoterm. يبقى المشتري داخل مسار البروفرما في Sidya Global، بينما يظل الموقع الرسمي للعلامة مرجعاً ثانوياً.",
+          "logistics": "يركز Unilever على علامات العناية المنزلية والنظافة المعروفة في أسواق التصدير. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ووثائق التصدير المطلوبة."
+        },
+        "p-g": {
+          "title": "منتجات P&G للتنظيف | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات P&G من تركيا مع طلب بروفرما وخطة شحن تصديرية. تساعد Sidya Global المشترين الدوليين على طلب بروفرما لمنتجات التنظيف التركية وتخطيط الشحن بشروط FOB/CIF/EXW.",
+          "intro": "تنظم Sidya Global تدفق التوريد والتصدير لفئة التنظيف الخاصة بـ P&G. تساعد هذه الصفحة المشتري على الانتقال بسرعة إلى طلب بروفرما أو عرض سعر واضح.",
+          "details": "يتم تقييم طلبات P&G حسب عدد الكراتين ونوع التحميل والسوق المستهدف وشروط Incoterm. يبقى المشتري داخل مسار البروفرما في Sidya Global، بينما يظل الموقع الرسمي للعلامة مرجعاً ثانوياً.",
+          "logistics": "يركز P&G على محافظ الغسيل والتنظيف والنظافة الشخصية للمشترين التجاريين. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ووثائق التصدير المطلوبة."
+        },
+        "henkel": {
+          "title": "منتجات Henkel للتنظيف | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Henkel من تركيا مع طلب بروفرما وخطة شحن تصديرية. تساعد Sidya Global المشترين الدوليين على طلب بروفرما لمنتجات التنظيف التركية وتخطيط الشحن بشروط FOB/CIF/EXW.",
+          "intro": "تنظم Sidya Global تدفق التوريد والتصدير لفئة التنظيف الخاصة بـ Henkel. تساعد هذه الصفحة المشتري على الانتقال بسرعة إلى طلب بروفرما أو عرض سعر واضح.",
+          "details": "يتم تقييم طلبات Henkel حسب عدد الكراتين ونوع التحميل والسوق المستهدف وشروط Incoterm. يبقى المشتري داخل مسار البروفرما في Sidya Global، بينما يظل الموقع الرسمي للعلامة مرجعاً ثانوياً.",
+          "logistics": "يركز Henkel على مساحيق الغسيل ومساعدات التنظيف ومجموعات العناية المنزلية المهنية. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ووثائق التصدير المطلوبة."
+        },
+        "evyap": {
+          "title": "منتجات Evyap للتنظيف | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Evyap من تركيا مع طلب بروفرما وخطة شحن تصديرية. تساعد Sidya Global المشترين الدوليين على طلب بروفرما لمنتجات التنظيف التركية وتخطيط الشحن بشروط FOB/CIF/EXW.",
+          "intro": "تنظم Sidya Global تدفق التوريد والتصدير لفئة التنظيف الخاصة بـ Evyap. تساعد هذه الصفحة المشتري على الانتقال بسرعة إلى طلب بروفرما أو عرض سعر واضح.",
+          "details": "يتم تقييم طلبات Evyap حسب عدد الكراتين ونوع التحميل والسوق المستهدف وشروط Incoterm. يبقى المشتري داخل مسار البروفرما في Sidya Global، بينما يظل الموقع الرسمي للعلامة مرجعاً ثانوياً.",
+          "logistics": "يركز Evyap على الصابون ومنتجات النظافة والعناية المنزلية سريعة الدوران من تركيا. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ووثائق التصدير المطلوبة."
+        },
+        "eczacibasi-selpak": {
+          "title": "منتجات Eczacıbaşı / Selpak للتنظيف | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Eczacıbaşı / Selpak من تركيا مع طلب بروفرما وخطة شحن تصديرية. تساعد Sidya Global المشترين الدوليين على طلب بروفرما لمنتجات التنظيف التركية وتخطيط الشحن بشروط FOB/CIF/EXW.",
+          "intro": "تنظم Sidya Global تدفق التوريد والتصدير لفئة التنظيف الخاصة بـ Eczacıbaşı / Selpak. تساعد هذه الصفحة المشتري على الانتقال بسرعة إلى طلب بروفرما أو عرض سعر واضح.",
+          "details": "يتم تقييم طلبات Eczacıbaşı / Selpak حسب عدد الكراتين ونوع التحميل والسوق المستهدف وشروط Incoterm. يبقى المشتري داخل مسار البروفرما في Sidya Global، بينما يظل الموقع الرسمي للعلامة مرجعاً ثانوياً.",
+          "logistics": "يركز Eczacıbaşı / Selpak على منتجات النظافة الورقية والمناديل والاستهلاك المهني. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ووثائق التصدير المطلوبة."
+        },
+        "sc-johnson": {
+          "title": "منتجات SC Johnson للتنظيف | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات SC Johnson من تركيا مع طلب بروفرما وخطة شحن تصديرية. تساعد Sidya Global المشترين الدوليين على طلب بروفرما لمنتجات التنظيف التركية وتخطيط الشحن بشروط FOB/CIF/EXW.",
+          "intro": "تنظم Sidya Global تدفق التوريد والتصدير لفئة التنظيف الخاصة بـ SC Johnson. تساعد هذه الصفحة المشتري على الانتقال بسرعة إلى طلب بروفرما أو عرض سعر واضح.",
+          "details": "يتم تقييم طلبات SC Johnson حسب عدد الكراتين ونوع التحميل والسوق المستهدف وشروط Incoterm. يبقى المشتري داخل مسار البروفرما في Sidya Global، بينما يظل الموقع الرسمي للعلامة مرجعاً ثانوياً.",
+          "logistics": "يركز SC Johnson على فئات تنظيف المنزل والعناية بالهواء ومكافحة الحشرات. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ووثائق التصدير المطلوبة."
+        },
+        "nivea": {
+          "title": "منتجات Nivea للتنظيف | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Nivea من تركيا مع طلب بروفرما وخطة شحن تصديرية. تساعد Sidya Global المشترين الدوليين على طلب بروفرما لمنتجات التنظيف التركية وتخطيط الشحن بشروط FOB/CIF/EXW.",
+          "intro": "تنظم Sidya Global تدفق التوريد والتصدير لفئة التنظيف الخاصة بـ Nivea. تساعد هذه الصفحة المشتري على الانتقال بسرعة إلى طلب بروفرما أو عرض سعر واضح.",
+          "details": "يتم تقييم طلبات Nivea حسب عدد الكراتين ونوع التحميل والسوق المستهدف وشروط Incoterm. يبقى المشتري داخل مسار البروفرما في Sidya Global، بينما يظل الموقع الرسمي للعلامة مرجعاً ثانوياً.",
+          "logistics": "يركز Nivea على منتجات العناية الشخصية والبشرة المطلوبة مع تشكيلات النظافة. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ووثائق التصدير المطلوبة."
+        },
+        "vileda": {
+          "title": "منتجات Vileda للتنظيف | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Vileda من تركيا مع طلب بروفرما وخطة شحن تصديرية. تساعد Sidya Global المشترين الدوليين على طلب بروفرما لمنتجات التنظيف التركية وتخطيط الشحن بشروط FOB/CIF/EXW.",
+          "intro": "تنظم Sidya Global تدفق التوريد والتصدير لفئة التنظيف الخاصة بـ Vileda. تساعد هذه الصفحة المشتري على الانتقال بسرعة إلى طلب بروفرما أو عرض سعر واضح.",
+          "details": "يتم تقييم طلبات Vileda حسب عدد الكراتين ونوع التحميل والسوق المستهدف وشروط Incoterm. يبقى المشتري داخل مسار البروفرما في Sidya Global، بينما يظل الموقع الرسمي للعلامة مرجعاً ثانوياً.",
+          "logistics": "يركز Vileda على أدوات التنظيف وأنظمة المسح والأقمشة ومعدات المنزل. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ووثائق التصدير المطلوبة."
+        },
+        "reckitt": {
+          "title": "منتجات Reckitt للتنظيف | Sidya Global",
+          "metaDescription": "توريد B2B لمنتجات Reckitt من تركيا مع طلب بروفرما وخطة شحن تصديرية. تساعد Sidya Global المشترين الدوليين على طلب بروفرما لمنتجات التنظيف التركية وتخطيط الشحن بشروط FOB/CIF/EXW.",
+          "intro": "تنظم Sidya Global تدفق التوريد والتصدير لفئة التنظيف الخاصة بـ Reckitt. تساعد هذه الصفحة المشتري على الانتقال بسرعة إلى طلب بروفرما أو عرض سعر واضح.",
+          "details": "يتم تقييم طلبات Reckitt حسب عدد الكراتين ونوع التحميل والسوق المستهدف وشروط Incoterm. يبقى المشتري داخل مسار البروفرما في Sidya Global، بينما يظل الموقع الرسمي للعلامة مرجعاً ثانوياً.",
+          "logistics": "يركز Reckitt على محافظ النظافة والتعقيم وتنظيف المنزل. يمكن لفريقنا إعداد عروض FOB وCIF وEXW مع خطة منصات مختلطة ووثائق التصدير المطلوبة."
+        }
+      }
+    }
+  }
+}

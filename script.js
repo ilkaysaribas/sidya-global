@@ -3369,6 +3369,14 @@ const translatePage = () => {
     const key = node.dataset.i18nPlaceholder;
     if (key && t(key)) node.setAttribute("placeholder", t(key));
   });
+  document.querySelectorAll("[data-brand-link]").forEach((link) => {
+    const slug = link.dataset.brandLink;
+    if (!slug) return;
+    const segment = currentLang === "en" ? "brands" : "markalar";
+    link.setAttribute("href", `/${currentLang}/${segment}/${slug}/`);
+    link.removeAttribute("target");
+    link.removeAttribute("rel");
+  });
   document.querySelector("#supplierSearchForm button")?.setAttribute("aria-label", t("supplierSearchTitle"));
   try {
     renderProducts();
@@ -3401,7 +3409,7 @@ document.querySelectorAll(".lang-option").forEach((button) => {
 
 document.querySelectorAll(".firm-link").forEach((link) => {
   const href = link.getAttribute("href") || "";
-  if (href && !href.startsWith("#")) {
+  if (/^https?:\/\//i.test(href)) {
     link.target = "_blank";
     link.rel = "noopener";
   }
@@ -3436,7 +3444,8 @@ document.addEventListener("click", (event) => {
 
 document.addEventListener("click", (event) => {
   const link = event.target.closest(".firm-link");
-  if (!link || link.getAttribute("href")?.startsWith("#")) return;
+  const href = link?.getAttribute("href") || "";
+  if (!link || href.startsWith("#") || !/^https?:\/\//i.test(href)) return;
   event.preventDefault();
   window.open(link.href, "_blank", "noopener");
 });
