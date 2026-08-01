@@ -11,6 +11,7 @@ const worker = read("sw.js");
 
 new vm.Script(script, { filename: "script.js" });
 
+const mojibakePattern = /[\u00c3\u00c2]|\u00e2[\u0080-\u009f]/;
 const checks = [];
 const check = (condition, message) => {
   checks.push({ condition: Boolean(condition), message });
@@ -24,6 +25,9 @@ check(index.includes('id="productGrid"'), "Homepage category grid is missing.");
 check(!index.includes('id="productCatalogSearch"'), "Individual product search must not appear on the homepage.");
 check(!index.includes('id="catalogLoadMore"'), "Individual product pagination must not appear on the homepage.");
 check(index.includes("script.js?v=20260801-1"), "Homepage script cache key is stale.");
+check(!mojibakePattern.test(index), "Homepage contains mojibake text.");
+check(index.includes("Build: 20260801-2 - Environment: production"), "Production build label must be shown.");
+check(!index.includes("Environment: development") && !index.includes("Build: local"), "Development build label must not be exposed.");
 check(index.includes("styles.css?v=20260722-2"), "Homepage stylesheet cache key is stale.");
 
 const renderStart = script.indexOf("const renderProducts = () => {");
@@ -57,7 +61,7 @@ check(styles.includes('html[dir="ltr"] main :where('), "LTR alignment guard is m
 check(styles.includes("text-align: left !important"), "LTR content must be forced left.");
 check(styles.includes('html[dir="rtl"] main :where('), "RTL alignment guard is missing.");
 check(styles.includes("text-align: right !important"), "RTL content must remain right aligned.");
-check(worker.includes("sidya-global-v121"), "Service worker cache version must be v121.");
+check(worker.includes("sidya-global-v122"), "Service worker cache version must be v122.");
 check(worker.includes("script.js?v=20260801-1"), "Service worker caches an old homepage script.");
 check(worker.includes("styles.css?v=20260722-2"), "Service worker caches an old stylesheet.");
 check(worker.includes('url.pathname === "/script.js"'), "Homepage script must use network-first cache handling.");
