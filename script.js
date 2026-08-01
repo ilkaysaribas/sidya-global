@@ -2412,7 +2412,7 @@ const scoreGtipRecord = (record, normalizedQuery, words) => {
   if (codeQuery.length >= 2 && code.startsWith(codeQuery)) score += 40;
   if (haystack.includes(normalizedQuery)) score += 20;
   score += words.filter((word) => word.length >= 2 && haystack.includes(word)).length * 6;
-  if (code.length === 12) score += 2;
+  if (score > 0 && code.length === 12) score += 2;
   return score;
 };
 
