@@ -52,7 +52,7 @@ check(styles.includes('html[dir="ltr"] main :where('), "LTR alignment guard is m
 check(styles.includes("text-align: left !important"), "LTR content must be forced left.");
 check(styles.includes('html[dir="rtl"] main :where('), "RTL alignment guard is missing.");
 check(styles.includes("text-align: right !important"), "RTL content must remain right aligned.");
-check(worker.includes("sidya-global-v119"), "Service worker cache version must be v117.");
+check(worker.includes("sidya-global-v120"), "Service worker cache version must be v120.");
 check(worker.includes("script.js?v=20260722-2"), "Service worker caches an old homepage script.");
 check(worker.includes("styles.css?v=20260722-2"), "Service worker caches an old stylesheet.");
 check(worker.includes('url.pathname === "/script.js"'), "Homepage script must use network-first cache handling.");
@@ -68,6 +68,7 @@ check((index.match(/<section\b/g) || []).length === (index.match(/<\/section>/g)
 
 console.log(`Homepage regression test passed (${checks.length} checks)`);
 
-check(index.includes('sidya-ux-upgrades.js?v=20260722-2'), 'UX upgrades script is missing.');
+check(!index.includes('sidya-ux-upgrades.js?v=20260722-2'), 'UX upgrades script must not block homepage loading.');
+
 
 
