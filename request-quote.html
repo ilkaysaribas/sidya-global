@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="tr">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Sidya Global | Teklif Talebi</title>
     <meta name="description" content="Sidya Global RFQ ekranı ile ürün, koli adedi, hedef koli fiyatı ve para birimi bazında teklif talebi oluşturun." />
@@ -36,13 +36,11 @@
           <a href="/request-quote?lang=ar">AR</a>
         </nav>
       </header>
-
       <section class="rfq-hero">
         <p class="rfq-kicker">RFQ / Request for Quotation</p>
         <h1>Teklif Talebi</h1>
         <p>Ürünleri seçin, kaç koli istediğinizi ve koli başına hedef fiyatınızı girin. Farklı para birimleri ayrı ayrı hesaplanır ve talep ticari otomasyon paneline düşer.</p>
       </section>
-
       <main class="rfq-layout">
         <div>
           <form class="rfq-card" id="rfqForm">
@@ -72,7 +70,6 @@
               <label class="rfq-full">Genel açıklama<textarea name="general_note"></textarea></label>
               <label><input name="urgent" type="checkbox" /> Acil teklif</label>
             </div>
-
             <section class="rfq-card" style="padding:0;border:0;box-shadow:none;margin-top:16px">
               <p class="rfq-kicker">Ürün seçimi</p>
               <h2>Ürün ara ve RFQ sepetine ekle</h2>
@@ -81,13 +78,11 @@
                 <div class="rfq-product-results" id="rfqProductResults"></div>
               </div>
             </section>
-
             <section class="rfq-card" style="padding:0;border:0;box-shadow:none;margin-top:16px">
               <p class="rfq-kicker">RFQ satırları</p>
               <h2>Seçilen ürünler</h2>
               <div class="rfq-lines" id="rfqLines"></div>
             </section>
-
             <div class="rfq-consents">
               <label><input name="consent_privacy" type="checkbox" required /> KVKK / gizlilik metnini kabul ediyorum.</label>
               <label><input name="consent_commercial" type="checkbox" /> Ticari iletişim izni veriyorum.</label>
