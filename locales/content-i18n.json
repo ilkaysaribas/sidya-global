@@ -190,7 +190,10 @@
     "customerHistoryKicker": "Order history",
     "customerHistoryTitle": "Previous orders",
     "customerHistoryEmpty": "No previous order has been recorded yet.",
-    "customerNewOrder": "Create a new order"
+    "customerNewOrder": "Create a new order",
+    "marketsKicker": "Target markets",
+    "marketsTitle": "Ready for nearby, northern and eastern markets from Türkiye.",
+    "marketsCopy": "Sidya Global prepares offers for buyers across Europe, the Caucasus, the Black Sea region, Central Asia and the Middle East."
   },
   "tr": {
     "navProducts": "Ürünler",
@@ -383,7 +386,10 @@
     "customerHistoryKicker": "Sipariş geçmişi",
     "customerHistoryTitle": "Önceki siparişler",
     "customerHistoryEmpty": "Henüz kayıtlı önceki sipariş bulunmuyor.",
-    "customerNewOrder": "Yeni sipariş oluştur"
+    "customerNewOrder": "Yeni sipariş oluştur",
+    "marketsKicker": "Hedef pazarlar",
+    "marketsTitle": "Türkiye’nin yakın, kuzey ve doğu pazarlarına hazır sunum.",
+    "marketsCopy": "Sidya Global; Avrupa, Kafkasya, Karadeniz bölgesi, Orta Asya ve Orta Doğu’daki alıcılar için teklif dosyaları hazırlar."
   },
   "az": {
     "navProducts": "Məhsullar",
@@ -526,7 +532,10 @@
     "customerHistoryKicker": "Sifariş tarixçəsi",
     "customerHistoryTitle": "Əvvəlki sifarişlər",
     "customerHistoryEmpty": "Hələ əvvəlki sifariş qeydə alınmayıb.",
-    "customerNewOrder": "Yeni sifariş yarat"
+    "customerNewOrder": "Yeni sifariş yarat",
+    "marketsKicker": "Hədəf bazarlar",
+    "marketsTitle": "Türkiyənin yaxın, şimal və şərq bazarları üçün hazır təqdimat.",
+    "marketsCopy": "Sidya Global Avropa, Qafqaz, Qara dəniz regionu, Mərkəzi Asiya və Yaxın Şərq alıcıları üçün təkliflər hazırlayır."
   },
   "ka": {
     "navProducts": "პროდუქტები",
@@ -665,7 +674,10 @@
     "customerHistoryKicker": "შეკვეთების ისტორია",
     "customerHistoryTitle": "წინა შეკვეთები",
     "customerHistoryEmpty": "წინა შეკვეთა ჯერ არ არის ჩაწერილი.",
-    "customerNewOrder": "ახალი შეკვეთის შექმნა"
+    "customerNewOrder": "ახალი შეკვეთის შექმნა",
+    "marketsKicker": "სამიზნე ბაზრები",
+    "marketsTitle": "მზად არის თურქეთის ახლო, ჩრდილოეთ და აღმოსავლეთ ბაზრებისთვის.",
+    "marketsCopy": "Sidya Global ამზადებს შეთავაზებებს ევროპის, კავკასიის, შავი ზღვის რეგიონის, ცენტრალური აზიისა და ახლო აღმოსავლეთის მყიდველებისთვის."
   },
   "ru": {
     "navProducts": "Продукты",
@@ -804,7 +816,10 @@
     "customerHistoryKicker": "История заказов",
     "customerHistoryTitle": "Предыдущие заказы",
     "customerHistoryEmpty": "Предыдущие заказы пока не записаны.",
-    "customerNewOrder": "Создать новый заказ"
+    "customerNewOrder": "Создать новый заказ",
+    "marketsKicker": "Целевые рынки",
+    "marketsTitle": "Готово для близких, северных и восточных рынков Турции.",
+    "marketsCopy": "Sidya Global готовит предложения для покупателей из Европы, Кавказа, Черноморского региона, Центральной Азии и Ближнего Востока."
   },
   "ar": {
     "navProducts": "المنتجات",
@@ -943,6 +958,9 @@
     "customerHistoryKicker": "سجل الطلبات",
     "customerHistoryTitle": "الطلبات السابقة",
     "customerHistoryEmpty": "لم يتم تسجيل أي طلب سابق بعد.",
-    "customerNewOrder": "إنشاء طلب جديد"
+    "customerNewOrder": "إنشاء طلب جديد",
+    "marketsKicker": "الأسواق المستهدفة",
+    "marketsTitle": "جاهزون للأسواق القريبة والشمالية والشرقية من تركيا.",
+    "marketsCopy": "تُعد Sidya Global عروضًا للمشترين في أوروبا والقوقاز ومنطقة البحر الأسود وآسيا الوسطى والشرق الأوسط."
   }
 }
