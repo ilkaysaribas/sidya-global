@@ -61,6 +61,8 @@ const applyContentToHtml = (html, locale, contentI18n) => {
     outputHtml = outputHtml.replace(textPattern, (_match, open, _tag, _body, close) => `${open}${htmlEscape(value)}${close}`);
     const placeholderPattern = new RegExp(`(<[^>]*\\sdata-i18n-placeholder="${escapedKey}"[^>]*\\splaceholder=")[^"]*(")`, "g");
     outputHtml = outputHtml.replace(placeholderPattern, `$1${htmlEscape(value)}$2`);
+    const placeholderBeforeKeyPattern = new RegExp(`(<[^>]*\\splaceholder=")[^"]*("[^>]*\\sdata-i18n-placeholder="${escapedKey}"[^>]*>)`, "g");
+    outputHtml = outputHtml.replace(placeholderBeforeKeyPattern, `$1${htmlEscape(value)}$2`);
     const missingPlaceholderPattern = new RegExp(`(<[^>]*\\sdata-i18n-placeholder="${escapedKey}"[^>]*)(>)`, "g");
     outputHtml = outputHtml.replace(missingPlaceholderPattern, (match, open, close) =>
       match.includes(" placeholder=") ? match : `${open} placeholder="${htmlEscape(value)}"${close}`);
@@ -143,6 +145,12 @@ const validateLocalizedHtml = (html, locale, seoMeta, contentI18n, options = {})
     [html.includes(htmlEscape(copy.gtipTitle)), "Missing localized GTIP body"],
     [html.includes(htmlEscape(copy.customsPlannerTitle)), "Missing localized route planner body"],
     [html.includes(htmlEscape(copy.customsDocsTitle)), "Missing localized customs output body"],
+    [html.includes(htmlEscape(copy.marketsTitle)), "Missing localized target markets title"],
+    [html.includes(htmlEscape(copy.marketGeorgia)) && html.includes(htmlEscape(copy.marketKazakhstan)), "Missing localized target market country names"],
+    [html.includes(htmlEscape(copy.b2bRegisterTitle)) && html.includes(htmlEscape(copy.b2bChecklistTitle)), "Missing localized B2B registration modal body"],
+    [html.includes(htmlEscape(copy.customerDashboardTitle)) && html.includes(htmlEscape(copy.customerHistoryEmpty)), "Missing localized customer portal modal body"],
+    [html.includes(htmlEscape(copy.catalogProformaTitle)) && html.includes(htmlEscape(copy.catalogProformaViewSummary)), "Missing localized category proforma modal body"],
+    [html.includes(`data-i18n-placeholder="catalogProformaSearchPlaceholder" placeholder="${htmlEscape(copy.catalogProformaSearchPlaceholder)}"`) || html.includes(`placeholder="${htmlEscape(copy.catalogProformaSearchPlaceholder)}" data-i18n-placeholder="catalogProformaSearchPlaceholder"`), "Missing localized category proforma search placeholder"],
     [locale === "ar" ? /<html[^>]*dir="rtl"/.test(html) : /<html[^>]*dir="ltr"/.test(html), `Missing localized direction for ${locale}`],
   ];
   for (const [ok, message] of checks) if (!ok) throw new Error(message);

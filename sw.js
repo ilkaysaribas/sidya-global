@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = "sidya-global-v126";
+﻿const CACHE_NAME = "sidya-global-v127";
 
 const SHELL_ASSETS = [
   "./",
@@ -153,7 +153,3 @@ self.addEventListener("fetch", (event) => {
     }),
   );
 });
-
-
-
-

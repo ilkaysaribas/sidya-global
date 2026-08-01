@@ -46,11 +46,12 @@ const assertions = [
   [index.includes("proformaRequestedTotalAmount") && index.includes("proformaExchangeRates"), "Integrated requested-price summary is missing"],
   [read("script.js").includes("requestedUnitPrice") && read("api/site-order.js").includes("site_order_items"), "Requested prices are not persisted through the order API"],
   [!backendLoader.includes("sidya-rtl-hero-fix.js"), "Legacy RTL hero transformer is still active"],
-  [worker.includes("sidya-global-v126"), "Service worker cache version was not advanced"],
+  [worker.includes("sidya-global-v127"), "Service worker cache version was not advanced"],
   [index.includes("Turkish Product Sourcing &amp; Export Proforma Platform"), "English SEO title is not updated"],
   [index.includes("SIDYA_SEO_META"), "Language-specific SEO metadata map is missing"],
   [["tr", "en", "az", "ka", "ru", "ar"].every((locale) => index.includes('"' + locale + '": {')), "SEO metadata is missing one or more locales"],
   [["tr", "en", "az", "ka", "ru", "ar"].every((locale) => contentI18n[locale]?.heroTitle && contentI18n[locale]?.navProducts && contentI18n[locale]?.footerText), "Content i18n dictionary is missing one or more critical body translations"],
+  [["tr", "en", "az", "ka", "ru", "ar"].every((locale) => contentI18n[locale]?.marketGeorgia && contentI18n[locale]?.marketKazakhstan && contentI18n[locale]?.b2bRegisterTitle && contentI18n[locale]?.customerDashboardTitle && contentI18n[locale]?.catalogProformaTitle), "Content i18n dictionary is missing modal or target-market translations"],
   [read("scripts/build-static.js").includes("applyContentToHtml") && read("scripts/build-static.js").includes("content-i18n.json"), "Static build does not render localized body content"],
   [read("script.js").includes("applyContentI18nOverrides") && read("script.js").includes("SIDYA_CONTENT_I18N"), "Client-side language switcher does not consume shared content i18n overrides"],
   [["tr", "en", "az", "ka", "ru", "ar"].every((locale) => index.includes('hreflang="' + locale + '" href="https://www.sidyaglobal.com/?lang=' + locale + '"')), "Localized hreflang links are incomplete"],
@@ -91,10 +92,4 @@ if (process.env.VALIDATE_PRODUCTION_ENV === "1") {
 console.log(`Static production validation passed (${sourceFiles.length}/12 Vercel functions)`);
 
 if (index.includes('sidya-ux-upgrades.js?v=20260722-2')) throw new Error('UX upgrades script must not block homepage loading.');
-if (!worker.includes('sidya-global-v126')) throw new Error('Service worker cache version is stale.');
-
-
-
-
-
-
+if (!worker.includes('sidya-global-v127')) throw new Error('Service worker cache version is stale.');

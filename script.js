@@ -1,4 +1,4 @@
-const content = {
+﻿const content = {
   en: {
     navProducts: "Products",
     navFindProducts: "Find Products",
@@ -2264,10 +2264,11 @@ const renderProducts = () => {
 const renderMarkets = () => {
   const marketList = document.querySelector("#marketList");
   if (!marketList) return;
-  const names = marketNames[currentLang] || marketNames.en;
+  const keys = ["marketGeorgia", "marketAzerbaijan", "marketArmenia", "marketIran", "marketIraq", "marketRussia", "marketUkraine", "marketKazakhstan"];
+  const fallbackNames = marketNames[currentLang] || marketNames.en;
   const links = marketLinks[currentLang] || marketLinks.en;
-  marketList.innerHTML = names
-    .map((name, index) => `<a href="${links[index] || links[0]}" target="_blank" rel="noopener">${name}</a>`)
+  marketList.innerHTML = keys
+    .map((key, index) => `<a href="${links[index] || links[0]}" target="_blank" rel="noopener" data-i18n="${key}">${escapeHtml(t(key) || fallbackNames[index] || marketNames.en[index] || key)}</a>`)
     .join("");
 };
 
@@ -3364,6 +3365,10 @@ const translatePage = () => {
   });
   const supplierSearchInput = document.querySelector("#supplierSearchInput");
   if (supplierSearchInput) supplierSearchInput.placeholder = t("supplierSearchPlaceholder");
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((node) => {
+    const key = node.dataset.i18nPlaceholder;
+    if (key && t(key)) node.setAttribute("placeholder", t(key));
+  });
   document.querySelector("#supplierSearchForm button")?.setAttribute("aria-label", t("supplierSearchTitle"));
   try {
     renderProducts();
