@@ -3344,6 +3344,7 @@ const translatePage = () => {
   setupCustomsModal();
   document.documentElement.lang = currentLang;
   document.documentElement.dir = RTL_LOCALES.has(currentLang) ? "rtl" : "ltr";
+  window.applySidyaSeoMeta?.(currentLang);
   try { window.localStorage.setItem("sidyaLang", currentLang); } catch (_) {}
   document.querySelectorAll(".lang-option").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.lang === currentLang);

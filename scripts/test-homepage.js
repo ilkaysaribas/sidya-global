@@ -24,7 +24,15 @@ check(/class="site-container">\s*<div class="section-heading products-section-he
 check(index.includes('id="productGrid"'), "Homepage category grid is missing.");
 check(!index.includes('id="productCatalogSearch"'), "Individual product search must not appear on the homepage.");
 check(!index.includes('id="catalogLoadMore"'), "Individual product pagination must not appear on the homepage.");
-check(index.includes("script.js?v=20260801-1"), "Homepage script cache key is stale.");
+check(index.includes("script.js?v=20260801-2"), "Homepage script cache key is stale.");
+check(index.includes("SIDYA_SEO_META"), "Language-specific SEO metadata map is missing.");
+["tr", "en", "az", "ka", "ru", "ar"].forEach((locale) => {
+  check(index.includes('"' + locale + '": {'), "SEO metadata is missing for locale: " + locale);
+  check(index.includes('hreflang="' + locale + '" href="https://www.sidyaglobal.com/?lang=' + locale + '"'), "hreflang is missing for locale: " + locale);
+});
+check(index.includes('hreflang="x-default" href="https://www.sidyaglobal.com/?lang=en"'), "x-default hreflang is missing.");
+check(index.includes('window.applySidyaSeoMeta'), "Runtime SEO updater is missing.");
+check(script.includes('window.applySidyaSeoMeta?.(currentLang)'), "Language switch must refresh SEO metadata.");
 check(!mojibakePattern.test(index), "Homepage contains mojibake text.");
 check(index.includes("Build: 20260801-2 - Environment: production"), "Production build label must be shown.");
 check(!index.includes("Environment: development") && !index.includes("Build: local"), "Development build label must not be exposed.");
@@ -61,8 +69,8 @@ check(styles.includes('html[dir="ltr"] main :where('), "LTR alignment guard is m
 check(styles.includes("text-align: left !important"), "LTR content must be forced left.");
 check(styles.includes('html[dir="rtl"] main :where('), "RTL alignment guard is missing.");
 check(styles.includes("text-align: right !important"), "RTL content must remain right aligned.");
-check(worker.includes("sidya-global-v123"), "Service worker cache version must be v123.");
-check(worker.includes("script.js?v=20260801-1"), "Service worker caches an old homepage script.");
+check(worker.includes("sidya-global-v124"), "Service worker cache version must be v124.");
+check(worker.includes("script.js?v=20260801-2"), "Service worker caches an old homepage script.");
 check(worker.includes("styles.css?v=20260722-2"), "Service worker caches an old stylesheet.");
 check(worker.includes('url.pathname === "/script.js"'), "Homepage script must use network-first cache handling.");
 check(worker.includes('url.pathname === "/styles.css"'), "Homepage stylesheet must use network-first cache handling.");check(index.includes("Turkish Product Sourcing &amp; Export Proforma Platform"), "English SEO title must describe sourcing and proforma.");
