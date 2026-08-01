@@ -19,6 +19,8 @@ const requiredFiles = [
   "lib/smtp-crypto.js",
   "sw.js",
   "locales/brand-pages.json",
+  "data/gtip-index.json",
+  "scripts/build-gtip-index.js",
 ];
 
 for (const file of requiredFiles) {
@@ -48,7 +50,7 @@ const assertions = [
   [index.includes("proformaRequestedTotalAmount") && index.includes("proformaExchangeRates"), "Integrated requested-price summary is missing"],
   [read("script.js").includes("requestedUnitPrice") && read("api/site-order.js").includes("site_order_items"), "Requested prices are not persisted through the order API"],
   [!backendLoader.includes("sidya-rtl-hero-fix.js"), "Legacy RTL hero transformer is still active"],
-  [worker.includes("sidya-global-v131"), "Service worker cache version was not advanced"],
+  [worker.includes("sidya-global-v132"), "Service worker cache version was not advanced"],
   [index.includes("Turkish Product Sourcing &amp; Export Proforma Platform"), "English SEO title is not updated"],
   [index.includes("SIDYA_SEO_META"), "Language-specific SEO metadata map is missing"],
   [["tr", "en", "az", "ka", "ru", "ar"].every((locale) => index.includes('"' + locale + '": {')), "SEO metadata is missing one or more locales"],
@@ -60,7 +62,7 @@ const assertions = [
   [index.includes('hreflang="x-default" href="https://www.sidyaglobal.com/?lang=en"'), "x-default hreflang is missing"],
   [read("script.js").includes("window.applySidyaSeoMeta?.(currentLang)"), "Language switch does not refresh SEO metadata"],
   [!mojibakePattern.test(index), "Mojibake text remains in index.html"],
-  [index.includes("Build: 20260802-3 - Environment: production"), "Production build label is missing"],
+  [index.includes("Build: 20260802-4 - Environment: production"), "Production build label is missing"],
   [!index.includes("Environment: development") && !index.includes("Build: local"), "Development build label leaked into production"],
   [index.includes("source reliable Turkish products, request proforma offers"), "English SEO description is not updated"],
   [index.includes('id="proforma"') && index.includes('aria-hidden="true"') && index.includes("inert"), "Hidden modal accessibility state is missing"],
@@ -75,6 +77,10 @@ const assertions = [
   [aiAssistant.includes("setupAssistantDrag") && aiAssistant.includes("POSITION_KEY"), "Sidya AI drag support is missing"],
   [brandPages.brands?.length === 21, "Brand pages must define exactly 21 brand pages"],
   [read("scripts/build-static.js").includes("brand-pages.json") && read("scripts/build-static.js").includes("sitemap.xml"), "Static build does not generate pilot brand pages and sitemap"],
+  [read("scripts/build-static.js").includes("gtip-index.json"), "Static build must copy the committed GTIP index without downloading it"],
+  [read("scripts/build-gtip-index.js").includes("ticaret.gov.tr") && read("scripts/build-gtip-index.js").includes("2026%20TGTC.zip"), "GTIP index builder must use the official TGTC ZIP source"],
+  [(() => { const indexData = JSON.parse(read("data/gtip-index.json")); return indexData.metadata?.decisionNumber === "10781" && Array.isArray(indexData.records) && indexData.records.length > 1000; })(), "Committed GTIP index metadata or records are invalid"],
+  [["tr", "en", "az", "ka", "ru", "ar"].every((locale) => contentI18n[locale]?.gtipIndexWarning && contentI18n[locale]?.gtipIndexLoadError), "GTIP warning/loading translations are missing"],
   [["abc-deterjan","unilever","p-g","henkel","evyap","eczacibasi-selpak","sc-johnson","nivea","vileda","reckitt","oncu-salca","heinz","lokman","yudum","fide","melwiss-cocowiss","johnson-johnson","ikihan-medikal","omron-healthcare","hanymish","sebamed"].every((slug) => index.includes(`data-brand-link="${slug}"`) && index.includes(`/en/brands/${slug}/`)), "Brand links must point to internal English brand pages"],
   [sourceFiles.length <= 12, `Vercel Hobby function limit exceeded: ${sourceFiles.length}/12`],
 ];
@@ -99,5 +105,5 @@ if (process.env.VALIDATE_PRODUCTION_ENV === "1") {
 
 console.log(`Static production validation passed (${sourceFiles.length}/12 Vercel functions)`);
 
-if (index.includes('sidya-ux-upgrades.js?v=20260802-3')) throw new Error('UX upgrades script must not block homepage loading.');
-if (!worker.includes('sidya-global-v131')) throw new Error('Service worker cache version is stale.');
+if (index.includes('sidya-ux-upgrades.js?v=20260802-4')) throw new Error('UX upgrades script must not block homepage loading.');
+if (!worker.includes('sidya-global-v132')) throw new Error('Service worker cache version is stale.');

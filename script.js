@@ -1,4 +1,4 @@
-﻿const content = {
+const content = {
   en: {
     navProducts: "Products",
     navFindProducts: "Find Products",
@@ -1467,6 +1467,8 @@ const productCategoryImages = {
   "hardware-products": "assets/category-hardware-crop.png",
 };
 
+const GTIP_INDEX_URL = "/data/gtip-index.json?v=20260802-4";
+
 const gtipEntries = [
   {
     code: "3402",
@@ -2125,7 +2127,12 @@ const normalizeSearchText = (value) =>
     .toLocaleLowerCase("tr-TR")
     .normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/ı/g, "i")
+    .replace(/\u0131/g, "i")
+    .replace(/\u011f/g, "g")
+    .replace(/\u00fc/g, "u")
+    .replace(/\u015f/g, "s")
+    .replace(/\u00f6/g, "o")
+    .replace(/\u00e7/g, "c")
     .replace(/[^\p{L}\p{N}]+/gu, " ")
     .trim();
 const normalizeCatalogName = (value) => normalizeSearchText(value).replace(/\s+/g, "");
@@ -2357,44 +2364,147 @@ const getLocalizedText = (value) => {
   return value[currentLang] || value.tr || value.en || "";
 };
 
+const gtipIndexState = {
+  status: "idle",
+  payload: null,
+  promise: null,
+  error: null,
+};
+
+const formatGtipDate = (value) => {
+  if (!value) return "-";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString(currentLang === "en" ? "en-US" : currentLang === "ar" ? "ar" : "tr-TR");
+};
+
+const loadGtipIndex = () => {
+  if (gtipIndexState.payload) return Promise.resolve(gtipIndexState.payload);
+  if (gtipIndexState.promise) return gtipIndexState.promise;
+  gtipIndexState.status = "loading";
+  gtipIndexState.promise = fetch(GTIP_INDEX_URL, { cache: "force-cache" })
+    .then((response) => {
+      if (!response.ok) throw new Error(`GTIP index request failed: HTTP ${response.status}`);
+      return response.json();
+    })
+    .then((payload) => {
+      if (!payload || !Array.isArray(payload.records)) throw new Error("GTIP index payload is invalid");
+      gtipIndexState.payload = payload;
+      gtipIndexState.status = "ready";
+      gtipIndexState.error = null;
+      return payload;
+    })
+    .catch((error) => {
+      gtipIndexState.status = "error";
+      gtipIndexState.error = error;
+      console.error("GTIP index load failed", error);
+      throw error;
+    });
+  return gtipIndexState.promise;
+};
+
+const scoreGtipRecord = (record, normalizedQuery, words) => {
+  const code = String(record.code || "");
+  const codeQuery = normalizedQuery.replace(/\D/g, "");
+  const haystack = String(record.search || normalizeSupplierSearch([record.code, record.description].join(" ")));
+  let score = 0;
+  if (codeQuery && code === codeQuery) score += 100;
+  if (codeQuery.length >= 2 && code.startsWith(codeQuery)) score += 40;
+  if (haystack.includes(normalizedQuery)) score += 20;
+  score += words.filter((word) => word.length >= 2 && haystack.includes(word)).length * 6;
+  if (code.length === 12) score += 2;
+  return score;
+};
+
 const getGtipResults = (query = "") => {
   const normalizedQuery = normalizeSupplierSearch(query);
-  if (!normalizedQuery) return gtipEntries.slice(0, 6);
+  if (normalizedQuery.length < 2) return [];
   const words = normalizedQuery.split(/\s+/).filter(Boolean);
-  return gtipEntries
-    .map((entry) => {
-      const haystack = normalizeSupplierSearch([entry.code, getLocalizedText(entry.title), ...(entry.keywords || [])].join(" "));
-      const wordHits = words.filter((word) => haystack.includes(word)).length;
-      const phraseBoost = haystack.includes(normalizedQuery) ? 8 : 0;
-      return { entry, score: wordHits * 3 + phraseBoost };
-    })
+  const records = Array.isArray(gtipIndexState.payload?.records) ? gtipIndexState.payload.records : [];
+  if (!records.length) {
+    return gtipEntries
+      .map((entry) => {
+        const haystack = normalizeSupplierSearch([entry.code, getLocalizedText(entry.title), ...(entry.keywords || [])].join(" "));
+        const score = haystack.includes(normalizedQuery) ? 20 : words.filter((word) => haystack.includes(word)).length * 6;
+        return { entry, score };
+      })
+      .filter((result) => result.score > 0)
+      .sort((a, b) => b.score - a.score || a.entry.code.localeCompare(b.entry.code))
+      .slice(0, 6)
+      .map((result) => result.entry);
+  }
+  return records
+    .map((entry) => ({ entry, score: scoreGtipRecord(entry, normalizedQuery, words) }))
     .filter((result) => result.score > 0)
-    .sort((a, b) => b.score - a.score || a.entry.code.localeCompare(b.entry.code))
+    .sort((a, b) => b.score - a.score || String(a.entry.code || "").localeCompare(String(b.entry.code || "")))
     .slice(0, 8)
     .map((result) => result.entry);
+};
+
+const renderGtipMetadata = () => {
+  const meta = document.querySelector("#gtipIndexMeta");
+  if (!meta) return;
+  const metadata = gtipIndexState.payload?.metadata;
+  if (!metadata) {
+    meta.textContent = t("gtipIndexStartSearching");
+    return;
+  }
+  meta.textContent = [
+    `${t("gtipIndexSourceLabel")}: ${metadata.sourceName || "TGTC"}`,
+    `${t("gtipIndexUpdatedLabel")}: ${formatGtipDate(metadata.downloadedAt || metadata.decisionDate)}`,
+    `${t("gtipIndexDecisionLabel")}: ${metadata.decisionNumber || "10781"}`,
+  ].join(" · ");
 };
 
 const renderGtipGuide = () => {
   const input = document.querySelector("#gtipSearchInput");
   const grid = document.querySelector("#gtipResultGrid");
   if (input) input.placeholder = t("gtipSearchPlaceholder");
+  renderGtipMetadata();
   if (!grid) return;
-  const results = getGtipResults(input?.value || "");
+  const query = input?.value || "";
+  const normalizedQuery = normalizeSupplierSearch(query);
+  if (normalizedQuery.length < 2) {
+    grid.innerHTML = `<article class="gtip-result-card"><p>${escapeHtml(t("gtipIndexStartSearching"))}</p></article>`;
+    return;
+  }
+  if (gtipIndexState.status === "idle") {
+    grid.innerHTML = `<article class="gtip-result-card"><p>${escapeHtml(t("gtipIndexLoading"))}</p></article>`;
+    loadGtipIndex().then(renderGtipGuide).catch(renderGtipGuide);
+    return;
+  }
+  if (gtipIndexState.status === "loading") {
+    grid.innerHTML = `<article class="gtip-result-card"><p>${escapeHtml(t("gtipIndexLoading"))}</p></article>`;
+    return;
+  }
+  if (gtipIndexState.status === "error") {
+    grid.innerHTML = `<article class="gtip-result-card"><p>${escapeHtml(t("gtipIndexLoadError"))}</p></article>`;
+    return;
+  }
+  const results = getGtipResults(query);
   if (!results.length) {
-    grid.innerHTML = `<article class="gtip-result-card"><p>${t("gtipNoResult")}</p></article>`;
+    grid.innerHTML = `<article class="gtip-result-card"><p>${escapeHtml(t("gtipNoResult"))}</p></article>`;
     return;
   }
   grid.innerHTML = results
-    .map(
-      (entry) => `<article class="gtip-result-card">
-        <strong>${t("gtipCodeLabel")}: ${entry.code}</strong>
-        <h4>${getLocalizedText(entry.title)}</h4>
-        <dl>
-          <div><dt>${t("gtipDocsLabel")}</dt><dd>${getLocalizedText(entry.docs)}</dd></div>
-          <div><dt>${t("gtipCautionLabel")}</dt><dd>${getLocalizedText(entry.caution)}</dd></div>
-        </dl>
-      </article>`,
-    )
+    .map((entry) => {
+      const description = entry.description || getLocalizedText(entry.title);
+      const badges = entry.description
+        ? `<div class="gtip-result-badges">
+            <span>${escapeHtml(t("gtipIndexChapterLabel"))}: ${escapeHtml(entry.chapter || String(entry.code || "").slice(0, 2))}</span>
+            <span>${escapeHtml(t("gtipIndexHeadingLabel"))}: ${escapeHtml(entry.heading || String(entry.code || "").slice(0, 4))}</span>
+            <span>${escapeHtml(t("gtipIndexSubheadingLabel"))}: ${escapeHtml(entry.subheading || String(entry.code || "").slice(0, 6))}</span>
+          </div>`
+        : `<dl>
+            <div><dt>${escapeHtml(t("gtipDocsLabel"))}</dt><dd>${escapeHtml(getLocalizedText(entry.docs))}</dd></div>
+            <div><dt>${escapeHtml(t("gtipCautionLabel"))}</dt><dd>${escapeHtml(getLocalizedText(entry.caution))}</dd></div>
+          </dl>`;
+      return `<article class="gtip-result-card">
+        <strong>${escapeHtml(t("gtipCodeLabel"))}: ${escapeHtml(entry.code)}</strong>
+        <h4>${escapeHtml(description)}</h4>
+        ${badges}
+      </article>`;
+    })
     .join("");
 };
 

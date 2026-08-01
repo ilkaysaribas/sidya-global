@@ -129,7 +129,7 @@
     <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/app-icon-192.png" />
     <link rel="preload" href="assets/sidya-global-hero-wide.jpeg" as="image" />
-    <link rel="stylesheet" href="styles.css?v=20260802-3" />
+    <link rel="stylesheet" href="styles.css?v=20260802-4" />
     <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
     <script type="application/ld+json">
       {
@@ -614,7 +614,12 @@
               <span data-i18n="gtipSearchLabel">GTIP product search</span>
               <input id="gtipSearchInput" type="search" autocomplete="off" data-i18n-placeholder="gtipSearchPlaceholder" placeholder="detergent, shampoo, sunscreen, ketchup..." />
             </label>
-            <div class="gtip-result-grid" id="gtipResultGrid"></div>
+            <div class="gtip-index-notice" id="gtipIndexNotice" role="note">
+              <strong data-i18n="gtipIndexWarningTitle">Preliminary classification notice</strong>
+              <p data-i18n="gtipIndexWarning">These results are automatic matches from official TGTC data and are for preliminary information only; they are not an official or binding customs classification.</p>
+              <p class="gtip-index-meta" id="gtipIndexMeta" aria-live="polite"></p>
+            </div>
+            <div class="gtip-result-grid" id="gtipResultGrid" aria-live="polite"></div>
             <div class="gtip-seo-copy">
               <h4 data-i18n="gtipSeoTitle">What is a GTIP code?</h4>
               <p data-i18n="gtipSeoCopy">GTIP is Türkiye's 12-digit customs tariff statistical position code. The first 6 digits follow the international HS system; the final classification must be checked with product composition, use, packaging and official tariff sources.</p>
@@ -1014,7 +1019,7 @@
         </span>
       </div>
       <span data-i18n="footerText">Trabzon-based export showcase website</span>
-      <small id="buildInfo" aria-label="Build information">Build: 20260802-3 - Environment: production</small>
+      <small id="buildInfo" aria-label="Build information">Build: 20260802-4 - Environment: production</small>
     </footer>
 
     <script>
@@ -1046,8 +1051,8 @@
     </script>
     <script src="assets/xlsx.full.min.js"></script>
     <script src="catalog-products.generated.js?v=20260614-1"></script>
-    <script src="script.js?v=20260802-3"></script>
-    <script src="sidya-locale-layout-fixes.js?v=20260802-3"></script>
-    <script src="sidya-proforma-core-fix.js?v=20260802-3"></script>
+    <script src="script.js?v=20260802-4"></script>
+    <script src="sidya-locale-layout-fixes.js?v=20260802-4"></script>
+    <script src="sidya-proforma-core-fix.js?v=20260802-4"></script>
   </body>
 </html>

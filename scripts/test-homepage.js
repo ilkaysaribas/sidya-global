@@ -25,7 +25,7 @@ check(/class="site-container">\s*<div class="section-heading products-section-he
 check(index.includes('id="productGrid"'), "Homepage category grid is missing.");
 check(!index.includes('id="productCatalogSearch"'), "Individual product search must not appear on the homepage.");
 check(!index.includes('id="catalogLoadMore"'), "Individual product pagination must not appear on the homepage.");
-check(index.includes("script.js?v=20260802-3"), "Homepage script cache key is stale.");
+check(index.includes("script.js?v=20260802-4"), "Homepage script cache key is stale.");
 check(index.includes("SIDYA_SEO_META"), "Language-specific SEO metadata map is missing.");
 ["tr", "en", "az", "ka", "ru", "ar"].forEach((locale) => {
   check(index.includes('"' + locale + '": {'), "SEO metadata is missing for locale: " + locale);
@@ -35,9 +35,9 @@ check(index.includes('hreflang="x-default" href="https://www.sidyaglobal.com/?la
 check(index.includes('window.applySidyaSeoMeta'), "Runtime SEO updater is missing.");
 check(script.includes('window.applySidyaSeoMeta?.(currentLang)'), "Language switch must refresh SEO metadata.");
 check(!mojibakePattern.test(index), "Homepage contains mojibake text.");
-check(index.includes("Build: 20260802-3 - Environment: production"), "Production build label must be shown.");
+check(index.includes("Build: 20260802-4 - Environment: production"), "Production build label must be shown.");
 check(!index.includes("Environment: development") && !index.includes("Build: local"), "Development build label must not be exposed.");
-check(index.includes("styles.css?v=20260802-3"), "Homepage stylesheet cache key is stale.");
+check(index.includes("styles.css?v=20260802-4"), "Homepage stylesheet cache key is stale.");
 
 const renderStart = script.indexOf("const renderProducts = () => {");
 const renderEnd = script.indexOf("\nconst renderMarkets =", renderStart);
@@ -72,9 +72,17 @@ check(styles.includes('html[dir="ltr"] main :where('), "LTR alignment guard is m
 check(styles.includes("text-align: left !important"), "LTR content must be forced left.");
 check(styles.includes('html[dir="rtl"] main :where('), "RTL alignment guard is missing.");
 check(styles.includes("text-align: right !important"), "RTL content must remain right aligned.");
-check(worker.includes("sidya-global-v131"), "Service worker cache version must be v131.");
-check(worker.includes("script.js?v=20260802-3"), "Service worker caches an old homepage script.");
-check(worker.includes("styles.css?v=20260802-3"), "Service worker caches an old stylesheet.");
+check(worker.includes("sidya-global-v132"), "Service worker cache version must be v132.");
+check(worker.includes("script.js?v=20260802-4"), "Service worker caches an old homepage script.");
+check(worker.includes("styles.css?v=20260802-4"), "Service worker caches an old stylesheet.");
+check(worker.includes("data/gtip-index.json?v=20260802-4"), "Service worker must cache the GTIP index with the current version.");
+check(fs.existsSync(path.join(root, "data", "gtip-index.json")), "Committed GTIP index is missing.");
+const gtipIndex = JSON.parse(read("data/gtip-index.json"));
+check(gtipIndex.metadata?.sourceUrl?.includes("ticaret.gov.tr"), "GTIP index must keep the official source URL.");
+check(gtipIndex.metadata?.decisionNumber === "10781", "GTIP decision number is missing.");
+check(Array.isArray(gtipIndex.records) && gtipIndex.records.length > 1000, "GTIP index does not contain enough tariff records.");
+check(script.includes("GTIP_INDEX_URL") && script.includes("fetch(GTIP_INDEX_URL"), "GTIP search must lazy-load the static index.");
+check(index.includes('data-i18n="gtipIndexWarning"'), "GTIP legal warning must be visible in the DOM.");
 check(worker.includes('url.pathname === "/script.js"'), "Homepage script must use network-first cache handling.");
 check(worker.includes('url.pathname === "/styles.css"'), "Homepage stylesheet must use network-first cache handling.");
 check(brandPages.brands?.length === 21, "Brand pages must include 21 internal brand pages.");
@@ -96,4 +104,4 @@ check((index.match(/<section\b/g) || []).length === (index.match(/<\/section>/g)
 
 console.log(`Homepage regression test passed (${checks.length} checks)`);
 
-check(!index.includes('sidya-ux-upgrades.js?v=20260802-3'), 'UX upgrades script must not block homepage loading.');
+check(!index.includes('sidya-ux-upgrades.js?v=20260802-4'), 'UX upgrades script must not block homepage loading.');

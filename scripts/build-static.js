@@ -55,7 +55,7 @@ const buildContentI18nScript = (contentI18n) => `<script>
 const injectContentI18nScript = (html, contentI18n) => {
   let outputHtml = html.replace(/\s*<script>\s*window\.SIDYA_CONTENT_I18N = [\s\S]*?<\/script>/, "");
   outputHtml = outputHtml.replace(/\s*<script src="script\.js\?v=[^"]+"><\/script>/,
-    `\n    ${buildContentI18nScript(contentI18n)}\n    <script src="script.js?v=20260802-3"></script>`);
+    `\n    ${buildContentI18nScript(contentI18n)}\n    <script src="script.js?v=20260802-4"></script>`);
   return outputHtml;
 };
 
@@ -167,7 +167,7 @@ const buildBrandPageHtml = (brand, locale, brandPages) => {
     "    <meta property=\"og:type\" content=\"website\" />",
     `    <meta property="og:url" content="${canonical}" />`,
     "    <link rel=\"icon\" href=\"/assets/app-icon.svg\" type=\"image/svg+xml\" />",
-    "    <link rel=\"stylesheet\" href=\"/styles.css?v=20260802-3\" />",
+    "    <link rel=\"stylesheet\" href=\"/styles.css?v=20260802-4\" />",
     "  </head>",
     `  <body class="brand-page-body">`,
     "    <main class=\"brand-page-shell\">",
@@ -248,6 +248,12 @@ for (const directory of staticDirectories) {
   const source = path.join(root, directory);
   if (fs.existsSync(source)) fs.cpSync(source, path.join(output, directory), { recursive: true });
 }
+
+const gtipIndexSource = path.join(root, "data", "gtip-index.json");
+if (!fs.existsSync(gtipIndexSource)) throw new Error("Missing data/gtip-index.json. Run npm run build:gtip-index before building static output.");
+const gtipDataOutput = path.join(output, "data");
+fs.mkdirSync(gtipDataOutput, { recursive: true });
+fs.copyFileSync(gtipIndexSource, path.join(gtipDataOutput, "gtip-index.json"));
 
 const indexPath = path.join(output, "index.html");
 const sourceIndex = fs.readFileSync(indexPath, "utf8");

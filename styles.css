@@ -3082,6 +3082,28 @@ h2 {
   font: inherit;
 }
 
+.gtip-index-notice {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid #f0d48a;
+  border-radius: 8px;
+  background: #fff8e6;
+  color: #352914;
+}
+
+.gtip-index-notice strong {
+  color: #1f2327;
+  font-size: 0.78rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.gtip-index-meta {
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
 .gtip-result-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3115,6 +3137,25 @@ h2 {
   gap: 7px;
   margin: 0;
 }
+
+.gtip-result-badges {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin: 0;
+}
+
+.gtip-result-badges span {
+  display: inline-flex;
+  justify-content: center;
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: #fff;
+  color: #1f2327;
+  font-size: 0.68rem;
+  font-weight: 900;
+}
+
 
 .gtip-result-card dt {
   color: #4f565c;
