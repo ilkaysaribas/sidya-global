@@ -54,8 +54,8 @@ const buildContentI18nScript = (contentI18n) => `<script>
 
 const injectContentI18nScript = (html, contentI18n) => {
   let outputHtml = html.replace(/\s*<script>\s*window\.SIDYA_CONTENT_I18N = [\s\S]*?<\/script>/, "");
-  outputHtml = outputHtml.replace(/\s*<script src="script\.js\?v=[^"]+"><\/script>/,
-    `\n    ${buildContentI18nScript(contentI18n)}\n    <script src="script.js?v=20260802-4"></script>`);
+  outputHtml = outputHtml.replace(/\s*<script src="\/?script\.js\?v=[^"]+"><\/script>/,
+    `\n    ${buildContentI18nScript(contentI18n)}\n    <script src="/script.js?v=20260802-4"></script>`);
   return outputHtml;
 };
 
