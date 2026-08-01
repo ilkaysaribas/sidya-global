@@ -1924,6 +1924,15 @@ const businessEmail = "info@sidyaglobal.com";
 const businessWhatsAppNumber = "905514894481";
 const SUPPORTED_LOCALES = ["tr", "en", "az", "ka", "ru", "ar"];
 const RTL_LOCALES = new Set(["ar", "fa", "ur", "he"]);
+const applyContentI18nOverrides = () => {
+  const overrides = typeof window !== "undefined" ? window.SIDYA_CONTENT_I18N : null;
+  if (!overrides || typeof overrides !== "object") return;
+  SUPPORTED_LOCALES.forEach((locale) => {
+    if (!overrides[locale] || typeof overrides[locale] !== "object") return;
+    content[locale] = { ...(content[locale] || {}), ...overrides[locale] };
+  });
+};
+applyContentI18nOverrides();
 const normalizeLocale = (value) => {
   const locale = String(value || "").toLowerCase().replace("_", "-").split("-")[0];
   return SUPPORTED_LOCALES.includes(locale) ? locale : "en";

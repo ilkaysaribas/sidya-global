@@ -31,6 +31,7 @@ const worker = read("sw.js");
 const proformaCore = read("sidya-proforma-core-fix.js");
 const aiAssistant = read("sidya-ai-assistant.js");
 const sourceFiles = fs.readdirSync(path.join(root, "api")).filter((file) => file.endsWith(".js"));
+const contentI18n = JSON.parse(read("locales/content-i18n.json"));
 
 const hasVersionedScript = (file) => index.includes(`${file}?v=`);
 
@@ -49,6 +50,9 @@ const assertions = [
   [index.includes("Turkish Product Sourcing &amp; Export Proforma Platform"), "English SEO title is not updated"],
   [index.includes("SIDYA_SEO_META"), "Language-specific SEO metadata map is missing"],
   [["tr", "en", "az", "ka", "ru", "ar"].every((locale) => index.includes('"' + locale + '": {')), "SEO metadata is missing one or more locales"],
+  [["tr", "en", "az", "ka", "ru", "ar"].every((locale) => contentI18n[locale]?.heroTitle && contentI18n[locale]?.navProducts && contentI18n[locale]?.footerText), "Content i18n dictionary is missing one or more critical body translations"],
+  [read("scripts/build-static.js").includes("applyContentToHtml") && read("scripts/build-static.js").includes("content-i18n.json"), "Static build does not render localized body content"],
+  [read("script.js").includes("applyContentI18nOverrides") && read("script.js").includes("SIDYA_CONTENT_I18N"), "Client-side language switcher does not consume shared content i18n overrides"],
   [["tr", "en", "az", "ka", "ru", "ar"].every((locale) => index.includes('hreflang="' + locale + '" href="https://www.sidyaglobal.com/?lang=' + locale + '"')), "Localized hreflang links are incomplete"],
   [index.includes('hreflang="x-default" href="https://www.sidyaglobal.com/?lang=en"'), "x-default hreflang is missing"],
   [read("script.js").includes("window.applySidyaSeoMeta?.(currentLang)"), "Language switch does not refresh SEO metadata"],

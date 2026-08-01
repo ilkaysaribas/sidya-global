@@ -20,6 +20,8 @@ const htmlEscape = (value) => String(value || "")
   .replace(/</g, "&lt;")
   .replace(/>/g, "&gt;");
 
+const jsEscape = (value) => JSON.stringify(value).replace(/</g, "\\u003c");
+
 const localePath = (locale) => `/${locale}/`;
 const localeUrl = (locale) => `${baseUrl}${localePath(locale)}`;
 const rootUrl = `${baseUrl}/`;
@@ -28,6 +30,48 @@ const extractSeoMeta = (html) => {
   const match = html.match(/const seoMeta = (\{[\s\S]*?\});\s*const normalizeLocale/);
   if (!match) throw new Error("SIDYA_SEO_META source object could not be located in index.html");
   return vm.runInNewContext(`(${match[1]})`);
+};
+
+const readContentI18n = () => {
+  const source = path.join(root, "locales", "content-i18n.json");
+  if (!fs.existsSync(source)) throw new Error("Missing locales/content-i18n.json");
+  return JSON.parse(fs.readFileSync(source, "utf8"));
+};
+
+const escapeRegExp = (value) => String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const buildContentI18nScript = (contentI18n) => `<script>
+      window.SIDYA_CONTENT_I18N = ${jsEscape(contentI18n)};
+    </script>`;
+
+const injectContentI18nScript = (html, contentI18n) => {
+  let outputHtml = html.replace(/\s*<script>\s*window\.SIDYA_CONTENT_I18N = [\s\S]*?<\/script>/, "");
+  outputHtml = outputHtml.replace(/\s*<script src="script\.js\?v=[^"]+"><\/script>/,
+    `\n    ${buildContentI18nScript(contentI18n)}\n    <script src="script.js?v=20260801-2"></script>`);
+  return outputHtml;
+};
+
+const applyContentToHtml = (html, locale, contentI18n) => {
+  const lang = seoLocales.includes(locale) ? locale : "en";
+  const dictionary = { ...(contentI18n.en || {}), ...(contentI18n[lang] || {}) };
+  let outputHtml = html;
+  for (const [key, value] of Object.entries(dictionary)) {
+    const escapedKey = escapeRegExp(key);
+    const textPattern = new RegExp(`(<([a-z][\\w:-]*)\\b[^>]*\\sdata-i18n="${escapedKey}"[^>]*>)([\\s\\S]*?)(<\\/\\2>)`, "g");
+    outputHtml = outputHtml.replace(textPattern, (_match, open, _tag, _body, close) => `${open}${htmlEscape(value)}${close}`);
+    const placeholderPattern = new RegExp(`(<[^>]*\\sdata-i18n-placeholder="${escapedKey}"[^>]*\\splaceholder=")[^"]*(")`, "g");
+    outputHtml = outputHtml.replace(placeholderPattern, `$1${htmlEscape(value)}$2`);
+    const missingPlaceholderPattern = new RegExp(`(<[^>]*\\sdata-i18n-placeholder="${escapedKey}"[^>]*)(>)`, "g");
+    outputHtml = outputHtml.replace(missingPlaceholderPattern, (match, open, close) =>
+      match.includes(" placeholder=") ? match : `${open} placeholder="${htmlEscape(value)}"${close}`);
+  }
+  outputHtml = outputHtml.replace(/<button class="([^"]*\blang-option\b[^"]*)" type="button" data-lang="([^"]+)"/g,
+    (_match, className, code) => {
+      const normalized = className.replace(/\s*\bis-active\b/g, "").trim();
+      const nextClass = code === lang ? `${normalized} is-active` : normalized;
+      return `<button class="${nextClass}" type="button" data-lang="${code}"`;
+    });
+  return outputHtml;
 };
 
 const buildHreflangLinks = () => [
@@ -52,12 +96,14 @@ const queryRedirectScript = `<script>
 
 const stripQueryRedirect = (html) => html.replace(/\s*<script>\s*\(function \(\) \{[\s\S]*?window\.location\.replace\(target\.href \+ window\.location\.hash\);[\s\S]*?\}\)\(\);\s*<\/script>/, "");
 
-const applySeoToHtml = (html, locale, seoMeta, options = {}) => {
+const applySeoToHtml = (html, locale, seoMeta, contentI18n, options = {}) => {
   const lang = seoLocales.includes(locale) ? locale : "en";
   const meta = seoMeta[lang] || seoMeta.en;
   const canonical = options.root ? rootUrl : localeUrl(lang);
   const dir = rtlLocales.has(lang) ? "rtl" : "ltr";
   let outputHtml = stripQueryRedirect(html);
+  outputHtml = injectContentI18nScript(outputHtml, contentI18n);
+  outputHtml = applyContentToHtml(outputHtml, lang, contentI18n);
   outputHtml = outputHtml.replace(/<html([^>]*)>/, (match, attrs) => {
     const cleanAttrs = attrs.replace(/\s+lang="[^"]*"/i, "").replace(/\s+dir="[^"]*"/i, "");
     return `<html${cleanAttrs} lang="${lang}" dir="${dir}">`;
@@ -79,8 +125,9 @@ const applySeoToHtml = (html, locale, seoMeta, options = {}) => {
   return outputHtml;
 };
 
-const validateLocalizedHtml = (html, locale, seoMeta, options = {}) => {
+const validateLocalizedHtml = (html, locale, seoMeta, contentI18n, options = {}) => {
   const meta = seoMeta[locale] || seoMeta.en;
+  const copy = { ...(contentI18n.en || {}), ...(contentI18n[locale] || {}) };
   const canonical = options.root ? rootUrl : localeUrl(locale);
   const checks = [
     [new RegExp(`<html[^>]*lang="${locale}"`).test(html), `Missing html lang for ${locale}`],
@@ -90,6 +137,10 @@ const validateLocalizedHtml = (html, locale, seoMeta, options = {}) => {
     [html.includes(`property="og:url" content="${canonical}"`), `Missing localized og:url for ${locale}`],
     [seoLocales.every((code) => html.includes(`hreflang="${code}" href="${localeUrl(code)}"`)), `Incomplete hreflang tags for ${locale}`],
     [html.includes(`hreflang="x-default" href="${rootUrl}"`), `Missing x-default hreflang for ${locale}`],
+    [html.includes(htmlEscape(copy.heroTitle)), `Missing localized hero body for ${locale}`],
+    [html.includes(htmlEscape(copy.navProducts)), `Missing localized nav body for ${locale}`],
+    [html.includes(htmlEscape(copy.footerText)), `Missing localized footer body for ${locale}`],
+    [locale === "ar" ? /<html[^>]*dir="rtl"/.test(html) : /<html[^>]*dir="ltr"/.test(html), `Missing localized direction for ${locale}`],
   ];
   for (const [ok, message] of checks) if (!ok) throw new Error(message);
 };
@@ -111,16 +162,17 @@ for (const directory of staticDirectories) {
 const indexPath = path.join(output, "index.html");
 const sourceIndex = fs.readFileSync(indexPath, "utf8");
 const seoMeta = extractSeoMeta(sourceIndex);
-const rootIndex = applySeoToHtml(sourceIndex, "en", seoMeta, { root: true });
+const contentI18n = readContentI18n();
+const rootIndex = applySeoToHtml(sourceIndex, "en", seoMeta, contentI18n, { root: true });
 fs.writeFileSync(indexPath, rootIndex, "utf8");
-validateLocalizedHtml(rootIndex, "en", seoMeta, { root: true });
+validateLocalizedHtml(rootIndex, "en", seoMeta, contentI18n, { root: true });
 
 for (const locale of seoLocales) {
   const localizedDir = path.join(output, locale);
   fs.mkdirSync(localizedDir, { recursive: true });
-  const localizedHtml = applySeoToHtml(sourceIndex, locale, seoMeta);
+  const localizedHtml = applySeoToHtml(sourceIndex, locale, seoMeta, contentI18n);
   fs.writeFileSync(path.join(localizedDir, "index.html"), localizedHtml, "utf8");
-  validateLocalizedHtml(localizedHtml, locale, seoMeta);
+  validateLocalizedHtml(localizedHtml, locale, seoMeta, contentI18n);
 }
 
 console.log(`Static output generated in public/ with localized SEO pages: ${seoLocales.map((locale) => `/${locale}/`).join(", ")}`);
